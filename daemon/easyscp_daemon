@@ -1,0 +1,165 @@
+#!/usr/bin/php -q
+
+<?php
+/**
+ * EasySCP a Virtual Hosting Control Panel
+ * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ *
+ * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+ *
+ * @link 		http://www.easyscp.net
+ * @author 		EasySCP Team
+ */
+
+// Allowed arguments & their defaults
+$runmode = array(
+    'help' => false,
+);
+ 
+// Scan command line attributes for allowed arguments
+foreach ($argv as $k=>$arg) {
+    if (substr($arg, 0, 2) == '--' && isset($runmode[substr($arg, 2)])) {
+        $runmode[substr($arg, 2)] = true;
+    }
+}
+ 
+// Help mode. Shows allowed argumentents and quit directly
+if ($runmode['help'] == true) {
+    echo 'Usage: '.$argv[0].' [runmode]' . "\n";
+    echo 'Available runmodes:' . "\n";
+    foreach ($runmode as $runmod=>$val) {
+        echo ' --'.$runmod . "\n";
+    }
+    die();
+}
+ 
+error_reporting(E_ALL);
+require_once(dirname(__FILE__).'/extlibs/Daemon.php');
+require_once(dirname(__FILE__).'/DaemonCommon.php');
+require_once(dirname(__FILE__).'/DaemonConfig.php');
+require_once(dirname(__FILE__).'/DaemonMaps.php');
+require_once(dirname(__FILE__).'/SocketHandler.php');
+
+// Setup
+$options = array(
+    'appName' => 'easyscp_daemon',
+    'appDir' => dirname(__FILE__),
+    'appDescription' => 'Daemon for EasySCP',
+    'authorName' => 'EasySCP Team',
+    'authorEmail' => 'team@easyscp.net',
+    'sysMaxExecutionTime' => '0',
+    'sysMaxInputTime' => '0',
+    'sysMemoryLimit' => '1024M',
+    'appRunAsGID' => 0, // Maybe this should be changed later
+    'appRunAsUID' => 0, // Maybe this should be changed later
+    'logLocation' => '/var/log/easyscp/easyscp_daemon.log',
+);
+
+if (DaemonConfig::$cfg->DEBUG == '1'){
+	// Default: 6
+	$options['logVerbosity'] = 7;
+}
+ 
+System_Daemon::setOptions($options);
+System_Daemon::start();
+
+try {
+	SocketHandler::$File = DaemonConfig::$cfg->SOCK_EASYSCPD;
+	SocketHandler::Create();
+	SocketHandler::Bind();
+	SocketHandler::Listen();
+	SocketHandler::Block(false);
+	$runningOkay = true;
+}
+catch(ErrorException $e){
+	echo $e->getMessage() . "\n";
+	$runningOkay = false;
+}
+catch(Exception $e){
+	System_Daemon::info($e->getMessage());
+	echo $e->getMessage() . "\n";
+	$runningOkay = false;
+}
+
+while (!System_Daemon::isDying() && $runningOkay) {
+		
+	$runningOkay = true;
+	
+	if ($Client = SocketHandler::Accept())
+	{
+		System_Daemon::info('Client connected');
+		SocketHandler::Write($Client, "End with .");
+		
+		while ($Input = SocketHandler::Read($Client))
+		{
+			$Input = trim($Input);
+			if ($Input != ''){
+				System_Daemon::debug('Input = ' . $Input);
+
+				$retVal = Null;
+			
+				switch ($Input) {
+					case 'legacy':
+
+						System_Daemon::info('Running classic Request Manager subprocess.');
+
+						try {
+							exec('perl ' . dirname(__FILE__) . '/../engine/easyscp-rqst-mngr', $output, $error);
+						}
+						catch(Exception $e){
+							System_Daemon::info($e->getMessage());
+						}
+
+						break;
+
+					case '.':
+
+						break;
+
+					case 'Stop':
+						$runningOkay = false;
+						$retVal = 'Daemon is stopping';
+						break;
+
+					default:
+
+						$Input = explode(" ", $Input, 3);
+
+						if ( DaemonMaps::$StatusMap[$Input[0]] == $Input[1] && file_exists(dirname(__FILE__). '/' . DaemonMaps::$ProcedureMap[$Input[0]] . '.php'))
+						{
+							try {
+								System_Daemon::info('Running ' . DaemonMaps::$ProcedureMap[$Input[0]] . ' subprocess.');
+								$Procedure = DaemonMaps::$ProcedureMap[$Input[0]];
+								$retVal = $Procedure::Start($Input[2]);
+								System_Daemon::info('Finished ' . DaemonMaps::$ProcedureMap[$Input[0]] . ' subprocess.');
+							}
+							catch(Exception $e){
+								System_Daemon::info($e->getMessage());
+							}
+
+							if (file_exists(DaemonConfig::$cfg->CONF_DIR . '/EasySCP_Config_DB.php')){
+								// Close DB connection
+								DB::closeInstance();
+							}
+						}
+						else {
+							System_Daemon::info('Could not find '.$Input[0].' '.$Input[1].' subprocess. Exiting.');
+						}
+				}
+				if ($retVal === true){$retVal = 'Ok';}
+				SocketHandler::Write($Client, $retVal);
+				System_Daemon::info('Closing connection.');
+				SocketHandler::CloseClient($Client);
+			}
+		}
+	}
+
+	// System_Daemon::iterate(2);
+	System_Daemon::iterate(0.05);
+}
+SocketHandler::Close();
+System_Daemon::info('Shutting down.');
+// Shut down the daemon nicely
+System_Daemon::stop();
+?>

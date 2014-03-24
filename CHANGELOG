@@ -1,0 +1,83 @@
+EasySCP 2.0.0 ChangeLog
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+2014-03-22
+	- Config:
+		* Add: Fields for SSL support
+
+	- Daemon:
+		* Add: New EasySCP Daemon
+
+	- DOCS:
+		* Update: CentOS 6.x package file
+		* Update: Debian 7.x (Wheezy) package file
+
+	- GUI:
+		* Add: New Language Files
+		* Add: Chinese Simplified Language (thx to bspxm)
+		* Add: Chinese Traditional Language (thx to akong)
+		* Add: Italian Language (thx to theprincy)
+		* Add: PHP/MySQL version info for clients
+		* Add: Postfix MySQL Support
+		* Add: SSL support
+
+		* Fix: Error when add subdomain to an alias
+		* Fix: Net_DNS2_Exception when adding A records.
+		* Fix: Delete message for reseller was empty in some cases.
+		* Fix: FTP dir selection does not work in some situations.
+		* Fix: Parse error on orderpanel activation
+		* Fix: Orders were not deletable
+		* Fix: EasySCP_Exception_Writer
+		* Fix: Migration won´t work in some cases
+		* Fix: Wrong calculation for the graphical bar on traffic usage
+		* Fix: Password error when edit normal mail account with forward
+		* Fix: Password error when edit normal mail account with forward
+		* Fix: In some cases the traffic was not calculated correctly
+		* Fix: Problem when create/update/delete subdomains
+		* Fix: Problem when add alias subdomain
+		* Fix: Aliases not shown on admin and reseller user page
+		* Fix: Error "You can upload only text files!" when trying to upload language files
+		* Fix: System shows empty strings if there is no translation
+		* Fix: Custom buttons not show on reseller and client menu
+		* Fix: Database error when creating an admin
+		* Fix: Error when creating a custom button
+		* Fix: Encoding of domainnames with umlaut
+		* Fix: Double encoding of username
+		* Fix: Server traffic was shown in wrong way
+		* Fix: Get error when try to change the ftp user password
+		* Fix: Expiration date cannot be set when create new domain
+		* Fix: Sort order of users doesn't work
+		* Fix: Multiplying of alias entries
+		* Fix: Some small fixes
+
+		* Update: All language files.
+		* Update: Danish Language (thx to Ryan Skov)
+   		* Update: Dutch Language (thx to Rob Boevéé)
+   		* Update: Japanese Language (thx to hinyhiny)
+		* Update: Russian language (thx to morphay)
+   		* Update: Swedish language (thx to Olof Fredriksson)
+   		* Update: jQuery to version 1.11.0
+		* Update: jQuery UI to version 1.10.4
+		* Update: Net_DNS2 to version 1.2.4
+		* Update: Smarty to version 3.1.17
+
+	- Engine:
+		* Remove: The old engine is no longer used
+
+	- Setup:
+		* Add: Dovecot Support
+		* Add: Postfix MySQL Support
+
+		* Fix: Wrong postfix config files was installed after setup
+
+	- System:
+		* Add: Dovecot Support
+
+		* Remove: Courier Support
+
+	- TOOLS:
+		* Fix: net2ftp does not work in some situations.
+
+		* Update: net2ftp to version 1.0
+		* Update: phpMyAdmin to version 4.0.10
+		* Update: Roundcube to version 0.9.5

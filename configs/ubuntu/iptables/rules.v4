@@ -1,0 +1,44 @@
+# EasySCP a Virtual Hosting Control Panel
+# Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+#
+# This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+# To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+#
+# @link 		http://www.easyscp.net
+# @author 		EasySCP Team
+
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:EASYSCP_INPUT - [0:0]
+:EASYSCP_OUTPUT - [0:0]
+-A INPUT -j EASYSCP_INPUT
+-A OUTPUT -j EASYSCP_OUTPUT
+-A EASYSCP_INPUT -p tcp -m tcp --sport 587
+-A EASYSCP_INPUT -p tcp -m tcp --sport 465
+-A EASYSCP_INPUT -p tcp -m tcp --sport 25
+-A EASYSCP_INPUT -p tcp -m tcp --dport 587
+-A EASYSCP_INPUT -p tcp -m tcp --dport 465
+-A EASYSCP_INPUT -p tcp -m tcp --dport 25
+-A EASYSCP_INPUT -p tcp -m tcp --dport 993
+-A EASYSCP_INPUT -p tcp -m tcp --dport 143
+-A EASYSCP_INPUT -p tcp -m tcp --dport 995
+-A EASYSCP_INPUT -p tcp -m tcp --dport 110
+-A EASYSCP_INPUT -p tcp -m tcp --dport 443
+-A EASYSCP_INPUT -p tcp -m tcp --dport 80
+-A EASYSCP_INPUT -j RETURN
+-A EASYSCP_OUTPUT -p tcp -m tcp --dport 587
+-A EASYSCP_OUTPUT -p tcp -m tcp --dport 465
+-A EASYSCP_OUTPUT -p tcp -m tcp --dport 25
+-A EASYSCP_OUTPUT -p tcp -m tcp --sport 587
+-A EASYSCP_OUTPUT -p tcp -m tcp --sport 465
+-A EASYSCP_OUTPUT -p tcp -m tcp --sport 25
+-A EASYSCP_OUTPUT -p tcp -m tcp --sport 993
+-A EASYSCP_OUTPUT -p tcp -m tcp --sport 143
+-A EASYSCP_OUTPUT -p tcp -m tcp --sport 995
+-A EASYSCP_OUTPUT -p tcp -m tcp --sport 110
+-A EASYSCP_OUTPUT -p tcp -m tcp --sport 443
+-A EASYSCP_OUTPUT -p tcp -m tcp --sport 80
+-A EASYSCP_OUTPUT -j RETURN
+COMMIT

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EasySCP a Virtual Hosting Control Panel
+	Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+
+	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+
+	@link 		http://www.easyscp.net
+	@author		EasySCP Team
+-->
+<configuration>
+	<DistName />
+	<DistVersion />
+	<HOST_FQHN></HOST_FQHN>
+	<HOST_IP></HOST_IP>
+	<HOST_NAME></HOST_NAME>
+
+	<DB_HOST>localhost</DB_HOST>
+	<DB_DATABASE>easyscp</DB_DATABASE>
+	<DB_USER>root</DB_USER>
+	<DB_PASSWORD></DB_PASSWORD>
+	<DB_PASSWORD2></DB_PASSWORD2>
+	<DB_KEY>AUTO</DB_KEY>
+	<DB_IV>AUTO</DB_IV>
+	<DB_PASSWORDENCRYPT></DB_PASSWORDENCRYPT>
+
+	<FTP_USER>vftp</FTP_USER>
+	<FTP_PASSWORD>AUTO</FTP_PASSWORD>
+
+	<PMA_USER>pma</PMA_USER>
+	<PMA_PASSWORD>AUTO</PMA_PASSWORD>
+	<PMA_BLOWFISH>AUTO</PMA_BLOWFISH>
+
+	<PANEL_ADMIN>admin</PANEL_ADMIN>
+	<PANEL_PASS></PANEL_PASS>
+	<PANEL_PASS2></PANEL_PASS2>
+	<PANEL_MAIL></PANEL_MAIL>
+
+	<Secondary_DNS></Secondary_DNS>
+	<LocalNS>_yes_</LocalNS>
+	<MySQL_Prefix>none</MySQL_Prefix>
+	<Timezone>Europe/Berlin</Timezone>
+	<AWStats>_no_</AWStats>
+</configuration>

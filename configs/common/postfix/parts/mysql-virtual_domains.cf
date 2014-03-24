@@ -1,0 +1,5 @@
+user = {$MTA_DB_USER}
+password = {$MTA_DB_PASS}
+dbname = mail
+query = SELECT domain AS virtual FROM domains WHERE domain='%s'
+hosts = 127.0.0.1

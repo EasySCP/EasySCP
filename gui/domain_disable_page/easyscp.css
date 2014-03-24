@@ -1,0 +1,154 @@
+/**
+ * EasySCP a Virtual Hosting Control Panel
+ * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ *
+ * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+ *
+ * @link 		http://www.easyscp.net
+ * @author 		EasySCP Team
+ */
+
+@CHARSET "UTF-8";
+
+/***********************************************************************************
+ * Reset
+ ***********************************************************************************/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+/***********************************************************************************
+ * Basic STYLE
+ ***********************************************************************************/
+a img {
+	border:				none;
+}
+
+a.link, a.link:link, a.link:visited {
+	color:				#009;
+	background-color:	#fff;
+	text-decoration:	underline;
+	font-weight:		normal;
+}
+
+a.link:hover, a.link:active, a.link:focus {
+	color:				#000;
+	background-color:	#fff;
+	text-decoration:	none;
+}
+
+body {
+	border: 			0;
+	color:				#000;
+	font-family:		Arial, sans-serif;
+	font-size:			0.9em;
+	height:				100%;
+	left: 				0;
+	overflow-y: 		scroll;
+	position: 			absolute;
+	right: 				0;
+	top: 				0;
+	width:				100%;
+}
+
+.login {
+	font-size:			0.8em;
+	white-space: 		nowrap;
+	text-decoration:	none;
+	text-align:			right;
+}
+
+.login p {
+	text-align:			right;
+}
+
+/***********************************************************************************
+ * Header STYLE
+ ***********************************************************************************/
+.header {
+	background-color:	#000;
+	height:				142px;
+}
+.header a.link {
+	background-color:	transparent;
+}
+.header img {
+	padding-top:		8px;
+}
+.location {
+    background:			url(./images/top_bar_bg.png) repeat-x scroll left top #000000;
+    height:				24px;
+    line-height:		24px;
+}
+
+/***********************************************************************************
+ * Main STYLE
+ ***********************************************************************************/
+.main {
+	margin:				50px auto;
+	width:				500px;
+}
+
+.content p {
+	margin-top:			50px;
+	margin-bottom:		5px;
+}
+
+/***********************************************************************************
+ * Footer STYLE
+ ***********************************************************************************/
+.footer {
+	bottom:				10px;
+	position:			absolute;
+	right:				10px;
+	text-align:			right;
+	z-index:			0;
+}
+
+.footer img {
+	border: 			0;
+	height:				15px;
+	width:				80px;
+}

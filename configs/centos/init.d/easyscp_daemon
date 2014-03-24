@@ -1,0 +1,81 @@
+#!/bin/bash
+#
+# /etc/rc.d/init.d/easyscp_daemon
+#
+# chkconfig: - 85 15
+# description: EasySCP Daemon. This is the start/stop script for the EasySCP GUI-Backend communication Daemon.
+# processname: easyscp_daemon
+# pidfile: /var/run/easyscp_daemon/easyscp_daemon.pid
+PID_FILE=/var/run/easyscp_daemon/easyscp_daemon.pid
+BIN_FILE=/var/www/easyscp/daemon/easyscp_daemon
+BIN_CONTROL=/var/www/easyscp/daemon/Daemon.php
+
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+start() {
+    ${BIN_FILE}
+    ret=$?
+    if [ $ret -eq 0 ]; then
+        action $"Starting easyscp_daemon: " /bin/true
+    else
+        action $"Starting easyscp_daemon: " /bin/false
+    fi
+
+    return $ret
+}
+
+stop() {
+    PID=`cat /var/run/easyscp_daemon/easyscp_daemon.pid  2>/dev/null `
+    if [ -n "$PID" ]; then
+        # /bin/kill "$PID" >/dev/null 2>&1
+        ${BIN_CONTROL} Daemon Stop
+        ret=$?
+        if [ $ret -eq 0 ]; then
+            STOPTIMEOUT=60
+            while [ $STOPTIMEOUT -gt 0 ]; do
+                /bin/kill -0 "$PID" >/dev/null 2>&1 || break
+                sleep 1
+                let STOPTIMEOUT=${STOPTIMEOUT}-1
+            done
+            if [ $STOPTIMEOUT -eq 0 ]; then
+                echo "Timeout error occurred trying to stop easyscp_daemon."
+                ret=1
+                action $"Stopping easyscp_daemon: " /bin/false
+            else
+                action $"Stopping easyscp_daemon: " /bin/true
+            fi
+        else
+            action $"Stopping easyscp_daemon: " /bin/false
+        fi
+    else
+        ret=1
+        action $"Stopping easyscp_daemon: " /bin/false
+    fi
+
+    return $ret
+}
+
+case "$1" in
+    start)
+        start
+    ;;
+    stop)
+        stop
+    ;;
+    restart)
+        stop
+        start
+    ;;
+    reload)
+        restart
+    ;;
+    status)
+        status easyscp_daemon
+    ;;
+    *)
+        echo "Usage: easyscp_daemon [start|stop|restart|status]"
+        exit 1
+    ;;
+esac

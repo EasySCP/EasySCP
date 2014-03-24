@@ -1,0 +1,2395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EasySCP a Virtual Hosting Control Panel
+	Copyright (C) 2010-2012 by Easy Server Control Panel - http://www.easyscp.net
+
+	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+
+	@link 		http://www.easyscp.net
+	@author		EasySCP Team
+-->
+
+
+<EasySCP_TLD>
+	<domain>
+		<tld>ac</tld>
+		<type>country-code</type>
+		<sponsor>Network Information Center (AC Domain Registry)
+c/o Cable and Wireless (Ascension Island)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ad</tld>
+		<type>country-code</type>
+		<sponsor>Andorra Telecom</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ae</tld>
+		<type>country-code</type>
+		<!-- <sponsor>United Arab Emirates<br/><span class="tld-table-so">Telecommunication Regulatory Authority (TRA)</span></sponsor> </sponsor> -->
+		<sponsor>Telecommunication Regulatory Authority (TRA)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>aero</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved for members of the air-transport industry<br/><span class="tld-table-so">Societe Internationale de Telecommunications Aeronautique (SITA INC USA)</span></sponsor> </sponsor> -->
+		<sponsor>Societe Internationale de Telecommunications Aeronautique (SITA INC USA)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>af</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Afghanistan<br/><span class="tld-table-so">Ministry of Communications and IT</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Communications and IT</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ag</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Antigua and Barbuda<br/><span class="tld-table-so">UHSA School of Medicine</span></sponsor> </sponsor> -->
+		<sponsor>UHSA School of Medicine</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ai</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Anguilla<br/><span class="tld-table-so">Government of Anguilla</span></sponsor> </sponsor> -->
+		<sponsor>Government of Anguilla</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>al</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Albania<br/><span class="tld-table-so">Electronic and Postal Communications Authority - AKEP</span></sponsor> </sponsor> -->
+		<sponsor>Electronic and Postal Communications Authority - AKEP</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>am</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Armenia<br/><span class="tld-table-so">Internet Society</span></sponsor> </sponsor> -->
+		<sponsor>Internet Society</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>an</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Netherlands Antilles<br/><span class="tld-table-so">University of The Netherlands Antilles</span></sponsor> </sponsor> -->
+		<sponsor>University of The Netherlands Antilles</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ao</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Angola<br/><span class="tld-table-so">Faculdade de Engenharia da Universidade Agostinho Neto</span></sponsor> </sponsor> -->
+		<sponsor>Faculdade de Engenharia da Universidade Agostinho Neto</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>aq</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Antarctica<br/><span class="tld-table-so">Mott and Associates</span></sponsor> </sponsor> -->
+		<sponsor>Mott and Associates</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ar</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Argentina<br/><span class="tld-table-so">Presidencia de la Nación – Secretaría Legal y Técnica</span></sponsor> </sponsor> -->
+		<sponsor>Presidencia de la Nación – Secretaría Legal y Técnica</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>arpa</tld>
+		<type>infrastructure</type>
+		<!-- <sponsor>Reserved exclusively to support operationally-critical infrastructural identifier spaces as advised by the Internet Architecture Board<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>as</tld>
+		<type>country-code</type>
+		<!-- <sponsor>American Samoa<br/><span class="tld-table-so">AS Domain Registry</span></sponsor> </sponsor> -->
+		<sponsor>AS Domain Registry</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>asia</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Restricted to the Pan-Asia and Asia Pacific community<br/><span class="tld-table-so">DotAsia Organisation Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>DotAsia Organisation Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>at</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Austria<br/><span class="tld-table-so">nic.at GmbH</span></sponsor> </sponsor> -->
+		<sponsor>nic.at GmbH</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>au</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Australia<br/><span class="tld-table-so">.au Domain Administration (auDA)</span></sponsor> </sponsor> -->
+		<sponsor>.au Domain Administration (auDA)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>aw</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Aruba<br/><span class="tld-table-so">SETAR</span></sponsor> </sponsor> -->
+		<sponsor>SETAR</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ax</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Åland Islands<br/><span class="tld-table-so">Ålands landskapsregering</span></sponsor> </sponsor> -->
+		<sponsor>Ålands landskapsregering</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>az</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Azerbaijan<br/><span class="tld-table-so">IntraNS</span></sponsor> </sponsor> -->
+		<sponsor>IntraNS</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ba</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bosnia and Herzegovina<br/><span class="tld-table-so">Universtiy Telinformatic Centre (UTIC)</span></sponsor> </sponsor> -->
+		<sponsor>Universtiy Telinformatic Centre (UTIC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bb</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Barbados<br/><span class="tld-table-so">Government of Barbados
+Ministry of Economic Affairs and Development
+Telecommunications Unit</span></sponsor> </sponsor> -->
+		<sponsor>Government of Barbados
+Ministry of Economic Affairs and Development
+Telecommunications Unit</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bd</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bangladesh<br/><span class="tld-table-so">Ministry of Post &amp; Telecommunications
+Bangladesh Secretariat</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Post &amp; Telecommunications
+Bangladesh Secretariat</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>be</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Belgium<br/><span class="tld-table-so">DNS BE vzw/asbl</span></sponsor> </sponsor> -->
+		<sponsor>DNS BE vzw/asbl</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bf</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Burkina Faso<br/><span class="tld-table-so">ARCE-AutoritÈ de RÈgulation des Communications Electroniques</span></sponsor> </sponsor> -->
+		<sponsor>ARCE-AutoritÈ de RÈgulation des Communications Electroniques</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bulgaria<br/><span class="tld-table-so">Register.BG</span></sponsor> </sponsor> -->
+		<sponsor>Register.BG</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bh</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bahrain<br/><span class="tld-table-so">Telecommunications Regulatory Authority (TRA)</span></sponsor> </sponsor> -->
+		<sponsor>Telecommunications Regulatory Authority (TRA)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bi</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Burundi<br/><span class="tld-table-so">Centre National de l&#39;Informatique</span></sponsor> </sponsor> -->
+		<sponsor>Centre National de l&#39;Informatique</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>biz</tld>
+		<type>generic-restricted</type>
+		<!-- <sponsor>Restricted for Business<br/><span class="tld-table-so">NeuStar, Inc.</span></sponsor> </sponsor> -->
+		<sponsor>NeuStar, Inc.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bj</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Benin<br/><span class="tld-table-so">Benin Telecoms S.A.</span></sponsor> </sponsor> -->
+		<sponsor>Benin Telecoms S.A.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bl</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Saint Barthélemy<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bermuda<br/><span class="tld-table-so">Registry General
+Ministry of Labour and Immigration</span></sponsor> </sponsor> -->
+		<sponsor>Registry General
+Ministry of Labour and Immigration</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bn</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Brunei Darussalam<br/><span class="tld-table-so">Telekom Brunei Berhad</span></sponsor> </sponsor> -->
+		<sponsor>Telekom Brunei Berhad</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bo</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bolivia, Plurinational State of<br/><span class="tld-table-so">Agencia para el Desarrollo de la Información de la Sociedad en Bolivia</span></sponsor> </sponsor> -->
+		<sponsor>Agencia para el Desarrollo de la Información de la Sociedad en Bolivia</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bq</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bonaire, Sint Eustatius and Saba<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>br</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Brazil<br/><span class="tld-table-so">Comite Gestor da Internet no Brasil</span></sponsor> </sponsor> -->
+		<sponsor>Comite Gestor da Internet no Brasil</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bs</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bahamas<br/><span class="tld-table-so">The College of the Bahamas</span></sponsor> </sponsor> -->
+		<sponsor>The College of the Bahamas</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bt</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bhutan<br/><span class="tld-table-so">Ministry of Information and Communications</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Information and Communications</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bv</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bouvet Island<br/><span class="tld-table-so">UNINETT Norid A/S</span></sponsor> </sponsor> -->
+		<sponsor>UNINETT Norid A/S</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bw</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Botswana<br/><span class="tld-table-so">University of Botswana</span></sponsor> </sponsor> -->
+		<sponsor>University of Botswana</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>by</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Belarus<br/><span class="tld-table-so">Reliable Software Inc.</span></sponsor> </sponsor> -->
+		<sponsor>Reliable Software Inc.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>bz</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Belize<br/><span class="tld-table-so">University of Belize</span></sponsor> </sponsor> -->
+		<sponsor>University of Belize</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ca</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Canada<br/><span class="tld-table-so">Canadian Internet Registration Authority (CIRA)
+Autorite Canadienne pour les Enregistrements Internet (ACEI)</span></sponsor> </sponsor> -->
+		<sponsor>Canadian Internet Registration Authority (CIRA)
+Autorite Canadienne pour les Enregistrements Internet (ACEI)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cat</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved for the Catalan linguistic and cultural community<br/><span class="tld-table-so">Fundacio puntCAT</span></sponsor> </sponsor> -->
+		<sponsor>Fundacio puntCAT</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cc</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Cocos (Keeling) Islands<br/><span class="tld-table-so">eNIC Cocos (Keeling) Islands Pty.
+Ltd. d/b/a Island Internet Services</span></sponsor> </sponsor> -->
+		<sponsor>eNIC Cocos (Keeling) Islands Pty.
+Ltd. d/b/a Island Internet Services</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cd</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Congo, The Democratic Republic of the<br/><span class="tld-table-so">Office Congolais des Postes et Télécommunications - OCPT</span></sponsor> </sponsor> -->
+		<sponsor>Office Congolais des Postes et Télécommunications - OCPT</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cf</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Central African Republic<br/><span class="tld-table-so">Societe Centrafricaine de Telecommunications (SOCATEL)</span></sponsor> </sponsor> -->
+		<sponsor>Societe Centrafricaine de Telecommunications (SOCATEL)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Congo<br/><span class="tld-table-so">ONPT Congo and Interpoint Switzerland</span></sponsor> </sponsor> -->
+		<sponsor>ONPT Congo and Interpoint Switzerland</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ch</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Switzerland<br/><span class="tld-table-so">SWITCH The Swiss Education &amp; Research Network</span></sponsor> </sponsor> -->
+		<sponsor>SWITCH The Swiss Education &amp; Research Network</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ci</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Côte d&#39;Ivoire<br/><span class="tld-table-so">INP-HB Institut National Polytechnique Felix Houphouet Boigny</span></sponsor> </sponsor> -->
+		<sponsor>INP-HB Institut National Polytechnique Felix Houphouet Boigny</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ck</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Cook Islands<br/><span class="tld-table-so">Telecom Cook Islands Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>Telecom Cook Islands Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cl</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Chile<br/><span class="tld-table-so">NIC Chile (University of Chile)</span></sponsor> </sponsor> -->
+		<sponsor>NIC Chile (University of Chile)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Cameroon<br/><span class="tld-table-so">Cameroon Telecommunications (CAMTEL)</span></sponsor> </sponsor> -->
+		<sponsor>Cameroon Telecommunications (CAMTEL)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cn</tld>
+		<type>country-code</type>
+		<!-- <sponsor>China<br/><span class="tld-table-so">Computer Network Information Center, Chinese Academy of Sciences</span></sponsor> </sponsor> -->
+		<sponsor>Computer Network Information Center, Chinese Academy of Sciences</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>co</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Colombia<br/><span class="tld-table-so">.CO Internet S.A.S.</span></sponsor> </sponsor> -->
+		<sponsor>.CO Internet S.A.S.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>com</tld>
+		<sponsor>generic</sponsor>
+		<!-- <sponsor>Generic top-level domain<br/><span class="tld-table-so">VeriSign Global Registry Services</span></sponsor> </sponsor> -->
+		<sponsor>VeriSign Global Registry Services</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>coop</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved for cooperative associations<br/><span class="tld-table-so">DotCooperation LLC</span></sponsor> </sponsor> -->
+		<sponsor>DotCooperation LLC</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Costa Rica<br/><span class="tld-table-so">National Academy of Sciences
+Academia Nacional de Ciencias</span></sponsor> </sponsor> -->
+		<sponsor>National Academy of Sciences
+Academia Nacional de Ciencias</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cu</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Cuba<br/><span class="tld-table-so">CENIAInternet
+Industria y San Jose
+Capitolio Nacional</span></sponsor> </sponsor> -->
+		<sponsor>CENIAInternet
+Industria y San Jose
+Capitolio Nacional</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cv</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Cape Verde<br/><span class="tld-table-so">Agência Nacional das Comunicações (ANAC)</span></sponsor> </sponsor> -->
+		<sponsor>Agência Nacional das Comunicações (ANAC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cw</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Curaçao<br/><span class="tld-table-so">University of the Netherlands Antilles</span></sponsor> </sponsor> -->
+		<sponsor>University of the Netherlands Antilles</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cx</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Christmas Island<br/><span class="tld-table-so">Christmas Island Internet Administration Limited</span></sponsor> </sponsor> -->
+		<sponsor>Christmas Island Internet Administration Limited</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cy</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Cyprus<br/><span class="tld-table-so">University of Cyprus</span></sponsor> </sponsor> -->
+		<sponsor>University of Cyprus</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>cz</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Czech Republic<br/><span class="tld-table-so">CZ.NIC, z.s.p.o</span></sponsor> </sponsor> -->
+		<sponsor>CZ.NIC, z.s.p.o</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>de</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Germany<br/><span class="tld-table-so">DENIC eG</span></sponsor> </sponsor> -->
+		<sponsor>DENIC eG</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>dj</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Djibouti<br/><span class="tld-table-so">Djibouti Telecom S.A</span></sponsor> </sponsor> -->
+		<sponsor>Djibouti Telecom S.A</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>dk</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Denmark<br/><span class="tld-table-so">Dansk Internet Forum</span></sponsor> </sponsor> -->
+		<sponsor>Dansk Internet Forum</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>dm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Dominica<br/><span class="tld-table-so">DotDM Corporation</span></sponsor> </sponsor> -->
+		<sponsor>DotDM Corporation</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>do</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Dominican Republic<br/><span class="tld-table-so">Pontificia Universidad Catolica Madre y Maestra
+Recinto Santo Tomas de Aquino</span></sponsor> </sponsor> -->
+		<sponsor>Pontificia Universidad Catolica Madre y Maestra
+Recinto Santo Tomas de Aquino</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>dz</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Algeria<br/><span class="tld-table-so">CERIST</span></sponsor> </sponsor> -->
+		<sponsor>CERIST</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ec</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Ecuador<br/><span class="tld-table-so">NIC.EC (NICEC) S.A.</span></sponsor> </sponsor> -->
+		<sponsor>NIC.EC (NICEC) S.A.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>edu</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved for post-secondary institutions accredited by an agency on the U.S. Department of Education&#39;s list of Nationally Recognized Accrediting Agencies
+
+<br/><span class="tld-table-so">EDUCAUSE</span></sponsor> </sponsor> -->
+		<sponsor>EDUCAUSE</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ee</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Estonia<br/><span class="tld-table-so">National Institute of Chemical Physics and Biophysics</span></sponsor> </sponsor> -->
+		<sponsor>National Institute of Chemical Physics and Biophysics</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>eg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Egypt<br/><span class="tld-table-so">Egyptian Universities Network (EUN)
+Supreme Council of Universities</span></sponsor> </sponsor> -->
+		<sponsor>Egyptian Universities Network (EUN)
+Supreme Council of Universities</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>eh</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Western Sahara<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>er</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Eritrea<br/><span class="tld-table-so">Eritrea Telecommunication Services Corporation (EriTel)</span></sponsor> </sponsor> -->
+		<sponsor>Eritrea Telecommunication Services Corporation (EriTel)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>es</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Spain<br/><span class="tld-table-so">Red.es</span></sponsor> </sponsor> -->
+		<sponsor>Red.es</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>et</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Ethiopia<br/><span class="tld-table-so">Ethio telecom</span></sponsor> </sponsor> -->
+		<sponsor>Ethio telecom</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>eu</tld>
+		<type>country-code</type>
+		<!-- <sponsor>European Union<br/><span class="tld-table-so">EURid vzw/asbl</span></sponsor> </sponsor> -->
+		<sponsor>EURid vzw/asbl</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>fi</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Finland<br/><span class="tld-table-so">Finnish Communications Regulatory Authority</span></sponsor> </sponsor> -->
+		<sponsor>Finnish Communications Regulatory Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>fj</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Fiji<br/><span class="tld-table-so">The University of the South Pacific
+IT Services</span></sponsor> </sponsor> -->
+		<sponsor>The University of the South Pacific
+IT Services</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>fk</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Falkland Islands (Malvinas)<br/><span class="tld-table-so">Falkland Islands Government</span></sponsor> </sponsor> -->
+		<sponsor>Falkland Islands Government</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>fm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Micronesia, Federated States of<br/><span class="tld-table-so">FSM Telecommunications Corporation</span></sponsor> </sponsor> -->
+		<sponsor>FSM Telecommunications Corporation</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>fo</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Faroe Islands<br/><span class="tld-table-so">FO Council</span></sponsor> </sponsor> -->
+		<sponsor>FO Council</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>fr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>France<br/><span class="tld-table-so">AFNIC (NIC France) - Immeuble International</span></sponsor> </sponsor> -->
+		<sponsor>AFNIC (NIC France) - Immeuble International</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ga</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Gabon<br/><span class="tld-table-so">Gabon Telecom</span></sponsor> </sponsor> -->
+		<sponsor>Gabon Telecom</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gb</tld>
+		<type>country-code</type>
+		<!-- <sponsor>United Kingdom<br/><span class="tld-table-so">Reserved Domain - IANA</span></sponsor> </sponsor> -->
+		<sponsor>Reserved Domain - IANA</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gd</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Grenada<br/><span class="tld-table-so">The National Telecommunications Regulatory Commission (NTRC)</span></sponsor> </sponsor> -->
+		<sponsor>The National Telecommunications Regulatory Commission (NTRC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ge</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Georgia<br/><span class="tld-table-so">Caucasus Online</span></sponsor> </sponsor> -->
+		<sponsor>Caucasus Online</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gf</tld>
+		<type>country-code</type>
+		<!-- <sponsor>French Guiana<br/><span class="tld-table-so">Net Plus</span></sponsor> </sponsor> -->
+		<sponsor>Net Plus</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Guernsey<br/><span class="tld-table-so">Island Networks Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>Island Networks Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gh</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Ghana<br/><span class="tld-table-so">Network Computer Systems Limited</span></sponsor> </sponsor> -->
+		<sponsor>Network Computer Systems Limited</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gi</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Gibraltar<br/><span class="tld-table-so">Sapphire Networks</span></sponsor> </sponsor> -->
+		<sponsor>Sapphire Networks</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gl</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Greenland<br/><span class="tld-table-so">TELE Greenland A/S</span></sponsor> </sponsor> -->
+		<sponsor>TELE Greenland A/S</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Gambia<br/><span class="tld-table-so">GM-NIC</span></sponsor> </sponsor> -->
+		<sponsor>GM-NIC</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gn</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Guinea<br/><span class="tld-table-so">Centre National des Sciences Halieutiques de Boussoura</span></sponsor> </sponsor> -->
+		<sponsor>Centre National des Sciences Halieutiques de Boussoura</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gov</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved exclusively for the United States Government<br/><span class="tld-table-so">General Services Administration
+Attn: QTDC, 2E08 (.gov Domain Registration)</span></sponsor> </sponsor> -->
+		<sponsor>General Services Administration
+Attn: QTDC, 2E08 (.gov Domain Registration)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gp</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Guadeloupe<br/><span class="tld-table-so">Networking Technologies Group</span></sponsor> </sponsor> -->
+		<sponsor>Networking Technologies Group</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gq</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Equatorial Guinea<br/><span class="tld-table-so">GETESA</span></sponsor> </sponsor> -->
+		<sponsor>GETESA</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Greece<br/><span class="tld-table-so">ICS-FORTH GR</span></sponsor> </sponsor> -->
+		<sponsor>ICS-FORTH GR</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gs</tld>
+		<type>country-code</type>
+		<!-- <sponsor>South Georgia and the South Sandwich Islands<br/><span class="tld-table-so">Government of South Georgia and South Sandwich Islands (GSGSSI)</span></sponsor> </sponsor> -->
+		<sponsor>Government of South Georgia and South Sandwich Islands (GSGSSI)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gt</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Guatemala<br/><span class="tld-table-so">Universidad del Valle de Guatemala</span></sponsor> </sponsor> -->
+		<sponsor>Universidad del Valle de Guatemala</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gu</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Guam<br/><span class="tld-table-so">University of Guam
+Computer Center</span></sponsor> </sponsor> -->
+		<sponsor>University of Guam
+Computer Center</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gw</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Guinea-Bissau<br/><span class="tld-table-so">Fundação IT &amp; MEDIA Universidade de Bissao</span></sponsor> </sponsor> -->
+		<sponsor>Fundação IT &amp; MEDIA Universidade de Bissao</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>gy</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Guyana<br/><span class="tld-table-so">University of Guyana</span></sponsor> </sponsor> -->
+		<sponsor>University of Guyana</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>hk</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Hong Kong<br/><span class="tld-table-so">Hong Kong Internet Registration Corporation Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>Hong Kong Internet Registration Corporation Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>hm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Heard Island and McDonald Islands<br/><span class="tld-table-so">HM Domain Registry</span></sponsor> </sponsor> -->
+		<sponsor>HM Domain Registry</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>hn</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Honduras<br/><span class="tld-table-so">Red de Desarrollo Sostenible Honduras</span></sponsor> </sponsor> -->
+		<sponsor>Red de Desarrollo Sostenible Honduras</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>hr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Croatia<br/><span class="tld-table-so">CARNet - Croatian Academic and Research Network</span></sponsor> </sponsor> -->
+		<sponsor>CARNet - Croatian Academic and Research Network</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ht</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Haiti<br/><span class="tld-table-so">Consortium FDS/RDDH</span></sponsor> </sponsor> -->
+		<sponsor>Consortium FDS/RDDH</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>hu</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Hungary<br/><span class="tld-table-so">Council of Hungarian Internet Providers (CHIP)</span></sponsor> </sponsor> -->
+		<sponsor>Council of Hungarian Internet Providers (CHIP)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>id</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Indonesia<br/><span class="tld-table-so">IDNIC-PPAU Mikroelektronika</span></sponsor> </sponsor> -->
+		<sponsor>IDNIC-PPAU Mikroelektronika</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ie</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Ireland<br/><span class="tld-table-so">University College Dublin
+Computing Services
+Computer Centre</span></sponsor> </sponsor> -->
+		<sponsor>University College Dublin
+Computing Services
+Computer Centre</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>il</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Israel<br/><span class="tld-table-so">Internet Society of Israel</span></sponsor> </sponsor> -->
+		<sponsor>Internet Society of Israel</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>im</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Isle of Man<br/><span class="tld-table-so">Isle of Man Government</span></sponsor> </sponsor> -->
+		<sponsor>Isle of Man Government</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>in</tld>
+		<type>country-code</type>
+		<!-- <sponsor>India<br/><span class="tld-table-so">National Internet Exchange of India</span></sponsor> </sponsor> -->
+		<sponsor>National Internet Exchange of India</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>info</tld>
+		<sponsor>generic</sponsor>
+		<!-- <sponsor>Generic top-level domain<br/><span class="tld-table-so">Afilias Limited</span></sponsor> </sponsor> -->
+		<sponsor>Afilias Limited</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>int</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Used only for registering organizations established by international treaties between governments<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>io</tld>
+		<type>country-code</type>
+		<!-- <sponsor>British Indian Ocean Territory<br/><span class="tld-table-so">IO Top Level Domain Registry
+Cable and Wireless</span></sponsor> </sponsor> -->
+		<sponsor>IO Top Level Domain Registry
+Cable and Wireless</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>iq</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Iraq<br/><span class="tld-table-so">Communications and Media Commission (CMC)</span></sponsor> </sponsor> -->
+		<sponsor>Communications and Media Commission (CMC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ir</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Iran, Islamic Republic of<br/><span class="tld-table-so">Institute for Research in Fundamental Sciences</span></sponsor> </sponsor> -->
+		<sponsor>Institute for Research in Fundamental Sciences</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>is</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Iceland<br/><span class="tld-table-so">ISNIC - Internet Iceland ltd.</span></sponsor> </sponsor> -->
+		<sponsor>ISNIC - Internet Iceland ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>it</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Italy<br/><span class="tld-table-so">IIT - CNR</span></sponsor> </sponsor> -->
+		<sponsor>IIT - CNR</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>je</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Jersey<br/><span class="tld-table-so">Island Networks (Jersey) Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>Island Networks (Jersey) Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>jm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Jamaica<br/><span class="tld-table-so">University of West Indies</span></sponsor> </sponsor> -->
+		<sponsor>University of West Indies</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>jo</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Jordan<br/><span class="tld-table-so">National Information Technology Center (NITC)</span></sponsor> </sponsor> -->
+		<sponsor>National Information Technology Center (NITC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>jobs</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved to serve needs of the international human resource management community<br/><span class="tld-table-so">Employ Media LLC</span></sponsor> </sponsor> -->
+		<sponsor>Employ Media LLC</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>jp</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Japan<br/><span class="tld-table-so">Japan Registry Services Co., Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>Japan Registry Services Co., Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ke</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Kenya<br/><span class="tld-table-so">Kenya Network Information Center (KeNIC)</span></sponsor> </sponsor> -->
+		<sponsor>Kenya Network Information Center (KeNIC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>kg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Kyrgyzstan<br/><span class="tld-table-so">AsiaInfo Telecommunication Enterprise</span></sponsor> </sponsor> -->
+		<sponsor>AsiaInfo Telecommunication Enterprise</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>kh</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Cambodia<br/><span class="tld-table-so">Ministry of Post and Telecommunications</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Post and Telecommunications</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ki</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Kiribati<br/><span class="tld-table-so">Ministry of Communications, Transport, and Tourism Development</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Communications, Transport, and Tourism Development</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>km</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Comoros<br/><span class="tld-table-so">Comores Telecom</span></sponsor> </sponsor> -->
+		<sponsor>Comores Telecom</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>kn</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Saint Kitts and Nevis<br/><span class="tld-table-so">Ministry of Finance, Sustainable Development Information &amp; Technology</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Finance, Sustainable Development Information &amp; Technology</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>kp</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Korea, Democratic People&#39;s Republic of<br/><span class="tld-table-so">Star Joint Venture Company</span></sponsor> </sponsor> -->
+		<sponsor>Star Joint Venture Company</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>kr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Korea, Republic of<br/><span class="tld-table-so">Korea Internet &amp; Security Agency (KISA)</span></sponsor> </sponsor> -->
+		<sponsor>Korea Internet &amp; Security Agency (KISA)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>kw</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Kuwait<br/><span class="tld-table-so">Ministry of Communications</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Communications</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ky</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Cayman Islands<br/><span class="tld-table-so">The Information and Communications Technology Authority</span></sponsor> </sponsor> -->
+		<sponsor>The Information and Communications Technology Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>kz</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Kazakhstan<br/><span class="tld-table-so">Association of IT Companies of Kazakhstan</span></sponsor> </sponsor> -->
+		<sponsor>Association of IT Companies of Kazakhstan</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>la</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Lao People&#39;s Democratic Republic<br/><span class="tld-table-so">Lao National Internet Committee (LANIC), Ministry of Posts and Telecommunications</span></sponsor> </sponsor> -->
+		<sponsor>Lao National Internet Committee (LANIC), Ministry of Posts and Telecommunications</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>lb</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Lebanon<br/><span class="tld-table-so">American University of Beirut
+Computing and Networking Services</span></sponsor> </sponsor> -->
+		<sponsor>American University of Beirut
+Computing and Networking Services</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>lc</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Saint Lucia<br/><span class="tld-table-so">University of Puerto Rico</span></sponsor> </sponsor> -->
+		<sponsor>University of Puerto Rico</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>li</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Liechtenstein<br/><span class="tld-table-so">Universitaet Liechtenstein</span></sponsor> </sponsor> -->
+		<sponsor>Universitaet Liechtenstein</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>lk</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Sri Lanka<br/><span class="tld-table-so">Council for Information Technology
+LK Domain Registrar</span></sponsor> </sponsor> -->
+		<sponsor>Council for Information Technology
+LK Domain Registrar</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>lr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Liberia<br/><span class="tld-table-so">Data Technology Solutions, Inc.</span></sponsor> </sponsor> -->
+		<sponsor>Data Technology Solutions, Inc.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ls</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Lesotho<br/><span class="tld-table-so">National University of Lesotho</span></sponsor> </sponsor> -->
+		<sponsor>National University of Lesotho</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>lt</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Lithuania<br/><span class="tld-table-so">Kaunas University of Technology
+Information Technology Development Institute</span></sponsor> </sponsor> -->
+		<sponsor>Kaunas University of Technology
+Information Technology Development Institute</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>lu</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Luxembourg<br/><span class="tld-table-so">RESTENA</span></sponsor> </sponsor> -->
+		<sponsor>RESTENA</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>lv</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Latvia<br/><span class="tld-table-so">University of Latvia
+Institute of Mathematics and Computer Science
+Department of Network Solutions (DNS)</span></sponsor> </sponsor> -->
+		<sponsor>University of Latvia
+Institute of Mathematics and Computer Science
+Department of Network Solutions (DNS)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ly</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Libya<br/><span class="tld-table-so">General Post and Telecommunication Company</span></sponsor> </sponsor> -->
+		<sponsor>General Post and Telecommunication Company</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ma</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Morocco<br/><span class="tld-table-so">Agence Nationale de Réglementation des Télécommunications (ANRT)</span></sponsor> </sponsor> -->
+		<sponsor>Agence Nationale de Réglementation des Télécommunications (ANRT)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mc</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Monaco<br/><span class="tld-table-so">Gouvernement de Monaco
+Direction des Communications Electroniques</span></sponsor> </sponsor> -->
+		<sponsor>Gouvernement de Monaco
+Direction des Communications Electroniques</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>md</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Moldova, Republic of<br/><span class="tld-table-so">MoldData S.E.</span></sponsor> </sponsor> -->
+		<sponsor>MoldData S.E.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>me</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Montenegro<br/><span class="tld-table-so">Government of Montenegro</span></sponsor> </sponsor> -->
+		<sponsor>Government of Montenegro</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mf</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Saint Martin (French part)<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Madagascar<br/><span class="tld-table-so">NIC-MG (Network Information Center Madagascar)</span></sponsor> </sponsor> -->
+		<sponsor>NIC-MG (Network Information Center Madagascar)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mh</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Marshall Islands<br/><span class="tld-table-so">Cabinet Office</span></sponsor> </sponsor> -->
+		<sponsor>Cabinet Office</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mil</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved exclusively for the United States Military<br/><span class="tld-table-so">DoD Network Information Center</span></sponsor> </sponsor> -->
+		<sponsor>DoD Network Information Center</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mk</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Macedonia, The Former Yugoslav Republic of<br/><span class="tld-table-so">Ministry of Foreign Relations</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Foreign Relations</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ml</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Mali<br/><span class="tld-table-so">SOTELMA</span></sponsor> </sponsor> -->
+		<sponsor>SOTELMA</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Myanmar<br/><span class="tld-table-so">Ministry of Communications, Posts &amp; Telegraphs</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Communications, Posts &amp; Telegraphs</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mn</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Mongolia<br/><span class="tld-table-so">Datacom Co., Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>Datacom Co., Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mo</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Macao<br/><span class="tld-table-so">Bureau of Telecommunications Regulation (DSRT)</span></sponsor> </sponsor> -->
+		<sponsor>Bureau of Telecommunications Regulation (DSRT)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mobi</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved for consumers and providers of mobile products and services<br/><span class="tld-table-so">Afilias Technologies Limited dba dotMobi</span></sponsor> </sponsor> -->
+		<sponsor>Afilias Technologies Limited dba dotMobi</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mp</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Northern Mariana Islands<br/><span class="tld-table-so">Saipan Datacom, Inc.</span></sponsor> </sponsor> -->
+		<sponsor>Saipan Datacom, Inc.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mq</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Martinique<br/><span class="tld-table-so">MEDIASERV</span></sponsor> </sponsor> -->
+		<sponsor>MEDIASERV</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Mauritania<br/><span class="tld-table-so">University of Nouakchott</span></sponsor> </sponsor> -->
+		<sponsor>University of Nouakchott</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ms</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Montserrat<br/><span class="tld-table-so">MNI Networks Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>MNI Networks Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mt</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Malta<br/><span class="tld-table-so">NIC (Malta)</span></sponsor> </sponsor> -->
+		<sponsor>NIC (Malta)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mu</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Mauritius<br/><span class="tld-table-so">Internet Direct Ltd</span></sponsor> </sponsor> -->
+		<sponsor>Internet Direct Ltd</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>museum</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved for museums<br/><span class="tld-table-so">Museum Domain Management Association</span></sponsor> </sponsor> -->
+		<sponsor>Museum Domain Management Association</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mv</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Maldives<br/><span class="tld-table-so">Dhiraagu Pvt. Ltd. (DHIVEHINET)</span></sponsor> </sponsor> -->
+		<sponsor>Dhiraagu Pvt. Ltd. (DHIVEHINET)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mw</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Malawi<br/><span class="tld-table-so">Malawi Sustainable Development Network Programme
+(Malawi SDNP)</span></sponsor> </sponsor> -->
+		<sponsor>Malawi Sustainable Development Network Programme
+(Malawi SDNP)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mx</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Mexico<br/><span class="tld-table-so">NIC-Mexico
+ITESM - Campus Monterrey</span></sponsor> </sponsor> -->
+		<sponsor>NIC-Mexico
+ITESM - Campus Monterrey</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>my</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Malaysia<br/><span class="tld-table-so">MYNIC Berhad</span></sponsor> </sponsor> -->
+		<sponsor>MYNIC Berhad</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>mz</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Mozambique<br/><span class="tld-table-so">Centro de Informatica de Universidade Eduardo Mondlane</span></sponsor> </sponsor> -->
+		<sponsor>Centro de Informatica de Universidade Eduardo Mondlane</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>na</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Namibia<br/><span class="tld-table-so">Namibian Network Information Center</span></sponsor> </sponsor> -->
+		<sponsor>Namibian Network Information Center</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>name</tld>
+		<type>generic-restricted</type>
+		<!-- <sponsor>Reserved for individuals<br/><span class="tld-table-so">VeriSign Information Services, Inc.</span></sponsor> </sponsor> -->
+		<sponsor>VeriSign Information Services, Inc.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>nc</tld>
+		<type>country-code</type>
+		<!-- <sponsor>New Caledonia<br/><span class="tld-table-so">Office des Postes et Telecommunications</span></sponsor> </sponsor> -->
+		<sponsor>Office des Postes et Telecommunications</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ne</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Niger<br/><span class="tld-table-so">SONITEL</span></sponsor> </sponsor> -->
+		<sponsor>SONITEL</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>net</tld>
+		<sponsor>generic</sponsor>
+		<!-- <sponsor>Generic top-level domain<br/><span class="tld-table-so">VeriSign Global Registry Services</span></sponsor> </sponsor> -->
+		<sponsor>VeriSign Global Registry Services</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>nf</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Norfolk Island<br/><span class="tld-table-so">Norfolk Island Data Services</span></sponsor> </sponsor> -->
+		<sponsor>Norfolk Island Data Services</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ng</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Nigeria<br/><span class="tld-table-so">Nigeria Internet Registration Association</span></sponsor> </sponsor> -->
+		<sponsor>Nigeria Internet Registration Association</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ni</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Nicaragua<br/><span class="tld-table-so">Universidad Nacional del Ingernieria
+Centro de Computo</span></sponsor> </sponsor> -->
+		<sponsor>Universidad Nacional del Ingernieria
+Centro de Computo</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>nl</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Netherlands<br/><span class="tld-table-so">SIDN (Stichting Internet  Domeinregistratie Nederland)</span></sponsor> </sponsor> -->
+		<sponsor>SIDN (Stichting Internet  Domeinregistratie Nederland)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>no</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Norway<br/><span class="tld-table-so">UNINETT Norid A/S</span></sponsor> </sponsor> -->
+		<sponsor>UNINETT Norid A/S</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>np</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Nepal<br/><span class="tld-table-so">Mercantile Communications Pvt. Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>Mercantile Communications Pvt. Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>nr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Nauru<br/><span class="tld-table-so">CENPAC NET</span></sponsor> </sponsor> -->
+		<sponsor>CENPAC NET</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>nu</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Niue<br/><span class="tld-table-so">The IUSN Foundation</span></sponsor> </sponsor> -->
+		<sponsor>The IUSN Foundation</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>nz</tld>
+		<type>country-code</type>
+		<!-- <sponsor>New Zealand<br/><span class="tld-table-so">InternetNZ</span></sponsor> </sponsor> -->
+		<sponsor>InternetNZ</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>om</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Oman<br/><span class="tld-table-so">Telecommunications Regulatory Authority (TRA)</span></sponsor> </sponsor> -->
+		<sponsor>Telecommunications Regulatory Authority (TRA)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>org</tld>
+		<sponsor>generic</sponsor>
+		<!-- <sponsor>Generic top-level domain<br/><span class="tld-table-so">Public Interest Registry (PIR)</span></sponsor> </sponsor> -->
+		<sponsor>Public Interest Registry (PIR)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pa</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Panama<br/><span class="tld-table-so">Universidad Tecnologica de Panama</span></sponsor> </sponsor> -->
+		<sponsor>Universidad Tecnologica de Panama</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pe</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Peru<br/><span class="tld-table-so">Red Cientifica Peruana</span></sponsor> </sponsor> -->
+		<sponsor>Red Cientifica Peruana</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pf</tld>
+		<type>country-code</type>
+		<!-- <sponsor>French Polynesia<br/><span class="tld-table-so">Gouvernement de la Polynésie française</span></sponsor> </sponsor> -->
+		<sponsor>Gouvernement de la Polynésie française</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Papua New Guinea<br/><span class="tld-table-so">PNG DNS Administration
+Vice Chancellors Office
+The Papua New Guinea University of Technology</span></sponsor> </sponsor> -->
+		<sponsor>PNG DNS Administration
+Vice Chancellors Office
+The Papua New Guinea University of Technology</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ph</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Philippines<br/><span class="tld-table-so">PH Domain Foundation</span></sponsor> </sponsor> -->
+		<sponsor>PH Domain Foundation</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pk</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Pakistan<br/><span class="tld-table-so">PKNIC</span></sponsor> </sponsor> -->
+		<sponsor>PKNIC</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pl</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Poland<br/><span class="tld-table-so">Research and Academic Computer Network</span></sponsor> </sponsor> -->
+		<sponsor>Research and Academic Computer Network</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Saint Pierre and Miquelon<br/><span class="tld-table-so">AFNIC (NIC France) - Immeuble International</span></sponsor> </sponsor> -->
+		<sponsor>AFNIC (NIC France) - Immeuble International</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pn</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Pitcairn<br/><span class="tld-table-so">Pitcairn Island Administration</span></sponsor> </sponsor> -->
+		<sponsor>Pitcairn Island Administration</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>post</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved for the global postal community<br/><span class="tld-table-so">Universal Postal Union</span></sponsor> </sponsor> -->
+		<sponsor>Universal Postal Union</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Puerto Rico<br/><span class="tld-table-so">Gauss Research Laboratory Inc.</span></sponsor> </sponsor> -->
+		<sponsor>Gauss Research Laboratory Inc.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pro</tld>
+		<type>generic-restricted</type>
+		<!-- <sponsor>Restricted to credentialed professionals and related entities<br/><span class="tld-table-so">Registry Services Corporation
+dba RegistryPro</span></sponsor> </sponsor> -->
+		<sponsor>Registry Services Corporation
+dba RegistryPro</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ps</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Palestinian Territory, Occupied<br/><span class="tld-table-so">Ministry Of Telecommunications &amp;
+Information Technology,
+Government Computer Center.</span></sponsor> </sponsor> -->
+		<sponsor>Ministry Of Telecommunications &amp;
+Information Technology,
+Government Computer Center.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pt</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Portugal<br/><span class="tld-table-so">Fundação para a Computação Científica Nacional</span></sponsor> </sponsor> -->
+		<sponsor>Fundação para a Computação Científica Nacional</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>pw</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Palau<br/><span class="tld-table-so">Micronesia Investment and Development Corporation</span></sponsor> </sponsor> -->
+		<sponsor>Micronesia Investment and Development Corporation</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>py</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Paraguay<br/><span class="tld-table-so">NIC-PY</span></sponsor> </sponsor> -->
+		<sponsor>NIC-PY</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>qa</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Qatar<br/><span class="tld-table-so">The Supreme Council of Information and Communication Technology (ictQATAR)</span></sponsor> </sponsor> -->
+		<sponsor>The Supreme Council of Information and Communication Technology (ictQATAR)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>re</tld>
+		<type>country-code</type>
+		<!-- <sponsor>RÉUNION<br/><span class="tld-table-so">AFNIC (NIC France) - Immeuble International</span></sponsor> </sponsor> -->
+		<sponsor>AFNIC (NIC France) - Immeuble International</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ro</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Romania<br/><span class="tld-table-so">National Institute for R&amp;D in Informatics</span></sponsor> </sponsor> -->
+		<sponsor>National Institute for R&amp;D in Informatics</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>rs</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Serbia<br/><span class="tld-table-so">Serbian National Register of
+Internet Domain Names (RNIDS)</span></sponsor> </sponsor> -->
+		<sponsor>Serbian National Register of
+Internet Domain Names (RNIDS)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ru</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Russian Federation<br/><span class="tld-table-so">Coordination Center for TLD RU</span></sponsor> </sponsor> -->
+		<sponsor>Coordination Center for TLD RU</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>rw</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Rwanda<br/><span class="tld-table-so">Rwanda Information Communication and Technology Association (RICTA)</span></sponsor> </sponsor> -->
+		<sponsor>Rwanda Information Communication and Technology Association (RICTA)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sa</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Saudi Arabia<br/><span class="tld-table-so">Communications and Information Technology Commission</span></sponsor> </sponsor> -->
+		<sponsor>Communications and Information Technology Commission</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sb</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Solomon Islands<br/><span class="tld-table-so">Solomon Telekom Company Limited</span></sponsor> </sponsor> -->
+		<sponsor>Solomon Telekom Company Limited</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sc</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Seychelles<br/><span class="tld-table-so">VCS Pty Ltd</span></sponsor> </sponsor> -->
+		<sponsor>VCS Pty Ltd</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sd</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Sudan<br/><span class="tld-table-so">Sudan Internet Society</span></sponsor> </sponsor> -->
+		<sponsor>Sudan Internet Society</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>se</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Sweden<br/><span class="tld-table-so">The Internet Infrastructure Foundation</span></sponsor> </sponsor> -->
+		<sponsor>The Internet Infrastructure Foundation</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Singapore<br/><span class="tld-table-so">Singapore Network Information Centre (SGNIC) Pte Ltd</span></sponsor> </sponsor> -->
+		<sponsor>Singapore Network Information Centre (SGNIC) Pte Ltd</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sh</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Saint Helena, Ascension and Tristan da Cunha<br/><span class="tld-table-so">Government of St. Helena</span></sponsor> </sponsor> -->
+		<sponsor>Government of St. Helena</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>si</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Slovenia<br/><span class="tld-table-so">Academic and Research Network of Slovenia (ARNES)</span></sponsor> </sponsor> -->
+		<sponsor>Academic and Research Network of Slovenia (ARNES)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sj</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Svalbard and Jan Mayen<br/><span class="tld-table-so">UNINETT Norid A/S</span></sponsor> </sponsor> -->
+		<sponsor>UNINETT Norid A/S</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sk</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Slovakia<br/><span class="tld-table-so">SK-NIC, a.s.</span></sponsor> </sponsor> -->
+		<sponsor>SK-NIC, a.s.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sl</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Sierra Leone<br/><span class="tld-table-so">Sierratel</span></sponsor> </sponsor> -->
+		<sponsor>Sierratel</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>San Marino<br/><span class="tld-table-so">Telecom Italia San Marino S.p.A.</span></sponsor> </sponsor> -->
+		<sponsor>Telecom Italia San Marino S.p.A.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sn</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Senegal<br/><span class="tld-table-so">Universite Cheikh Anta Diop
+NIC Senegal</span></sponsor> </sponsor> -->
+		<sponsor>Universite Cheikh Anta Diop
+NIC Senegal</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>so</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Somalia<br/><span class="tld-table-so">Ministry of Post and Telecommunications</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Post and Telecommunications</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Suriname<br/><span class="tld-table-so">Telesur</span></sponsor> </sponsor> -->
+		<sponsor>Telesur</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ss</tld>
+		<type>country-code</type>
+		<!-- <sponsor>South Sudan<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>st</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Sao Tome and Principe<br/><span class="tld-table-so">Tecnisys</span></sponsor> </sponsor> -->
+		<sponsor>Tecnisys</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>su</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Soviet Union<br/><span class="tld-table-so">Russian Institute for Development of Public Networks
+(ROSNIIROS)</span></sponsor> </sponsor> -->
+		<sponsor>Russian Institute for Development of Public Networks
+(ROSNIIROS)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sv</tld>
+		<type>country-code</type>
+		<!-- <sponsor>El Salvador<br/><span class="tld-table-so">SVNet</span></sponsor> </sponsor> -->
+		<sponsor>SVNet</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sx</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Sint Maarten (Dutch part)<br/><span class="tld-table-so">SX Registry SA B.V.</span></sponsor> </sponsor> -->
+		<sponsor>SX Registry SA B.V.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sy</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Syrian Arab Republic<br/><span class="tld-table-so">National Agency for Network Services (NANS)</span></sponsor> </sponsor> -->
+		<sponsor>National Agency for Network Services (NANS)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>sz</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Swaziland<br/><span class="tld-table-so">University of Swaziland
+Department of Computer Science</span></sponsor> </sponsor> -->
+		<sponsor>University of Swaziland
+Department of Computer Science</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tc</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Turks and Caicos Islands<br/><span class="tld-table-so">Melrex TC</span></sponsor> </sponsor> -->
+		<sponsor>Melrex TC</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>td</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Chad<br/><span class="tld-table-so">Société des télécommunications du Tchad (SOTEL TCHAD)</span></sponsor> </sponsor> -->
+		<sponsor>Société des télécommunications du Tchad (SOTEL TCHAD)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tel</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved for businesses and individuals to publish their contact data<br/><span class="tld-table-so">Telnic Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>Telnic Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tf</tld>
+		<type>country-code</type>
+		<!-- <sponsor>French Southern Territories<br/><span class="tld-table-so">AFNIC (NIC France) - Immeuble International</span></sponsor> </sponsor> -->
+		<sponsor>AFNIC (NIC France) - Immeuble International</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Togo<br/><span class="tld-table-so">Cafe Informatique et Telecommunications</span></sponsor> </sponsor> -->
+		<sponsor>Cafe Informatique et Telecommunications</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>th</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Thailand<br/><span class="tld-table-so">Thai Network Information Center Foundation</span></sponsor> </sponsor> -->
+		<sponsor>Thai Network Information Center Foundation</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tj</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Tajikistan<br/><span class="tld-table-so">Information Technology Center</span></sponsor> </sponsor> -->
+		<sponsor>Information Technology Center</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tk</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Tokelau<br/><span class="tld-table-so">Telecommunication Tokelau Corporation (Teletok)</span></sponsor> </sponsor> -->
+		<sponsor>Telecommunication Tokelau Corporation (Teletok)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tl</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Timor-Leste<br/><span class="tld-table-so">Ministry of Infrastructure
+Information and Technology Division</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Infrastructure
+Information and Technology Division</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tm</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Turkmenistan<br/><span class="tld-table-so">TM Domain Registry Ltd</span></sponsor> </sponsor> -->
+		<sponsor>TM Domain Registry Ltd</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tn</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Tunisia<br/><span class="tld-table-so">Agence Tunisienne d&#39;Internet</span></sponsor> </sponsor> -->
+		<sponsor>Agence Tunisienne d&#39;Internet</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>to</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Tonga<br/><span class="tld-table-so">Government of the Kingdom of Tonga
+H.R.H. Crown Prince Tupouto&#39;a
+c/o Consulate of Tonga</span></sponsor> </sponsor> -->
+		<sponsor>Government of the Kingdom of Tonga
+H.R.H. Crown Prince Tupouto&#39;a
+c/o Consulate of Tonga</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tp</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Portuguese Timor<br/><span class="tld-table-so">-</span></sponsor> </sponsor> -->
+		<sponsor>-</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tr</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Turkey<br/><span class="tld-table-so">Middle East Technical University
+Department of Computer Engineering</span></sponsor> </sponsor> -->
+		<sponsor>Middle East Technical University
+Department of Computer Engineering</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>travel</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved for entities whose primary area of activity is in the travel industry<br/><span class="tld-table-so">Tralliance Registry Management Company, LLC.</span></sponsor> </sponsor> -->
+		<sponsor>Tralliance Registry Management Company, LLC.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tt</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Trinidad and Tobago<br/><span class="tld-table-so">University of the West Indies
+Faculty of Engineering</span></sponsor> </sponsor> -->
+		<sponsor>University of the West Indies
+Faculty of Engineering</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tv</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Tuvalu<br/><span class="tld-table-so">Ministry of Finance and Tourism</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Finance and Tourism</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tw</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Taiwan, Province of China<br/><span class="tld-table-so">Taiwan Network Information Center (TWNIC)</span></sponsor> </sponsor> -->
+		<sponsor>Taiwan Network Information Center (TWNIC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>tz</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Tanzania, United Republic of<br/><span class="tld-table-so">Tanzania Network Information Centre (tzNIC)</span></sponsor> </sponsor> -->
+		<sponsor>Tanzania Network Information Centre (tzNIC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ua</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Ukraine<br/><span class="tld-table-so">Communication Systems Ltd</span></sponsor> </sponsor> -->
+		<sponsor>Communication Systems Ltd</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ug</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Uganda<br/><span class="tld-table-so">Uganda Online Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>Uganda Online Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>uk</tld>
+		<type>country-code</type>
+		<!-- <sponsor>United Kingdom<br/><span class="tld-table-so">Nominet UK</span></sponsor> </sponsor> -->
+		<sponsor>Nominet UK</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>um</tld>
+		<type>country-code</type>
+		<!-- <sponsor>United States Minor Outlying Islands<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>us</tld>
+		<type>country-code</type>
+		<!-- <sponsor>United States<br/><span class="tld-table-so">NeuStar, Inc.</span></sponsor> </sponsor> -->
+		<sponsor>NeuStar, Inc.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>uy</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Uruguay<br/><span class="tld-table-so">SeCIU - Universidad de la Republica</span></sponsor> </sponsor> -->
+		<sponsor>SeCIU - Universidad de la Republica</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>uz</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Uzbekistan<br/><span class="tld-table-so">Computerization and Information Technologies Developing Center
+UZINFOCOM</span></sponsor> </sponsor> -->
+		<sponsor>Computerization and Information Technologies Developing Center
+UZINFOCOM</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>va</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Holy See (Vatican City State)<br/><span class="tld-table-so">Holy See Secretariat of State Department of Telecommunications</span></sponsor> </sponsor> -->
+		<sponsor>Holy See Secretariat of State Department of Telecommunications</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>vc</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Saint Vincent and the Grenadines<br/><span class="tld-table-so">Ministry of Telecommunications, Science, Technology and Industry</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Telecommunications, Science, Technology and Industry</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ve</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Venezuela, Bolivarian Republic of<br/><span class="tld-table-so">Comisión Nacional de Telecomunicaciones (CONATEL)</span></sponsor> </sponsor> -->
+		<sponsor>Comisión Nacional de Telecomunicaciones (CONATEL)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>vg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Virgin Islands, British<br/><span class="tld-table-so">Pinebrook Developments Ltd</span></sponsor> </sponsor> -->
+		<sponsor>Pinebrook Developments Ltd</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>vi</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Virgin Islands, U.S.<br/><span class="tld-table-so">Virgin Islands Public Telcommunications System
+c/o COBEX Internet Services</span></sponsor> </sponsor> -->
+		<sponsor>Virgin Islands Public Telcommunications System
+c/o COBEX Internet Services</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>vn</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Viet Nam<br/><span class="tld-table-so">Ministry of Information and Communications of Socialist Republic of Viet Nam</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Information and Communications of Socialist Republic of Viet Nam</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>vu</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Vanuatu<br/><span class="tld-table-so">Telecom Vanuatu Limited</span></sponsor> </sponsor> -->
+		<sponsor>Telecom Vanuatu Limited</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>wf</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Wallis and Futuna<br/><span class="tld-table-so">AFNIC (NIC France) - Immeuble International</span></sponsor> </sponsor> -->
+		<sponsor>AFNIC (NIC France) - Immeuble International</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ws</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Samoa<br/><span class="tld-table-so">Government of Samoa Ministry of Foreign Affairs &amp; Trade</span></sponsor> </sponsor> -->
+		<sponsor>Government of Samoa Ministry of Foreign Affairs &amp; Trade</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--0zwm56d</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--11b5bs3a9aj6g</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--3e0b707e</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Korea, Republic of<br/><span class="tld-table-so">KISA (Korea Internet &amp; Security Agency)</span></sponsor> </sponsor> -->
+		<sponsor>KISA (Korea Internet &amp; Security Agency)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--45brj9c</tld>
+		<type>country-code</type>
+		<!-- <sponsor>India<br/><span class="tld-table-so">National Internet Exchange of India</span></sponsor> </sponsor> -->
+		<sponsor>National Internet Exchange of India</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--54b7fta0cc</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Bangladesh<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--80akhbyknj4f</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--80ao21a</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Kazakhstan<br/><span class="tld-table-so">Association of IT Companies of Kazakhstan</span></sponsor> </sponsor> -->
+		<sponsor>Association of IT Companies of Kazakhstan</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--90a3ac</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Serbia<br/><span class="tld-table-so">Serbian National Register of Internet Domain Names (RNIDS)</span></sponsor> </sponsor> -->
+		<sponsor>Serbian National Register of Internet Domain Names (RNIDS)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--9t4b11yi5a</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--clchc0ea0b2g2a9gcd</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Singapore<br/><span class="tld-table-so">Singapore Network Information Centre (SGNIC) Pte Ltd</span></sponsor> </sponsor> -->
+		<sponsor>Singapore Network Information Centre (SGNIC) Pte Ltd</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--deba0ad</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--fiqs8s</tld>
+		<type>country-code</type>
+		<!-- <sponsor>China<br/><span class="tld-table-so">China Internet Network Information Center</span></sponsor> </sponsor> -->
+		<sponsor>China Internet Network Information Center</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--fiqz9s</tld>
+		<type>country-code</type>
+		<!-- <sponsor>China<br/><span class="tld-table-so">China Internet Network Information Center</span></sponsor> </sponsor> -->
+		<sponsor>China Internet Network Information Center</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--fpcrj9c3d</tld>
+		<type>country-code</type>
+		<!-- <sponsor>India<br/><span class="tld-table-so">National Internet Exchange of India</span></sponsor> </sponsor> -->
+		<sponsor>National Internet Exchange of India</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--fzc2c9e2c</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Sri Lanka<br/><span class="tld-table-so">LK Domain Registry</span></sponsor> </sponsor> -->
+		<sponsor>LK Domain Registry</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--g6w251d</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--gecrj9c</tld>
+		<type>country-code</type>
+		<!-- <sponsor>India<br/><span class="tld-table-so">National Internet Exchange of India</span></sponsor> </sponsor> -->
+		<sponsor>National Internet Exchange of India</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--h2brj9c</tld>
+		<type>country-code</type>
+		<!-- <sponsor>India<br/><span class="tld-table-so">National Internet Exchange of India</span></sponsor> </sponsor> -->
+		<sponsor>National Internet Exchange of India</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--hgbk6aj7f53bba</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--hlcj6aya9esc7a</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--j1amh</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Ukraine<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--j6w193g</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Hong Kong<br/><span class="tld-table-so">Hong Kong Internet Registration Corporation Ltd.</span></sponsor> </sponsor> -->
+		<sponsor>Hong Kong Internet Registration Corporation Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--jxalpdlp</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--kgbechtv</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--kprw13d</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Taiwan, Province of China<br/><span class="tld-table-so">Taiwan Network Information Center (TWNIC)</span></sponsor> </sponsor> -->
+		<sponsor>Taiwan Network Information Center (TWNIC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--kpry57d</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Taiwan, Province of China<br/><span class="tld-table-so">Taiwan Network Information Center (TWNIC)</span></sponsor> </sponsor> -->
+		<sponsor>Taiwan Network Information Center (TWNIC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--l1acc</tld>
+		<type>country-code</type>
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--lgbbat1ad8j</tld>
+		<type>country-code</type>
+		<sponsor>CERIST</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--mgb9awbf</tld>
+		<type>country-code</type>
+		<sponsor>Telecommunications Regulatory Authority (TRA)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--mgba3a4f16a</tld>
+		<type>country-code</type>
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--mgbaam7a8h</tld>
+		<type>country-code</type>
+		<!-- <sponsor>United Arab Emirates<br/><span class="tld-table-so">Telecommunications Regulatory Authority (TRA)</span></sponsor> </sponsor> -->
+		<sponsor>Telecommunications Regulatory Authority (TRA)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--mgbai9azgqp6j</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Pakistan<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--mgbayh7gpa</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Jordan<br/><span class="tld-table-so">National Information Technology Center (NITC)</span></sponsor> </sponsor> -->
+		<sponsor>National Information Technology Center (NITC)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--mgbbh1a71e</tld>
+		<type>country-code</type>
+		<!-- <sponsor>India<br/><span class="tld-table-so">National Internet Exchange of India</span></sponsor> </sponsor> -->
+		<sponsor>National Internet Exchange of India</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--mgbc0a9azcg</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Morocco<br/><span class="tld-table-so">Agence Nationale de Réglementation des Télécommunications (ANRT)</span></sponsor> </sponsor> -->
+		<sponsor>Agence Nationale de Réglementation des Télécommunications (ANRT)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--mgberp4a5d4ar</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Saudi Arabia<br/><span class="tld-table-so">Communications and Information Technology Commission</span></sponsor> </sponsor> -->
+		<sponsor>Communications and Information Technology Commission</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--mgbpl2fh</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Sudan<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--mgbx4cd0ab</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Malaysia<br/><span class="tld-table-so">MYNIC Berhad</span></sponsor> </sponsor> -->
+		<sponsor>MYNIC Berhad</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--node</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Georgia<br/><span class="tld-table-so">Not assigned</span></sponsor> </sponsor> -->
+		<sponsor>Not assigned</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--o3cw4h</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Thailand<br/><span class="tld-table-so">Thai Network Information Center Foundation</span></sponsor> </sponsor> -->
+		<sponsor>Thai Network Information Center Foundation</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--ogbpf8fl</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Syrian Arab Republic<br/><span class="tld-table-so">National Agency for Network Services (NANS)</span></sponsor> </sponsor> -->
+		<sponsor>National Agency for Network Services (NANS)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--p1ai</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Russian Federation<br/><span class="tld-table-so">Coordination Center for TLD RU</span></sponsor> </sponsor> -->
+		<sponsor>Coordination Center for TLD RU</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--pgbs0dh</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Tunisia<br/><span class="tld-table-so">Agence Tunisienne d&#39;Internet</span></sponsor> </sponsor> -->
+		<sponsor>Agence Tunisienne d&#39;Internet</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--s9brj9c</tld>
+		<type>country-code</type>
+		<!-- <sponsor>India<br/><span class="tld-table-so">National Internet Exchange of India</span></sponsor> </sponsor> -->
+		<sponsor>National Internet Exchange of India</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--wgbh1c</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Egypt<br/><span class="tld-table-so">National Telecommunication Regulatory Authority - NTRA</span></sponsor> </sponsor> -->
+		<sponsor>National Telecommunication Regulatory Authority - NTRA</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--wgbl6a</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Qatar<br/><span class="tld-table-so">Supreme Council for Communications and Information Technology (ictQATAR)</span></sponsor> </sponsor> -->
+		<sponsor>Supreme Council for Communications and Information Technology (ictQATAR)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--xkc2al3hye2a</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Sri Lanka<br/><span class="tld-table-so">LK Domain Registry</span></sponsor> </sponsor> -->
+		<sponsor>LK Domain Registry</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--xkc2dl3a5ee0h</tld>
+		<type>country-code</type>
+		<!-- <sponsor>India<br/><span class="tld-table-so">National Internet Exchange of India</span></sponsor> </sponsor> -->
+		<sponsor>National Internet Exchange of India</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--yfro4i67o</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Singapore<br/><span class="tld-table-so">Singapore Network Information Centre (SGNIC) Pte Ltd</span></sponsor> </sponsor> -->
+		<sponsor>Singapore Network Information Centre (SGNIC) Pte Ltd</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--ygbi2ammx</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Palestinian Territory, Occupied<br/><span class="tld-table-so">Ministry of Telecom &amp; Information Technology (MTIT)</span></sponsor> </sponsor> -->
+		<sponsor>Ministry of Telecom &amp; Information Technology (MTIT)</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xn--zckzah</tld>
+		<sponsor>test</sponsor>
+		<!-- <sponsor>Reserved for testing internationalised domain names<br/><span class="tld-table-so">Internet Assigned Numbers Authority</span></sponsor> </sponsor> -->
+		<sponsor>Internet Assigned Numbers Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>xxx</tld>
+		<type>sponsored</type>
+		<!-- <sponsor>Reserved for the adult entertainment community<br/><span class="tld-table-so">ICM Registry LLC</span></sponsor> </sponsor> -->
+		<sponsor>ICM Registry LLC</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>ye</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Yemen<br/><span class="tld-table-so">TeleYemen</span></sponsor> </sponsor> -->
+		<sponsor>TeleYemen</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>yt</tld>
+		<type>country-code</type>
+		<!-- <sponsor>Mayotte<br/><span class="tld-table-so">AFNIC (NIC France) - Immeuble International</span></sponsor> </sponsor> -->
+		<sponsor>AFNIC (NIC France) - Immeuble International</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>za</tld>
+		<type>country-code</type>
+		<sponsor>ZA Domain Name Authority</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>zm</tld>
+		<type>country-code</type>
+		<sponsor>ZAMNET Communication Systems Ltd.</sponsor>
+	</domain>
+	
+	<domain>
+		<tld>zw</tld>
+		<type>country-code</type>
+		<sponsor>Postal and Telecommunications Regulatory Authority of Zimbabwe (POTRAZ)</sponsor>
+	</domain>
+</EasySCP_TLD>

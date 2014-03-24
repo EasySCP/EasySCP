@@ -1,0 +1,180 @@
+<?php
+/**
+ * EasySCP a Virtual Hosting Control Panel
+ * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * @link 		http://www.easyscp.net
+ * @author 		EasySCP Team
+ */
+
+/**
+ * Script short description:
+ *
+ * This script allows PhpMyAdmin authentication from EasySCP
+ */
+
+/**
+ * Main program
+ */
+
+// Include all needed libraries and process to the EasySCP initialization
+require '../../include/easyscp-lib.php';
+
+// Check login
+check_login(__FILE__);
+
+/**
+ *  Dispatches the request
+ */
+if(isset($_GET['id'])) {
+	if(!pmaAuth((int) $_GET['id'])) {
+		user_goto('sql_manage.php');
+	}
+} else {
+	user_goto('/index.php');
+}
+
+/**
+ * Functions
+ */
+
+/**
+ * Get database login credentials
+ *
+ * @since  1.0.7
+ * @access private
+ * @param  int $dbUserId Database user unique identifier
+ * @return array Array that contains login credentials or FALSE on failure
+ */
+function _getLoginCredentials($dbUserId) {
+
+	/**
+	 * @var $db EasySCP_Database_ResultSet
+	 */
+	$db = EasySCP_Registry::get('Db');
+
+	// @todo Should be optimized
+	$query = "
+		SELECT
+			`sqlu_name`, `sqlu_pass`
+		FROM
+			`sql_user`, `sql_database`, `domain`
+		WHERE
+			`sql_user`.`sqld_id` = `sql_database`.`sqld_id`
+		AND
+			`sql_user`.`sqlu_id` = ?
+		AND
+			`sql_database`.`domain_id` = `domain`.`domain_id`
+		AND
+			`domain`.`domain_admin_id` = ?
+		;
+	";
+
+	$stmt = exec_query($db, $query, array($dbUserId, $_SESSION['user_id']));
+
+	if($stmt->rowCount() == 1) {
+		return array(
+			$stmt->fields['sqlu_name'],
+			decrypt_db_password($stmt->fields['sqlu_pass'])
+		);
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Creates all cookies for PhpMyAdmin
+ *
+ * @since  1.0.7
+ * @access private
+ * @param  array $cookies Array that contains cookies definitions for PMA
+ * @return void
+ */
+function _pmaCreateCookies($cookies) {
+
+	foreach($cookies as $cookie) {
+		header("Set-Cookie: $cookie", false);
+	}
+}
+
+/**
+ * PhpMyAdmin authentication
+ *
+ * @since  1.0.7
+ * @param  int $dbUserId Database user unique identifier
+ * @return bool TRUE on success, FALSE otherwise
+ */
+function pmaAuth($dbUserId) {
+
+	$credentials = _getLoginCredentials($dbUserId);
+
+	if($credentials) {
+		$data = http_build_query(
+			array(
+				'pma_username' => $credentials[0],
+				'pma_password' => stripcslashes($credentials[1])
+			)
+		);
+	} else {
+		set_page_message(tr('Unknown SQL user id!'), 'error');
+
+		return false;
+	}
+
+	// Prepares PhpMyadmin absolute Uri to use
+	if(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS'])) {
+		$port = ($_SERVER['SERVER_PORT'] != '443')
+			? ':' . $_SERVER['SERVER_PORT'] : '';
+
+		$pmaUri = "https://{$_SERVER['SERVER_NAME']}$port/pma/";
+	} else {
+		$port = ($_SERVER['SERVER_PORT'] != '80')
+			? ':' . $_SERVER['SERVER_PORT'] : '';
+
+		$pmaUri = "http://{$_SERVER['SERVER_NAME']}$port/pma/";
+	}
+
+	// Set stream context (http) options
+	stream_context_get_default(
+		array(
+			'http' => array(
+				'method' => 'POST',
+				'header' => "Host: {$_SERVER['SERVER_NAME']}$port\r\n" .
+					"Content-Type: application/x-www-form-urlencoded\r\n" .
+					'Content-Length: ' . strlen($data) . "\r\n" .
+					"Connection: close\r\n\r\n",
+				'content' => $data,
+				'user_agent' => 'Mozilla/5.0',
+				'max_redirects' => 1
+			)
+		)
+	);
+
+	// Gets the headers from PhpMyAdmin
+	$headers = get_headers($pmaUri, true);
+
+	if(!$headers || !isset($headers['Location'])) {
+		set_page_message(tr('An error occurred while authentication!'), 'error');
+		return false;
+	} else {
+		_pmaCreateCookies($headers['Set-Cookie']);
+		header("Location: {$headers['Location']}");
+	}
+
+	return true;
+}
+?>

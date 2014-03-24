@@ -1,0 +1,3 @@
+<IfModule !mod_fcgid.c>
+LoadModule fcgid_module /usr/lib/apache2/modules/mod_fcgid.so
+</IfModule>

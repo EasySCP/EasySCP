@@ -1,0 +1,1 @@
+{include file='client/main_menu_general_information.tpl'}

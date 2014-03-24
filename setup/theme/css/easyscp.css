@@ -1,0 +1,218 @@
+/**
+ * EasySCP a Virtual Hosting Control Panel
+ * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ *
+ * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+ *
+ * @link 		http://www.easyscp.net
+ * @author 		EasySCP Team
+ */
+
+@import url('easyscp.reset.css');
+@import url('easyscp.messages.css');
+
+@CHARSET "UTF-8";
+
+a img {
+	border:				none;
+}
+
+a.link, a.link:link, a.link:visited {
+	color:				#009;
+	background-color:	#fff;
+	text-decoration:	underline;
+	font-weight:		normal;
+}
+
+a.link:hover, a.link:active, a.link:focus {
+	color:				#000;
+	background-color:	#fff;
+	text-decoration:	none;
+}
+
+body {
+	border: 			0;
+	color:				#000;
+	font-family:		Arial, sans-serif;
+	font-size:			0.9em;
+	height:				100%;
+	left: 				0;
+	overflow-y: 		scroll;
+	position: 			absolute;
+	right: 				0;
+	top: 				0;
+	width:				100%;
+}
+
+.login {
+	font-size:			0.8em;
+	white-space: 		nowrap;
+	text-decoration:	none;
+	text-align:			right;
+}
+
+.login p {
+	text-align:			right;
+}
+
+/***********************************************************************************
+ * GENERAL INTERFACE STYLES
+ ***********************************************************************************/
+
+h2 {
+    font-family:		Geneva,Arial,Helvetica,sans-serif;
+	font-size:			1.6em;
+    font-variant:		small-caps;
+    font-weight:		bold;
+    position:			relative;
+    left:				-33px;
+    padding-left:		33px;
+    height:				33px;
+    background-repeat:	no-repeat;
+    margin:				1em 0 0;
+}
+h2 span {
+    display:			block;
+    border-bottom:		1px solid #ccc;
+    margin-right:		-33px;
+}
+
+
+/***********************************************************************************
+ * Form elements
+ ***********************************************************************************/
+
+form {
+	margin: 0.5em 0;
+}
+
+form table tbody td input[type="text"],
+form table tbody td input[type="password"],
+form table tbody td textarea{
+	min-width:			200px;
+}
+
+form table tbody td input[type="text"],
+form table tbody td input[type="password"],
+form table tbody td select,
+form table tbody td textarea {
+	border:				1px solid #ccc;
+	border-radius:		4px;
+	padding:			2px;
+}
+
+/***********************************************************************************
+ * Header STYLE
+ ***********************************************************************************/
+.header {
+	background-color:	#000;
+	height:				142px;
+}
+.header a.link {
+	background-color:	transparent;
+}
+.header img {
+	padding-top:		8px;
+}
+.location {
+    background:			url(../images/background/top_bar_bg.png) repeat-x scroll left top #000000;
+    height:				24px;
+    line-height:		24px;
+}
+
+/***********************************************************************************
+ * Main STYLE
+ ***********************************************************************************/
+.main {
+	margin:				30px auto;
+	width:				700px;
+}
+.main table {
+    width:				100%;
+    border-collapse:	collapse;
+}
+.main tr {
+    border:				1px solid #dfdfdf;
+    background:			#fff;
+}
+.main tr.line_top{
+	border-top:			3px solid #000;
+}
+.main tr:nth-child(odd) {
+    background:			#f5f5f5;
+}
+.main tr:hover {
+	background:			#ddd;
+}
+.main td {
+    padding:			5px;
+    white-space:		nowrap;
+    border-top:			1px solid #dfdfdf;
+    border-bottom:		1px solid #dfdfdf;
+}
+.main fieldset {
+	border:				none;
+	margin-bottom:		20px;
+}
+.main legend, .main h3 {
+	color:				#000;
+	font-size:			1.2em;
+	font-weight:		bold;
+	margin-bottom:		5px;
+}
+.content p {
+	margin-top:			50px;
+	margin-bottom:		5px;
+}
+
+/***********************************************************************************
+ * Footer STYLE
+ ***********************************************************************************/
+.footer {
+	bottom:				10px;
+	position:			absolute;
+	right:				10px;
+	text-align:			right;
+	z-index:			0;
+}
+
+.footer img {
+	border: 			0;
+	height:				15px;
+	width:				80px;
+}
+
+/***********************************************************************************
+ * Button STYLE
+ ***********************************************************************************/
+
+.buttons {
+	margin:				0.5em 0;
+	padding-bottom:		25px;
+	text-align:			right;
+}
+
+.buttons input {
+	background:			transparent url(../images/background/button.jpg) center left repeat-x;
+	border-color:		#eee #000 #000 #eee;
+	border-style:		solid;
+	border-width:		1px;
+	color:				#fff;
+	font-size:			0.9em;
+	font-weight:		bold;
+	height:				21px;
+	line-height:		21px;
+	padding:			0 10px;
+}
+.buttons input:hover, .buttons input:focus {
+	color:				#5cbada;
+	cursor:				pointer;
+}
+
+/***********************************************************************************
+ * ICONS
+ ***********************************************************************************/
+
+/* Content icons (table_icons) */
+.main .general { background-image: url(../images/content/table_icon_general.png); }

@@ -1,0 +1,109 @@
+# EasySCP a Virtual Hosting Control Panel
+# Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+#
+# This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+# To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+#
+# @link 		http://www.easyscp.net
+# @author 		EasySCP Team
+
+HowTo Update for Debian
+================================================================================
+For other Linux distributions please check the other UPDATE files.
+================================================================================
+
+Table of Content
+================
+1) Version Info
+2) Update
+3) Credits
+
+================================================================================
+1) Version Info
+---------------
+EasySCP Version: 	1.1.0
+UPDATE Script:		1.00
+Maintainer:			Markus Szywon
+Homepage:			http://www.easyscp.net
+Linux Distros:		Debian
+
+================================================================================
+2) Update
+---------
+NOTE: EasySCP can only be updated from post 1.1.0. If you have a
+version prior 1.1.0 (final release) installed, migrate to EasySCP 1.1.0 first.
+
+Make sure you are logged in as root and MySQL is running.
+
+1. Untar or unzip the distribution files to a secure directory:
+	# cd /usr/local/src
+	# tar xjvf easyscp-1.1.0.tar.gz
+
+2. Change to the newly created directory:
+	# cd ./easyscp-1.1.0
+
+3. Install the required packages
+
+   First update your system:
+	# aptitude update && aptitude safe-upgrade
+
+   Install all required packages:
+
+	# aptitude install lsb-release
+	# aptitude install $(cat ./docs/Debian/debian-packages-`lsb_release -cs`)
+
+	(if you get to the courier screen select 'no' to web directories)
+	(if you get to the postfix screen select 'internet site' and then type 'root'
+	for mail. If you've set debian up correctly on install your domain should be
+	already on screen. Select 'no' to force sync updates.)
+	(if you get to the proftpd screen, select 'standalone')
+	(if you get to the rootkithunter screen, select two time 'yes')
+
+4. Stop the easyscp_deamon and build the Software by using make:
+	# /etc/init.d/easyscp_daemon stop
+	# make
+	# make install
+
+5. Backup files
+	# cp -TRv /var/www/easyscp/gui/domain_default_page /tmp/easyscp/var/www/easyscp/gui/domain_default_page
+
+6. Delete old files to avoid security risks:
+	# rm -Rf /var/www/easyscp/engine/
+	# rm -Rf /var/www/easyscp/gui/{htdocs,include}/
+	# rm -Rf /var/www/easyscp/gui/tools/{filemanager/,pma/,webmail/,index.php}
+
+7. Copy /usr and /var directories into your system (you may make backups)
+	# cp -R /tmp/easyscp/usr/* /usr/
+	# cp -R /tmp/easyscp/var/* /var/
+
+8. Backup easyscp.conf and copy the /etc directory into your system (you may make
+   backups):
+	# mv /etc/easyscp/easyscp.conf /etc/easyscp/easyscp.old.conf
+	# cp -R /tmp/easyscp/etc/* /etc/
+
+9. Now it's time to update your installation. Change into the engine directory:
+	# cd /var/www/easyscp/engine/setup
+
+10. Start the engine update:
+	# perl easyscp-update
+
+11. Update EasySCP step-by-step
+
+	If you get no error, all went good; if you get one, look at
+	http://www.easyscp.net to solve the problem.
+
+12. Clean the temporary folders:
+	# rm -fR /tmp/easyscp/
+
+================================================================================
+3) Credits
+----------
+
+EasySCP is a project of Easy Server Control Panel.
+EasySCP, Easy Server Control Panel and the EasySCP logo are trademarks of the EasySCP Project.
+
+Please visit our site under http://www.easyscp.net for further information on
+EasySCP and other themes.
+
+We hope you enjoy using EasySCP. If you like it, help us, to make it better. We
+would be glad on any help provided!

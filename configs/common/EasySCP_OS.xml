@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EasySCP a Virtual Hosting Control Panel
+	Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+
+	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+
+	@link 		http://www.easyscp.net
+	@author		EasySCP Team
+-->
+<EasySCP_OS>
+	<Dist Name="CentOS">
+		<OS>
+			<Name>CentOS 6</Name>
+			<DistName>CentOS</DistName>
+			<DistVersion>6</DistVersion>
+		</OS>
+	</Dist>
+
+	<Dist Name="Debian">
+		<OS>
+			<Name>Debian GNU/Linux 6 (Squeeze)</Name>
+			<DistName>Debian</DistName>
+			<DistVersion>6</DistVersion>
+		</OS>
+		<OS>
+			<Name>Debian GNU/Linux 7 (Wheezy)</Name>
+			<DistName>Debian</DistName>
+			<DistVersion>7</DistVersion>
+		</OS>
+	</Dist>
+
+	<Dist Name="Ubuntu">
+		<OS>
+			<Name>Ubuntu 12.04 LTS</Name>
+			<DistName>Ubuntu</DistName>
+			<DistVersion>12.04</DistVersion>
+		</OS>
+	</Dist>
+</EasySCP_OS>

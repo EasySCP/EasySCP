@@ -1,0 +1,150 @@
+#!/usr/bin/php -q
+
+<?php
+/**
+ * EasySCP a Virtual Hosting Control Panel
+ * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ *
+ * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+ *
+ * @link 		http://www.easyscp.net
+ * @author 		EasySCP Team
+ */
+
+// Allowed arguments & their defaults
+$runmode = array(
+    'help' => false,
+);
+ 
+// Scan command line attributes for allowed arguments
+foreach ($argv as $k=>$arg) {
+    if (substr($arg, 0, 2) == '--' && isset($runmode[substr($arg, 2)])) {
+        $runmode[substr($arg, 2)] = true;
+    }
+}
+ 
+// Help mode. Shows allowed argumentents and quit directly
+if ($runmode['help'] == true) {
+    echo 'Usage: '.$argv[0].' [runmode]' . "\n";
+    echo 'Available runmodes:' . "\n";
+    foreach ($runmode as $runmod=>$val) {
+        echo ' --'.$runmod . "\n";
+    }
+    die();
+}
+ 
+error_reporting(E_ALL);
+require_once(dirname(__FILE__).'/extlibs/Daemon.php');
+require_once(dirname(__FILE__).'/ControlIPT.php');
+require_once(dirname(__FILE__).'/DaemonCommon.php');
+require_once(dirname(__FILE__).'/DaemonConfig.php');
+require_once(dirname(__FILE__).'/DaemonMaps.php');
+require_once(dirname(__FILE__).'/SocketHandler.php');
+
+// Setup
+$options = array(
+    'appName' => 'easyscp_control',
+    'appDir' => dirname(__FILE__),
+    'appDescription' => 'Controller for EasySCP',
+    'authorName' => 'EasySCP Team',
+    'authorEmail' => 'team@easyscp.net',
+    'sysMaxExecutionTime' => '0',
+    'sysMaxInputTime' => '0',
+    'sysMemoryLimit' => '1024M',
+    'appRunAsGID' => 0, // Maybe this should be changed later
+    'appRunAsUID' => 0, // Maybe this should be changed later
+    'logLocation' => '/var/log/easyscp/easyscp_control.log',
+);
+ 
+System_Daemon::setOptions($options);
+System_Daemon::start();
+ControlIPT::$logLocation = $options['logLocation'];
+// ControlIPT::Add();
+
+try {
+	SocketHandler::$File = DaemonConfig::$cfg->SOCK_EASYSCPC;
+	SocketHandler::Create();
+	SocketHandler::Bind();
+	SocketHandler::Listen();
+	SocketHandler::Block(false);
+	$runningOkay = true;
+}
+catch(ErrorException $e){
+	echo $e->getMessage() . "\n";
+	$runningOkay = false;
+}
+catch(Exception $e){
+	echo $e->getMessage() . "\n";
+	$runningOkay = false;
+}
+
+while (!System_Daemon::isDying() && $runningOkay) {
+		
+	$runningOkay = true;
+
+	if (isset($ApacheRestart)){
+		if ($ApacheRestart > 0){
+			$ApacheRestart--;
+		} else {
+			System_Daemon::info('Running "ApacheRestart" subprocess.');
+
+			exec(DaemonConfig::$cmd->CMD_HTTPD_CTL . ' graceful 1>&1 2>&1', $result, $error);
+			unset($ApacheRestart);
+
+			System_Daemon::info('Finished "ApacheRestart" subprocess.');
+		}
+	}
+
+	if ($Client = SocketHandler::Accept())
+	{
+		System_Daemon::info('Client connected');
+		SocketHandler::Write($Client, "End with .");
+		
+		while ($Input = SocketHandler::Read($Client))
+		{
+			$Input = trim($Input);
+			if ($Input != ''){
+				System_Daemon::debug('Input = ' . $Input);
+
+				switch ($Input) {
+
+					case '.':
+
+						break;
+
+					case 'ApacheRestart':
+						System_Daemon::info('Running "ApacheCountdown" subprocess.');
+
+						if (isset($ApacheRestart)){
+							System_Daemon::info('Reset "ApacheCountdown".');
+						}
+
+						$ApacheRestart = 15;
+
+						// System_Daemon::iterate(0.25);
+						// exec(DaemonConfig::$cmd->CMD_HTTPD_CTL . ' graceful 1>&1 2>&1', $result, $error);
+
+						System_Daemon::info('Finished "ApacheCountdown" subprocess.');
+						break;
+					case 'Stop':
+						$runningOkay = false;
+						System_Daemon::info('EasySCP Controller is stopping.');
+						break;
+
+					default:
+
+				}
+				System_Daemon::info('Closing connection.');
+				SocketHandler::CloseClient($Client);
+			}
+		}
+	}
+	System_Daemon::iterate(0.05);
+}
+SocketHandler::Close();
+System_Daemon::info('Shutting down.');
+ControlIPT::Remove();
+// Shut down the daemon nicely
+System_Daemon::stop();
+?>
