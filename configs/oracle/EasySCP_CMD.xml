@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EasySCP a Virtual Hosting Control Panel
+	Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+
+	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+
+	@link 		http://www.easyscp.net
+	@author		EasySCP Team
+-->
+<EasySCP_CMD>
+	<!--
+		System Commands
+	-->
+	<CMD_BZIP>/usr/bin/bzip2</CMD_BZIP>
+
+	<CMD_CHMOD>/bin/chmod</CMD_CHMOD>
+
+	<CMD_CHOWN>/bin/chown</CMD_CHOWN>
+
+	<CMD_CP>/bin/cp</CMD_CP>
+
+	<CMD_DU>/usr/bin/du</CMD_DU>
+
+	<CMD_FIND>/usr/bin/find</CMD_FIND>
+
+	<CMD_GROUPADD>/usr/sbin/groupadd</CMD_GROUPADD>
+
+	<CMD_GROUPDEL>/usr/sbin/groupdel</CMD_GROUPDEL>
+
+	<CMD_HTTPD_CTL>service httpd</CMD_HTTPD_CTL>
+
+	<CMD_ID>/usr/bin/id</CMD_ID>
+
+	<CMD_IPTABLES>/sbin/iptables</CMD_IPTABLES>
+
+	<CMD_MV>/bin/mv</CMD_MV>
+
+	<CMD_MYSQLDUMP>/usr/bin/mysqldump</CMD_MYSQLDUMP>
+
+	<CMD_QUOTAON>/sbin/quotaon</CMD_QUOTAON>
+	
+	<CMD_QUOTAOFF>/sbin/quotaoff</CMD_QUOTAOFF>
+
+	<CMD_RKHUNTER>/usr/bin/rkhunter</CMD_RKHUNTER>
+
+	<CMD_RM>/bin/rm</CMD_RM>
+
+	<CMD_SETQUOTA>/usr/sbin/setquota</CMD_SETQUOTA>
+
+	<CMD_TAR>/bin/tar</CMD_TAR>
+
+	<CMD_USERADD>/usr/sbin/useradd</CMD_USERADD>
+
+	<CMD_USERDEL>/usr/sbin/userdel</CMD_USERDEL>
+
+	<!--
+		System Services
+	-->
+	<SRV_AMAVIS>/etc/init.d/amavisd</SRV_AMAVIS>
+
+	<SRV_CLAMD>/etc/init.d/clamd</SRV_CLAMD>
+
+	<SRV_DNS>/etc/init.d/pdns</SRV_DNS>
+
+	<SRV_DOVECOT>/etc/init.d/dovecot</SRV_DOVECOT>
+
+	<SRV_EASYSCPC>/etc/init.d/easyscp_control</SRV_EASYSCPC>
+
+	<SRV_EASYSCPD>/etc/init.d/easyscp_daemon</SRV_EASYSCPD>
+
+	<SRV_FTPD>/etc/init.d/proftpd</SRV_FTPD>
+
+	<SRV_HTTPD>/etc/init.d/httpd</SRV_HTTPD>
+
+	<SRV_POSTGREY>/etc/init.d/postgrey</SRV_POSTGREY>
+
+	<SRV_POLICYD_WEIGHT>/etc/init.d/policyd-weight</SRV_POLICYD_WEIGHT>
+
+	<SRV_MTA>/etc/init.d/postfix</SRV_MTA>
+
+</EasySCP_CMD>
