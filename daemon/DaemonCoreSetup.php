@@ -318,7 +318,7 @@ function EasySCP_Directories(){
 function EasySCP_main_configuration_file(){
 	$xml = simplexml_load_file(DaemonConfig::$cfg->ROOT_DIR . '/../setup/config.xml');
 
-	DaemonConfig::$cfg->BuildDate = '20140324';
+	DaemonConfig::$cfg->BuildDate = '20140326';
 	DaemonConfig::$cfg->DistName = $xml->DistName;
 	DaemonConfig::$cfg->DistVersion = $xml->DistVersion;
 	DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS = $xml->PANEL_MAIL;
@@ -1212,6 +1212,11 @@ function EasySCP_MTA_configuration_files(){
 function EasySCP_ProFTPd_configuration_file(){
 	$xml = simplexml_load_file(DaemonConfig::$cfg->ROOT_DIR . '/../setup/config.xml');
 
+	// Create config dir if it doesn't exists
+	if (!file_exists(DaemonConfig::$cfg->FTPD_CONF_DIR)){
+		DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->FTPD_CONF_DIR, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0755);
+	}
+
 	// Backup current proftpd.conf if exists
 	if (file_exists(DaemonConfig::$cfg->FTPD_CONF_FILE)){
 		exec(DaemonConfig::$cmd->CMD_CP.' -pf '.DaemonConfig::$cfg->FTPD_CONF_FILE .' '.DaemonConfig::$cfg->CONF_DIR.'/proftpd/backup/proftpd.conf'.'_'.date("Y_m_d_H_i_s"), $result, $error);
@@ -1267,11 +1272,6 @@ function EasySCP_ProFTPd_configuration_file(){
 			exec(DaemonConfig::$cmd->CMD_CP.' -pf '.DaemonConfig::$cfg->CONF_DIR.'/proftpd/working/modules.conf '.DaemonConfig::$cfg->FTPD_MODULES_CONF_FILE, $result, $error);
 			break;
 		default:
-	}
-
-	// Create config dir if it doesn't exists
-	if (!file_exists(DaemonConfig::$cfg->FTPD_CONF_DIR)){
-		DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->FTPD_CONF_DIR, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0755);
 	}
 
 	$tpl_param = array(
@@ -1540,6 +1540,9 @@ function Set_gui_permissions(){
 
 	switch(DaemonConfig::$cfg->DistName . '_' . DaemonConfig::$cfg->DistVersion){
 		case 'CentOS_6':
+			exec(DaemonConfig::$cmd->CMD_CP.' -pf '.DaemonConfig::$cfg->CONF_DIR.'/iptables/iptables /etc/sysconfig/iptables', $result, $error);
+
+			exec(DaemonConfig::$cmd->SRV_IPTABLES . ' restart >> /dev/null 2>&1', $result, $error);
 			break;
 		case 'Debian_6':
 			break;
@@ -1609,6 +1612,9 @@ function System_cleanup(){
 		default:
 			// Disable Setup vhost
 			exec('a2dissite easyscp-setup.conf');
+
+			// Remove Setup vhost
+			unlink(DaemonConfig::$cfg->APACHE_SITES_DIR.'/easyscp-setup.conf');
 
 			// Enable GUI vhost (Debian like distributions)
 			exec('a2ensite 00_master.conf');

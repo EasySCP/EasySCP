@@ -96,7 +96,7 @@ class DaemonMail {
 			DB::prepare($sql_query);
 			DB::execute($sql_param)->closeCursor();
 
-			exec(DaemonConfig::$cmd->CMD_MTA . ' reload');
+			exec(DaemonConfig::$cmd->SRV_MTA . ' reload');
 
 			//mail($row['mail_addr'], 'Welcome to EasySCP!', "\nA new EasySCP Mail account has been created for you.\n\nBest wishes with EasySCP!\nThe EasySCP Team.");
 		}

@@ -72,6 +72,8 @@
 
 	<SRV_FTPD>/etc/init.d/proftpd</SRV_FTPD>
 
+	<SRV_IPTABLES>service iptables</SRV_IPTABLES>
+
 	<SRV_HTTPD>/etc/init.d/httpd</SRV_HTTPD>
 
 	<SRV_POSTGREY>/etc/init.d/postgrey</SRV_POSTGREY>
