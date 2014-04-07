@@ -113,7 +113,7 @@ do
 
 			while :
 			do
-				read -p "Configure iptables [Y/N]? (if unsure, select no)" IPTables
+				read -p "Configure iptables [Y/N]? (if unsure, select yes)" IPTables
 				case "$IPTables" in
 					[JjYy])
 						#echo "ja"

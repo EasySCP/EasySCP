@@ -32,7 +32,6 @@
 	SSLCertificateKeyFile {$SSL_KEY_DIR}/easyscp_{$MASTER_DOMAIN}-key.pem
 {/if}
 	
-	ErrorLog {$APACHE_LOG_DIR}/users/{$SERVER_NAME}-error.log
 	ErrorLog {$WWW_DIR}/{$DOC_ROOT}/logs/{$SERVER_NAME}-error.log
 
 	CustomLog {$APACHE_LOG_DIR}/users/{$SERVER_NAME}-access.log combined
