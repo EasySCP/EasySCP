@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2010 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: APL.php 127 2011-12-03 03:29:39Z mike.pultz $
+ * @version   SVN: $Id: APL.php 179 2012-11-23 05:49:01Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 1.0.0
  *
@@ -234,14 +234,14 @@ class Net_DNS2_RR_APL extends Net_DNS2_RR
     {
         if (count($this->apl_items) > 0) {
 
-            $out = '';
+            $data = '';
 
             foreach ($this->apl_items as $item) {
 
                 //
                 // pack the address_family and prefix values
                 //
-                $out .= pack(
+                $data .= pack(
                     'nCC', 
                     $item['address_family'], 
                     $item['prefix'],
@@ -256,7 +256,7 @@ class Net_DNS2_RR_APL extends Net_DNS2_RR
                     );
 
                     foreach ($address as $b) {
-                        $out .= chr($b);
+                        $data .= chr($b);
                     }
                     break;
                 case 2:
@@ -266,7 +266,7 @@ class Net_DNS2_RR_APL extends Net_DNS2_RR
                     );
 
                     foreach ($address as $b) {
-                        $out .= pack('H', $b);
+                        $data .= pack('H', $b);
                     }
                     break;
                 default:
@@ -274,7 +274,9 @@ class Net_DNS2_RR_APL extends Net_DNS2_RR
                 }
             }
 
-            return $out;
+            $packet->offset += strlen($data);
+
+            return $data;
         }
 
         return null;

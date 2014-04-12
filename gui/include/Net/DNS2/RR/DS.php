@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2010 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: DS.php 127 2011-12-03 03:29:39Z mike.pultz $
+ * @version   SVN: $Id: DS.php 179 2012-11-23 05:49:01Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 0.6.0
  *
@@ -185,10 +185,14 @@ class Net_DNS2_RR_DS extends Net_DNS2_RR
     {
         if (strlen($this->digest) > 0) {
 
-            return pack(
+            $data = pack(
                 'nCCH*', 
                 $this->keytag, $this->algorithm, $this->digesttype, $this->digest
             );
+
+            $packet->offset += strlen($data);
+
+            return $data;
         }
         
         return null;

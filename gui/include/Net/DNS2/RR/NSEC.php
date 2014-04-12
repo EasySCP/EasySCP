@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2010 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: NSEC.php 103 2011-05-30 01:16:04Z mike.pultz $
+ * @version   SVN: $Id: NSEC.php 179 2012-11-23 05:49:01Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 0.6.0
  *
@@ -163,9 +163,11 @@ class Net_DNS2_RR_NSEC extends Net_DNS2_RR
         if (strlen($this->next_domain_name) > 0) {
 
             $data = $packet->compress($this->next_domain_name, $packet->offset);
-            $data .= Net_DNS2_BitMap::arrayToBitMap($this->type_bit_maps);
+            $bitmap = Net_DNS2_BitMap::arrayToBitMap($this->type_bit_maps);
     
-            return $data;
+            $packet->offset += strlen($bitmap);
+
+            return $data . $bitmap;
         }
 
         return null;

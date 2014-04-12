@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2010 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: Packet.php 124 2011-12-02 23:23:15Z mike.pultz $
+ * @version   SVN: $Id: Packet.php 218 2013-11-28 22:34:20Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 0.6.0
  *
@@ -274,9 +274,8 @@ class Net_DNS2_Packet
             $offset += $length + 1;
         }
 
-        if (empty($names)) {
-            $compname .= "\0";
-        }
+        $compname .= "\0";
+        $offset++;
 
         return $compname;
     }
@@ -423,7 +422,7 @@ class Net_DNS2_Packet
     
         return true;
     }
-    
+
     /**
      * formats an IPv6 IP address in the preferred format
      *

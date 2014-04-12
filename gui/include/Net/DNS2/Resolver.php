@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2010 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: Resolver.php 160 2012-07-18 03:57:32Z mike.pultz $
+ * @version   SVN: $Id: Resolver.php 191 2013-04-07 23:28:20Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 0.6.0
  *
@@ -127,6 +127,42 @@ class Net_DNS2_Resolver extends Net_DNS2
         }
 
         //
+        // check for the DNSSEC flag, and if it's true, then add an OPT
+        // RR to the additional section, and set the DO flag to 1.
+        //
+        if ($this->dnssec == true) {
+
+            //
+            // create a new OPT RR
+            //
+            $opt = new Net_DNS2_RR_OPT();
+
+            //
+            // set the DO flag, and the other values
+            //
+            $opt->do = 1;
+            $opt->class = $this->dnssec_payload_size;
+
+            //
+            // add the RR to the additional section.
+            //
+            $packet->additional[] = $opt;
+            $packet->header->arcount = count($packet->additional);
+        }
+
+        //
+        // set the DNSSEC AD or CD bits
+        //
+        if ($this->dnssec_ad_flag == true) {
+
+            $packet->header->ad = 1;
+        }
+        if ($this->dnssec_cd_flag == true) {
+
+            $packet->header->cd = 1;
+        }
+
+        //
         // if caching is turned on, then check then hash the question, and
         // do a cache lookup.
         //
@@ -134,7 +170,7 @@ class Net_DNS2_Resolver extends Net_DNS2
         //
         $packet_hash = '';
 
-        if ( ($this->use_cache == true) && ($type != 'AXFR') ) {
+        if ( ($this->use_cache == true) && ($this->cacheable($type) == true) ) {
 
             //
             // open the cache
@@ -154,6 +190,16 @@ class Net_DNS2_Resolver extends Net_DNS2
 
                 return $this->cache->get($packet_hash);
             }
+        }
+
+        //
+        // set the RD (recursion desired) bit to 1 / 0 depending on the config
+        // setting.
+        //
+        if ($this->recurse == false) {
+            $packet->header->rd = 0;
+        } else {
+            $packet->header->rd = 1;
         }
 
         //
@@ -211,7 +257,7 @@ class Net_DNS2_Resolver extends Net_DNS2
         //
         // cache the response object
         //
-        if ( ($this->use_cache == true) && ($type != 'AXFR') ) {
+        if ( ($this->use_cache == true) && ($this->cacheable($type) == true) ) {
 
             $this->cache->put($packet_hash, $response);
         }

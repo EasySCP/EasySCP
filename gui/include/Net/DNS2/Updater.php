@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2010 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: Updater.php 155 2012-05-06 23:45:23Z mike.pultz $
+ * @version   SVN: $Id: Updater.php 198 2013-05-26 05:05:22Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 0.6.0
  *
@@ -582,12 +582,14 @@ class Net_DNS2_Updater extends Net_DNS2
     /**
      * executes the update request with the object informaton
      *
+     * @param Net_DNS2_Packet_Response &$response ref to the response object
+     *
      * @return boolean
      * @throws Net_DNS2_Exception
      * @access public
      *
      */
-    public function update()
+    public function update(&$response = null)
     {
         //
         // make sure we have some name servers set
@@ -626,7 +628,7 @@ class Net_DNS2_Updater extends Net_DNS2
         //
         // send the packet and get back the response
         //
-        $r = $this->sendPacket($this->_packet, $this->use_tcp);
+        $response = $this->sendPacket($this->_packet, $this->use_tcp);
 
         //
         // clear the internal packet so if we make another request, we don't have

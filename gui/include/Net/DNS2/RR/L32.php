@@ -6,7 +6,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2010, Mike Pultz <mike@mikepultz.com>.
+ * Copyright (c) 2013, Mike Pultz <mike@mikepultz.com>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,27 +41,24 @@
  * @category  Networking
  * @package   Net_DNS2
  * @author    Mike Pultz <mike@mikepultz.com>
- * @copyright 2010 Mike Pultz <mike@mikepultz.com>
+ * @copyright 2013 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: KX.php 179 2012-11-23 05:49:01Z mike.pultz $
+ * @version   SVN: $Id: L32.php 207 2013-06-13 01:19:55Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
- * @since     File available since Release 0.6.0
+ * @since     File available since Release 1.3.1
  *
  */
 
 /**
- * KX Resource Record - RFC2230 section 3.1
+ * L32 Resource Record - RFC6742 section 2.2
  *
- * This class is almost identical to MX, except that the the exchanger
- * domain is not compressed, it's added as a label
+ *   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *  |          Preference           |      Locator32 (16 MSBs)      |
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *  |     Locator32 (16 LSBs)       |
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  *
- *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *   |                  PREFERENCE                   |
- *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *   /                   EXCHANGER                   /
- *   /                                               /
- *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- * 
  * @category Networking
  * @package  Net_DNS2
  * @author   Mike Pultz <mike@mikepultz.com>
@@ -70,17 +67,17 @@
  * @see      Net_DNS2_RR
  *
  */
-class Net_DNS2_RR_KX extends Net_DNS2_RR
+class Net_DNS2_RR_L32 extends Net_DNS2_RR
 {
     /*
-     * the preference for this mail exchanger
-     */    
-    public $preference;
- 
-    /*
-     * the hostname of the mail exchanger
+     * The preference
      */
-    public $exchange;
+    public $preference;
+
+    /*
+     * The locator32 field
+     */
+    public $locator32;
 
     /**
      * method to return the rdata portion of the packet as a string
@@ -91,7 +88,7 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
      */
     protected function rrToString()
     {
-        return $this->preference . ' ' . $this->cleanString($this->exchange) . '.';
+        return $this->preference . ' ' . $this->locator32;
     }
 
     /**
@@ -105,10 +102,10 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
      */
     protected function rrFromString(array $rdata)
     {
-        $this->preference   = array_shift($rdata);
-        $this->exchange     = $this->cleanString(array_shift($rdata));
- 
-        return true;        
+        $this->preference = array_shift($rdata);
+        $this->locator32 = array_shift($rdata);
+
+        return true;
     }
 
     /**
@@ -118,53 +115,57 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
      *
      * @return boolean
      * @access protected
-     *
+     * 
      */
     protected function rrSet(Net_DNS2_Packet &$packet)
     {
         if ($this->rdlength > 0) {
-   
+
             //
-            // parse the preference
+            // unpack the values
             //
-            $x = unpack('npreference', $this->rdata);
+            $x = unpack('npreference/C4locator', $this->rdata);
+
             $this->preference = $x['preference'];
 
             //
-            // get the exchange entry server)
+            // build the locator value
             //
-            $offset = $packet->offset + 2;
-            $this->exchange = Net_DNS2_Packet::label($packet, $offset);
+            $this->locator32 = $x['locator1'] . '.' . $x['locator2'] . '.' .
+                $x['locator3'] . '.' . $x['locator4'];
 
             return true;
         }
-      
+
         return false;
     }
 
     /**
      * returns the rdata portion of the DNS packet
-     *
+     * 
      * @param Net_DNS2_Packet &$packet a Net_DNS2_Packet packet use for
      *                                 compressed names
      *
-     * @return mixed                   either returns a binary packed
+     * @return mixed                   either returns a binary packed 
      *                                 string or null on failure
      * @access protected
-     *
+     * 
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->exchange) > 0) {
-     
-            $data = pack('nC', $this->preference, strlen($this->exchange)) . 
-                $this->exchange;
+        if (strlen($this->locator32) > 0) {
 
-            $packet->offset += strlen($data);
+            //
+            // break out the locator value
+            //
+            $n = explode('.', $this->locator32);
 
-            return $data;
+            //
+            // pack the data
+            //
+            return pack('nC4', $this->preference, $n[0], $n[1], $n[2], $n[3]);
         }
-    
+
         return null;
     }
 }

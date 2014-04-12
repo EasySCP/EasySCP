@@ -43,11 +43,21 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2010 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: Socket.php 168 2012-09-13 02:01:29Z mike.pultz $
+ * @version   SVN: $Id: Socket.php 176 2012-11-16 02:14:09Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 0.6.0
  *
  */
+
+/*
+ * check to see if the socket defines exist; if they don't, then define them
+ */
+if (defined('SOCK_STREAM') == false) {
+    define('SOCK_STREAM', 1);
+}
+if (defined('SOCK_DGRAM') == false) {
+    define('SOCK_DGRAM', 2);
+}
 
 /**
  * This is the abstract base class for the two sockets classes; this simply
@@ -77,8 +87,8 @@ abstract class Net_DNS2_Socket
     /*
      * type of sockets
      */
-    const SOCK_STREAM   = 1;
-    const SOCK_DGRAM    = 2;
+    const SOCK_STREAM   = SOCK_STREAM;
+    const SOCK_DGRAM    = SOCK_DGRAM;
 
     /**   
      * constructor - set the port details

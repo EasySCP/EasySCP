@@ -60,7 +60,7 @@ EasySCP 2.0.0 ChangeLog
    		* Update: Swedish language (thx to Olof Fredriksson)
    		* Update: jQuery to version 1.11.0
 		* Update: jQuery UI to version 1.10.4
-		* Update: Net_DNS2 to version 1.2.4
+		* Update: Net_DNS2 to version 1.3.2
 		* Update: Smarty to version 3.1.18
 
 	- Engine:

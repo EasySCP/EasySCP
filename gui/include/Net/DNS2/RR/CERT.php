@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2010 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: CERT.php 47 2010-10-24 23:53:08Z mike.pultz $
+ * @version   SVN: $Id: CERT.php 179 2012-11-23 05:49:01Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 0.6.0
  *
@@ -270,8 +270,12 @@ class Net_DNS2_RR_CERT extends Net_DNS2_RR
     {
         if (strlen($this->certificate) > 0) {
 
-            return pack('nnC', $this->format, $this->keytag, $this->algorithm) . 
+            $data = pack('nnC', $this->format, $this->keytag, $this->algorithm) . 
                 $this->certificate;
+
+            $packet->offset += strlen($data);
+
+            return $data;
         }
 
         return null;

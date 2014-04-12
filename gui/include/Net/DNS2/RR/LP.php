@@ -6,7 +6,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2010, Mike Pultz <mike@mikepultz.com>.
+ * Copyright (c) 2013, Mike Pultz <mike@mikepultz.com>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,27 +41,26 @@
  * @category  Networking
  * @package   Net_DNS2
  * @author    Mike Pultz <mike@mikepultz.com>
- * @copyright 2010 Mike Pultz <mike@mikepultz.com>
+ * @copyright 2013 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: KX.php 179 2012-11-23 05:49:01Z mike.pultz $
+ * @version   SVN: $Id: LP.php 207 2013-06-13 01:19:55Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
- * @since     File available since Release 0.6.0
+ * @since     File available since Release 1.3.1
  *
  */
 
 /**
- * KX Resource Record - RFC2230 section 3.1
+ * LP Resource Record - RFC6742 section 2.4
  *
- * This class is almost identical to MX, except that the the exchanger
- * domain is not compressed, it's added as a label
+ *   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *  |          Preference           |                               /
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                               /
+ *  /                                                               /
+ *  /                              FQDN                             /
+ *  /                                                               /
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  *
- *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *   |                  PREFERENCE                   |
- *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *   /                   EXCHANGER                   /
- *   /                                               /
- *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- * 
  * @category Networking
  * @package  Net_DNS2
  * @author   Mike Pultz <mike@mikepultz.com>
@@ -70,17 +69,17 @@
  * @see      Net_DNS2_RR
  *
  */
-class Net_DNS2_RR_KX extends Net_DNS2_RR
+class Net_DNS2_RR_LP extends Net_DNS2_RR
 {
     /*
-     * the preference for this mail exchanger
-     */    
-    public $preference;
- 
-    /*
-     * the hostname of the mail exchanger
+     * The preference
      */
-    public $exchange;
+    public $preference;
+
+    /*
+     * The fdqn field
+     */
+    public $fqdn;
 
     /**
      * method to return the rdata portion of the packet as a string
@@ -91,7 +90,7 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
      */
     protected function rrToString()
     {
-        return $this->preference . ' ' . $this->cleanString($this->exchange) . '.';
+        return $this->preference . ' ' . $this->fqdn . '.';
     }
 
     /**
@@ -105,10 +104,10 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
      */
     protected function rrFromString(array $rdata)
     {
-        $this->preference   = array_shift($rdata);
-        $this->exchange     = $this->cleanString(array_shift($rdata));
- 
-        return true;        
+        $this->preference = array_shift($rdata);
+        $this->fqdn = trim(array_shift($rdata), '.');
+
+        return true;
     }
 
     /**
@@ -118,53 +117,52 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
      *
      * @return boolean
      * @access protected
-     *
+     * 
      */
     protected function rrSet(Net_DNS2_Packet &$packet)
     {
         if ($this->rdlength > 0) {
-   
+ 
             //
             // parse the preference
             //
             $x = unpack('npreference', $this->rdata);
             $this->preference = $x['preference'];
+            $offset = $packet->offset + 2;
 
             //
-            // get the exchange entry server)
+            // get the hostname
             //
-            $offset = $packet->offset + 2;
-            $this->exchange = Net_DNS2_Packet::label($packet, $offset);
+            $this->fqdn = Net_DNS2_Packet::expand($packet, $offset);
 
             return true;
         }
-      
+       
         return false;
     }
 
     /**
      * returns the rdata portion of the DNS packet
-     *
+     * 
      * @param Net_DNS2_Packet &$packet a Net_DNS2_Packet packet use for
      *                                 compressed names
      *
-     * @return mixed                   either returns a binary packed
+     * @return mixed                   either returns a binary packed 
      *                                 string or null on failure
      * @access protected
-     *
+     * 
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->exchange) > 0) {
+        if (strlen($this->fqdn) > 0) {
      
-            $data = pack('nC', $this->preference, strlen($this->exchange)) . 
-                $this->exchange;
+            $data = pack('n', $this->preference);
+            $packet->offset += 2;
 
-            $packet->offset += strlen($data);
-
+            $data .= $packet->compress($this->fqdn, $packet->offset);
             return $data;
         }
-    
+
         return null;
     }
 }

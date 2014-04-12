@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2011 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: CAA.php 132 2011-12-03 05:28:54Z mike.pultz $
+ * @version   SVN: $Id: CAA.php 179 2012-11-23 05:49:01Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 1.2.0
  *
@@ -166,6 +166,8 @@ class Net_DNS2_RR_CAA extends Net_DNS2_RR
 
             $data  = chr($this->flags);
             $data .= chr(strlen($this->tag)) . $this->tag . $this->value;
+
+            $packet->offset += strlen($data);
 
             return $data;
         }

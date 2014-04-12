@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2010 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: NSAP.php 125 2011-12-03 00:19:49Z mike.pultz $
+ * @version   SVN: $Id: NSAP.php 179 2012-11-23 05:49:01Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 0.6.0
  *
@@ -225,7 +225,7 @@ class Net_DNS2_RR_NSAP extends Net_DNS2_RR
             $id = unpack('A8a/A4b', $this->id);
 
             //
-            $out = pack(
+            $data = pack(
                 'CnCCCCnnnNnC', 
                 hexdec($this->afi), 
                 hexdec($this->idi),
@@ -241,9 +241,10 @@ class Net_DNS2_RR_NSAP extends Net_DNS2_RR
                 hexdec($this->sel)
             );
 
-            if (strlen($out) == 20) {
+            if (strlen($data) == 20) {
                 
-                return $out;
+                $packet->offset += 20;
+                return $data;
             }
         }
 

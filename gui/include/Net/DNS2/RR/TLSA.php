@@ -6,7 +6,7 @@
  *
  * PHP Version 5
  *
- * Copyright (c) 2010, Mike Pultz <mike@mikepultz.com>.
+ * Copyright (c) 2012, Mike Pultz <mike@mikepultz.com>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,26 +41,25 @@
  * @category  Networking
  * @package   Net_DNS2
  * @author    Mike Pultz <mike@mikepultz.com>
- * @copyright 2010 Mike Pultz <mike@mikepultz.com>
+ * @copyright 2012 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: KX.php 179 2012-11-23 05:49:01Z mike.pultz $
+ * @version   SVN: $Id: TLSA.php 198 2013-05-26 05:05:22Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
- * @since     File available since Release 0.6.0
+ * @since     File available since Release 1.2.5
  *
  */
 
 /**
- * KX Resource Record - RFC2230 section 3.1
+ * TLSA Resource Record - RFC 6698
  *
- * This class is almost identical to MX, except that the the exchanger
- * domain is not compressed, it's added as a label
- *
- *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *   |                  PREFERENCE                   |
- *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *   /                   EXCHANGER                   /
- *   /                                               /
- *   +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ *   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *  |  Cert. Usage  |   Selector    | Matching Type |               /
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+               /
+ *  /                                                               /
+ *  /                 Certificate Association Data                  /
+ *  /                                                               /
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  * 
  * @category Networking
  * @package  Net_DNS2
@@ -70,17 +69,27 @@
  * @see      Net_DNS2_RR
  *
  */
-class Net_DNS2_RR_KX extends Net_DNS2_RR
+class Net_DNS2_RR_TLSA extends Net_DNS2_RR
 {
     /*
-     * the preference for this mail exchanger
-     */    
-    public $preference;
- 
-    /*
-     * the hostname of the mail exchanger
+     * The Certificate Usage Field
      */
-    public $exchange;
+    public $cert_usage;
+
+    /*
+     * The Selector Field
+     */
+    public $selector;
+
+    /*
+     * The Matching Type Field
+     */
+    public $matching_type;
+
+    /*
+     * The Certificate Association Data Field
+     */
+    public $certificate;
 
     /**
      * method to return the rdata portion of the packet as a string
@@ -91,7 +100,8 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
      */
     protected function rrToString()
     {
-        return $this->preference . ' ' . $this->cleanString($this->exchange) . '.';
+        return $this->cert_usage . ' ' . $this->selector . ' ' . 
+            $this->matching_type . ' ' . base64_encode($this->certificate);
     }
 
     /**
@@ -105,10 +115,12 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
      */
     protected function rrFromString(array $rdata)
     {
-        $this->preference   = array_shift($rdata);
-        $this->exchange     = $this->cleanString(array_shift($rdata));
- 
-        return true;        
+        $this->cert_usage       = array_shift($rdata);
+        $this->selector         = array_shift($rdata);
+        $this->matching_type    = array_shift($rdata);
+        $this->certificate      = base64_decode(implode('', $rdata));
+
+        return true;
     }
 
     /**
@@ -123,22 +135,24 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
     protected function rrSet(Net_DNS2_Packet &$packet)
     {
         if ($this->rdlength > 0) {
-   
-            //
-            // parse the preference
-            //
-            $x = unpack('npreference', $this->rdata);
-            $this->preference = $x['preference'];
 
             //
-            // get the exchange entry server)
+            // unpack the format, keytag and algorithm
             //
-            $offset = $packet->offset + 2;
-            $this->exchange = Net_DNS2_Packet::label($packet, $offset);
+            $x = unpack('Cusage/Cselector/Ctype', $this->rdata);
+
+            $this->cert_usage       = $x['usage'];
+            $this->selector         = $x['selector'];
+            $this->matching_type    = $x['type'];
+
+            //
+            // copy the certificate
+            //
+            $this->certificate  = substr($this->rdata, 3, $this->rdlength - 3);
 
             return true;
         }
-      
+
         return false;
     }
 
@@ -155,16 +169,17 @@ class Net_DNS2_RR_KX extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->exchange) > 0) {
-     
-            $data = pack('nC', $this->preference, strlen($this->exchange)) . 
-                $this->exchange;
+        if (strlen($this->certificate) > 0) {
+
+            $data = pack(
+                'CCC', $this->cert_usage, $this->selector, $this->matching_type
+            ) . $this->certificate;
 
             $packet->offset += strlen($data);
 
             return $data;
         }
-    
+
         return null;
     }
 }

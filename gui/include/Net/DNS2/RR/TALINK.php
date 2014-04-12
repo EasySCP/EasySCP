@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2011 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: TALINK.php 130 2011-12-03 05:02:37Z mike.pultz $
+ * @version   SVN: $Id: TALINK.php 179 2012-11-23 05:49:01Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 1.2.0
  *
@@ -149,8 +149,12 @@ class Net_DNS2_RR_TALINK extends Net_DNS2_RR
     {
         if ( (strlen($this->previous) > 0) || (strlen($this->next) > 0) ) {
 
-            return chr(strlen($this->previous)) . $this->previous . 
+            $data = chr(strlen($this->previous)) . $this->previous . 
                 chr(strlen($this->next)) . $this->next;
+
+            $packet->offset += strlen($data);
+
+            return $data;
         }
 
         return null;

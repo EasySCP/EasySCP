@@ -43,7 +43,7 @@
  * @author    Mike Pultz <mike@mikepultz.com>
  * @copyright 2010 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: NSEC3PARAM.php 47 2010-10-24 23:53:08Z mike.pultz $
+ * @version   SVN: $Id: NSEC3PARAM.php 179 2012-11-23 05:49:01Z mike.pultz $
  * @link      http://pear.php.net/package/Net_DNS2
  * @since     File available since Release 0.6.0
  *
@@ -199,10 +199,12 @@ class Net_DNS2_RR_NSEC3PARAM extends Net_DNS2_RR
         $salt = pack('H*', $this->salt);
         $this->salt_length = strlen($salt);
 
-        return pack(
+        $data = pack(
             'CCnC', 
             $this->algorithm, $this->flags, $this->iterations, $this->salt_length
         ) . $salt;
+
+        $packet->offset += strlen($data);
 
         return $data;
     }
