@@ -404,7 +404,7 @@ class EasySCP_Initializer {
 		EasySCP_Registry::set('Pdo', EasySCP_Database::getRawInstance());
 
 		// @todo remove the Global
-		$GLOBALS['sql'] =  EasySCP_Registry::get('Db');
+		$GLOBALS['sql'] = EasySCP_Registry::get('Db');
 	}
 
 	/**

@@ -25,7 +25,7 @@ class EasySCP_TemplateEngine {
 	 * Constructor
 	 */
 	protected function __construct() {
-		require('Smarty/Smarty.class.php');
+		require_once(EasyConfig::$cfg->GUI_ROOT_DIR.'/include/Smarty/Smarty.class.php');
 		$this->template_engine = new Smarty();
 		$this->template_engine->caching = false;
 

@@ -80,7 +80,6 @@ class EasySCP_Database {
 	 * @param string $host Mysql server hostname
 	 * @param string $name Database name
 	 * @param array $driver_options OPTIONAL Driver options
-	 * @return void
 	 */
 	private function __construct($user, $pass, $type, $host, $name,	$driver_options = array()) {
 		$this->_db = new PDO(
