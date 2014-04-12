@@ -1,7 +1,7 @@
 EasySCP 2.0.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2014-03-27
+2014-04-11
 	- Config:
 		* Add: Fields for SSL support
 		* Add: Oracle Linux support
@@ -61,7 +61,7 @@ EasySCP 2.0.0 ChangeLog
    		* Update: jQuery to version 1.11.0
 		* Update: jQuery UI to version 1.10.4
 		* Update: Net_DNS2 to version 1.2.4
-		* Update: Smarty to version 3.1.17
+		* Update: Smarty to version 3.1.18
 
 	- Engine:
 		* Remove: The old engine is no longer used
