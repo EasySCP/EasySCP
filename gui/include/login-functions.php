@@ -39,18 +39,20 @@
 function do_session_timeout() {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
-	$ttl = time() - $cfg->SESSION_TIMEOUT * 60;
+	$sql_param = array(
+		':lastaccess' => time() - $cfg->SESSION_TIMEOUT * 60
+	);
 
-	$query = "
+	$sql_query = "
 		DELETE FROM
-			`login`
+			login
 		WHERE
-			`lastaccess` < ?
-	;";
+			lastaccess < :lastaccess
+	";
 
-	exec_query($sql, $query, $ttl);
+	DB::prepare($sql_query);
+	DB::execute($sql_param)->closeCursor();
 
 	if (!session_exists(session_id())) {
 		unset($_SESSION['user_logged']);
@@ -66,25 +68,26 @@ function do_session_timeout() {
  */
 function session_exists($sess_id) {
 
-	$sql = EasySCP_Registry::get('Db');
+	$sql_param = array(
+			':session_id'	=> $sess_id,
+			':ipaddr'		=> getipaddr()
+	);
 
-	$ip = getipaddr();
-
-	$query = "
+	$sql_query = "
 		SELECT
-			`session_id`,
-			`ipaddr`
+			session_id, ipaddr
 		FROM
-			`login`
+			login
 		WHERE
-			`session_id` = ?
+			session_id = :session_id
 		AND
-			`ipaddr` = ?
-	;";
+			ipaddr = :ipaddr;
+	";
 
-	$res = exec_query($sql, $query, array($sess_id, $ip));
+	DB::prepare($sql_query);
+	$rs = DB::execute($sql_param);
 
-	return ($res->recordCount() == 1);
+	return ($rs->rowCount() == 0) ? false : true;
 }
 
 /**
@@ -120,20 +123,23 @@ function init_login() {
  */
 function username_exists($username) {
 
-	$sql = EasySCP_Registry::get('Db');
+	$sql_param = array(
+		':admin_name'	=> $username
+	);
 
-	$query = "
+	$sql_query = "
 		SELECT
-			`admin_id`
+			admin_id
 		FROM
-			`admin`
+			admin
 		WHERE
-			`admin_name` = ?
-	;";
+			admin_name = :admin_name;
+	";
 
-	$res = exec_query($sql, $query, $username);
+	DB::prepare($sql_query);
+	$rs = DB::execute($sql_param);
 
-	return ($res->recordCount() == 1);
+	return ($rs->rowCount() == 0) ? false : true;
 }
 
 /**
@@ -144,20 +150,21 @@ function username_exists($username) {
  */
 function get_userdata($username) {
 
-	$sql = EasySCP_Registry::get('Db');
+	$sql_param = array(
+		':admin_name'	=> $username
+	);
 
-	$query = "
+	$sql_query = "
 		SELECT
 			*
 		FROM
-			`admin`
+			admin
 		WHERE
-			`admin_name` = ?
-	;";
+			admin_name = :admin_name;
+	";
 
-	$res = exec_query($sql, $query, $username);
-
-	return $res->fetchRow();
+	DB::prepare($sql_query);
+	return DB::execute($sql_param, true);
 }
 
 /**
@@ -211,7 +218,6 @@ function is_userdomain_expired($username) {
 function is_userdomain_ok($username) {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
 	$udata = get_userdata($username);
 
@@ -223,18 +229,21 @@ function is_userdomain_ok($username) {
 		return true;
 	}
 
-	$query = "
+	$sql_param = array(
+		':domain_admin_id'	=> $udata['admin_id']
+	);
+
+	$sql_query = "
 		SELECT
 			status
 		FROM
 			domain
 		WHERE
-			domain_admin_id = ?
-	;";
+			domain_admin_id = :domain_admin_id;
+	";
 
-	$res = exec_query($sql, $query, $udata['admin_id']);
-
-	$row = $res->fetchRow();
+	DB::prepare($sql_query);
+	$row = DB::execute($sql_param, true);
 
 	return ($row['status'] == $cfg->ITEM_OK_STATUS);
 }
@@ -250,7 +259,6 @@ function is_userdomain_ok($username) {
 function unblock($timeout = null, $type = 'bruteforce') {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
 	if (is_null($timeout)) {
 		$timeout = $cfg->BRUTEFORCE_BLOCK_TIME;
@@ -260,36 +268,44 @@ function unblock($timeout = null, $type = 'bruteforce') {
 
 	switch ($type) {
 		case 'bruteforce':
-			$query = "
-				UPDATE
-					`login`
-				SET
-					`login_count` = '1'
-				WHERE
-					`login_count` >= ?
-				AND
-					`lastaccess` < ?
-				AND
-					`user_name` is NULL
-			;";
+			$sql_param = array(
+				':login_count'=> $cfg->BRUTEFORCE_MAX_LOGIN,
+				':lastaccess' => $timeout
+			);
 
-			$max = $cfg->BRUTEFORCE_MAX_LOGIN;
+			$sql_query = "
+				UPDATE
+					login
+				SET
+					login_count = '1'
+				WHERE
+					login_count >= :login_count
+				AND
+					lastaccess < :lastaccess
+				AND
+					user_name is NULL;
+			";
+
 			break;
 		case 'captcha':
-			$query = "
+			$sql_param = array(
+					':captcha_count'=> $cfg->BRUTEFORCE_MAX_CAPTCHA,
+					':lastaccess'	=> $timeout
+			);
+
+			$sql_query = "
 				UPDATE
-					`login`
+					login
 				SET
-					`captcha_count` = '1'
+					captcha_count = '1'
 				WHERE
-					`captcha_count` >= ?
+					captcha_count >= :captcha_count
 				AND
-					`lastaccess` < ?
+					lastaccess < :lastaccess
 				AND
-					`user_name` is NULL
+					user_name is NULL
 			;";
 
-			$max = $cfg->BRUTEFORCE_MAX_CAPTCHA;
 			break;
 		default:
 			write_log(
@@ -299,7 +315,10 @@ function unblock($timeout = null, $type = 'bruteforce') {
 			throw new EasySCP_Exception('FIXME: ' . __FILE__ . ':' . __LINE__);
 	}
 
-	exec_query($sql, $query, array($max, $timeout));
+	if(isset($sql_param) && isset($sql_query)){
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+	}
 }
 
 /**
@@ -315,7 +334,6 @@ function is_ipaddr_blocked($ipaddr = null, $type = 'bruteforce',
 	$autodeny = false) {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
 	if (is_null($ipaddr)) {
 		$ipaddr = getipaddr();
@@ -323,32 +341,40 @@ function is_ipaddr_blocked($ipaddr = null, $type = 'bruteforce',
 
 	switch ($type) {
 		case 'bruteforce':
-			$query = "
+			$sql_param = array(
+				':ipaddr' => $ipaddr,
+				':login_count' => $cfg->BRUTEFORCE_MAX_LOGIN
+			);
+
+			$sql_query = "
 				SELECT
 					*
 				FROM
-					`login`
+					login
 				WHERE
-					`ipaddr` = ?
+					ipaddr = :ipaddr
 				AND
-					`login_count` = ?
-			;";
+					login_count = :login_count;
+			";
 
-			$max = $cfg->BRUTEFORCE_MAX_LOGIN;
 			break;
 		case 'captcha':
-			$query = "
+			$sql_param = array(
+				':ipaddr' => $ipaddr,
+				':captcha_count' => $cfg->BRUTEFORCE_MAX_CAPTCHA
+			);
+
+			$sql_query = "
 				SELECT
 					*
 				FROM
-					`login`
+					login
 				WHERE
-					`ipaddr` = ?
+					ipaddr = :ipaddr
 				AND
-					`captcha_count` = ?
-			;";
+					captcha_count = :captcha_count;
+			";
 
-			$max = $cfg->BRUTEFORCE_MAX_CAPTCHA;
 			break;
 		default:
 			write_log(
@@ -358,9 +384,10 @@ function is_ipaddr_blocked($ipaddr = null, $type = 'bruteforce',
 			throw new EasySCP_Exception('FIXME: ' . __FILE__ . ':' . __LINE__);
 	}
 
-	$res = exec_query($sql, $query, array($ipaddr, $max));
+	DB::prepare($sql_query);
+	$rs = DB::execute($sql_param);
 
-	if ($res->recordCount() == 0) {
+	if ($rs->rowCount() == 0) {
 		return false;
 	} else if (!$autodeny) {
 		return true;
@@ -380,7 +407,6 @@ function is_ipaddr_blocked($ipaddr = null, $type = 'bruteforce',
 function shall_user_wait($ipaddr = null, $displayMessage = true) {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
 	if (!$cfg->BRUTEFORCE) {
 		return false;
@@ -389,24 +415,29 @@ function shall_user_wait($ipaddr = null, $displayMessage = true) {
 		$ipaddr = getipaddr();
 	}
 
-	$query = "
+	$sql_param = array(
+		':ipaddr' => $ipaddr
+	);
+
+	$sql_query = "
 		SELECT
-			`lastaccess`
+			lastaccess
 		FROM
-			`login`
+			login
 		WHERE
-			`ipaddr` = ?
+			ipaddr = :ipaddr
 		AND
-			`user_name` is NULL
+			user_name is NULL
 	;";
 
-	$res = exec_query($sql, $query, $ipaddr);
+	DB::prepare($sql_query);
+	$rs = DB::execute($sql_param);
 
-	if ($res->recordCount() == 0) {
+	if ($rs->rowCount() == 0) {
 		return false;
 	}
 
-	$data = $res->fetchRow();
+	$data = $rs->fetchRow();
 
 	$lastaccess = $data['lastaccess'];
 
@@ -445,7 +476,6 @@ function shall_user_wait($ipaddr = null, $displayMessage = true) {
 function check_ipaddr($ipaddr = null, $type = 'bruteforce') {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
 	if (is_null($ipaddr)) {
 		$ipaddr = getipaddr();
@@ -453,44 +483,47 @@ function check_ipaddr($ipaddr = null, $type = 'bruteforce') {
 
 	$sess_id = session_id();
 
-	$query = "
+	$sql_param = array(
+		':ipaddr' => $ipaddr
+	);
+
+	$sql_query = "
 		SELECT
-			`session_id`,
-			`ipaddr`,
-			`user_name`,
-			`lastaccess`,
-			`login_count`,
-			`captcha_count`
+			session_id, ipaddr, user_name, lastaccess, login_count, captcha_count
 		FROM
-			`login`
+			login
 		WHERE
-			`ipaddr` = ?
+			ipaddr = :ipaddr
 		AND
-			`user_name` IS NULL
+			user_name IS NULL
 		;
 	";
 
-	$res = exec_query($sql, $query, $ipaddr);
+	DB::prepare($sql_query);
+	$rs = DB::execute($sql_param);
 
 	// There is no record, add one
-	if ($res->recordCount() == 0) {
-		$query = "
-			REPLACE INTO `login` (
-				`session_id`,
-				`ipaddr`,
-				`lastaccess`,
-				`login_count`,
-				`captcha_count`
-			) VALUES 
-				(?, ?, UNIX_TIMESTAMP(), ?, ?)
-			;";
+	if ($rs->rowCount() == 0) {
+		$sql_param = array(
+			':session_id'	=> $sess_id,
+			':ipaddr'		=> $ipaddr,
+			':login_count'	=> (int) ($type == 'bruteforce'),
+			':captcha_count'=> (int) ($type == 'captcha')
+		);
 
-		exec_query($sql, $query, array($sess_id, $ipaddr,
-			(int) ($type == 'bruteforce'), (int) ($type == 'captcha')));
+		$sql_query = "
+			REPLACE INTO
+				login (session_id, ipaddr, lastaccess, login_count, captcha_count)
+			VALUES
+				(:session_id, :ipaddr, UNIX_TIMESTAMP(), :login_count, :captcha_count);
+		";
+
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
 
 	} elseif($cfg->BRUTEFORCE) {
 
-		$data = $res->fetchRow();
+		$data = $rs->fetch();
 
 		$lastaccess = $data['lastaccess'];
 		$logincount = $data['login_count'];
@@ -512,32 +545,41 @@ function check_ipaddr($ipaddr = null, $type = 'bruteforce') {
 		// Updating Timer for Bruteforce or Captcha
 		if ($btime < time()) {
 			if ($type == 'bruteforce') {
-				$query = "
+				$sql_param = array(
+					':ipaddr' => $ipaddr
+				);
+
+				$sql_query = "
 					UPDATE
-						`login`
+						login
 					SET
-						`lastaccess` = UNIX_TIMESTAMP(),
-						`login_count` = `login_count`+1
+						lastaccess = UNIX_TIMESTAMP(),
+						login_count = login_count+1
 					WHERE
-						`ipaddr` = ?
+						ipaddr = :ipaddr
 					AND
-						`user_name` IS NULL
-					;";
+						user_name IS NULL;
+				";
 			} else if ($type == 'captcha') {
-				$query = "
+				$sql_param = array(
+						':ipaddr' => $ipaddr
+				);
+
+				$sql_query = "
 					UPDATE
-						`login`
+						login
 					SET
-						`lastaccess` = UNIX_TIMESTAMP(),
-						`captcha_count` = `captcha_count`+1
+						lastaccess = UNIX_TIMESTAMP(),
+						captcha_count = captcha_count+1
 					WHERE
-						`ipaddr` = ?
+						ipaddr = :ipaddr
 					AND
-						`user_name` IS NULL
-					;";
+						user_name IS NULL;
+				";
 			}
 
-			exec_query($sql, $query, $ipaddr);
+			DB::prepare($sql_query);
+			DB::execute($sql_param)->closeCursor();
 		} else {
 			$baseServerVHostPrefix = (isset($_SERVER['HTTPS'])) ? "https://" : "http://";
 			$backButtonDestination = $baseServerVHostPrefix . $cfg->BASE_SERVER_VHOST;
@@ -606,7 +648,6 @@ function deny_access() {
 function register_user($uname, $upass) {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
 	$baseServerVHostPrefix = (isset($_SERVER['HTTPS'])) ? "https://" : "http://";
 	$backButtonDestination = $baseServerVHostPrefix . $cfg->BASE_SERVER_VHOST;
@@ -681,19 +722,24 @@ function register_user($uname, $upass) {
 			return false;
 		}
 
-		$sess_id = session_id();
+		$sql_param = array(
+			':user_name'	=> $uname,
+			':lastaccess'	=> time(),
+			':session_id'	=> session_id()
+		);
 
-		$query = "
+		$sql_query = "
 			UPDATE
-				`login`
+				login
 			SET
-				`user_name` = ?,
-				`lastaccess` = ?
+				user_name = :user_name,
+				lastaccess = :lastaccess
 			WHERE
-				`session_id` = ?
-		;";
+				session_id = :session_id;
+		";
 
-		exec_query($sql, $query, array($uname, time(), $sess_id));
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
 
 		$_SESSION['user_logged'] = $udata['admin_name'];
 		$_SESSION['user_pass'] = $udata['admin_pass'];
@@ -726,47 +772,46 @@ function register_user($uname, $upass) {
 function check_user_login() {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
 	$sess_id = session_id();
 	// kill timed out sessions
 	do_session_timeout();
-	$user_logged = isset($_SESSION['user_logged'])
-		? $_SESSION['user_logged'] : false;
+	$user_logged = isset($_SESSION['user_logged']) ? $_SESSION['user_logged'] : false;
 
 	if (!$user_logged) {
 		return false;
 	}
 
-	$user_pass = $_SESSION['user_pass'];
-	$user_type = $_SESSION['user_type'];
-	$user_id = $_SESSION['user_id'];
+	$sql_param = array(
+		':admin_name'	=> $user_logged,
+		':admin_pass'	=> $_SESSION['user_pass'],
+		':admin_type'	=> $_SESSION['user_type'],
+		':admin_id'		=> $_SESSION['user_id'],
+		':session_id'	=> $sess_id
+	);
 
 	// verify session data with database
-	$query = "
+	$sql_query = "
 		SELECT
 			*
 		FROM
-			`admin`, `login`
+			admin, login
 		WHERE
-			admin.`admin_name` = ?
+			admin.admin_name = :admin_name
 		AND
-			admin.`admin_pass` = ?
+			admin.admin_pass = :admin_pass
 		AND
-			admin.`admin_type` = ?
+			admin.admin_type = :admin_type
 		AND
-			admin.`admin_id` = ?
+			admin.admin_id = :admin_id
 		AND
-			login.`session_id` = ?
-	;";
+			login.session_id = :session_id;
+	";
 
-	$rs = exec_query(
-			$sql,
-			$query,
-			array($user_logged, $user_pass, $user_type, $user_id, $sess_id)
-	);
+	DB::prepare($sql_query);
+	$rs = DB::execute($sql_param);
 
-	if ($rs->recordCount() != 1) {
+	if ($rs->rowCount() != 1) {
 		write_log("Detected session manipulation on ".$user_logged."'s session!");
 		unset_user_login_data();
 
@@ -774,7 +819,7 @@ function check_user_login() {
 	}
 
 	if ((EasySCP_Update_Database::getInstance()->checkUpdateExists() ||
-		($cfg->MAINTENANCEMODE)) && $user_type != 'admin') {
+		($cfg->MAINTENANCEMODE)) && $_SESSION['user_type'] != 'admin') {
 		unset_user_login_data();
 		write_log(
 			"System is currently in maintenance mode. Logging out <strong><em>" .
@@ -787,16 +832,22 @@ function check_user_login() {
 	// if user login data correct - update session and lastaccess
 	$_SESSION['user_login_time'] = time();
 
-	$query = "
+	$sql_param = array(
+		':lastaccess'	=> time(),
+		':session_id'	=> $sess_id
+	);
+
+	$sql_query = "
 		UPDATE
-			`login`
+			login
 		SET
-			`lastaccess` = ?
+			lastaccess = :lastaccess
 		WHERE
-			`session_id` = ?
+			session_id = :session_id
 	;";
 
-	exec_query($sql, $query, array(time(), $sess_id));
+	DB::prepare($sql_query);
+	DB::execute($sql_param);
 
 	return true;
 }
@@ -823,8 +874,11 @@ function check_login($fName = null, $preventExternalLogin = true) {
 
 	if (!is_null($fName)) {
 
-		$levels = explode('/', realpath(dirname($fName)));
-		$level = $levels[count($levels) - 1];
+		// TODO: Prüfen ob das so ok ist. Das '\\' wird bei Windows Pfaden benötigt.
+		// $levels = explode('/', realpath(dirname($fName)));
+		// $levels = explode('\\', realpath(dirname($fName)));
+		// $level = $levels[count($levels) - 1];
+		$level = basename(dirname($fName));
 
 		$userType = ($_SESSION['user_type'] == 'user')
 			? 'client' : $_SESSION['user_type'];
@@ -1041,24 +1095,22 @@ function change_user_interface($from_id, $to_id) {
  */
 function unset_user_login_data() {
 
-	$sql = EasySCP_Registry::get('Db');
-
 	if (isset($_SESSION['user_logged'])) {
+		$sql_param = array(
+				':session_id'	=> session_id(),
+				':user_name'	=> $_SESSION['user_logged']
+		);
 
-		$sess_id = session_id();
-
-		$admin_name = $_SESSION['user_logged'];
-
-		$query = "
+		$sql_query = "
 			DELETE FROM
-				`login`
+				login
 			WHERE
-				`session_id` = ?
+				session_id = :session_id
 			AND
-				`user_name` = ?
-		;";
-
-		exec_query($sql, $query, array($sess_id, $admin_name));
+				user_name = :user_name
+		";
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
 	}
 
 	$_SESSION = array();

@@ -91,6 +91,8 @@ class DaemonDomainCommon {
 	 * @return bool
 	 */
 	protected static function apacheReloadConfig() {
+		System_Daemon::debug('Starting "apacheReloadConfig" subprocess.');
+
 		switch(DaemonConfig::$cfg->DistName){
 			case 'CentOS':
 				exec(DaemonConfig::$cmd->CMD_HTTPD_CTL . ' configtest 1>&1 2>&1', $result, $error);
@@ -117,6 +119,9 @@ class DaemonDomainCommon {
 				return 'EasySCP Controller not running. System is unable to reload Apache config.<br />';
 			}
 		}
+
+		System_Daemon::debug('Finished "apacheReloadConfig" subprocess.');
+
 		return ($error == 0) ? true : $result;
 	}
 

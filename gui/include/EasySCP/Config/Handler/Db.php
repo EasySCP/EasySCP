@@ -1,31 +1,24 @@
 <?php
 /**
- * ispCP ω (OMEGA) a Virtual Hosting Control System
+ * EasySCP a Virtual Hosting Control Panel
+ * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * The Original Code is "ispCP - ISP Control Panel".
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * The Initial Developer of the Original Code is ispCP Team.
- * Portions created by Initial Developer are Copyright (C) 2006-2011 by
- * isp Control Panel. All Rights Reserved.
- *
- * @category    ispCP
- * @package     EasySCP_Config
- * @subpackage  Handler
- * @copyright   2006-2011 by ispCP | http://isp-control.net
- * @author      Laurent Declercq <laurent.declercq@ispcp.net>
- * @version     SVN: $Id: Db.php 3762 2011-01-14 08:43:43Z benedikt $
- * @link        http://isp-control.net ispCP Home Site
- * @license     http://www.mozilla.org/MPL/ MPL 1.1
+ * @link 		http://www.easyscp.net
+ * @author 		EasySCP Team
  */
 
 /**
@@ -41,18 +34,10 @@ require_once  INCLUDEPATH . '/EasySCP/Config/Handler.php';
  *
  * @package     EasySCP_Config
  * @subpackage  Handler
- * @author      Laurent Declercq <laurent.declercq@ispcp.net>
- * @since       1.0.7
- * @version     1.0.7
+ * @copyright 	2010-2014 by EasySCP | http://www.easyscp.net
+ * @author 		EasySCP Team
  */
 class EasySCP_Config_Handler_Db extends EasySCP_Config_Handler implements iterator {
-
-	/**
-	 * PDO instance
-	 *
-	 * @var PDO
-	 */
-	protected $_db;
 
 	/**
 	 * Array that contains all configuration parameters from the database
@@ -126,86 +111,13 @@ class EasySCP_Config_Handler_Db extends EasySCP_Config_Handler implements iterat
 	protected $_updateQueriesCounter = 0;
 
 	/**
-	 * Database table name for configuration parameters
-	 *
-	 * @var string
-	 */
-	protected $_tableName = 'config';
-
-	/**
-	 * Database column name for configuration parameters keys
-	 *
-	 * @var string
-	 */
-	protected $_keysColumn = 'name';
-
-	/**
-	 * Database column name for configuration parameters values
-	 *
-	 * @var string
-	 */
-	protected $_valuesColumn = 'value';
-
-	/**
 	 * Loads all configuration parameters from the database
 	 *
-	 * <b>Parameters:</b>
-	 *
-	 * The constructor accepts one or more parameters passed in a array where
-	 * each key represent a parameter name.
-	 *
-	 * For an array, the possible parameters are:
-	 *
-	 * - db: A PDO instance
-	 * - table_name: Database table for configuration parameters
-	 * - key_column: Database column name for configuration parameters keys
-	 * - value_column: Database column name for configuration parameters values
-	 *
-	 * <b>Note:</b> The three last parameters are optionals.
-	 *
-	 * For a single parameter, only a PDO instance is accepted.
-	 *
 	 * @throws EasySCP_Exception
-	 * @param PDO|array A PDO instance or an array of parameters that contains
-	 * at least a PDO instance
-	 * @return void
+	 *
+	 * @return EasySCP_Config_Handler_Db
 	 */
-	public function __construct($params) {
-
-		if(is_array($params)) {
-
-			if(!array_key_exists('db', $params) ||
-				!($params['db'] instanceof PDO)) {
-
-				throw new EasySCP_Exception(
-					'Error: A PDO instance is requested for ' . __CLASS__
-				);
-			}
-
-			$this->_db = $params['db'];
-
-			// Overrides the database table name for configuration parameters
-			if(isset($params['table_name'])) {
-					$this->_tableName = $params['table_name'];
-			}
-
-			// Override the column name for configuration parameters keys
-			if(isset($params['keys_column'])) {
-				$this->_keysColumn = $params['keys_column'];
-			}
-
-			// Set the column name for configuration parameters values
-			if(isset($params['values_column'])) {
-				$this->_valuesColumn = $params['values_column'];
-			}
-
-		} elseif(!$params instanceof PDO) {
-			throw new EasySCP_Exception(
-				'Error: PDO instance requested for ' . __CLASS__
-			);
-		}
-
-		$this->_db = $params;
+	public function __construct() {
 		$this->_loadAll();
 	}
 
@@ -329,8 +241,10 @@ class EasySCP_Config_Handler_Db extends EasySCP_Config_Handler implements iterat
 	 * This method returns the count of queries that were executed since the
 	 * last call of {@link reset_queries_counter()} method.
 	 *
+	 * @param $queriesCounterType
 	 * @throws EasySCP_Exception
-	 * @param string $queriesCounter Query counter type (insert|update)
+	 * @internal param string $queriesCounter Query counter type (insert|update)
+	 *
 	 * @return void
 	 */
 	public function countQueries($queriesCounterType) {
@@ -353,6 +267,7 @@ class EasySCP_Config_Handler_Db extends EasySCP_Config_Handler implements iterat
 	 *
 	 * @throws EasySCP_Exception
 	 * @param string $queriesCounterType Type of query counter (insert|update)
+	 *
 	 * @return void
 	 */
 	public function resetQueriesCounter($queriesCounterType) {
@@ -373,7 +288,8 @@ class EasySCP_Config_Handler_Db extends EasySCP_Config_Handler implements iterat
 	/**
 	 * Deletes a configuration parameters from the database
 	 *
-	 * @param string $index Configuration parameter key name
+	 * @param string $key Configuration parameter key name
+	 *
 	 * @return void
 	 */
 	public function del($key) {
@@ -388,134 +304,128 @@ class EasySCP_Config_Handler_Db extends EasySCP_Config_Handler implements iterat
 	 * Load all configuration parameters from the database
 	 *
 	 * @throws EasySCP_Exception
+	 *
 	 * @return void
 	 */
 	protected function _loadAll() {
 
-		$query = "
+		$sql_query = "
 			SELECT
-				`{$this->_keysColumn}`, `{$this->_valuesColumn}`
+				name, value
 			FROM
-				`{$this->_tableName}`
-			;
+				config
+			ORDER BY
+				name;
 		";
-
-		if(($stmt = $this->_db->query($query, PDO::FETCH_ASSOC))) {
-
-			$keyColumn = $this->_keysColumn;
-			$valueColumn = $this->_valuesColumn;
-
-			foreach($stmt->fetchAll() as $row) {
-				$this->_parameters[$row[$keyColumn]] = $row[$valueColumn];
-			}
-		} else {
-			throw new EasySCP_Exception(
-				'Error: Could not get configuration parameters from database!'
-			);
+		foreach (DB::query($sql_query) as $row) {
+			$this->_parameters[$row['name']] = $row['value'];
 		}
+
 	}
 
 	/**
 	 * Store a new configuration parameter in the database
 	 *
 	 * @throws EasySCP_Exception_Database
+	 *
 	 * @return void
 	 */
 	protected function _insert() {
 
-		if(!$this->_insertStmt instanceof PDOStatement) {
+		$sql_param = array(
+				':index' => $this->_key,
+				':value' => $this->_value
+		);
 
-			$query = "
-				INSERT INTO
-					`{$this->_tableName}` (
-						`{$this->_keysColumn}`, `{$this->_valuesColumn}`
-					) VALUES (
-						:index, :value
-					)
-				;
-			";
+		$sql_query = "
+			INSERT INTO
+					config (name, value)
+				VALUES
+					(:index, :value)
+		";
 
-			$this->_insertStmt = $this->_db->prepare($query);
-			$this->_insertStmt->BindParam(':index', $this->_key);
-			$this->_insertStmt->BindParam(':value', $this->_value);
-		}
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
 
-		if(!$this->_insertStmt->execute()) {
-			throw new EasySCP_Exception_Database(
-				"Error: Unable to insert the configuration parameter `{$this->_key}` in the database"
-			);
-		} else {
-			$this->_insertQueriesCounter++;
-		}
+		$this->_insertQueriesCounter++;
+		/*
+		throw new EasySCP_Exception_Database(
+			"Error: Unable to insert the configuration parameter `{$this->_key}` in the database"
+		);
+		*/
 	}
 
 	/**
 	 * Update a configuration parameter in the database
 	 *
 	 * @throws EasySCP_Exception_Database
+	 *
 	 * @return void
 	 */
 	protected function _update() {
 
-		if(!$this->_updateStmt instanceof PDOStatement) {
+		$sql_param = array(
+				':value' => $this->_value,
+				':index' => $this->_key
+		);
 
-			$query = "
-				UPDATE
-					`{$this->_tableName}`
-				SET
-					`{$this->_valuesColumn}` = :value
-				WHERE
-					`{$this->_keysColumn}` = :index
-				;
-			";
+		$sql_query = "
+			UPDATE
+				config
+			SET
+				value = :value
+			WHERE
+				name = :index
 
-			$this->_updateStmt = $this->_db->prepare($query);
-			$this->_updateStmt->BindParam(':index', $this->_key);
-			$this->_updateStmt->BindParam(':value', $this->_value);
-		}
+		";
 
-		if(!$this->_updateStmt->execute()) {
-			throw new EasySCP_Exception_Database(
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+
+		$this->_updateQueriesCounter++;
+
+		/*
+		throw new EasySCP_Exception_Database(
 				"Error: Unable to update the configuration parameter `{$this->_key}` in the database!"
-			);
-		} else {
-			$this->_updateQueriesCounter++;
-		}
+		);
+		*/
+
 	}
 
 	/**
 	 * Deletes a configuration parameter from the database
 	 *
 	 * @throws EasySCP_Exception_Database
+	 *
 	 * @return void
 	 */
 	protected function _delete() {
 
-		if(!$this->_deleteStmt instanceof PDOStatement) {
+		$sql_param = array(
+				':index' => $this->_key
+		);
 
-			$query = "
-				DELETE FROM
-					`{$this->_tableName}`
-				WHERE
-					`{$this->_keysColumn}` = :index
-				;
-			";
+		$sql_query = "
+			DELETE FROM
+				config
+			WHERE
+				name = :index
+		";
 
-			$this->_deleteStmt = $this->_db->prepare($query);
-			$this->_deleteStmt->BindParam(':index', $this->_key);
-		}
-
-		if(!$this->_deleteStmt->execute()) {
-			throw new EasySCP_Exception_Database(
-				'Error: Unable to delete the configuration parameter in the database!'
-			);
-		}
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+		/*
+		 throw new EasySCP_Exception_Database(
+			'Error: Unable to delete the configuration parameter in the database!'
+		);
+		 */
 	}
 
 	/**
 	 * Whether or not an offset exists
 	 *
 	 * @param mixed $offset An offset to check for existence
+	 *
 	 * @return boolean TRUE on success or FALSE on failure
 	 */
 	public function offsetExists($offset) {

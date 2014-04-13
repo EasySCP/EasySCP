@@ -1,31 +1,24 @@
 <?php
 /**
- * ispCP ω (OMEGA) a Virtual Hosting Control System
+ * EasySCP a Virtual Hosting Control Panel
+ * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * The Original Code is "ispCP - ISP Control Panel".
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * The Initial Developer of the Original Code is ispCP Team.
- * Portions created by Initial Developer are Copyright (C) 2006-2011 by
- * isp Control Panel. All Rights Reserved.
- *
- * @category    ispCP
- * @package     EasySCP_Config
- * @subpackage  Handler
- * @copyright   2006-2011 by ispCP | http://isp-control.net
- * @author      Laurent Declercq <laurent.declercq@ispcp.net>
- * @version     SVN: $Id: Handler.php 3762 2011-01-14 08:43:43Z benedikt $
- * @link        http://isp-control.net ispCP Home Site
- * @license     http://www.mozilla.org/MPL/ MPL 1.1
+ * @link 		http://www.easyscp.net
+ * @author 		EasySCP Team
  */
 
 /**
@@ -43,14 +36,13 @@
  *
  * @package     EasySCP_Config
  * @subpackage  Handler
- * @author      Laurent Declercq <laurent.declercq@ispcp.net>
- * @since       1.0.7
- * @version     1.0.6
+ * @copyright 	2010-2014 by EasySCP | http://www.easyscp.net
+ * @author 		EasySCP Team
  */
 class EasySCP_Config_Handler implements ArrayAccess {
 
 	/**
-	 * Callbacks that will be executed after ispCP has been fully initialized
+	 * Callbacks that will be executed after EasySCP has been fully initialized
 	 *
 	 * @var array
 	 */
@@ -61,7 +53,8 @@ class EasySCP_Config_Handler implements ArrayAccess {
 	 * Loads all configuration parameters from an array
 	 *
 	 * @param array $parameters Configuration parameters
- 	 * @return void
+	 *
+	 * @return EasySCP_Config_Handler
 	 */
 	public function __construct(array $parameters) {
 
@@ -86,6 +79,7 @@ class EasySCP_Config_Handler implements ArrayAccess {
 	 * PHP overloading on inaccessible members
 	 *
 	 * @param $key Configuration parameter key name
+	 *
 	 * @return mixed Configuration parameter value
 	 */
 	public function __get($key) {
@@ -98,6 +92,7 @@ class EasySCP_Config_Handler implements ArrayAccess {
 	 *
 	 * @throws EasySCP_Exception
 	 * @param string $key Configuration parameter key name
+	 *
 	 * @return mixed Configuration parameter value
 	 */
 	public function get($key) {
@@ -114,7 +109,8 @@ class EasySCP_Config_Handler implements ArrayAccess {
 	/**
 	 * Deletes a configuration parameters
 	 *
-	 * @param $string $key Configuration parameter key name
+	 * @param string $key Configuration parameter key name
+	 *
 	 * @return void
 	 */
 	public function del($key) {
@@ -125,7 +121,8 @@ class EasySCP_Config_Handler implements ArrayAccess {
 	/**
 	 * Checks whether configuration parameters exists
 	 *
-	 * @param string $index Configuration parameter key name
+	 * @param string $key Configuration parameter key name
+	 *
 	 * @return boolean TRUE if configuration parameter exists, FALSE otherwise
 	 * @todo Remove this method
 	 */
@@ -149,6 +146,7 @@ class EasySCP_Config_Handler implements ArrayAccess {
 	 * <b>Note:</b> This method is not recursive.
 	 *
 	 * @param EasySCP_Config_Handler $config EasySCP_Config_Handler object
+	 *
 	 * @return void
 	 */
 	public function replaceWith(EasySCP_Config_Handler $config) {
@@ -180,18 +178,15 @@ class EasySCP_Config_Handler implements ArrayAccess {
 	}
 
 	/**
-	 * Adds a callback which will be executed after ispCP has been fully
-	 * initialized
+	 * Adds a callback which will be executed after EasySCP has been fully initialized
 	 *
-	 * Useful for per-environment configuration which depends on the ispCP being
-	 * fully initialized.
+	 * Useful for per-environment configuration which depends on the EasySCP being fully initialized.
 	 *
 	 * Callbacks can be defined in a PHP call_user_func() function format.
 	 *
 	 * @throws EasySCP_Exception
-	 * @param callback $function The function to be called
-	 * @param mixed $parameters... Zero or more parameters to be passed to the
-	 * function
+	 * @param callback $callback The function to be called
+	 *
 	 * @return void
 	 */
 	public function afterInitialize($callback) {
@@ -252,6 +247,7 @@ class EasySCP_Config_Handler implements ArrayAccess {
 	 * Whether or not an offset exists
 	 *
 	 * @param mixed $offset An offset to check for existence
+	 *
 	 * @return boolean TRUE on success or FALSE on failure
 	 */
 	public function offsetExists($offset) {
@@ -260,9 +256,10 @@ class EasySCP_Config_Handler implements ArrayAccess {
 	}
 
 	/**
-	 * Unsets an offset
+	 * Unset an offset
 	 *
 	 * @param  mixed $offset The offset to unset
+	 *
 	 * @return void
 	 */
 	public function offsetUnset($offset) {

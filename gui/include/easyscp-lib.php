@@ -46,29 +46,9 @@ spl_autoload_register('AutoLoader::loadClass');
 /**
  * Exception Handler for uncaught exceptions
  *
- * Sets the exception handler for uncaught exceptions and register it in the
- * registry.
+ * Sets the exception handler for uncaught exceptions
  */
-EasySCP_Registry::setAlias(
-	'exceptionHandler',
-	EasySCP_Exception_Handler::getInstance()->setHandler()
-);
-
-/**
- * Attach the primary writer to write uncaught exceptions messages to
- * the client browser.
- *
- * The writer writes all exception messages to the client browser. In production,
- * all messages are replaced by a specific message to avoid revealing important
- * information about the EasySCP application environment if the user is not an
- * administrator.
- *
- * Another optional writers will be attached to this object during
- * initialization process.
- */
-EasySCP_Registry::get('exceptionHandler')->attach(
-	new EasySCP_Exception_Writer_Browser()
-);
+EasySCP_Exception::setHandler();
 
 /**
  * Encryption data

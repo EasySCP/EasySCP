@@ -39,7 +39,6 @@
 function gen_admin_mainmenu($tpl, $menu_file) {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
 	$tpl->assign(
 		array(
@@ -71,7 +70,6 @@ function gen_admin_mainmenu($tpl, $menu_file) {
 function gen_admin_menu($tpl, $menu_file) {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
 	$tpl->assign(
 		array(
@@ -130,67 +128,61 @@ function gen_admin_menu($tpl, $menu_file) {
 	$tpl->assign('MENU', $menu_file);
 }
 
-function get_sql_user_count($sql) {
+function get_sql_user_count() {
 
-	$query = "
+	$sql_query = "
 		SELECT DISTINCT
 			sqlu_name
 		FROM
-			sql_user
-		;
+			sql_user;
 	";
 
-	$rs = exec_query($sql, $query);
+	$rs = DB::query($sql_query);
 
-	return $rs->recordCount();
+	return $rs->rowCount();
 }
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function get_admin_general_info($tpl, $sql) {
+function get_admin_general_info($tpl) {
 
-	$cfg = EasySCP_Registry::get('Config');
 
 	$tpl->assign(
 		array(
-			'TR_GENERAL_INFORMATION' => tr('General information'),
-			'TR_ACCOUNT_NAME' => tr('Account name'),
-			'TR_ADMIN_USERS' => tr('Admin users'),
-			'TR_RESELLER_USERS' => tr('Reseller users'),
-			'TR_NORMAL_USERS' => tr('Normal users'),
-			'TR_DOMAINS' => tr('Domains'),
-			'TR_SUBDOMAINS' => tr('Subdomains'),
-			'TR_DOMAINS_ALIASES' => tr('Domain aliases'),
-			'TR_MAIL_ACCOUNTS' => tr('Mail accounts'),
-			'TR_FTP_ACCOUNTS' => tr('FTP accounts'),
-			'TR_SQL_DATABASES' => tr('SQL databases'),
-			'TR_SQL_USERS' => tr('SQL users'),
-			'TR_SYSTEM_MESSAGES' => tr('System messages'),
-			'TR_NO_NEW_MESSAGES' => tr('No new messages'),
-			'TR_SERVER_TRAFFIC' => tr('Server traffic')
+			'TR_GENERAL_INFORMATION'=> tr('General information'),
+			'TR_ACCOUNT_NAME'		=> tr('Account name'),
+			'TR_ADMIN_USERS'		=> tr('Admin users'),
+			'TR_RESELLER_USERS'		=> tr('Reseller users'),
+			'TR_NORMAL_USERS'		=> tr('Normal users'),
+			'TR_DOMAINS'			=> tr('Domains'),
+			'TR_SUBDOMAINS'			=> tr('Subdomains'),
+			'TR_DOMAINS_ALIASES'	=> tr('Domain aliases'),
+			'TR_MAIL_ACCOUNTS'		=> tr('Mail accounts'),
+			'TR_FTP_ACCOUNTS'		=> tr('FTP accounts'),
+			'TR_SQL_DATABASES'		=> tr('SQL databases'),
+			'TR_SQL_USERS'			=> tr('SQL users'),
+			'TR_SYSTEM_MESSAGES'	=> tr('System messages'),
+			'TR_NO_NEW_MESSAGES'	=> tr('No new messages'),
+			'TR_SERVER_TRAFFIC'		=> tr('Server traffic')
 		)
 	);
 
-	$show_total_emails = records_count(
-		'mail_users', 'mail_type NOT RLIKE \'_catchall\'', ''
-	);
+	$show_total_emails = records_count('mail_users', "mail_type NOT RLIKE '_catchall'", '');
 
 	$tpl->assign(
 		array(
-			'ACCOUNT_NAME' => $_SESSION['user_logged'],
-			'ADMIN_USERS' => records_count('admin', 'admin_type', 'admin'),
-			'RESELLER_USERS' => records_count('admin', 'admin_type', 'reseller'),
-			'NORMAL_USERS' => records_count('admin', 'admin_type', 'user'),
-			'DOMAINS' => records_count('domain', '', ''),
-			'SUBDOMAINS' => records_count('subdomain', '', '') +
-				records_count('subdomain_alias', 'subdomain_alias_id', '', ''),
-			'DOMAINS_ALIASES' => records_count('domain_aliasses', '', ''),
-			'MAIL_ACCOUNTS' => $show_total_emails,
-			'FTP_ACCOUNTS' => records_count('ftp_users', '', ''),
-			'SQL_DATABASES' => records_count('sql_database', '', ''),
-			'SQL_USERS' => get_sql_user_count($sql)
+			'ACCOUNT_NAME'		=> $_SESSION['user_logged'],
+			'ADMIN_USERS'		=> records_count('admin', 'admin_type', 'admin'),
+			'RESELLER_USERS'	=> records_count('admin', 'admin_type', 'reseller'),
+			'NORMAL_USERS'		=> records_count('admin', 'admin_type', 'user'),
+			'DOMAINS'			=> records_count('domain', '', ''),
+			'SUBDOMAINS'		=> records_count('subdomain', '', '') + records_count('subdomain_alias', 'subdomain_alias_id', '', ''),
+			'DOMAINS_ALIASES'	=> records_count('domain_aliasses', '', ''),
+			'MAIL_ACCOUNTS'		=> $show_total_emails,
+			'FTP_ACCOUNTS'		=> records_count('ftp_users', '', ''),
+			'SQL_DATABASES'		=> records_count('sql_database', '', ''),
+			'SQL_USERS'			=> get_sql_user_count()
 		)
 	);
 }
@@ -610,9 +602,10 @@ function gen_user_list($tpl, $sql) {
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function get_admin_manage_users($tpl, $sql) {
+function get_admin_manage_users($tpl) {
+
+	$sql = EasySCP_Registry::get('Db');
 
 	$tpl->assign(
 		array(
@@ -910,48 +903,57 @@ function generate_user_props($user_id) {
 }
 
 /**
-* @todo implement check for dynamic table/row in SQL query
-*/
+ * @todo implement check for dynamic table/row in SQL query
+ * @param $table
+ * @param $where
+ * @param $value
+ *
+ * @return
+ */
 function records_count($table, $where, $value) {
-
-	$sql = EasySCP_Registry::get('Db');
 
 	if($where != '') {
 		if($value != '') {
-			$query = "
-				SELECT COUNT(*) AS `cnt`
-				FROM
-					$table
-				WHERE
-					$where = ?
-				;
-			";
+			$sql_param = array(
+				':where' => $where,
+				':value' => $value
+			);
 
-			$rs = exec_query($sql, $query, $value);
+			$sql_query = "
+				SELECT
+					COUNT(*) AS cnt
+				FROM
+					".$table."
+				WHERE
+					:where = :value;
+			";
 		} else {
-			$query = "
-				SELECT COUNT(*) AS `cnt`
+			$sql_param = array(
+					':where' => $where
+			);
+
+			$sql_query = "
+				SELECT
+					COUNT(*) AS cnt
 				FROM
-					$table
+					".$table."
 				WHERE
-					$where
-				;
+					:where;
 			";
-
-			$rs = exec_query($sql, $query);
 		}
+		DB::prepare($sql_query);
+		$row = DB::execute($sql_param, true);
 	} else {
-		$query = "
-			SELECT COUNT(*) AS `cnt`
+		$sql_query = "
+			SELECT
+				COUNT(*) AS cnt
 			FROM
-				$table
-			;
+				".$table.";
 		";
-
-		$rs = exec_query($sql, $query);
+		$row = DB::query($sql_query, true);
 	}
 
-	return $rs->fields['cnt'];
+	return $row['cnt'];
 }
 
 /**
@@ -1277,7 +1279,6 @@ function write_log($msg, $level = E_USER_WARNING) {
 
 	global $send_log_to;
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
 	if(isset($_SERVER['REMOTE_ADDR'])) {
 		$client_ip = $_SERVER['REMOTE_ADDR'];
@@ -1289,13 +1290,18 @@ function write_log($msg, $level = E_USER_WARNING) {
 
 	$msg = replace_html($msg, ENT_COMPAT, tr('encoding')).'<br /><small>User IP: '.$client_ip.'</small>';
 
-	$query = "
-		INSERT INTO
-			`log` (`log_time`,`log_message`)
-		VALUES(NOW(), ?)
-	;";
+	$sql_param = array(
+		':log_message'	=> $msg
+	);
 
-	exec_query($sql, $query, $msg, false);
+	$sql_query = "
+		INSERT INTO
+			log (log_time, log_message)
+		VALUES
+			(NOW(), :log_message);
+		";
+	DB::prepare($sql_query);
+	DB::execute($sql_param)->closeCursor();
 
 	$msg = strip_tags(str_replace('<br />', "\n", $msg));
 	$send_log_to = $cfg->DEFAULT_ADMIN_ADDRESS;
@@ -1335,18 +1341,18 @@ AUTO_LOG_MSG;
 		// successful
 		if(!$mail_result) {
 			$mail_status = ($mail_result) ? 'OK' : 'NOT OK';
-			$log_message = "$admin_login: Logging Daemon Mail To: |$to|, " .
-					"From: |$admin_email|, Status: |$mail_status|!";
-			$query = "
-				INSERT INTO
-					`log` (`log_time`,`log_message`)
-				VALUES(NOW(), ?)
-				;
-			";
+			$sql_param = array(
+				':log_message'	=> "$admin_login: Logging Daemon Mail To: |$to|, " . "From: |$admin_email|, Status: |$mail_status|!"
+			);
 
-			// NXW: Hu, don't die on failed query ?
-			// Change this to be compatible with PDO Exception only
-			exec_query($sql, $query, $log_message, false);
+			$sql_query = "
+				INSERT INTO
+					log (log_time, log_message)
+				VALUES
+					(NOW(), :log_message);
+			";
+			DB::prepare($sql_query);
+			DB::execute($sql_param)->closeCursor();
 		}
 	}
 }

@@ -1,34 +1,28 @@
 <?php
 /**
- * ispCP ω (OMEGA) a Virtual Hosting Control System
+ * EasySCP a Virtual Hosting Control Panel
+ * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * The Original Code is "ispCP - ISP Control Panel".
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * The Initial Developer of the Original Code is ispCP Team.
- * Portions created by Initial Developer are Copyright (C) 2006-2011 by
- * isp Control Panel. All Rights Reserved.
- *
- * @category    ispCP
- * @package     EasySCP_Initializer
- * @copyright   2006-2011 by ispCP | http://isp-control.net
- * @author      Laurent Declercq <laurent.declercq@ispcp.net>
- * @version     SVN: $Id: Initializer.php 3873 2011-07-10 07:34:22Z benedikt $
- * @link        http://isp-control.net ispCP Home Site
- * @license     http://www.mozilla.org/MPL/ MPL 1.1
+ * @link 		http://www.easyscp.net
+ * @author 		EasySCP Team
  */
 
 /**
- * ispCP Initializer class
+ * EasySCP Initializer class
  *
  * The initializer is responsible for processing the EasySCP configuration,
  * such as setting the include_path, initializing logging, database and
@@ -36,9 +30,8 @@
  *
  * @category    EasySCP
  * @package     EasySCP_Initializer
- * @author      Laurent declercq <laurent.declercq@ispcp.net>
- * @since       1.0.7
- * @version     1.1.3
+ * @copyright 	2010-2014 by EasySCP | http://www.easyscp.net
+ * @author 		EasySCP Team
  */
 class EasySCP_Initializer {
 
@@ -52,14 +45,14 @@ class EasySCP_Initializer {
 	/**
 	 * Initialization status
 	 *
-	 * @staticvar boolean
+	 * @var static boolean
 	 */
 	private static $_initialized = false;
 
 	/**
 	 * PHP Version required by EasySCP
 	 *
-	 * @staticvar String
+	 * @var static String
 	 */
 	private static $_phpVersion = '5.1.4';
 
@@ -81,10 +74,10 @@ class EasySCP_Initializer {
 	 * environment.
 	 *
 	 * @throws EasySCP_Exception
-	 * @param string|EasySCP_Config_Handler_File $command Initializer method to be
-	 *	executed or an EasySCP_Config_Handler_File object
-	 * @param EasySCP_Config_Handler_File $config Optional EasySCP_Config_Handler_File
-	 * object
+	 *
+	 * @param string|EasySCP_Config_Handler_File $command Initializer method to be executed or an EasySCP_Config_Handler_File object
+	 * @param EasySCP_Config_Handler_File $config Optional EasySCP_Config_Handler_File object
+	 *
 	 * @return EasySCP_Initializer The EasySCP_Initializer instance
 	 */
 	public static function run($command = '_processAll',
@@ -123,8 +116,8 @@ class EasySCP_Initializer {
 	 * Create a new Initializer instance that references the given
 	 * {@link EasySCP_Config_Handler_File} instance
 	 *
-	 * @param EasySCP_Config_Handler_File $config EasySCP_Config_Handler_File object
-	 * @return void
+	 * @param EasySCP_Config_Handler| EasySCP_Config_Handler_File $config EasySCP_Config_Handler_File object
+	 * @return EasySCP_Initializer
 	 */
 	protected function __construct(EasySCP_Config_Handler $config) {
 		// Register config object in registry for further usage
@@ -151,16 +144,13 @@ class EasySCP_Initializer {
 		// Check php version and availability of the Php Standard Library
 		$this->_checkPhp();
 
-		// Set additionally EasySCP_Exception_Writer observers
-		$this->_setExceptionWriters();
-
 		// Include path
 		$this->_setIncludePath();
 
 		// Establish the connection to the database
 		$this->_initializeDatabase();
 
-		// Se encoding (Both PHP and database)
+		// Set encoding (Both PHP and database)
 		$this->_setEncoding();
 
 		// Set timezone
@@ -170,24 +160,8 @@ class EasySCP_Initializer {
 		// it to our basis configuration object
 		$this->_processConfiguration();
 
-		// Initialize output buffering
-		$this->_initializeOutputBuffering();
-
 		// Create or restore the session
 		$this->_initializeSession();
-
-		// Initialize internationalization libraries
-		// $this->_initializeI18n();
-
-		// Initialize logger
-		// $this->_initializeLogger();
-
-		// Not yet fully integrated - (testing in progress)
-		// $this->loadPlugins();
-
-      	// Trigger the 'OnAfterInitialize' action hook
-		// (will be activated later)
-		// EasySCP_Registry::get('Hook')->OnAfterInitialize();
 
 		// Run after initialize callbacks (will be changed later)
 		$this->_afterInitialize();
@@ -228,7 +202,7 @@ class EasySCP_Initializer {
 	 */
 	protected function _setDisplayErrors() {
 
-		if($this->_config->DEBUG) {
+		if(EasyConfig::$cfg->DEBUG == '1') {
 			ini_set('display_errors', 1);
 		} else {
 			ini_set('display_errors', 0);
@@ -247,8 +221,8 @@ class EasySCP_Initializer {
 	 * interfaces were not stable in earlier versions of PHP.
 	 *
 	 * @throws EasySCP_Exception
+	 *
 	 * @return void
-	 * @todo Check SPL part (EasySCP_Exception_Handler use SPL)
 	 */
 	protected function _checkPhp() {
 
@@ -275,52 +249,6 @@ class EasySCP_Initializer {
 
 		throw new EasySCP_Exception($errMsg);
 	}
-
-	/**
-	 * Sets additional writers or exception handler
-	 *
-	 * @return void
-	 * @todo Automatic detection of new writers based on the namespace
-	 */
-	protected function _setExceptionWriters() {
-
-		// Get a reference to the EasySCP_Exception_Handler object
-		$exceptionHandler = EasySCP_Registry::get('exceptionHandler');
-
-		$writerObservers = explode(',', $this->_config->GUI_EXCEPTION_WRITERS);
-		$writerObservers = array_map('trim', $writerObservers);
-		$writerObservers = array_map('strtolower', $writerObservers);
-
-		/*
-		if(in_array('file', $writerObservers)) {
-			// Writer not Yet Implemented
-			$exceptionHandler->attach(
-				new EasySCP_Exception_Writer_File(
-					'path_to_logfile'
-				)
-			);
-		}
-		*/
-
-		if(in_array('mail', $writerObservers)) {
-			$admin_email = $this->_config->DEFAULT_ADMIN_ADDRESS;
-
-			if($admin_email != '') {
-
-				$exceptionHandler->attach(
-					new EasySCP_Exception_Writer_Mail($admin_email)
-				);
-			}
-		}
-
-		/*
-		if(in_array('database', $writerObservers)) {
-			$exceptionHandler->attach(
-				new EasySCP_Exception_Writer_Db(EasySCP_Registry::get('Pdo'))
-			);
-		}
-		*/
-	} // end _setExceptionWriters()
 
 	/**
 	 * Sets the include path
@@ -350,6 +278,8 @@ class EasySCP_Initializer {
 	/**
 	 * Create/restore the session
 	 *
+	 * @throws EasySCP_Exception
+	 *
 	 * @return void
 	 */
 	protected function _initializeSession() {
@@ -376,6 +306,7 @@ class EasySCP_Initializer {
 	 * A PDO instance is also registered in the registry for shared access.
 	 *
 	 * @throws EasySCP_Exception
+	 *
 	 * @return void
 	 * @todo Remove global variable
 	 */
@@ -393,7 +324,7 @@ class EasySCP_Initializer {
 
 		} catch(PDOException $e) {
 
-			throw new EasySCP_Exception_Database(
+			throw new EasySCP_Exception(
 				'Error: Unable to establish connection to the database! '.
 				'SQL returned: ' . $e->getMessage()
 			);
@@ -413,6 +344,7 @@ class EasySCP_Initializer {
 	 * This methods set encoding for both communication database and PHP.
 	 *
 	 * @throws EasySCP_Exception
+	 *
 	 * @return void
 	 */
 	protected function _setEncoding() {
@@ -423,8 +355,7 @@ class EasySCP_Initializer {
 		ini_set('default_charset', 'UTF-8');
 
 		// Switch optionally to utf8 based communication with the database
-		if (isset($this->_config->DATABASE_UTF8) &&
-			$this->_config->DATABASE_UTF8 == 'yes') {
+		if (isset($this->_config->DATABASE_UTF8) && $this->_config->DATABASE_UTF8 == 'yes') {
 
 			$db = EasySCP_Registry::get('Db');
 
@@ -449,6 +380,7 @@ class EasySCP_Initializer {
 	 * {@link EasySCP_Exception} exception is raised.
 	 *
 	 * @throws EasySCP_Exception
+	 *
 	 * @return void
 	 */
 	protected function _setTimezone() {
@@ -489,7 +421,7 @@ class EasySCP_Initializer {
 	protected function _processConfiguration() {
 
 		// We get an EasySCP_Config_Handler_Db object
-		$dbConfig = new EasySCP_Config_Handler_Db(EasySCP_Registry::get('Pdo'));
+		$dbConfig = new EasySCP_Config_Handler_Db();
 
 		// Now, we can override our basis configuration object with parameter
 		// that come from the database
@@ -498,55 +430,6 @@ class EasySCP_Initializer {
 		// Finally, we register the EasySCP_Config_Handler_Db for shared access
 		EasySCP_Registry::set('Db_Config', $dbConfig);
 	}
-
-	/**
-	 * Initialize the PHP output buffering / spGzip filter
-	 *
-	 * <b>Note:</b> The hight level (like 8, 9) for compression are not
-	 * recommended for performances reasons. The obtained gain with these levels
-	 * is very small compared to the intermediate level like 6,7.
-	 *
-	 * @return void
-	 */
-	protected function _initializeOutputBuffering() {
-
-		if(isset($this->_config->COMPRESS_OUTPUT) && $this->_config->COMPRESS_OUTPUT) {
-			// Create a new filter that will be applyed on the buffer output
-			$filter = EasySCP_Registry::set(
-				'bufferFilter',
-				new EasySCP_Filter_Compress_Gzip(
-					EasySCP_Filter_Compress_Gzip::FILTER_BUFFER
-				)
-			);
-
-			// Show compression information in HTML comment ?
-			if(!$this->_config->SHOW_COMPRESSION_SIZE) {
-				$filter->compressionInformation = false;
-			}
-
-			// Start the buffer and attach the filter to him
-			ob_start(array($filter, EasySCP_Filter_Compress_Gzip::CALLBACK_NAME));
-		}
-	}
-
-	/**
-	 * Initialize translation libraries
-	 *
-	 * <b>Note:</b> Not Yet Implemented
-	 *
-	 * @return void
-	 * @todo Ask Jochen for the new i18n library and initilization processing
-	 */
-	protected function _initializeI18n() {}
-
-	/**
-	 * Initialize logger
-	 *
-	 * <b>Note:</b> Not used at this moment
-	 *
-	 * @return void
-	 */
-	protected function _initializeLogger() {}
 
 	/**
 	 * Not yet implemented

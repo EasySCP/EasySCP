@@ -46,12 +46,6 @@ $config->HTML_SELECTED = ' selected="selected"';
 // variable for development edition: show all php variables beyond page content
 $config->DUMP_GUI_DEBUG = false;
 
-// Set whether output should be compressed
-$config->COMPRESS_OUTPUT = true;
-
-// show spGZIP compression information in HTML output
-$config->SHOW_COMPRESSION_SIZE = true;
-
 // Session timeout in minutes
 $config->SESSION_TIMEOUT = 30;
 

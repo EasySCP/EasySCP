@@ -75,32 +75,31 @@ if (isset($_SESSION['user_id'])){
 function get_user_gui_props($user_id) {
 
 	$cfg = EasySCP_Registry::get('Config');
-	$sql = EasySCP_Registry::get('Db');
 
-	$query = "
+	$sql_param = array(
+		':user_id'	=> $user_id
+	);
+
+	$sql_query = "
 		SELECT
-			`lang`, `layout`
+			lang, layout
 		FROM
-			`user_gui_props`
+			user_gui_props
 		WHERE
-			`user_id` = ?
+			user_id = :user_id;
 	";
 
-	$rs = exec_query($sql, $query, $user_id);
+	DB::prepare($sql_query);
+	$row = DB::execute($sql_param, true);
 
-	if ($rs->recordCount() == 0
-		|| (empty($rs->fields['lang']) && empty($rs->fields['layout']))) {
-		// values for user id, some default stuff
-		return array($cfg->USER_INITIAL_LANG, $cfg->USER_INITIAL_THEME);
-	} else if (empty($rs->fields['lang'])) {
-
-		return array($cfg->USER_INITIAL_LANG, $rs->fields['layout']);
-	} else if (empty($rs->fields['layout'])) {
-
-		return array($rs->fields['lang'], $cfg->USER_INITIAL_THEME);
+	if (isset($row['lang']) && !empty($row['lang']) && isset($row['layout']) && !empty($row['layout'])){
+		return array($row['lang'], $row['layout']);
+	} elseif (isset($row['lang']) && !empty($row['lang'])){
+		return array($row['lang'], $cfg->USER_INITIAL_THEME);
+	} elseif(isset($row['layout']) && !empty($row['layout'])){
+		return array($cfg->USER_INITIAL_LANG, $row['layout']);
 	} else {
-
-		return array($rs->fields['lang'], $rs->fields['layout']);
+		return array($cfg->USER_INITIAL_LANG, $cfg->USER_INITIAL_THEME);
 	}
 }
 
