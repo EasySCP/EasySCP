@@ -29,7 +29,7 @@ $cfg2 = EasySCP_Configuration::getInstance();
 $cfg2->PREVENT_EXTERNAL_LOGIN_ADMIN = 'blablub';
 $cfg2->DUMP_GUI_DEBUG = 'blablub';
 
-check_login(__FILE__, $cfg->PREVENT_EXTERNAL_LOGIN_ADMIN);
+check_login(__FILE__);
 
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'admin/index.tpl';

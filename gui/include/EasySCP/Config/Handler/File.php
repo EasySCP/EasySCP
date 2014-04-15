@@ -39,7 +39,7 @@ require_once  INCLUDEPATH . '/EasySCP/Config/Handler.php';
  * @property int BRUTEFORCE_BLOCK_TIME Blocktime after brute force detection
  * @property int BRUTEFORCE_MAX_CAPTCHA Max. number of captcha attemps before blocktime
  * @property int BRUTEFORCE_MAX_LOGIN Max. number of login attemps before brute force block time
- * @property int BuildDate ispCP package Build date
+ * @property int BuildDate EasySCP package Build date
  * @property bool CHECK_FOR_UPDATES If TRUE, update cheching is enabled
  * @property bool CREATE_DEFAULT_EMAIL_ADDRESSES If TRUE, create default email addresse (abuse, postmaster, webmaster)
  * @property int CRITICAL_UPDATE_REVISION Last critical update revision
@@ -49,8 +49,8 @@ require_once  INCLUDEPATH . '/EasySCP/Config/Handler.php';
  * @property string DEFAULT_ADMIN_ADDRESS Default mail address for administrator
  * @property int DOMAIN_ROWS_PER_PAGE Number for domain displayed per page
  * @property bool DUMP_GUI_DEBUG If true, display some information for debugging
- * @property string DATABASE_USER ispCP database username
- * @property string DATABASE_PASSWORD ispCP database password
+ * @property string DATABASE_USER EasySCP database username
+ * @property string DATABASE_PASSWORD EasySCP database password
  * @property string DATABASE_TYPE Database type
  * @property string DATABASE_HOST Database hostname
  * @property string DATABASE_NAME Database name
@@ -80,11 +80,7 @@ require_once  INCLUDEPATH . '/EasySCP/Config/Handler.php';
  * @property int MAX_SUBDNAMES_LABELS Maximum number of labels for a subdomain
  * @property int PASSWD_CHARS Allowed number of chararacterd for passwords
  * @property bool PASSWD_STRONG If TRUE, only strong password are allowed
- * @property bool PREVENT_EXTERNAL_LOGIN_ADMIN If TRUE, login from external site is prevented for administrators
- * @property bool PREVENT_EXTERNAL_LOGIN_CLIENT If TRUE, login from external site is prevented for client
- * @property bool PREVENT_EXTERNAL_LOGIN_RESELLER If TRUE, login from external site is prevented for resellers
  * @property int SESSION_TIMEOUT Session timeout
- * @property bool SHOW_COMPRESSION_SIZE If TRUE, show page compression info
  * @property bool SLD_STRICT_VALIDATION If TRUE, only restricted tld list can have sld with a single character
  * @property bool TLD_STRICT_VALIDATION If TRUE, Only TLD from iana database are usable
  * @property mixed ITEM_ADD_STATUS

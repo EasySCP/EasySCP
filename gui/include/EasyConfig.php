@@ -19,12 +19,12 @@ class EasyConfig {
 	static $cmd;
 
 	public static function Reload(){
-		// unset(self::$cfg);
 		self::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
 	}
 
 	/**
 	 * Speichern der Konfiguration
+	 *
 	 * @param $data array Daten die gespeichert werden sollen
 	 * @return bool Gibt bei erfolg true, ansonsten false zurück
 	 */

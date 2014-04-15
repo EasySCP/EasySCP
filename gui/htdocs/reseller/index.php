@@ -25,7 +25,7 @@ require '../../include/easyscp-lib.php';
 
 $cfg = EasySCP_Registry::get('Config');
 
-check_login(__FILE__, $cfg->PREVENT_EXTERNAL_LOGIN_RESELLER);
+check_login(__FILE__);
 
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'reseller/index.tpl';

@@ -853,13 +853,11 @@ function check_user_login() {
 }
 
 /**
- * check for valid user login and valid file request/call
+ * check for valid user login
  *
  * @param string $fName Full file path (ie. the magic __FILE__ constant value)
- * @param boolean $preventExternalLogin Check HTTP Referer for valid
- * request/call (ie. to prevent login from external websites)
  */
-function check_login($fName = null, $preventExternalLogin = true) {
+function check_login($fName = null) {
 
 	// session-type check:
 	if (!check_user_login()) {
@@ -899,41 +897,6 @@ function check_login($fName = null, $preventExternalLogin = true) {
 			}
 
 			user_goto('/index.php');
-		}
-	}
-
-	// prevent external login / check for referer
-	if ($preventExternalLogin) {
-		if (isset($_SERVER['HTTP_REFERER']) &&
-			!empty($_SERVER['HTTP_REFERER'])) {
-
-			$info = parse_url($_SERVER['HTTP_REFERER']);
-
-			if (isset($info['host']) && !empty($info['host'])) {
-				// Check if $_SERVER['HTTP_REFERER'] equals $_SERVER['HTTP_HOST']
-				// w/ port number stipped
-				$http_host = $_SERVER['HTTP_HOST'];
-
-				if ($info['host'] != substr(
-						$http_host,
-						0,
-						(int) (strlen($http_host) - strlen(strrchr($http_host, ':'))))
-					|| $info['host'] != $_SERVER['SERVER_NAME']) {
-
-					set_page_message(
-						tr('Request from foreign host was blocked!'),
-						'error'
-					);
-
-					if (!(substr(
-							$_SERVER['SCRIPT_FILENAME'],
-							(int)-strlen($_SERVER['REDIRECT_URL']),
-							strlen($_SERVER['REDIRECT_URL'])
-						) === $_SERVER['REDIRECT_URL'])) {
-						redirect_to_level_page();
-					}
-				}
-			}
 		}
 	}
 }

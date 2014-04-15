@@ -208,24 +208,6 @@
 						</td>
 					</tr>
 					<tr>
-						<td><label for="compress_output">{$TR_COMPRESS_OUTPUT}</label></td>
-						<td>
-							<select name="compress_output" id="compress_output">
-								<option value="1" {$COMPRESS_OUTPUT_ON}>{$TR_ENABLED}</option>
-								<option value="0" {$COMPRESS_OUTPUT_OFF}>{$TR_DISABLED}</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td><label for="show_compression_size">{$TR_SHOW_COMPRESSION_SIZE}</label></td>
-						<td>
-							<select name="show_compression_size" id="show_compression_size">
-								<option value="0" {$SHOW_COMPRESSION_SIZE_SELECTED_OFF}>{$TR_DISABLED}</option>
-								<option value="1" {$SHOW_COMPRESSION_SIZE_SELECTED_ON}>{$TR_ENABLED}</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
 						<td><label for="hosting_plan_level">{$TR_HOSTING_PLANS_LEVEL}</label></td>
 						<td>
 							<select name="hosting_plan_level" id="hosting_plan_level">
@@ -246,33 +228,6 @@
 								<option value="E_USER_ERROR" {$LOG_LEVEL_SELECTED_ERROR}>{$TR_E_USER_ERROR}</option>
 								<option value="E_USER_WARNING" {$LOG_LEVEL_SELECTED_WARNING}>{$TR_E_USER_WARNING}</option>
 								<option value="E_USER_NOTICE" {$LOG_LEVEL_SELECTED_NOTICE}>{$TR_E_USER_NOTICE}</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td><label for="prevent_external_login_admin">{$TR_PREVENT_EXTERNAL_LOGIN_ADMIN}</label></td>
-						<td>
-							<select name="prevent_external_login_admin" id="prevent_external_login_admin">
-								<option value="0" {$PREVENT_EXTERNAL_LOGIN_ADMIN_SELECTED_OFF}>{$TR_DISABLED}</option>
-								<option value="1" {$PREVENT_EXTERNAL_LOGIN_ADMIN_SELECTED_ON}>{$TR_ENABLED}</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td><label for="prevent_external_login_reseller">{$TR_PREVENT_EXTERNAL_LOGIN_RESELLER}</label></td>
-						<td>
-							<select name="prevent_external_login_reseller" id="prevent_external_login_reseller">
-								<option value="0" {$PREVENT_EXTERNAL_LOGIN_RESELLER_SELECTED_OFF}>{$TR_DISABLED}</option>
-								<option value="1" {$PREVENT_EXTERNAL_LOGIN_RESELLER_SELECTED_ON}>{$TR_ENABLED}</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td><label for="prevent_external_login_client">{$TR_PREVENT_EXTERNAL_LOGIN_CLIENT}</label></td>
-						<td>
-							<select name="prevent_external_login_client" id="prevent_external_login_client">
-								<option value="0" {$PREVENT_EXTERNAL_LOGIN_CLIENT_SELECTED_OFF}>{$TR_DISABLED}</option>
-								<option value="1" {$PREVENT_EXTERNAL_LOGIN_CLIENT_SELECTED_ON}>{$TR_ENABLED}</option>
 							</select>
 						</td>
 					</tr>

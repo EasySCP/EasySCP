@@ -1,7 +1,7 @@
 EasySCP 2.0.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2014-04-13
+2014-04-15
 	- Config:
 		* Add: Fields for SSL support
 		* Add: Oracle Linux support
@@ -10,15 +10,17 @@ EasySCP 2.0.0 ChangeLog
 		* Add: New EasySCP Daemon
 
 	- DOCS:
+		* Add: Oracle Linux package file
+
 		* Update: CentOS 6.x package file
 		* Update: Debian 7.x (Wheezy) package file
-		* Add: Oracle Linux package file
 
 	- GUI:
 		* Add: New Language Files
 		* Add: Chinese Simplified Language (thx to bspxm)
 		* Add: Chinese Traditional Language (thx to akong)
 		* Add: Italian Language (thx to theprincy)
+		* Add: IPv6 support
 		* Add: PHP/MySQL version info for clients
 		* Add: Postfix MySQL Support
 		* Add: SSL support

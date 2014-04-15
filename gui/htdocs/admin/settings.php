@@ -51,11 +51,6 @@ if (isset($_POST['uaction']) && $_POST['uaction'] == 'apply') {
 	// $hosting_plan_level = $_POST['hosting_plan_level'];
 	$domain_rows_per_page = clean_input($_POST['domain_rows_per_page']);
 	$checkforupdate = $_POST['checkforupdate'];
-	$compress_output = $_POST['compress_output'];
-	$show_compression_size = $_POST['show_compression_size'];
-	$prev_ext_login_admin = $_POST['prevent_external_login_admin'];
-	$prev_ext_login_reseller = $_POST['prevent_external_login_reseller'];
-	$prev_ext_login_client = $_POST['prevent_external_login_client'];
 	// $custom_orderpanel_id = clean_input($_POST['coid']);
 	$tld_strict_validation = $_POST['tld_strict_validation'];
 	$sld_strict_validation = $_POST['sld_strict_validation'];
@@ -104,11 +99,6 @@ if (isset($_POST['uaction']) && $_POST['uaction'] == 'apply') {
 		$db_cfg->DOMAIN_ROWS_PER_PAGE = $domain_rows_per_page;
 		$db_cfg->LOG_LEVEL = $log_level;
 		$db_cfg->CHECK_FOR_UPDATES = $checkforupdate;
-		$db_cfg->COMPRESS_OUTPUT = $compress_output;
-		$db_cfg->SHOW_COMPRESSION_SIZE = $show_compression_size;
-		$db_cfg->PREVENT_EXTERNAL_LOGIN_ADMIN = $prev_ext_login_admin;
-		$db_cfg->PREVENT_EXTERNAL_LOGIN_RESELLER = $prev_ext_login_reseller;
-		$db_cfg->PREVENT_EXTERNAL_LOGIN_CLIENT = $prev_ext_login_client;
 		// $db_cfg->CUSTOM_ORDERPANEL_ID = $custom_orderpanel_id;
 		$db_cfg->TLD_STRICT_VALIDATION = $tld_strict_validation;
 		$db_cfg->SLD_STRICT_VALIDATION = $sld_strict_validation;
@@ -264,46 +254,6 @@ if ($cfg->CHECK_FOR_UPDATES) {
 	$tpl->assign('CHECK_FOR_UPDATES_SELECTED_OFF', $html_selected);
 }
 
-if ($cfg->COMPRESS_OUTPUT) {
-	$tpl->assign('COMPRESS_OUTPUT_ON', $html_selected);
-	$tpl->assign('COMPRESS_OUTPUT_OFF', '');
-} else {
-	$tpl->assign('COMPRESS_OUTPUT_ON', '');
-	$tpl->assign('COMPRESS_OUTPUT_OFF', $html_selected);
-}
-
-if ($cfg->SHOW_COMPRESSION_SIZE) {
-	$tpl->assign('SHOW_COMPRESSION_SIZE_SELECTED_ON', $html_selected);
-	$tpl->assign('SHOW_COMPRESSION_SIZE_SELECTED_OFF', '');
-} else {
-	$tpl->assign('SHOW_COMPRESSION_SIZE_SELECTED_ON', '');
-	$tpl->assign('SHOW_COMPRESSION_SIZE_SELECTED_OFF', $html_selected);
-}
-
-if ($cfg->PREVENT_EXTERNAL_LOGIN_ADMIN) {
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_ADMIN_SELECTED_ON', $html_selected);
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_ADMIN_SELECTED_OFF', '');
-} else {
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_ADMIN_SELECTED_ON', '');
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_ADMIN_SELECTED_OFF', $html_selected);
-}
-
-if ($cfg->PREVENT_EXTERNAL_LOGIN_RESELLER) {
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_RESELLER_SELECTED_ON', $html_selected);
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_RESELLER_SELECTED_OFF', '');
-} else {
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_RESELLER_SELECTED_ON', '');
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_RESELLER_SELECTED_OFF', $html_selected);
-}
-
-if ($cfg->PREVENT_EXTERNAL_LOGIN_CLIENT) {
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_CLIENT_SELECTED_ON', $html_selected);
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_CLIENT_SELECTED_OFF', '');
-} else {
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_CLIENT_SELECTED_ON', '');
-	$tpl->assign('PREVENT_EXTERNAL_LOGIN_CLIENT_SELECTED_OFF', $html_selected);
-}
-
 switch ($cfg->LOG_LEVEL) {
 	case false:
 		$tpl->assign('LOG_LEVEL_SELECTED_OFF', $html_selected);
@@ -379,11 +329,6 @@ $tpl->assign(
 		'TR_E_USER_WARNING'					=> tr('Warnings and Errors'),
 		'TR_E_USER_ERROR'					=> tr('Errors'),
 		'TR_CHECK_FOR_UPDATES'				=> tr('Check for update'),
-		'TR_COMPRESS_OUTPUT'				=> tr('Compress output'),
-		'TR_SHOW_COMPRESSION_SIZE'			=> tr('Show compression size comment'),
-		'TR_PREVENT_EXTERNAL_LOGIN_ADMIN'	=> tr('Prevent external login for admins'),
-		'TR_PREVENT_EXTERNAL_LOGIN_RESELLER'=> tr('Prevent external login for resellers'),
-		'TR_PREVENT_EXTERNAL_LOGIN_CLIENT'	=> tr('Prevent external login for clients'),
 		'TR_CUSTOM_ORDERPANEL_ID'			=> tr('Custom orderpanel ID'),
 		'TR_DNAMES_VALIDATION_SETTINGS'		=> tr('Domain names validation'),
 		'TR_TLD_STRICT_VALIDATION'			=> tr('Top Level Domain name strict validation'),

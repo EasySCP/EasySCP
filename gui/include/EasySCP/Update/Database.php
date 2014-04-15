@@ -433,6 +433,34 @@ class EasySCP_Update_Database extends EasySCP_Update {
 		return $sqlUpd;
 	}
 
+	/**
+	 * Remove unused column 'mail_auto_respond' and 'mail_auto_respond_text'
+	 *
+	 * @author Markus Szywon <markus.szywon@easyscp.net>
+	 * @return array
+	 */
+	protected function _databaseUpdate_58(){
+		$sqlUpd = array();
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`server_ips`
+			CHANGE
+				`ip_number` `ip_number` varchar(15) COLLATE 'utf8_unicode_ci' NULL;
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`server_ips`
+			ADD
+				`ip_number_v6` varchar(39) COLLATE utf8_unicode_ci NOT NULL
+			AFTER
+				`ip_number`;
+		";
+
+		return $sqlUpd;
+	}
+
 	/*
 	 * DO NOT CHANGE ANYTHING BELOW THIS LINE!
 	 */
