@@ -1,7 +1,7 @@
 EasySCP 2.0.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2014-04-11
+2014-04-13
 	- Config:
 		* Add: Fields for SSL support
 		* Add: Oracle Linux support
@@ -50,6 +50,7 @@ EasySCP 2.0.0 ChangeLog
 		* Fix: Expiration date cannot be set when create new domain
 		* Fix: Sort order of users doesn't work
 		* Fix: Multiplying of alias entries
+		* Fix: 500 internal server error on systems running PHP 5.5
 		* Fix: Some small fixes
 
 		* Update: All language files.
@@ -81,5 +82,5 @@ EasySCP 2.0.0 ChangeLog
 		* Fix: net2ftp does not work in some situations.
 
 		* Update: net2ftp to version 1.0
-		* Update: phpMyAdmin to version 4.1.12
+		* Update: phpMyAdmin to version 4.1.13
 		* Update: Roundcube to version 0.9.5
