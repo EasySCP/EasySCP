@@ -30,8 +30,12 @@
 							<td><input type="text" name="HOST_FQHN" id="HOST_FQHN" value="{$HOST_FQHN}"/></td>
 						</tr>
 						<tr>
-							<td><label for="HOST_IP">Please enter the system network address</label></td>
+							<td><label for="HOST_IP">Please enter the system ipv4 network address</label></td>
 							<td><input type="text" name="HOST_IP" id="HOST_IP" value="{$HOST_IP}"/></td>
+						</tr>
+						<tr>
+							<td><label for="HOST_IPv6">Please enter the system ipv6 network address (if available)</label></td>
+							<td><input type="text" name="HOST_IPv6" id="HOST_IPv6" value="{$HOST_IPv6}"/></td>
 						</tr>
 						<tr>
 							<td><label for="HOST_NAME">Please enter the domain name where EasySCP will be reachable on</label></td>

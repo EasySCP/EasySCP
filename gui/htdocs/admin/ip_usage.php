@@ -30,7 +30,7 @@ $cfg = EasySCP_Registry::get('Config');
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'admin/ip_usage.tpl';
 
-listIPDomains($tpl, $sql);
+listIPDomains($tpl);
 
 // static page messages
 $tpl->assign(
@@ -60,15 +60,16 @@ unset_messages();
  * Generate List of Domains assigned to IPs
  *
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql The SQL object
  */
-function listIPDomains($tpl, $sql) {
+function listIPDomains($tpl) {
+
+	$sql = EasySCP_Registry::get('Db');
 
 	$query = "
 		SELECT
-			`ip_id`, `ip_number`
+			ip_id, ip_number, ip_number_v6
 		FROM
-			`server_ips`;
+			server_ips;
 	";
 
 	$rs = exec_query($sql, $query);
@@ -160,7 +161,7 @@ function listIPDomains($tpl, $sql) {
 
 		$tpl->append(
 			array(
-				'IP'			=> $rs->fields['ip_number'],
+				'IP'			=> ($rs->fields['ip_number_v6'] != '') ? $rs->fields['ip_number'] . ' / ' . $rs->fields['ip_number_v6'] : $rs->fields['ip_number'],
 				'RECORD_COUNT'	=> tr('Total Domains') . " : " .($domain_count+$alias_count)
 			)
 		);

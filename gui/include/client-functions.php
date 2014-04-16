@@ -934,17 +934,17 @@ function get_user_domain_ip($sql, $dmn_ip_id) {
 
 	$query = "
 		SELECT
-			`ip_number`
+			ip_number, ip_number_v6
 		FROM
-			`server_ips`
+			server_ips
 		WHERE
-			`ip_id` = ?
+			ip_id = ?
 		;
 	";
 
 	$rs = exec_query($sql, $query, $dmn_ip_id);
 
-	return $rs->fields['ip_number'];
+	return ($rs->fields['ip_number_v6'] != '') ? $rs->fields['ip_number'] .' / '. $rs->fields['ip_number_v6'] : $rs->fields['ip_number'];
 }
 
 function get_user_domains($user_id) {

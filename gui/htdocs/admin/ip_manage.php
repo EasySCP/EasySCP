@@ -30,13 +30,13 @@ $cfg = EasySCP_Registry::get('Config');
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'admin/ip_manage.tpl';
 
-$interfaces=new EasySCP_NetworkCard();
+$interfaces = new EasySCP_NetworkCard();
 
 show_Network_Cards($tpl, $interfaces);
 
-add_ip($tpl, $sql);
+add_ip($tpl);
 
-show_IPs($tpl, $sql);
+show_IPs($tpl);
 
 // static page messages
 $tpl->assign(
@@ -46,6 +46,7 @@ $tpl->assign(
 		'MANAGE_IPS'		=> tr('Manage IPs'),
 		'TR_AVAILABLE_IPS'	=> tr('Available IPs'),
 		'TR_IP'				=> tr('IP'),
+		'TR_IPv6'			=> tr('IPv6'),
 		'TR_DOMAIN'			=> tr('Domain'),
 		'TR_ALIAS'			=> tr('Alias'),
 		'TR_ACTION'			=> tr('Action'),
@@ -82,11 +83,11 @@ function gen_ip_action($ip_id, $status) {
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function show_IPs($tpl, $sql) {
+function show_IPs($tpl) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	$query = "
 		SELECT
@@ -96,7 +97,6 @@ function show_IPs($tpl, $sql) {
 	";
 	$rs = exec_query($sql, $query);
 
-	$row = 1;
 	$single = false;
 
 	if ($rs->recordCount() < 2) {
@@ -104,13 +104,12 @@ function show_IPs($tpl, $sql) {
 	}
 
 	while (!$rs->EOF) {
-		$tpl->assign('IP_CLASS', ($row++ % 2 == 0) ? 'content' : 'content2');
-
 		list($ip_action, $ip_action_script) = gen_ip_action($rs->fields['ip_id'], $rs->fields['ip_status']);
 
 		$tpl->append(
 			array(
 				'IP'			=> $rs->fields['ip_number'],
+				'IPv6'			=> $rs->fields['ip_number_v6'],
 				'DOMAIN'		=> tohtml($rs->fields['ip_domain']),
 				'ALIAS'			=> tohtml($rs->fields['ip_alias']),
 				'NETWORK_CARD'	=> ($rs->fields['ip_card'] === NULL) ? '' : tohtml($rs->fields['ip_card'])
@@ -136,31 +135,50 @@ function show_IPs($tpl, $sql) {
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function add_ip($tpl, $sql) {
+function add_ip($tpl) {
 
-	global $ip_number, $domain, $alias, $ip_card;
 	$cfg = EasySCP_Registry::get('Config');
 
 	if (isset($_POST['uaction']) && $_POST['uaction'] === 'add_ip') {
 		if (check_user_data()) {
 
-			$query = "
-				INSERT INTO `server_ips`
-					(`ip_number`, `ip_domain`, `ip_alias`, `ip_card`,
-					`ip_ssl_domain_id`, `ip_status`)
-				VALUES
-					(?, ?, ?, ?, ?, ?)
-			";
-			exec_query($sql, $query, array($ip_number, htmlspecialchars($domain, ENT_QUOTES, "UTF-8"),
-			htmlspecialchars($alias, ENT_QUOTES, "UTF-8"), htmlspecialchars($ip_card, ENT_QUOTES, "UTF-8"), NULL, $cfg->ITEM_ADD_STATUS));
+			$sql_param = array(
+				':ip_number'		=> trim($_POST['ip_number_1']) . '.' . trim($_POST['ip_number_2']) . '.' . trim($_POST['ip_number_3']) . '.' . trim($_POST['ip_number_4']),
+				':ip_number_v6'	 	=> trim($_POST['ipv6']),
+				':ip_domain'		=> htmlspecialchars(trim($_POST['domain']), ENT_QUOTES, 'UTF-8'),
+				':ip_alias'			=> htmlspecialchars(trim($_POST['alias']), ENT_QUOTES, 'UTF-8'),
+				':ip_card'			=> htmlspecialchars(trim($_POST['ip_card']), ENT_QUOTES, 'UTF-8'),
+				':ip_ssl_domain_id'	=> NULL,
+				':ip_status'		=> $cfg->ITEM_ADD_STATUS
+			);
 
-			send_request();
+			$sql_query = "
+				INSERT INTO
+					server_ips (ip_number, ip_number_v6, ip_domain, ip_alias, ip_card, ip_ssl_domain_id, ip_status)
+				VALUES
+					ip_number		= :ip_number,
+					ip_number_v6	= :ip_number_v6,
+					ip_domain		= :ip_domain,
+					ip_alias		= :ip_alias,
+					ip_card			= :ip_card,
+					ip_ssl_domain_id= :ip_ssl_domain_id,
+					ip_status		= :ip_status
+			";
+
+			DB::prepare($sql_query);
+			DB::execute($sql_param)->closeCursor();
+
+			// todo Prüfen wie man das zukünftig behandeln soll
+			// send_request();
 
 			set_page_message(tr('New IP was added!'), 'success');
 
-			write_log("{$_SESSION['user_logged']}: adds new IPv4 address: {$ip_number}!");
+			write_log('{'.$_SESSION['user_logged'].'}: adds new IPv4 address: {'.trim($_POST['ip_number_1']) . '.' . trim($_POST['ip_number_2']) . '.' . trim($_POST['ip_number_3']) . '.' . trim($_POST['ip_number_4']).'}!');
+
+			if (isset($_POST['ipv6']) && $_POST['ipv6'] != ''){
+				write_log('{'.$_SESSION['user_logged'].'}: adds new IPv6 address: {'.trim($_POST['ipv6']).'}!');
+			}
 
 			$sucess = true;
 		}
@@ -173,6 +191,7 @@ function add_ip($tpl, $sql) {
 				'VALUE_IP2'		=> tohtml($_POST['ip_number_2']),
 				'VALUE_IP3'		=> tohtml($_POST['ip_number_3']),
 				'VALUE_IP4'		=> tohtml($_POST['ip_number_4']),
+				'VALUE_IPv6'	=> tohtml($_POST['ipv6']),
 				'VALUE_DOMAIN'	=> clean_input($_POST['domain'], true),
 				'VALUE_ALIAS'	=> clean_input($_POST['alias'], true),
 			)
@@ -184,6 +203,7 @@ function add_ip($tpl, $sql) {
 				'VALUE_IP2'		=> '',
 				'VALUE_IP3'		=> '',
 				'VALUE_IP4'		=> '',
+				'VALUE_IPv6'	=> '',
 				'VALUE_DOMAIN'	=> '',
 				'VALUE_ALIAS'	=> '',
 			)
@@ -192,30 +212,21 @@ function add_ip($tpl, $sql) {
 }
 
 function check_user_data() {
-	global $ip_number, $interfaces;
+	global $interfaces;
 
-	$ip_number = trim($_POST['ip_number_1'])
-		. '.' . trim($_POST['ip_number_2'])
-		. '.' . trim($_POST['ip_number_3'])
-		. '.' . trim($_POST['ip_number_4']);
-
-	global $domain, $alias, $ip_card;
-
-	$domain = clean_input($_POST['domain']);
-	$alias = clean_input($_POST['alias']);
-	$ip_card = clean_input($_POST['ip_card']);
+	$ip_number = trim($_POST['ip_number_1']) . '.' . trim($_POST['ip_number_2']) . '.' . trim($_POST['ip_number_3']) . '.' . trim($_POST['ip_number_4']);
 
 	$err_msg = '_off_';
 
 	if (filter_var($ip_number, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) === false) {
 		$err_msg = tr('Wrong IP number!');
-	} elseif ($domain == '') {
+	} elseif (clean_input($_POST['domain']) == '') {
 		$err_msg = tr('Please specify domain!');
-	} elseif ($alias == '') {
+	} elseif (clean_input($_POST['alias']) == '') {
 		$err_msg = tr('Please specify alias!');
 	} elseif (IP_exists()) {
 		$err_msg = tr('This IP already exist!');
-	} elseif (!in_array($ip_card, $interfaces->getAvailableInterface())) {
+	} elseif (!in_array(clean_input($_POST['ip_card']), $interfaces->getAvailableInterface())) {
 		$err_msg = tr('Please select nework interface!');
 	}
 
@@ -229,20 +240,21 @@ function check_user_data() {
 
 function IP_exists() {
 
-	$sql = EasySCP_Registry::get('Db');
+	$sql_param = array(
+		':ip_number' => trim($_POST['ip_number_1'])	. '.' . trim($_POST['ip_number_2'])	. '.' . trim($_POST['ip_number_3'])	. '.' . trim($_POST['ip_number_4'])
+	);
 
-	global $ip_number;
-
-	$query = "
+	$sql_query = "
 		SELECT
 			*
 		FROM
-			`server_ips`
+			server_ips
 		WHERE
-			`ip_number` = ?
-	";
+			ip_number = :ip_number;
+		";
 
-	$rs = exec_query($sql, $query, $ip_number);
+	DB::prepare($sql_query);
+	$rs = DB::execute($sql_param);
 
 	if ($rs->rowCount() == 0) {
 		return false;

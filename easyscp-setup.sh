@@ -196,11 +196,9 @@ do
 
 			# Checking for bind9 and remove them if needed
 			echo "Checking for Bind9"
-			dpkg -p bind9 > /dev/null 2>&1
-            if [ $? != 0 ]; then
-            	#yes|apt-get remove --purge bind9
-            	yes|apt-get remove bind9
-            fi
+			if [ -f /etc/init.d/bind9 ]; then
+				yes|apt-get remove bind9
+			fi
 
 			# Remove all old apache vhost/site configs
 			rm /etc/apache2/sites-enabled/* > /dev/null

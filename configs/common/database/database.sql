@@ -81,7 +81,7 @@ INSERT INTO `config` (`name`, `value`) VALUES
 ('SSL_CERT', ''),
 ('SSL_STATUS',0),
 ('MIGRATION_ENABLED',0),
-('DATABASE_REVISION', '57');
+('DATABASE_REVISION', '58');
 
 -- --------------------------------------------------------
 
@@ -98,12 +98,12 @@ CREATE TABLE IF NOT EXISTS `cronjobs` (
   `month` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `dayofweek` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `command` varchar(500) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `active` ENUM('yes','no') NOT NULL DEFAULT 'yes',
+  `active` enum('yes','no') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'yes',
   `description` varchar(500) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `name` varchar(200) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `user` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `status` varchar(15) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `status_msg` varchar(255) collate utf8_unicode_ci default NULL,
+  `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -528,7 +528,8 @@ CREATE TABLE IF NOT EXISTS `reseller_props` (
 
 CREATE TABLE IF NOT EXISTS `server_ips` (
   `ip_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `ip_number` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ip_number` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ip_number_v6` varchar(39) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ip_domain` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ip_alias` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ip_card` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,

@@ -434,7 +434,7 @@ class EasySCP_Update_Database extends EasySCP_Update {
 	}
 
 	/**
-	 * Remove unused column 'mail_auto_respond' and 'mail_auto_respond_text'
+	 * Add/Update database field for ipv6 support
 	 *
 	 * @author Markus Szywon <markus.szywon@easyscp.net>
 	 * @return array

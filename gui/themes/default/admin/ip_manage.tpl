@@ -37,6 +37,7 @@
 				<thead>
 					<tr>
 						<th>{$TR_IP}</th>
+						<th>{$TR_IPv6}</th>
 						<th>{$TR_DOMAIN}</th>
 						<th>{$TR_ALIAS}</th>
 						<th>{$TR_NETWORK_CARD}</th>
@@ -47,6 +48,7 @@
 					{section name=i loop=$IP}
 					<tr>
 						<td>{$IP[i]}</td>
+						<td>{$IPv6[i]}</td>
 						<td>{$DOMAIN[i]}</td>
 						<td>{$ALIAS[i]}</td>
 						<td>{$NETWORK_CARD[i]}</td>
@@ -74,6 +76,10 @@
 						<td><input type="text" name="ip_number_2" id="ip_number_2" value="{$VALUE_IP2}" maxlength="3" />.</td>
 						<td><input type="text" name="ip_number_3" id="ip_number_3" value="{$VALUE_IP3}" maxlength="3" />.</td>
 						<td><input type="text" name="ip_number_4" id="ip_number_4" value="{$VALUE_IP4}" maxlength="3" /></td>
+					</tr>
+					<tr>
+						<td><label for="ipv6">{$TR_IPv6}</label></td>
+						<td colspan="3"><input type="text" name="ipv6" id="ipv6" value="{$VALUE_IPv6}" /></td>
 					</tr>
 					<tr>
 						<td><label for="domain">{$TR_DOMAIN}</label></td>

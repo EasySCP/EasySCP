@@ -91,73 +91,10 @@ function send_request($execute = 'legacy') {
 	socket_close($socket);
 
 	// sleep(1);
-	usleep(250);
+	// todo: prüfen ob das noch benötigt wird. Wenn keine Fehler mehr auftreten kann es entfernt werden
+	// usleep(250);
 
 	return trim($out);
-
-	/*
-	$cfg = EasySCP_Registry::get('Config');
-
-	@$socket = socket_create (AF_INET, SOCK_STREAM, 0);
-	if ($socket < 0) {
-		$errno = "socket_create() failed.\n";
-		return $errno;
-	}
-
-	@$result = socket_connect ($socket, '127.0.0.1', 9876);
-	if ($result == false) {
-		$errno = "socket_connect() failed.\n";
-		return $errno;
-	}
-
-	// read one line with welcome string
-	$out = read_line($socket);
-
-	list($code) = explode(' ', $out);
-	if ($code == 999) {
-		return $out;
-	}
-
-	// send hello query
-	$query = "helo  {$cfg->Version}\r\n";
-	socket_write($socket, $query, strlen ($query));
-
-	// read one line with helo answer
-	$out = read_line($socket);
-
-	list($code) = explode(' ', $out);
-	if ($code == 999) {
-		return $out;
-	}
-
-	// send reg check query
-	$query = "execute query\r\n";
-	socket_write ($socket, $query, strlen ($query));
-	// read one line key replay
-	$execute_reply = read_line($socket);
-
-	list($code) = explode(' ', $execute_reply);
-	if ($code == 999) {
-		return $out;
-	}
-
-	// send quit query
-	$quit_query = "bye\r\n";
-	socket_write ($socket, $quit_query, strlen($quit_query));
-	// read quit answer
-	$quit_reply = read_line($socket);
-
-	list($code) = explode(' ', $quit_reply);
-	if ($code == 999) {
-		return $out;
-	}
-
-	list($answer) = explode(' ', $execute_reply);
-
-	socket_close ($socket);
-
-	return $answer;
-	*/
 }
 
 /**

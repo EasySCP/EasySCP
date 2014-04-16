@@ -15,6 +15,11 @@
  */
 
 /**
+ * Standard EasyConfig path
+ */
+define('EasyConfig_PATH', '/etc/easyscp');
+
+/**
  * Autoloader für Klassen
  */
 class AutoLoader {
@@ -252,7 +257,7 @@ class DaemonCommon {
 	/**
 	 *
 	 * @param array $tpl_param
-	 * @return \Smarty
+	 * @return Smarty
 	 */
 	public static function getTemplate($tpl_param) {
 		require_once('../gui/include/Smarty/Smarty.class.php');

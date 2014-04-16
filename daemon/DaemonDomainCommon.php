@@ -131,15 +131,15 @@ class DaemonDomainCommon {
 	 */
 	protected static function apacheWriteDisabledSiteConfig($domainData) {
 		$tpl_param = array(
-			"DOMAIN_IP" => $domainData['ip_number'],
-			"DOMAIN_NAME" => $domainData['domain_name'],
-			"DOMAIN_GID" => DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'],
-			"DOMAIN_UID" => DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'],
-			"AWSTATS" => (DaemonConfig::$cfg->AWSTATS_ACTIVE == 'yes') ? true : false,
-			"DOMAIN_CGI" => ($domainData['domain_cgi'] == 'yes') ? true : false,
-			"DOMAIN_PHP" => ($domainData['domain_php'] == 'yes') ? true : false,
-			"BASE_SERVER_VHOST" => DaemonConfig::$cfg->BASE_SERVER_VHOST,
-			"WWW_DIR" => DaemonConfig::$cfg->APACHE_WWW_DIR,
+			"DOMAIN_IP"			=> $domainData['ip_number'],
+			"DOMAIN_NAME"		=> $domainData['domain_name'],
+			"DOMAIN_GID"		=> DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'],
+			"DOMAIN_UID"		=> DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'],
+			"AWSTATS"			=> (DaemonConfig::$cfg->AWSTATS_ACTIVE == 'yes') ? true : false,
+			"DOMAIN_CGI"		=> ($domainData['domain_cgi'] == 'yes') ? true : false,
+			"DOMAIN_PHP"		=> ($domainData['domain_php'] == 'yes') ? true : false,
+			"BASE_SERVER_VHOST"	=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
+			"WWW_DIR"			=> DaemonConfig::$cfg->APACHE_WWW_DIR
 		);
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -193,15 +193,21 @@ class DaemonDomainCommon {
 			"SELF"						=> $domainData['domain_name']
 		);
 
-		if($domainData['ssl_status']==1){
-			$tpl_param ['DOMAIN_PORT']	= 80;
-			$tpl_param['REDIRECT']		= true;
+		if ($tpl_param['SERVER_ADMIN'] == null || $tpl_param['SERVER_ADMIN'] == ''){
+			$msg = 'Mail Address for ServerAdmin must be set!';
+			System_Daemon::warning($msg);
+			return $msg.'<br />'.false;
+		}
+
+		if($domainData['ssl_status'] == 1){
+			$tpl_param['DOMAIN_PORT'] = 80;
+			$tpl_param['REDIRECT'] = true;
 		} else {
-			$tpl_param ['DOMAIN_PORT']	= 80;
+			$tpl_param['DOMAIN_PORT'] = 80;
 		}
 
 		if(isset($domainData['subdomain_url_forward'])){
-			$tpl_param['FORWARD_URL']	= $domainData['subdomain_url_forward'];
+			$tpl_param['FORWARD_URL'] = $domainData['subdomain_url_forward'];
 		}
 		if(isset($domainData['subdomain_name'])){
 			$append = true;
@@ -228,6 +234,8 @@ class DaemonDomainCommon {
 		$tpl = DaemonCommon::getTemplate($tpl_param);
 		// write Apache config
 		$config = $tpl->fetch("apache/parts/vhost.tpl");
+		$tpl = NULL;
+		unset($tpl);
 		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
 
 		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
@@ -235,6 +243,27 @@ class DaemonDomainCommon {
 			$msg = 'Failed to write'. $confFile;
 			System_Daemon::warning($msg);
 			return $msg.'<br />'.$retVal;
+		}
+
+		if (isset($domainData['ip_number_v6']) && $domainData['ip_number_v6'] != ''){
+			$append = true;
+			$tpl_param['DOMAIN_IP']	= '['.$domainData['ip_number_v6'].']';
+
+			$tpl = DaemonCommon::getTemplate($tpl_param);
+			// write Apache config
+			$config = $tpl->fetch("apache/parts/vhost.tpl");
+			$tpl = NULL;
+			unset($tpl);
+			$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+
+			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
+			if ($retVal !== true) {
+				$msg = 'Failed to write'. $confFile;
+				System_Daemon::warning($msg);
+				return $msg.'<br />'.$retVal;
+			}
+
+			$tpl_param['DOMAIN_IP']	= $domainData['ip_number'];
 		}
 
 		if ($domainData['ssl_status']>0){
@@ -245,14 +274,16 @@ class DaemonDomainCommon {
 				System_Daemon::debug($msg);
 				return $msg.'<br />'.$retVal;
 			}
-			$tpl_param ['DOMAIN_PORT']	= 443;
-			$tpl_param ['SSL_CERT_DIR'] = DaemonConfig::$cfg->SSL_CERT_DIR;
-			$tpl_param ['SSL_KEY_DIR']	= DaemonConfig::$cfg->SSL_KEY_DIR;
+			$tpl_param['DOMAIN_PORT']	= 443;
+			$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$cfg->SSL_CERT_DIR;
+			$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$cfg->SSL_KEY_DIR;
 			$tpl_param['REDIRECT']		= false;
 
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 			// write Apache config
 			$config = $tpl->fetch("apache/parts/vhost.tpl");
+			$tpl = NULL;
+			unset($tpl);
 			$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
 
 			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
@@ -261,13 +292,27 @@ class DaemonDomainCommon {
 				System_Daemon::warning($msg);
 				return $msg.'<br />'.$retVal;
 			}
+
+			if (isset($domainData['ip_number_v6']) && $domainData['ip_number_v6'] != ''){
+				$append = true;
+				$tpl_param['DOMAIN_IP']	= '['.$domainData['ip_number_v6'].']';
+
+				$tpl = DaemonCommon::getTemplate($tpl_param);
+				// write Apache config
+				$config = $tpl->fetch("apache/parts/vhost.tpl");
+				$tpl = NULL;
+				unset($tpl);
+				$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+
+				$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
+				if ($retVal !== true) {
+					$msg = 'Failed to write'. $confFile;
+					System_Daemon::warning($msg);
+					return $msg.'<br />'.$retVal;
+				}
+			}
 		}
 
-		if ($tpl_param['SERVER_ADMIN']==null || $tpl_param['SERVER_ADMIN']==''){
-			$msg = 'Mail Address for ServerAdmin must be set!';
-			System_Daemon::warning($msg);
-			return $msg.'<br />'.false;
-		}
 		$tpl = DaemonCommon::getTemplate($tpl_param);
 		// write Apache config
 		$config = $tpl->fetch("apache/parts/custom.conf.tpl");
@@ -957,7 +1002,8 @@ class DaemonDomainCommon {
 				   d.ssl_key,
 				   d.ssl_cert,
 				   d.ssl_status,
-				   s.ip_number
+				   s.ip_number,
+				   s.ip_number_v6
 			FROM
 				domain AS d,
 				server_ips AS s,
@@ -1006,7 +1052,8 @@ class DaemonDomainCommon {
 				   d.ssl_key,
 				   d.ssl_cert,
 				   d.ssl_status,
-				   s.ip_number
+				   s.ip_number,
+				   s.ip_number_v6
 				FROM
 					subdomain_alias sa,
 					domain AS d,
@@ -1041,7 +1088,7 @@ class DaemonDomainCommon {
 
 		$sql_query = "
 			SELECT
-				a.email, d.*, s.ip_number
+				a.email, d.*, s.ip_number, s.ip_number_v6
 			FROM
 				admin a,
 				domain d,
@@ -1067,7 +1114,7 @@ class DaemonDomainCommon {
 			SELECT
 				a.email,
 				d.*,
-				s.ip_number,
+				s.ip_number, s.ip_number_v6,
 				sd.*,
 				sd.status as subdomain_status,
 				sd.subdomain_mount as mount
@@ -1098,7 +1145,7 @@ class DaemonDomainCommon {
 		$sql_query = "
 			SELECT
 				d.*,
-				s.ip_number,
+				s.ip_number, s.ip_number_v6
 				sd.*,
 				sd.status as subdomain_status,
 				sd.subdomain_mount as mount
@@ -1162,23 +1209,38 @@ class DaemonDomainCommon {
 					"$sysGroup -s /bin/false -u $sysUID $sysUser";
 		}
 
-		exec(DaemonConfig::$cmd->CMD_ID.' -g '.$sysGroup.' 2>&1', $result, $error);
-		if ($error != 0){
+		// TODO getent stattdessen probieren z.b.
+		// wenn der Benutzer existiert liefert das Tool Daten zurück
+		/*
+		if getent passwd BENUTZERNAME >/dev/null; then
+			echo BENUTZERNAME vorhanden
+		endif
+		if getent group GRUPPENNAME >/dev/null; then
+  			echo GRUPPENNAME vorhanden
+		endif
+		*/
+
+		// exec(DaemonConfig::$cmd->CMD_ID.' -g '.$sysGroup.' 2>&1', $result, $error);
+		exec('getent group '.$sysGroup.' 2>&1', $result, $error);
+		//if ($error != 0){
+		if ($result == Null){
 			System_Daemon::debug("Group $sysGroup ($sysGID) does not exist");
 			exec($cmdGroup.' >> /dev/null 2>&1', $result, $error);
 			System_Daemon::debug($cmdGroup);
 			System_Daemon::debug($result . $error);
 			unset($result);
-			exec(DaemonConfig::$cmd->CMD_ID.' -g '.$sysGroup, $result, $error);
+			// exec(DaemonConfig::$cmd->CMD_ID.' -g '.$sysGroup, $result, $error);
 		}
 
-		if ($error != 0){
+		exec('getent passwd '.$sysUser.' 2>&1', $result, $error);
+		// if ($error != 0){
+		if ($result == Null){
 			System_Daemon::debug("User $sysUser ($sysUID) does not exist");
 			exec($cmdUser.' >> /dev/null 2>&1', $result, $error);
 			System_Daemon::debug($cmdUser);
 			System_Daemon::debug($result . $error);
 			unset($result);
-			exec(DaemonConfig::$cmd->CMD_ID.' -u '.$sysUser, $result, $error);
+			// exec(DaemonConfig::$cmd->CMD_ID.' -u '.$sysUser, $result, $error);
 		}
 
 		return $retVal;
@@ -1400,6 +1462,8 @@ class DaemonDomainCommon {
 		$tpl = DaemonCommon::getTemplate($tpl_param);
 		// write Apache config
 		$config = $tpl->fetch("apache/parts/00_master.conf.tpl");
+		$tpl = NULL;
+		unset($tpl);
 		$confFile = DaemonConfig::$cfg->CONF_DIR.'/apache/working/00_master.conf';
 
 		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
@@ -1426,6 +1490,8 @@ class DaemonDomainCommon {
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 			// write Apache config
 			$config = $tpl->fetch("apache/parts/00_master.conf.tpl");
+			$tpl = NULL;
+			unset($tpl);
 			$confFile = DaemonConfig::$cfg->CONF_DIR.'/apache/working/00_master.conf';
 
 			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);

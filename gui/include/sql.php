@@ -92,7 +92,7 @@ function exec_query($db, $query, $bind = null, $failDie = true) {
 
 	if(!($stmt = $db->prepare($query)) || !($stmt = $db->execute($stmt, $bind))) {
 		if($failDie) {
-			throw new EasySCP_Exception_Database(
+			throw new EasySCP_Exception(
 				$db->getLastErrorMessage() . " - Query: $query"
 			);
 		}

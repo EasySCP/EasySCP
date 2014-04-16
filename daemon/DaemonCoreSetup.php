@@ -318,12 +318,13 @@ function EasySCP_Directories(){
 function EasySCP_main_configuration_file(){
 	$xml = simplexml_load_file(DaemonConfig::$cfg->ROOT_DIR . '/../setup/config.xml');
 
-	DaemonConfig::$cfg->BuildDate = '20140413';
+	DaemonConfig::$cfg->BuildDate = '20140416';
 	DaemonConfig::$cfg->DistName = $xml->DistName;
 	DaemonConfig::$cfg->DistVersion = $xml->DistVersion;
 	DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS = $xml->PANEL_MAIL;
 	DaemonConfig::$cfg->SERVER_HOSTNAME = $xml->HOST_FQHN;
 	DaemonConfig::$cfg->BASE_SERVER_IP = $xml->HOST_IP;
+	DaemonConfig::$cfg->BASE_SERVER_IPv6 = $xml->HOST_IPv6;
 	DaemonConfig::$cfg->BASE_SERVER_VHOST = $xml->HOST_NAME;
 
 	DaemonConfig::$cfg->DATABASE_HOST = $xml->DB_HOST;
@@ -434,18 +435,19 @@ function EasySCP_default_SQL_data(){
 
 	$sql_param = array(
 		':ip_number'	=> $xml->HOST_IP,
+		':ip_number_v6'	=> $xml->HOST_IPv6,
 		':ip_domain'	=> $xml->HOST_FQHN,
 		':ip_alias'		=> $xml->HOST_FQHN
 	);
 	$sql_query = "
 		INSERT INTO
-			server_ips (ip_id, ip_number, ip_domain, ip_alias)
+			server_ips (ip_id, ip_number, ip_number_v6, ip_domain, ip_alias)
 		VALUES
-			('1', :ip_number, :ip_domain, :ip_alias)
+			('1', :ip_number, :ip_number_v6, :ip_domain, :ip_alias)
 		ON
 			DUPLICATE KEY
 		UPDATE
-			ip_number = :ip_number, ip_domain = :ip_domain, ip_alias = :ip_alias;
+			ip_number = :ip_number, ip_number_v6 = :ip_number_v6, ip_domain = :ip_domain, ip_alias = :ip_alias;
 	";
 
 	DB::prepare($sql_query);
@@ -1230,6 +1232,8 @@ function EasySCP_ProFTPd_configuration_file(){
 		'FTPD_TransferLog'	=> DaemonConfig::$cfg->FTPD_TransferLog
 	);
 
+	$tpl_param['UseIPv6'] = (isset(DaemonConfig::$cfg->BASE_SERVER_IPv6) && DaemonConfig::$cfg->BASE_SERVER_IPv6 != '') ? 'on' : 'off';
+
 	$tpl = DaemonCommon::getTemplate($tpl_param);
 	$config = $tpl->fetch('proftpd/parts/proftpd_'.DaemonConfig::$cfg->DistVersion.'.conf');
 	$confFile = DaemonConfig::$cfg->CONF_DIR.'/proftpd/working/proftpd.conf';
@@ -1433,6 +1437,10 @@ function GUI_VHOST(){
 		'PHP_STARTER_DIR'			=> DaemonConfig::$cfg->PHP_STARTER_DIR,
 		'PHP_VERSION'				=> DaemonConfig::$cfg->PHP_VERSION
 	);
+
+	if (isset(DaemonConfig::$cfg->BASE_SERVER_IPv6) && DaemonConfig::$cfg->BASE_SERVER_IPv6 != ''){
+		$tpl_param['BASE_SERVER_IPv6'] = DaemonConfig::$cfg->BASE_SERVER_IPv6;
+	}
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
 	$config = $tpl->fetch('apache/parts/00_master.conf.tpl');

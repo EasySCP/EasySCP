@@ -20,11 +20,11 @@ class DaemonConfig {
 
 	public static function Reload(){
 		// unset(self::$cfg);
-		self::$cfg = simplexml_load_file('/etc/easyscp/EasySCP_Config.xml');
+		self::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
 	}
 
 	public static function Save(){
-		$handle = fopen('/etc/easyscp/EasySCP_Config.xml', "wb");
+		$handle = fopen(EasyConfig_PATH . '/EasySCP_Config.xml', "wb");
 		fwrite($handle, self::$cfg->asXML());
 		fclose($handle);
 
@@ -147,6 +147,6 @@ class DaemonConfig {
 	}
 }
 
-DaemonConfig::$cfg = simplexml_load_file('/etc/easyscp/EasySCP_Config.xml');
-DaemonConfig::$cmd = simplexml_load_file('/etc/easyscp/EasySCP_CMD.xml');
+DaemonConfig::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
+DaemonConfig::$cmd = simplexml_load_file(EasyConfig_PATH . '/EasySCP_CMD.xml');
 ?>

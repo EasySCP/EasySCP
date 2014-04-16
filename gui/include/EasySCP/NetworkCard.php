@@ -1,38 +1,33 @@
 <?php
 /**
- * ispCP ω (OMEGA) a Virtual Hosting Control System
+ * EasySCP a Virtual Hosting Control Panel
+ * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
  *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * The Original Code is "ispCP - ISP Control Panel".
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * The Initial Developer of the Original Code is ispCP Team.
- * Portions created by Initial Developer are Copyright (C) 2006-2011 by
- * isp Control Panel. All Rights Reserved.
- *
- * @category	ispCP
- * @package		EasySCP_NetworkCard
- * @copyright 	2006-2011 by ispCP | http://isp-control.net
- * @author 		ispCP Team
- * @version 	SVN: $Id: NetworkCard.php 3762 2011-01-14 08:43:43Z benedikt $
- * @link		http://isp-control.net ispCP Home Site
- * @license		http://www.mozilla.org/MPL/ MPL 1.1
+ * @link 		http://www.easyscp.net
+ * @author 		EasySCP Team
  */
 
 /**
  * Class Network Card
  *
- * @category	ispCP
+ * @category	EasySCP
  * @package		EasySCP_NetworkCard
- * @author 		ispCP Team
+ * @copyright 	2010-2014 by EasySCP | http://www.easyscp.net
+ * @author 		EasySCP Team
  */
 class EasySCP_NetworkCard {
 
@@ -81,7 +76,7 @@ class EasySCP_NetworkCard {
 	/**
 	 * Should be documented
 	 *
-	 * @return void
+	 * @return EasySCP_NetworkCard
 	 */
 	public function __construct() {
 
@@ -180,7 +175,7 @@ class EasySCP_NetworkCard {
 	/**
 	 * Should be documented
 	 *
-	 * @return bool
+	 * @return bool|void
 	 */
 	private function _populateInterfaces() {
 

@@ -62,9 +62,10 @@ if ($template == 'index2.tpl'){
 	$tpl->assign(
 		array(
 			'HOST_OS'		=> getOS($xml),
-			'HOST_FQHN'		=> (isset($_POST['HOST_FQHN'])) ? trim($_POST['HOST_FQHN']) : $_SERVER["HTTP_HOST"],
-			'HOST_IP'		=> (isset($_POST['HOST_IP'])) ? trim($_POST['HOST_IP']) : gethostbyname($_SERVER["HTTP_HOST"]),
-			'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : 'admin.'.$_SERVER["HTTP_HOST"],
+			'HOST_FQHN'		=> (isset($_POST['HOST_FQHN'])) ? trim($_POST['HOST_FQHN']) : $_SERVER['SERVER_NAME'],
+			'HOST_IP'		=> (isset($_POST['HOST_IP'])) ? trim($_POST['HOST_IP']) : gethostbyname($_SERVER['SERVER_NAME']),
+			'HOST_IPv6'		=> (isset($_POST['HOST_IPv6'])) ? trim($_POST['HOST_IPv6']) : $xml->HOST_IPv6,
+			'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : 'admin.'.$_SERVER['SERVER_NAME'],
 
 			'PANEL_ADMIN'	=> (isset($_POST['PANEL_ADMIN'])) ? trim($_POST['PANEL_ADMIN']) : $xml->PANEL_ADMIN,
 			'PANEL_PASS'	=> (isset($_POST['PANEL_PASS'])) ? trim($_POST['PANEL_PASS']) : $xml->PANEL_PASS,
@@ -212,9 +213,23 @@ function checkData($xml){
 		set_page_message('Please enter the system network address!', 'error');
 		return false;
 	}
+	if(filter_var($_POST['HOST_IP'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) == false){
+		set_page_message('Please enter a valid ipv4 network address!', 'error');
+		return false;
+	}
+	if(isset($_POST['HOST_IPv6']) && $_POST['HOST_IPv6'] != '' && filter_var($_POST['HOST_IPv6'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) == false){
+		set_page_message('Please enter a valid ipv6 network address!', 'error');
+		return false;
+	}
 	if(!isset($_POST['HOST_NAME']) || $_POST['HOST_NAME'] == ''){
 		set_page_message('Please enter the domain name where EasySCP will be reachable on!', 'error');
 		return false;
+	} else {
+		$checkHOST = explode('.', trim($_POST['HOST_NAME']));
+		if (count($checkHOST) < 4 || $_POST['HOST_NAME'] == $_POST['HOST_FQHN']){
+			set_page_message('Please enter the domain name where EasySCP will be reachable on!', 'error');
+			return false;
+		}
 	}
 
 	if(!isset($_POST['PANEL_ADMIN']) || $_POST['PANEL_ADMIN'] == ''){
@@ -249,6 +264,7 @@ function checkData($xml){
 
 	$xml->HOST_FQHN = trim($_POST['HOST_FQHN']);
 	$xml->HOST_IP = trim($_POST['HOST_IP']);
+	$xml->HOST_IPv6 = trim($_POST['HOST_IPv6']);
 	$xml->HOST_NAME = trim($_POST['HOST_NAME']);
 
 	if ($xml->FTP_PASSWORD == 'AUTO'){
