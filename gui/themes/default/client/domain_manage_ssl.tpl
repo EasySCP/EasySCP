@@ -46,6 +46,10 @@
                         <td>{$TR_SSL_KEY}</td>
                         <td><textarea name="ssl_key" id="sslkey" cols="80" rows="15" >{$SSL_KEY}</textarea></td>
                     </tr>
+					<tr>
+						<td>{$TR_SSL_CACERT}</td>
+						<td><textarea name="ssl_cacert" id="ssl_cacert" cols="80" rows="15" >{$SSL_CACERT}</textarea></td>
+					</tr>
                 </table>
                     <div class="buttons">
                         <input type="hidden" name="uaction" value="apply" />

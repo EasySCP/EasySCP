@@ -279,6 +279,10 @@ class DaemonDomainCommon {
 			$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$cfg->SSL_KEY_DIR;
 			$tpl_param['REDIRECT']		= false;
 
+			if (isset($domainData['ssl_cacert']) && $domainData['ssl_cacert'] != ''){
+				$tpl_param['SSL_CACERT'] = true;
+			}
+
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 			// write Apache config
 			$config = $tpl->fetch("apache/parts/vhost.tpl");
@@ -1430,6 +1434,7 @@ class DaemonDomainCommon {
 				name IN (
 					'SSL_KEY',
 					'SSL_CERT',
+					'SSL_CACERT',
 					'SSL_STATUS')
 		";
 
@@ -1487,6 +1492,10 @@ class DaemonDomainCommon {
 			$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$cfg->SSL_KEY_DIR;
 			$tpl_param['REDIRECT']		= false;
 
+			if (isset($sslData['ssl_cacert']) && $sslData['ssl_cacert'] != ''){
+				$tpl_param['SSL_CACERT'] = true;
+			}
+
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 			// write Apache config
 			$config = $tpl->fetch("apache/parts/00_master.conf.tpl");
@@ -1514,6 +1523,7 @@ class DaemonDomainCommon {
 	 */
 	protected static function writeSSLKeys($domainData){
 		$certFile = DaemonConfig::$cfg->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cert.pem';
+		$cacertFile = DaemonConfig::$cfg->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cacert.pem';
 		$keyFile = DaemonConfig::$cfg->SSL_KEY_DIR . '/easyscp_' . $domainData['domain_name'] . '-key.pem';
 		$cert = $domainData['ssl_cert'];
 		$key = $domainData['ssl_key'];
@@ -1528,6 +1538,13 @@ class DaemonDomainCommon {
 				$msg = 'Failed to write key '.$keyFile;
 				System_Daemon::debug($msg);
 				return $msg.'<br />';
+			}
+			if (isset($domainData['ssl_cacert']) && $domainData['ssl_cacert'] != ''){
+				if(!DaemonCommon::systemWriteContentToFile($cacertFile, $domainData['ssl_cacert'], DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644)){
+					$msg = 'Failed to write certificate of certification authorities (CA) '.$cacertFile;
+					System_Daemon::debug($msg);
+					return $msg.'<br />';
+				}
 			}
 		} else{
 			$msg = 'Certificate and key don\'t match';

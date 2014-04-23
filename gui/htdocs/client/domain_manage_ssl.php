@@ -70,21 +70,23 @@ switch ($dmn_props['ssl_status']) {
 
 // static page messages
 $tpl->assign(
-        array(
-            'TR_PAGE_TITLE'				=> tr('EasySCP - Manage SSL configuration'),
-            'TR_SSL_CONFIG_TITLE'       => tr('EasySCP SSL config'),
-            'TR_SSL_CERTIFICATE'        => tr('SSL certificate'),
-            'TR_SSL_KEY'                => tr('SSL key'),
-            'TR_SSL_ENABLED'            => tr('SSL enabled'),
-            'TR_APPLY_CHANGES'          => tr('Apply changes'),
-            'TR_SSL_STATUS_DISABLED'    => tr('SSL disabled'),
-            'TR_SSL_STATUS_SSLONLY'     => tr('SSL enabled'),
-            'TR_SSL_STATUS_BOTH'        => tr('both'),
-            'TR_MESSAGE'                => tr('Message'),
-            'SSL_KEY'                   => $dmn_props['ssl_key'],
-            'SSL_CERTIFICATE'           => $dmn_props['ssl_cert'],
-            'SSL_STATUS'                => $dmn_props['ssl_status']
-        )
+	array(
+		'TR_PAGE_TITLE'				=> tr('EasySCP - Manage SSL configuration'),
+		'TR_SSL_CONFIG_TITLE'		=> tr('EasySCP SSL config'),
+		'TR_SSL_ENABLED'			=> tr('SSL enabled'),
+		'TR_SSL_CERTIFICATE'		=> tr('SSL certificate'),
+		'TR_SSL_KEY'				=> tr('SSL key'),
+		'TR_SSL_CACERT'				=> tr('Certificate of Certification Authorities (CA) (optional, if needed)'),
+		'TR_APPLY_CHANGES'			=> tr('Apply changes'),
+		'TR_SSL_STATUS_DISABLED'	=> tr('SSL disabled'),
+		'TR_SSL_STATUS_SSLONLY'		=> tr('SSL enabled'),
+		'TR_SSL_STATUS_BOTH'		=> tr('both'),
+		'TR_MESSAGE'				=> tr('Message'),
+		'SSL_KEY'					=> $dmn_props['ssl_key'],
+		'SSL_CERTIFICATE'			=> $dmn_props['ssl_cert'],
+		'SSL_CACERT'				=> $dmn_props['ssl_cacert'],
+		'SSL_STATUS'				=> $dmn_props['ssl_status']
+	)
 );
 
 gen_client_mainmenu($tpl, 'client/main_menu_manage_domains.tpl');
@@ -107,6 +109,7 @@ function update_ssl_data($domain_id){
 
 		$sql_param = array(
 			"ssl_cert"	=> clean_input($_POST['ssl_cert']),
+			"ssl_cacert"=> clean_input($_POST['ssl_cacert']),
 			"ssl_key"	=> clean_input($_POST['ssl_key']),
 			"ssl_status"=> $_POST['ssl_status'],
 			"domain_id"	=> $domain_id
@@ -118,6 +121,7 @@ function update_ssl_data($domain_id){
 				domain
 			SET
 				ssl_cert	= :ssl_cert,
+				ssl_cacert	= :ssl_cacert,
 				ssl_key		= :ssl_key,
 				ssl_status	= :ssl_status,
 				status		= 'change'

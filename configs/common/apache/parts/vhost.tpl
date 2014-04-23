@@ -30,6 +30,9 @@
 	SSLEngine       On
 	SSLCertificateFile {$SSL_CERT_DIR}/easyscp_{$MASTER_DOMAIN}-cert.pem
 	SSLCertificateKeyFile {$SSL_KEY_DIR}/easyscp_{$MASTER_DOMAIN}-key.pem
+	{if isset($SSL_CACERT) && $SSL_CACERT == true }
+	SSLCACertificateFile {$SSL_CERT_DIR}/easyscp_{$MASTER_DOMAIN}-cacert.pem
+	{/if}
 {/if}
 	
 	ErrorLog {$WWW_DIR}/{$DOC_ROOT}/logs/{$SERVER_NAME}-error.log

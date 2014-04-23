@@ -68,6 +68,7 @@ function get_domain_default_props($domain_admin_id) {
 			domain_ssl,
 			ssl_key,
 			ssl_cert,
+			ssl_cacert,
 			ssl_status
 		FROM
 			domain
