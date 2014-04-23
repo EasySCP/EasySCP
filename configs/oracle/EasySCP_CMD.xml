@@ -35,6 +35,8 @@
 
 	<CMD_IPTABLES>/sbin/iptables</CMD_IPTABLES>
 
+	<CMD_IPTABLESv6>/sbin/ip6tables</CMD_IPTABLESv6>
+
 	<CMD_MV>/bin/mv</CMD_MV>
 
 	<CMD_MYSQLDUMP>/usr/bin/mysqldump</CMD_MYSQLDUMP>
@@ -71,6 +73,8 @@
 	<SRV_EASYSCPD>/etc/init.d/easyscp_daemon</SRV_EASYSCPD>
 
 	<SRV_FTPD>/etc/init.d/proftpd</SRV_FTPD>
+
+	<SRV_IPTABLES>service iptables</SRV_IPTABLES>
 
 	<SRV_HTTPD>/etc/init.d/httpd</SRV_HTTPD>
 

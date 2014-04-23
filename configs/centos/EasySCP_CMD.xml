@@ -35,6 +35,8 @@
 
 	<CMD_IPTABLES>/sbin/iptables</CMD_IPTABLES>
 
+	<CMD_IPTABLESv6>/sbin/ip6tables</CMD_IPTABLESv6>
+
 	<CMD_MV>/bin/mv</CMD_MV>
 
 	<CMD_MYSQLDUMP>/usr/bin/mysqldump</CMD_MYSQLDUMP>
