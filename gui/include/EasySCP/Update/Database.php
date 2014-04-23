@@ -214,11 +214,11 @@ class EasySCP_Update_Database extends EasySCP_Update {
 			ADD
 				`domain_ssl` VARCHAR(15) NOT NULL DEFAULT 'No',
 			ADD
-				`SSL_KEY` VARCHAR(5000) NULL DEFAULT NULL,
+				`ssl_key` VARCHAR(5000) NULL DEFAULT NULL,
 			ADD
-				`SSL_CERT` VARCHAR(5000) NULL DEFAULT NULL,
+				`ssl_cert` VARCHAR(5000) NULL DEFAULT NULL,
 			ADD
-				`SSL_STATUS` INT(1) unsigned NOT NULL DEFAULT '0';
+				`ssl_status` INT(1) unsigned NOT NULL DEFAULT '0';
 		";
 
 		return $sqlUpd;
@@ -456,6 +456,25 @@ class EasySCP_Update_Database extends EasySCP_Update {
 				`ip_number_v6` varchar(39) COLLATE utf8_unicode_ci NOT NULL
 			AFTER
 				`ip_number`;
+		";
+
+		return $sqlUpd;
+	}
+
+	/**
+	 * Adds database fields for SSL configuration
+	 *
+	 * @author Markus Szywon <markus.szywon@easyscp.net>
+	 * @return array
+	 */
+	protected function _databaseUpdate_59(){
+		$sqlUpd = array();
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`domain`
+			ADD
+				`ssl_cacert` varchar(5000) COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER ssl_cert;
 		";
 
 		return $sqlUpd;

@@ -79,9 +79,10 @@ INSERT INTO `config` (`name`, `value`) VALUES
 ('PREVENT_EXTERNAL_LOGIN_CLIENT', '1'),
 ('SSL_KEY', ''),
 ('SSL_CERT', ''),
+('SSL_CACERT', ''),
 ('SSL_STATUS',0),
 ('MIGRATION_ENABLED',0),
-('DATABASE_REVISION', '58');
+('DATABASE_REVISION', '59');
 
 -- --------------------------------------------------------
 
@@ -144,6 +145,7 @@ CREATE TABLE IF NOT EXISTS `domain` (
   `domain_ssl` varchar(15) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
   `ssl_key` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ssl_cert` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_cacert` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ssl_status` int(1) unsigned NOT NULL DEFAULT '0',
   UNIQUE KEY `domain_id` (`domain_id`),
   UNIQUE KEY `domain_name` (`domain_name`),
