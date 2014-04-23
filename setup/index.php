@@ -226,7 +226,7 @@ function checkData($xml){
 		return false;
 	} else {
 		$checkHOST = explode('.', trim($_POST['HOST_NAME']));
-		if (count($checkHOST) < 4 || $_POST['HOST_NAME'] == $_POST['HOST_FQHN']){
+		if (count($checkHOST) < 3 || $_POST['HOST_NAME'] == $_POST['HOST_FQHN']){
 			set_page_message('Please enter the domain name where EasySCP will be reachable on!', 'error');
 			return false;
 		}
