@@ -170,11 +170,8 @@
 	<!--
 		SSL data
 	-->
-	<SSL_CERT />
 	<SSL_CERT_DIR>/etc/pki/tls/certs</SSL_CERT_DIR>
-	<SSL_KEY />
 	<SSL_KEY_DIR>/etc/pki/tls/private</SSL_KEY_DIR>
-	<SSL_STATUS>0</SSL_STATUS>
 
 	<!--
 		CRON data

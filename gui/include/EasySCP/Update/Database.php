@@ -471,6 +471,14 @@ class EasySCP_Update_Database extends EasySCP_Update {
 		$sqlUpd = array();
 
 		$sqlUpd[] = "
+			INSERT INTO
+				`config` (name, value)
+			VALUES
+				('SSL_CACERT', '')
+			;
+		";
+
+		$sqlUpd[] = "
 			ALTER TABLE
 				`domain`
 			ADD

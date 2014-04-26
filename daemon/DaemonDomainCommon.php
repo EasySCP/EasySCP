@@ -1441,10 +1441,8 @@ class DaemonDomainCommon {
 		$rs = DB::query($sql_query);
 		$sslData = array();
 		while ($row=$rs->fetch()){
-//			System_Daemon::debug(print_r($row));
-			$sslData[strtolower($row['name'])]=$row['value'];
+			$sslData[strtolower($row['name'])] = $row['value'];
 		}
-		System_Daemon::warning(print_r($sslData,true));
 
 		$tpl_param = array(
 			"BASE_SERVER_IP"			=> DaemonConfig::$cfg->BASE_SERVER_IP,
@@ -1456,6 +1454,10 @@ class DaemonDomainCommon {
 			"PHP_STARTER_DIR"			=> DaemonConfig::$cfg->PHP_STARTER_DIR,
 			"PHP_VERSION"				=> DaemonConfig::$cfg->PHP_VERSION
 		);
+
+		if (isset(DaemonConfig::$cfg->BASE_SERVER_IPv6) && DaemonConfig::$cfg->BASE_SERVER_IPv6 != ''){
+			$tpl_param['BASE_SERVER_IPv6'] = DaemonConfig::$cfg->BASE_SERVER_IPv6;
+		}
 
 		if($sslData['ssl_status']==1){
 			$tpl_param['BASE_PORT']	= 80;

@@ -17,6 +17,14 @@ class DaemonSystem {
 	public static function Start($Input) {
 		$data = explode(" ", $Input);
 		switch ($data[0]) {
+			case 'cron':
+				System_Daemon::debug('DaemonSystem Cronjob called ');
+				$retVal = self::handleCronjob($data[1]);
+				if ($retVal!==true){
+					System_Daemon::warning('Failed to handle Cronjob for '.$data[1]);
+					return false;
+				}
+				break;
 			case 'direxists':
 				if (is_dir($data[1])){
 					System_Daemon::debug('Directory '.$data[1].' exists');
@@ -48,19 +56,16 @@ class DaemonSystem {
 					return false;
 				}
 				break;
+			case 'setPermissions':
+				System_Daemon::debug('DaemonSystem setPermissions called ');
+				DaemonCommon::systemSetSystemPermissions();
+				DaemonCommon::systemSetGUIPermissions();
+				break;
 			case 'userexists':
 				exec(DaemonConfig::$cmd->CMD_ID.' -u '.$data['1'].' 2>&1', $result, $error);
 				if ($error != 0){
 					System_Daemon::debug('User '.$data['1'].' does not exist');
 					unset($result);
-					return false;
-				}
-				break;
-			case 'cron':
-				System_Daemon::debug('DaemonSystem Cronjob called ');
-				$retVal = self::handleCronjob($data[1]);
-				if ($retVal!==true){
-					System_Daemon::warning('Failed to handle Cronjob for '.$data[1]);
 					return false;
 				}
 				break;

@@ -46,6 +46,9 @@ NameVirtualHost {$BASE_SERVER_IP}:443
 	SSLEngine       On
 	SSLCertificateFile {$SSL_CERT_DIR}/easyscp_master-cert.pem
 	SSLCertificateKeyFile {$SSL_KEY_DIR}/easyscp_master-key.pem
+{if isset($SSL_CACERT) && $SSL_CACERT == true }
+	SSLCACertificateFile {$SSL_CERT_DIR}/easyscp_master-cacert.pem
+{/if}
 {/if}
 
 	Alias /errors   {$GUI_ROOT_DIR}/errordocs/
@@ -116,9 +119,9 @@ NameVirtualHost {$BASE_SERVER_IP}:443
 	SSLEngine       On
 	SSLCertificateFile {$SSL_CERT_DIR}/easyscp_master-cert.pem
 	SSLCertificateKeyFile {$SSL_KEY_DIR}/easyscp_master-key.pem
-	{if isset($SSL_CACERT) && $SSL_CACERT == true }
+{if isset($SSL_CACERT) && $SSL_CACERT == true }
 	SSLCACertificateFile {$SSL_CERT_DIR}/easyscp_master-cacert.pem
-	{/if}
+{/if}
 	{/if}
 
 	Alias /errors   {$GUI_ROOT_DIR}/errordocs/
