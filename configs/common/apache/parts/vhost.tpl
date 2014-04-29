@@ -61,7 +61,7 @@
 {if isset($FORWARD_URL) && strcmp($FORWARD_URL,'no') != 0 }
 	RewriteEngine On
 	RewriteRule ^/(.*) {$FORWARD_URL}{literal}%{REQUEST_URI}{/literal} [R]
-{/if}
+{else}
 
 {if isset($AWSTATS) && $AWSTATS == true }
 	ProxyRequests Off
@@ -122,7 +122,7 @@
 {/if}
 
 	Include {$CUSTOM_SITES_CONFIG_DIR}/{$SERVER_NAME}.custom
-
+{/if}
 </VirtualHost>
 
 <IfModule mod_cband.c>

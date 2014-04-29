@@ -46,7 +46,7 @@ NameVirtualHost {$BASE_SERVER_IP}:443
 	SSLEngine       On
 	SSLCertificateFile {$SSL_CERT_DIR}/easyscp_master-cert.pem
 	SSLCertificateKeyFile {$SSL_KEY_DIR}/easyscp_master-key.pem
-{if isset($SSL_CACERT) && $SSL_CACERT == true }
+{if isset($SSL_CACERT) && $SSL_CACERT == true}
 	SSLCACertificateFile {$SSL_CERT_DIR}/easyscp_master-cacert.pem
 {/if}
 {/if}
@@ -65,9 +65,9 @@ NameVirtualHost {$BASE_SERVER_IP}:443
 
 	DirectoryIndex index.php index.htm index.html
 
-    <IfModule suexec_module>
+	<IfModule suexec_module>
 	SuexecUserGroup {$SUEXEC_UID} {$SUEXEC_GID}
-    </IfModule>
+	</IfModule>
 
 	<Directory {$GUI_ROOT_DIR}>
 		Options -Indexes Includes FollowSymLinks MultiViews
@@ -92,7 +92,7 @@ NameVirtualHost {$BASE_SERVER_IP}:443
 </VirtualHost>
 {/if}
 
-{if (isset($BASE_SERVER_IPv6))}
+{if isset($BASE_SERVER_IPv6)}
 {if isset($REDIRECT) && $REDIRECT == true }
 <VirtualHost [{$BASE_SERVER_IPv6}]:80>
 	ServerAdmin		{$DEFAULT_ADMIN_ADDRESS}
@@ -115,14 +115,14 @@ NameVirtualHost {$BASE_SERVER_IP}:443
 
 	ServerName      {$BASE_SERVER_VHOST}
 
-	{if isset($SSL_CERT_DIR) && isset($SSL_KEY_DIR)}
+{if isset($SSL_CERT_DIR) && isset($SSL_KEY_DIR)}
 	SSLEngine       On
 	SSLCertificateFile {$SSL_CERT_DIR}/easyscp_master-cert.pem
 	SSLCertificateKeyFile {$SSL_KEY_DIR}/easyscp_master-key.pem
-{if isset($SSL_CACERT) && $SSL_CACERT == true }
+{if isset($SSL_CACERT) && $SSL_CACERT == true}
 	SSLCACertificateFile {$SSL_CERT_DIR}/easyscp_master-cacert.pem
 {/if}
-	{/if}
+{/if}
 
 	Alias /errors   {$GUI_ROOT_DIR}/errordocs/
 

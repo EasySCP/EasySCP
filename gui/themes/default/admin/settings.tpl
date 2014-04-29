@@ -207,6 +207,7 @@
 							</select>
 						</td>
 					</tr>
+					<!--
 					<tr>
 						<td><label for="hosting_plan_level">{$TR_HOSTING_PLANS_LEVEL}</label></td>
 						<td>
@@ -216,6 +217,7 @@
 							</select>
 						</td>
 					</tr>
+					-->
 					<tr>
 						<td><label for="domain_rows_per_page">{$TR_DOMAIN_ROWS_PER_PAGE}</label></td>
 						<td><input type="text" name="domain_rows_per_page" id="domain_rows_per_page" value="{$DOMAIN_ROWS_PER_PAGE}" maxlength="3" /></td>
@@ -231,10 +233,13 @@
 							</select>
 						</td>
 					</tr>
+					<!--
 					<tr>
 						<td><label for="coid">{$TR_CUSTOM_ORDERPANEL_ID}</label></td>
 						<td><input type="text" name="coid" id="coid" value="{$CUSTOM_ORDERPANEL_ID}" /></td>
 					</tr>
+					-->
+					<!--
 					<tr>
 						<td><label for="migration_enabled">{$TR_MIGRATION_ENABLED}</label></td>
 						<td>
@@ -244,6 +249,7 @@
 							</select>
 						</td>
 					</tr>
+					-->
 				</table>
 			</fieldset>
 			<div class="buttons">
