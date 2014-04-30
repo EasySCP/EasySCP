@@ -23,7 +23,7 @@ $template = 'admin/cronjob_manage.tpl';
 $tpl->assign(
 	array(
 		'TR_CLIENT_CRONJOBS_TITLE'	=> tr('EasySCP - Admin/Cronjob Manager'),
-		'TR_MESSAGE_EXPERT_MODE'	=> tr('Warning!\nDo you really want to change into expert mode?\nYou should know what you\'re doing.'),
+		'TR_MESSAGE_EXPERT_MODE'	=> tr('Warning!\nDo you really want to change into expert mode?\nYou should know what you are doing.'),
 		'TR_MESSAGE_NORMAL_MODE'	=> tr('Warning!\nIf you switch back to normal mode all schedule settings will be lost!')
 	)
 );

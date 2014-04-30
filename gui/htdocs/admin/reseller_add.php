@@ -31,9 +31,9 @@ $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'admin/reseller_add.tpl';
 
 // static page messages
-$reseller_ips = get_server_ip($tpl, $sql);
+$reseller_ips = get_server_ip($tpl);
 
-add_reseller($tpl, $sql);
+add_reseller($tpl);
 
 $tpl->assign(
 	array(
@@ -110,11 +110,11 @@ unset_messages();
 /**
  * Get Server IPs
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function get_server_ip($tpl, $sql) {
+function get_server_ip($tpl) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	$query = "
 		SELECT
@@ -184,12 +184,12 @@ function get_server_ip($tpl, $sql) {
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function add_reseller($tpl, $sql) {
+function add_reseller($tpl) {
 
 	global $reseller_ips;
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	if (isset($_POST['uaction']) && $_POST['uaction'] === 'add_reseller') {
 		if (check_user_data()) {

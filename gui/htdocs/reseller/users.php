@@ -316,7 +316,7 @@ function check_externel_events($tpl) {
 
 	if (isset($_SESSION["user_add3_added"])) {
 		if ($_SESSION["user_add3_added"] === '_yes_') {
-			set_page_message(tr('User added sucessfully!'), 'success');
+			set_page_message(tr('User added!'), 'success');
 
 			$externel_event = '_on_';
 			unset($_SESSION["user_add3_added"]);

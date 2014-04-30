@@ -31,9 +31,9 @@ $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'admin/manage_reseller_owners.tpl';
 
 // static page messages
-update_reseller_owner($sql);
+update_reseller_owner();
 
-gen_reseller_table($tpl, $sql);
+gen_reseller_table($tpl);
 
 $tpl->assign(
 	array(
@@ -65,11 +65,11 @@ unset_messages();
 /**
  * @todo check if it's useful to have the table admin two times in the same query
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function gen_reseller_table($tpl, $sql) {
+function gen_reseller_table($tpl) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	$query = "
 		SELECT
@@ -157,7 +157,8 @@ function gen_reseller_table($tpl, $sql) {
 	$tpl->assign('PAGE_MESSAGE', '');
 }
 
-function update_reseller_owner($sql) {
+function update_reseller_owner() {
+	$sql = EasySCP_Registry::get('Db');
 
 	if (isset($_POST['uaction']) && $_POST['uaction'] === 'reseller_owner') {
 		$query = "

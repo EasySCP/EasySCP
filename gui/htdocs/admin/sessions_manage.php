@@ -46,9 +46,9 @@ $tpl->assign(
 gen_admin_mainmenu($tpl, 'admin/main_menu_users_manage.tpl', true);
 gen_admin_menu($tpl, 'admin/menu_users_manage.tpl', true);
 
-kill_session($sql);
+kill_session();
 
-gen_user_sessions($tpl, $sql);
+gen_user_sessions($tpl);
 
 gen_page_message($tpl);
 
@@ -60,7 +60,9 @@ $tpl->display($template);
 
 unset_messages();
 
-function kill_session($sql) {
+function kill_session() {
+
+	$sql = EasySCP_Registry::get('Db');
 
 	if (isset($_GET['kill']) && $_GET['kill'] !== ''
 		&& $_GET['kill'] !== $_SESSION['user_logged']) {
@@ -80,9 +82,11 @@ function kill_session($sql) {
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function gen_user_sessions($tpl, $sql) {
+function gen_user_sessions($tpl) {
+
+	$sql = EasySCP_Registry::get('Db');
+
 	$query = "
 		SELECT
 			*

@@ -33,7 +33,7 @@ $template = 'admin/manage_reseller_users.tpl';
 // static page messages
 update_reseller_user();
 
-gen_user_table($tpl, $sql);
+gen_user_table($tpl);
 
 $tpl->assign(
 	array(
@@ -64,11 +64,11 @@ unset_messages();
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function gen_user_table($tpl, $sql) {
+function gen_user_table($tpl) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	$query = "
 		SELECT

@@ -34,7 +34,7 @@ if (isset($_POST['uaction']) && $_POST['uaction'] === 'updt_data') {
 	update_admin_personal_data($sql, $_SESSION['user_id']);
 }
 
-gen_admin_personal_data($tpl, $sql, $_SESSION['user_id']);
+gen_admin_personal_data($tpl, $_SESSION['user_id']);
 
 // static page messages
 $tpl->assign(
@@ -77,12 +77,12 @@ unset_messages();
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  * @param int $user_id
  */
-function gen_admin_personal_data($tpl, $sql, $user_id) {
+function gen_admin_personal_data($tpl, $user_id) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	$query = "
 		SELECT
