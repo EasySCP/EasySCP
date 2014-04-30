@@ -437,7 +437,7 @@ function shall_user_wait($ipaddr = null, $displayMessage = true) {
 		return false;
 	}
 
-	$data = $rs->fetchRow();
+	$data = $rs->fetch();
 
 	$lastaccess = $data['lastaccess'];
 

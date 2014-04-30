@@ -96,7 +96,7 @@ function gen_admin_menu($tpl, $menu_file) {
 			'TR_MENU_EasySCP_DEBUGGER'		=> tr('EasySCP debugger'),
 			'TR_MENU_ROOTKIT_LOG'			=> tr('Rootkit Log'),
 			'TR_MENU_CRONJOB_OVERVIEW'		=> tr('Cronjob Overview'),
-			'TR_MENU_CRONJOB_ADD'			=> tr('Add cronjob'),
+			'TR_MENU_CRONJOB_ADD'			=> tr('Add Cronjob'),
 
 			'TR_MENU_RESELLER_STATISTICS'	=> tr('Reseller statistics'),
 			'TR_MENU_IP_USAGE'				=> tr('IP Usage'),

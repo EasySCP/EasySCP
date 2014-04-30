@@ -21,7 +21,7 @@
  * @author 		EasySCP Team
  */
 
-require '../include/easyscp-lib.php';
+require_once '../include/easyscp-lib.php';
 
 $cfg = EasySCP_Registry::get('Config');
 
@@ -33,10 +33,7 @@ do_session_timeout();
 
 init_login();
 
-if (isset($_POST['uname'])
-	&& isset($_POST['upass'])
-	&& !empty($_POST['uname'])
-	&& !empty($_POST['upass'])) {
+if (isset($_POST['uname']) && !empty($_POST['uname']) && isset($_POST['upass']) && !empty($_POST['upass'])) {
 
 	check_input(trim($_POST['uname']));
 	check_input(trim($_POST['upass']));
