@@ -1,7 +1,7 @@
 EasySCP 2.0.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2014-04-26
+2014-05-07
 	- Config:
 		* Add: Fields for SSL support
 		* Add: Oracle Linux support
@@ -11,6 +11,7 @@ EasySCP 2.0.0 ChangeLog
 
 	- DOCS:
 		* Add: Oracle Linux package file
+		* Add: Ubuntu 14.04 LTS package file
 
 		* Update: CentOS 6.x package file
 		* Update: Debian 7.x (Wheezy) package file

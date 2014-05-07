@@ -39,7 +39,7 @@ Pentium III or K6-4 with 500 MHz
 100 MB disk space (only for install of EasySCP)
 Debian (or even any other *NIX-Distribution)
 
-All required packages for "Ubuntu 12.04 LTS" are listed in "./docs/ubuntu-packages-precise"
+All required packages for "Ubuntu 12.04 LTS" are listed in "./docs/ubuntu-packages-1204"
 
 ================================================================================
 3) Introduction
@@ -74,7 +74,7 @@ provides graphic user interfaces for the administrators, resellers and users.
 
 	Install all required packages:
 
-	# sudo apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-precise)
+	# sudo apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-1204)
 
 	If you get to the "ProFTPD configuration" screen, select 'standalone'.
 	If you get to the "Postfix configuration" screen select 'internet site'.
