@@ -53,9 +53,9 @@ $tpl->assign(
 gen_admin_mainmenu($tpl, 'admin/main_menu_users_manage.tpl');
 gen_admin_menu($tpl, 'admin/menu_users_manage.tpl');
 
-send_circular($tpl, $sql);
+send_circular($tpl);
 
-gen_page_data($tpl, $sql);
+gen_page_data($tpl);
 
 gen_page_message($tpl);
 
@@ -69,10 +69,12 @@ unset_messages();
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
+ *
  * @return void
  */
-function gen_page_data($tpl, $sql) {
+function gen_page_data($tpl) {
+
+	$sql = EasySCP_Registry::get('Db');
 
 	if (isset($_POST['uaction']) && $_POST['uaction'] === 'send_circular') {
 		$tpl->assign(
@@ -154,7 +156,9 @@ function check_user_data() {
 	}
 }
 
-function send_reseller_message($sql) {
+function send_reseller_message() {
+
+	$sql = EasySCP_Registry::get('Db');
 
 	$user_id = $_SESSION['user_id'];
 
@@ -200,12 +204,12 @@ function send_reseller_message($sql) {
 	write_log('Mass email was sent from ' . tohtml($sender_name) . '<' . $sender_email . '>!');
 }
 
-function send_circular($tpl, $sql) {
+function send_circular($tpl) {
 	if (isset($_POST['uaction']) && $_POST['uaction'] === 'send_circular') {
 		if (check_user_data()) {
-			send_reseller_message($sql);
+			send_reseller_message();
 			unset($_POST['uaction']);
-			gen_page_data($tpl, $sql);
+			gen_page_data($tpl);
 		}
 	}
 }

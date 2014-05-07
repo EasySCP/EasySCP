@@ -80,7 +80,7 @@ if (isset($_SESSION['user_disabled'])) {
 	set_page_message(tr('User disabled successfully'), 'success');
 }
 
-get_admin_manage_users($tpl, $sql);
+get_admin_manage_users($tpl);
 
 if (!$cfg->exists('HOSTING_PLANS_LEVEL') || strtolower($cfg->HOSTING_PLANS_LEVEL) === 'admin') {
 	$tpl->assign('EDIT_OPTION', true);

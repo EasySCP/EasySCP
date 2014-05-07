@@ -45,9 +45,9 @@ $tpl->assign(
 gen_admin_mainmenu($tpl, 'admin/main_menu_settings.tpl');
 gen_admin_menu($tpl, 'admin/menu_settings.tpl');
 
-update_server_settings($sql);
+update_server_settings();
 
-generate_server_data($tpl, $sql);
+generate_server_data($tpl);
 
 gen_page_message($tpl);
 
@@ -59,11 +59,19 @@ $tpl->display($template);
 
 unset_messages();
 
-function update_server_settings($sql) {
+/**
+ * @todo What's about the outcommented code?
+ */
+function update_server_settings() {
+
+	$sql = EasySCP_Registry::get('Db');
 
 	if (!isset($_POST['uaction']) && !isset($_POST['uaction'])) {
 		return;
 	}
+	/*global $data;
+	$match = array();
+	preg_match("/^(-1|0|[1-9][0-9]*)$/D", $data, $match);*/
 
 	$max_traffic = clean_input($_POST['max_traffic']);
 
@@ -105,24 +113,23 @@ function update_server_settings($sql) {
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function generate_server_data($tpl, $sql) {
+function generate_server_data($tpl) {
 
-	$query = "
+	$sql_query = "
 		SELECT
-			`straff_max`,
-			`straff_warn`
+			straff_max,
+			straff_warn
 		FROM
-			`straff_settings`
+			straff_settings;
 	";
 
-	$rs = exec_query($sql, $query);
+	$row = DB::query($sql_query, true);
 
 	$tpl->assign(
 		array(
-			'MAX_TRAFFIC' => $rs->fields['straff_max'],
-			'TRAFFIC_WARNING' => $rs->fields['straff_warn'],
+			'MAX_TRAFFIC'		=> $row['straff_max'],
+			'TRAFFIC_WARNING'	=> $row['straff_warn']
 		)
 	);
 }

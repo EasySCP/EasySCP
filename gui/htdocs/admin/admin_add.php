@@ -30,7 +30,7 @@ $cfg = EasySCP_Registry::get('Config');
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'admin/admin_add.tpl';
 
-add_user($tpl, $sql);
+add_user($tpl);
 
 // static page messages
 $tpl->assign(
@@ -81,11 +81,11 @@ unset_messages();
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function add_user($tpl, $sql) {
+function add_user($tpl) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	if (isset($_POST['uaction']) && $_POST['uaction'] === 'add_user') {
 		if (check_user_data()) {

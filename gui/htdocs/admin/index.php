@@ -34,13 +34,13 @@ check_login(__FILE__);
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'admin/index.tpl';
 
-get_admin_general_info($tpl, $sql);
+get_admin_general_info($tpl);
 
 get_update_infos($tpl);
 
 gen_server_trafic($tpl);
 
-gen_system_message($tpl, $sql);
+gen_system_message($tpl);
 
 // static page messages
 $tpl->assign(
@@ -64,28 +64,31 @@ unset_messages();
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
+ *
  * @return void
  */
-function gen_system_message($tpl, $sql) {
-	$user_id = $_SESSION['user_id'];
+function gen_system_message($tpl) {
+
+	$sql_param = array(
+		':user_id'	=> $_SESSION['user_id']
+	);
 
 	$query = "
 		SELECT
-			COUNT(`ticket_id`) AS cnum
+			COUNT(ticket_id) AS cnum
 		FROM
-			`tickets`
+			tickets
 		WHERE
-			`ticket_to` = ?
+			ticket_to = :user_id
 		AND
-			`ticket_status` IN ('1', '4')
+			ticket_status IN ('1', '4')
 		AND
-			`ticket_reply` = 0
-	;";
+			ticket_reply = 0;
+	";
 
-	$rs = exec_query($sql, $query, $user_id);
+	$row = DB::execute($sql_param, true);
 
-	$num_question = $rs->fields('cnum');
+	$num_question = (isset($row['cnum'])) ? $row['cnum'] : 0;
 
 	if ($num_question != 0) {
 		$tpl->assign(
@@ -148,37 +151,39 @@ function get_update_infos($tpl) {
  * @return void
  */
 function gen_server_trafic($tpl) {
-	$sql = EasySCP_Registry::get('Db');
+
+	$sql_query = "
+		SELECT
+			straff_max, straff_warn
+		FROM
+			straff_settings;
+	";
+
+	$row = DB::query($sql_query, true);
+
+	$straff_max  = $row['straff_max'] * 1024 * 1024;
+	$straff_warn = $row['straff_warn'] * 1024 * 1024;
+
+	$sql_param = array(
+		':fdofmnth'	=> mktime(0, 0, 0, date("m"), 1, date("Y")),
+		':ldofmnth'	=> mktime(1, 0, 0, date("m") + 1, 0, date("Y"))
+	);
 
 	$query = "
 		SELECT
-			`straff_max`, `straff_warn`
+			IFNULL((SUM(bytes_in) + SUM(bytes_out)), 0) AS traffic
 		FROM
-			`straff_settings`
-	;";
-
-	$rs = exec_query($sql, $query);
-
-	$straff_max  = $rs->fields['straff_max'] * 1024 * 1024;
-	$straff_warn = $rs->fields['straff_warn'] * 1024 * 1024;
-
-	$fdofmnth = mktime(0, 0, 0, date("m"), 1, date("Y"));
-	$ldofmnth = mktime(1, 0, 0, date("m") + 1, 0, date("Y"));
-
-	$query = "
-		SELECT
-			IFNULL((SUM(`bytes_in`) + SUM(`bytes_out`)), 0) AS traffic
-		FROM
-			`server_traffic`
+			server_traffic
 		WHERE
-			`traff_time` > ?
+			traff_time > :fdofmnth
 		AND
-			`traff_time` < ?
-	;";
+			traff_time < :ldofmnth;
+	";
 
-	$rs1 = exec_query($sql, $query, array($fdofmnth, $ldofmnth));
+	DB::prepare($sql_query);
+	$row = DB::execute($sql_param, true);
 
-	$traff = $rs1->fields['traffic'];
+	$traff = (isset($row['traffic'])) ? $row['traffic'] : 0;
 
 	$mtraff = sprintf("%.2f", $traff);
 
@@ -216,9 +221,9 @@ function gen_server_trafic($tpl) {
 
 	$tpl->assign(
 		array(
-			'TRAFFIC_WARNING' => $traff_msg,
-			'BAR_VALUE' => $bar_value,
-			'TRAFFIC_PERCENT' => $percent,
+			'TRAFFIC_WARNING'	=> $traff_msg,
+			'BAR_VALUE'			=> $bar_value,
+			'TRAFFIC_PERCENT'	=> $percent
 		)
 	);
 }
