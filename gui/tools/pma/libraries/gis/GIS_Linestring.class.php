@@ -252,7 +252,7 @@ class PMA_GIS_Linestring extends PMA_GIS_Geometry
                 ? $gis_data[$index]['LINESTRING'][$i]['x'] : $empty)
                 . ' ' . ((isset($gis_data[$index]['LINESTRING'][$i]['y'])
                 && trim($gis_data[$index]['LINESTRING'][$i]['y']) != '')
-                ? $gis_data[$index]['LINESTRING'][$i]['y'] : $empty) .',';
+                ? $gis_data[$index]['LINESTRING'][$i]['y'] : $empty) . ',';
         }
         $wkt = substr($wkt, 0, strlen($wkt) - 1);
         $wkt .= ')';
@@ -270,9 +270,9 @@ class PMA_GIS_Linestring extends PMA_GIS_Geometry
      */
     public function generateParams($value, $index = -1)
     {
+        $params = array();
         if ($index == -1) {
             $index = 0;
-            $params = array();
             $data = PMA_GIS_Geometry::generateParams($value);
             $params['srid'] = $data['srid'];
             $wkt = $data['wkt'];

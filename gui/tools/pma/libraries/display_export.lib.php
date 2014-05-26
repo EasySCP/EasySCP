@@ -473,7 +473,7 @@ function PMA_getHtmlForExportOptionsOutputFormat($export_type)
     $msg->addParam($trans);
     $doc_url = PMA_Util::getDocuLink('faq', 'faq6-27');
     $msg->addParam(
-        '<a href="'. $doc_url . '" target="documentation">',
+        '<a href="' . $doc_url . '" target="documentation">',
         false
     );
     $msg->addParam('</a>', false);
@@ -662,6 +662,15 @@ function PMA_getHtmlForExportOptionsOutput($export_type)
     $html .= PMA_getHtmlForExportOptionsOutputRadio();
 
     $html .= '</ul>';
+
+    /*
+     * @todo use sprintf() for better translatability, while keeping the
+     *       <label></label> principle (for screen readers)
+     */
+    $html .= '<label for="maxsize">'
+        . __('Skip tables larger than') . '</label>';
+    $html .= '<input type="text" id="maxsize" name="maxsize" size="4">' . __('MiB');
+
     $html .= '</div>';
 
     return $html;

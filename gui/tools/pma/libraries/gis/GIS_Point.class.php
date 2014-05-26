@@ -217,7 +217,7 @@ class PMA_GIS_Point extends PMA_GIS_Geometry
 
         if ($points_arr[0][0] != '' && $points_arr[0][1] != '') {
             $result .= 'vectorLayer.addFeatures(new OpenLayers.Feature.Vector('
-                . $this->getPointForOpenLayers($points_arr[0], $srid). ', null, '
+                . $this->getPointForOpenLayers($points_arr[0], $srid) . ', null, '
                 . json_encode($style_options) . '));';
         }
         return $result;
@@ -270,9 +270,9 @@ class PMA_GIS_Point extends PMA_GIS_Geometry
      */
     public function generateParams($value, $index = -1)
     {
+        $params = array();
         if ($index == -1) {
             $index = 0;
-            $params = array();
             $data = PMA_GIS_Geometry::generateParams($value);
             $params['srid'] = $data['srid'];
             $wkt = $data['wkt'];
