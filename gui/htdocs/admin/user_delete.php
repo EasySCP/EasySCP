@@ -37,7 +37,7 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id'])) {
 		user_goto('manage_users.php');
 	}
 } else if (isset($_GET['domain_id']) && is_numeric($_GET['domain_id'])) {
-	validate_domain_deletion(intval($_GET['domain_id']));
+	validate_domain_deletion($tpl, intval($_GET['domain_id']));
 } else if (isset($_POST['domain_id']) && is_numeric($_POST['domain_id'])
 	&& isset($_POST['delete']) && $_POST['delete'] == 1) {
 	delete_domain((int)$_POST['domain_id'], 'manage_users.php');
@@ -150,11 +150,12 @@ function validate_user_deletion($user_id) {
 
 /**
  * Validate domain deletion, display all items to delete
+ * @param EasySCP_TemplateEngine $tpl
  * @param integer $domain_id
  */
-function validate_domain_deletion($domain_id) {
+function validate_domain_deletion($tpl, $domain_id) {
 
-	global $tpl, $sql;
+	$sql = EasySCP_Registry::get('Db');
 
 	// check for domain owns
 	$query = "SELECT `domain_id`, `domain_name`, `domain_created_id` FROM `domain` WHERE `domain_id` = ?;";

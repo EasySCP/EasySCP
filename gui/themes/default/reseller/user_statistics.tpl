@@ -100,7 +100,7 @@
 		</div>
 		{/if}
 		{else}
-		<div class="{$MSG_TYPE}">{$TR_NO_DOMAINS}</div>
+		<div class="info">{$TR_NO_DOMAINS}</div>
 		{/if}
 	</div>
 {include file='reseller/footer.tpl'}
