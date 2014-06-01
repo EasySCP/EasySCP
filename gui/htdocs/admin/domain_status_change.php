@@ -32,7 +32,7 @@ $sql_query = "
 	SELECT
 		domain_name, status
 	FROM
-		domain,
+		domain
 	WHERE
 		domain_id = :domain_id
 ";
