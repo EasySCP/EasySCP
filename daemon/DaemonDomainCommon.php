@@ -24,13 +24,16 @@ class DaemonDomainCommon {
 		if (file_exists($confFile)) {
 			switch(DaemonConfig::$cfg->DistName){
 				case 'CentOS':
-					exec(DaemonConfig::$cmd->CMD_MV.' -f ' . $siteName .' ' . $siteName . '.disabled', $result, $error);
+					$command = DaemonConfig::$cmd->CMD_MV.' -f ' . $confFile .' ' . $confFile . '.disabled';
 					break;
 				default:
-					exec(DaemonConfig::$cmd->CMD_HTTPD_A2DISSITE . ' ' . $siteName . '.conf 1>&1 2>&1', $result, $error);
+					$command = DaemonConfig::$cmd->CMD_HTTPD_A2DISSITE . ' ' . $siteName . '.conf 1>&1 2>&1';
 			}
 
-			if ($error==0){
+			System_Daemon::debug('Doing: ' . $command);
+			exec($command, $result, $error);
+
+			if ($error == 0){
 				System_Daemon::debug('Disabled '.$siteName);
 			} else {
 				$msg = 'Failed to disable '.$siteName;
@@ -56,29 +59,30 @@ class DaemonDomainCommon {
 		switch(DaemonConfig::$cfg->DistName){
 			case 'CentOS':
 				if (file_exists($confFile . '.disabled')) {
-					exec(DaemonConfig::$cmd->CMD_MV.' -f ' . $siteName . '.disabled ' . $siteName, $result, $error);
-					if ($error==0){
-						System_Daemon::debug("Enabled $siteName");
-					} else {
-						$msg = 'Failed to enable '.$siteName;
-						System_Daemon::warning($msg);
-						System_Daemon::warning(DaemonCommon::listArrayforLOG($result));
-						return $msg . '<br />' . ((DaemonConfig::$cfg->DEBUG == '1') ? DaemonCommon::listArrayforGUI($result) : '');
-					}
+					$command = DaemonConfig::$cmd->CMD_MV.' -f ' . $confFile . '.disabled ' . $confFile;
 				}
 				break;
 			default:
 				if (file_exists($confFile)) {
-					exec(DaemonConfig::$cmd->CMD_HTTPD_A2ENSITE . ' ' . $siteName . '.conf 1>&1 2>&1', $result, $error);
-					if ($error==0){
-						System_Daemon::debug("Enabled $siteName");
-					} else {
-						$msg = 'Failed to enable '.$siteName;
-						System_Daemon::warning($msg);
-						System_Daemon::warning(DaemonCommon::listArrayforLOG($result));
-						return $msg . '<br />' . ((DaemonConfig::$cfg->DEBUG == '1') ? DaemonCommon::listArrayforGUI($result) : '');
-					}
+					$command = DaemonConfig::$cmd->CMD_HTTPD_A2ENSITE . ' ' . $siteName . '.conf 1>&1 2>&1';
 				}
+		}
+
+		if (isset($command) && $command != ''){
+			System_Daemon::debug('Doing: ' . $command);
+			exec($command, $result, $error);
+		} else {
+			$result = '';
+			$error = 0;
+		}
+
+		if ($error == 0){
+			System_Daemon::debug('Enabled '.$siteName);
+		} else {
+			$msg = 'Failed to enable '.$siteName;
+			System_Daemon::debug($msg);
+			System_Daemon::debug(DaemonCommon::listArrayforLOG($result));
+			return $msg . '<br />' . ((DaemonConfig::$cfg->DEBUG == '1') ? DaemonCommon::listArrayforGUI($result) : '');
 		}
 
 		return true;
