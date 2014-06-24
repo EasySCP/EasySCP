@@ -85,5 +85,5 @@ EasySCP 2.0.0 ChangeLog
 		* Fix: net2ftp does not work in some situations.
 
 		* Update: net2ftp to version 1.0
-		* Update: phpMyAdmin to version 4.2.2
+		* Update: phpMyAdmin to version 4.2.4
 		* Update: Roundcube to version 0.9.5

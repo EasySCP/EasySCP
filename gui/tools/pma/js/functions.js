@@ -387,13 +387,13 @@ function confirmQuery(theForm1, sqlQuery1)
  */
 function checkSqlQuery(theForm)
 {
+    var sqlQuery;
     // get the textarea element containing the query
     if (codemirror_editor) {
         codemirror_editor.save();
-        var sqlQuery = codemirror_editor.display.input;
-        sqlQuery.value = codemirror_editor.getValue();
+        sqlQuery = codemirror_editor.getValue();
     } else {
-        var sqlQuery = theForm.elements['sql_query'];
+        sqlQuery = theForm.elements.sql_query.value;
     }
     var isEmpty  = 1;
     var space_re = new RegExp('\\s+');
@@ -411,7 +411,7 @@ function checkSqlQuery(theForm)
         return true;
     }
     // Checks for "DROP/DELETE/ALTER" statements
-    if (sqlQuery.value.replace(space_re, '') !== '') {
+    if (sqlQuery.replace(space_re, '') !== '') {
         if (confirmQuery(theForm, sqlQuery)) {
             return true;
         } else {
@@ -1380,7 +1380,7 @@ AJAX.registerOnload('functions.js', function () {
         }
 
         var $form = $(this).prev('form');
-        var sql_query  = $form.find("input[name='sql_query']").val();
+        var sql_query  = $form.find("input[name='sql_query']").val().trim();
         var $inner_sql = $(this).parent().prev().find('code.sql');
         var old_text   = $inner_sql.html();
 
