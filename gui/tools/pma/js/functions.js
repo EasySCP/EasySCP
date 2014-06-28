@@ -422,9 +422,8 @@ function checkSqlQuery(theForm)
     isEmpty = 1;
 
     if (isEmpty) {
-        sqlQuery.select();
         alert(PMA_messages.strFormEmpty);
-        sqlQuery.focus();
+        codemirror_editor.focus();
         return false;
     }
 
@@ -3001,6 +3000,8 @@ function indexEditorDialog(url, title, callback_success, callback_failure)
             .dialog({
                 title: title,
                 width: 450,
+                // increase the chance that the footer will be visible:
+                height: 450,
                 open: PMA_verifyColumnsProperties,
                 modal: true,
                 buttons: button_options,

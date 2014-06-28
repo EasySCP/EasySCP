@@ -1,7 +1,7 @@
 EasySCP 2.0.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2014-05-27
+2014-06-28
 	- Config:
 		* Add: Fields for SSL support
 		* Add: Oracle Linux support
@@ -85,5 +85,5 @@ EasySCP 2.0.0 ChangeLog
 		* Fix: net2ftp does not work in some situations.
 
 		* Update: net2ftp to version 1.0
-		* Update: phpMyAdmin to version 4.2.4
+		* Update: phpMyAdmin to version 4.2.5
 		* Update: Roundcube to version 0.9.5

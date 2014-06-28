@@ -14,7 +14,7 @@ define('LINE_COUNTS', true);
 $LINE_COUNT = array();
 
 $LINE_COUNT["error_report.js"] = 326;
-$LINE_COUNT["functions.js"] = 4162;
+$LINE_COUNT["functions.js"] = 4163;
 $LINE_COUNT["jquery/jquery-ui-timepicker-addon.js"] = 2144;
 $LINE_COUNT["jquery/jquery.cookie.js"] = 91;
 $LINE_COUNT["jquery/jquery.sortableTable.js"] = 271;

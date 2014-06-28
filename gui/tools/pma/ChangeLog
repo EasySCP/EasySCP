@@ -1,6 +1,14 @@
 phpMyAdmin - ChangeLog
 ======================
 
+4.2.5.0 (2014-06-26)
+- bug #4467 shell_exec() has been disabled for security reasons
+- bug #4470 Error while submitting empty query
+- bug #4463 Fatal error: Class 'PMA_DatabaseInterface' not found
+- bug #4469 Fixed cookie based login for installations without mcrypt
+- bug #4473 incorrect result count when having clause is used
+-           mcrypt: remove the requirement (64-bit) and the related warning
+
 4.2.4.0 (2014-06-20)
 - bug #4449 Mediawiki export does not produce table header row; also fix related PHP warnings
 - bug #4442 New lines are added to query every time
@@ -108,6 +116,9 @@ phpMyAdmin - ChangeLog
 - bug #4375 Group two DB, one's name is the prefix of the other one
 - bug #4070 Confusing database/table grouping
 - bug #4366 Creating Index doesn't update index-list
+
+4.1.14.1 (2014-06-21)
+- bug #4464 [security] XSS injection due to unescaped db/table name in navigation hiding
 
 4.1.14.0 (2014-04-26)
 - bug #4365 Creating bookmark with multiple queries not working
