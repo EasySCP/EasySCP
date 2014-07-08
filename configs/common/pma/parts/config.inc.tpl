@@ -34,8 +34,6 @@ $cfg['Servers'][$i]['password'] = $_POST['pma_password'];
 $cfg['Servers'][$i]['host'] = '{$HOSTNAME}';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 $cfg['Servers'][$i]['compress'] = true;
-/* Select mysql if your server does not have mysqli */
-$cfg['Servers'][$i]['extension'] = 'mysqli';
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
 
 /*
@@ -62,9 +60,11 @@ $cfg['Servers'][$i]['tracking'] = 'pma__tracking';
 $cfg['Servers'][$i]['designer_coords'] = 'pma__designer_coords';
 $cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';
 $cfg['Servers'][$i]['recent'] = 'pma__recent';
+$cfg['Servers'][$i]['favorite'] = 'pma__favorite';
 $cfg['Servers'][$i]['users'] = 'pma__users';
 $cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';
 $cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';
+$cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';
 
 /* Hide some databases from listing */
 $cfg['Servers'][$i]['hide_db'] = '(information_schema|phpmyadmin|mysql)';
@@ -151,7 +151,7 @@ $cfg['SaveDir'] = '{$TMP_DIR}';
 /**
  * Should error reporting be enabled for JavaScript errors
  *
- * default = 'ask' 
+ * default = 'ask'
  */
 //$cfg['SendErrorReports'] = 'ask';
 
