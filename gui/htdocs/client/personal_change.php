@@ -31,10 +31,10 @@ $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'client/personal_change.tpl';
 
 if (isset($_POST['uaction']) && $_POST['uaction'] === 'updt_data') {
-	update_user_personal_data($sql, $_SESSION['user_id']);
+	update_user_personal_data($_SESSION['user_id']);
 }
 
-gen_user_personal_data($tpl, $sql, $_SESSION['user_id']);
+gen_user_personal_data($tpl, $_SESSION['user_id']);
 
 // static page messages
 gen_logged_from($tpl);
@@ -81,12 +81,12 @@ unset_messages();
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  * @param int $user_id
  */
-function gen_user_personal_data($tpl, $sql, $user_id) {
+function gen_user_personal_data($tpl, $user_id) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	$query = "
 		SELECT
@@ -131,7 +131,10 @@ function gen_user_personal_data($tpl, $sql, $user_id) {
 	);
 }
 
-function update_user_personal_data($sql, $user_id) {
+function update_user_personal_data($user_id) {
+
+	$sql = EasySCP_Registry::get('Db');
+
 	$fname = clean_input($_POST['fname']);
 	$lname = clean_input($_POST['lname']);
 	$gender = $_POST['gender'];

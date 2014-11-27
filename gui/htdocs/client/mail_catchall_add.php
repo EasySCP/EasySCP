@@ -350,7 +350,7 @@ function create_catchall_mail_account($sql, $id) {
 
 				exec_query($sql, $query, array($mail_acc, '_no_', '_no_', $domain_id, $mail_type, $sub_id, $status, NULL, $mail_addr));
 
-				send_request();
+				send_request('130 MAIL '.$domain_id);
 				write_log($_SESSION['user_logged'] . ": adds new email catch all");
 				set_page_message(
 					tr('Catch all account scheduled for creation!'),
@@ -441,7 +441,7 @@ function create_catchall_mail_account($sql, $id) {
 
 			exec_query($sql, $query, array(implode(',', $mail_acc), '_no_', '_no_', $domain_id, $mail_type, $sub_id, $status, NULL, $mail_addr));
 
-			send_request();
+			send_request('130 MAIL '.$domain_id);
 			write_log($_SESSION['user_logged'] . ": adds new email catch all ");
 			set_page_message(
 				tr('Catch all account scheduled for creation!'),

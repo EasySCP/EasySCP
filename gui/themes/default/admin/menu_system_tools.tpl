@@ -22,21 +22,12 @@
 			<li><a href="sessions_manage.php">{$TR_MENU_MANAGE_SESSIONS}</a></li>
 		</ul>
 	</li>
-	{if isset($HOSTING_PLANS)}
-	<li>
-		<a href="hosting_plan.php" title="{$TR_MENU_HOSTING_PLANS}" class="hosting_plans icon_link">{$TR_MENU_HOSTING_PLANS}</a>
-		<ul>
-			<li><a href="hosting_plan.php">{$TR_MENU_OVERVIEW}</a></li>
-			<li><a href="hosting_plan_add.php">{$TR_MENU_ADD_HOSTING}</a></li>
-		</ul>
-	</li>
-	{/if}
 	<li class="menuLeft_expand">
 		<a href="system_info.php" title="{$TR_MENU_SYSTEM_TOOLS}" class="webtools_active icon_link">{$TR_MENU_SYSTEM_TOOLS}</a>
 		<ul>
 			<li><a href="system_info.php">{$TR_MENU_OVERVIEW}</a></li>
 			<li><a href="settings_maintenance_mode.php">{$TR_MAINTENANCEMODE}</a></li>
-            <li><a href="tools_config_ssl.php">{$TR_MANAGE_SSL}</a></li>
+			<li><a href="tools_config_ssl.php">{$TR_MANAGE_SSL}</a></li>
 			<li><a href="easyscp_updates.php">{$TR_MENU_EasySCP_UPDATE}</a></li>
 			<li><a href="easyscp_debugger.php">{$TR_MENU_EasySCP_DEBUGGER}</a></li>
 			<li><a href="rootkit_log.php">{$TR_MENU_ROOTKIT_LOG}</a></li>

@@ -26,6 +26,7 @@ class DaemonDomain extends DaemonDomainCommon {
 		switch ($data[0]) {
 			case 'domain':
 				System_Daemon::debug('Starting domain.');
+				$retVal = false;
 				if ($domainData = self::queryDomainDataByDomainID($data[1])) {
 					$retVal = self::handleDomain($domainData);
 					if ($retVal !== true){
@@ -297,7 +298,7 @@ class DaemonDomain extends DaemonDomainCommon {
 					return $msg . '<br />' . $retVal;
 				}
 
-				$retVal = DaemonDNS::DeleteDomainDNSEntries($domainData['domain_id']);
+				$retVal = DaemonDNS::DeleteAllDomainDNSEntries($domainData['domain_id']);
 				if ($retVal !== true) {
 					$msg = 'Deleting of domain dns entries failed';
 					System_Daemon::warning($msg);
@@ -441,6 +442,13 @@ class DaemonDomain extends DaemonDomainCommon {
 					return $msg . '<br />' . $retVal;
 				}
 
+				$retVal = DaemonDNS::AddDNSEntry($subDomainData);
+				if ($retVal !== true) {
+					$msg = 'Creating of subdomain dns entry failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
+
 				break;
 			case 'change':
 				$retVal = self::apacheWriteDomainConfig($subDomainData);
@@ -459,6 +467,14 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::warning($msg);
 					return $msg . '<br />' . $retVal;
 				}
+
+				$retVal = DaemonDNS::DeleteDNSEntry($subDomainData);
+				if ($retVal !== true) {
+					$msg = 'Deleting of subdomain dns entry failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
+
 				break;
 			case 'ok':
 				// Configuration has to be rewritten every time to ensure that
@@ -499,6 +515,14 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
+
+				$retVal = DaemonDNS::AddDNSEntry($subDomainAliasData);
+				if ($retVal !== true) {
+					$msg = 'Creating of subdomain-alias dns entry failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
+
 				break;
 			case 'change':
 				$retVal = self::apacheWriteDomainConfig($subDomainAliasData);
@@ -515,6 +539,14 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
+
+				$retVal = DaemonDNS::DeleteDNSEntry($subDomainAliasData);
+				if ($retVal !== true) {
+					$msg = 'Deleting of subdomain-alias dns entry failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
+
 				break;
 			case 'ok':
 				// Configuration has to be rewritten every time to ensure that

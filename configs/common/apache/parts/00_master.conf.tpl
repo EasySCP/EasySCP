@@ -18,6 +18,9 @@ NameVirtualHost [{$BASE_SERVER_IPv6}]:80
 {/if}
 {if {$BASE_PORT} == 443 }
 NameVirtualHost {$BASE_SERVER_IP}:443
+{if (isset($BASE_SERVER_IPv6))}
+NameVirtualHost [{$BASE_SERVER_IPv6}]:443
+{/if}
 {/if}
 
 {if isset($REDIRECT) && $REDIRECT == true }
@@ -70,7 +73,7 @@ NameVirtualHost {$BASE_SERVER_IP}:443
 	</IfModule>
 
 	<Directory {$GUI_ROOT_DIR}>
-		Options -Indexes Includes FollowSymLinks MultiViews
+		Options -Indexes +Includes +FollowSymLinks +MultiViews
 		AllowOverride None
 		Order allow,deny
 		Allow from all
@@ -143,7 +146,7 @@ NameVirtualHost {$BASE_SERVER_IP}:443
 	</IfModule>
 
 	<Directory {$GUI_ROOT_DIR}>
-		Options -Indexes Includes FollowSymLinks MultiViews
+		Options -Indexes +Includes +FollowSymLinks +MultiViews
 		AllowOverride None
 		Order allow,deny
 		Allow from all
@@ -156,7 +159,7 @@ NameVirtualHost {$BASE_SERVER_IP}:443
 		</Directory>
 		<Directory "{$PHP_STARTER_DIR}/master">
 		AllowOverride None
-		Options +ExecCGI MultiViews -Indexes
+		Options +ExecCGI +MultiViews -Indexes
 		Order allow,deny
 		Allow from all
 		</Directory>

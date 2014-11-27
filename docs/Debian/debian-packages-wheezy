@@ -9,6 +9,7 @@ chkrootkit
 dnsutils
 dovecot-common
 dovecot-imapd
+dovecot-managesieved
 dovecot-pop3d
 gamin
 gzip

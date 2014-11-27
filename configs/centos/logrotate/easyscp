@@ -34,12 +34,13 @@
   missingok
   compress
   delaycompress
-  prerotate
-    /etc/init.d/easyscp_daemon stop > /dev/null
-    /etc/init.d/easyscp_control stop > /dev/null
-  endscript
-  postrotate
-    /etc/init.d/easyscp_control start > /dev/null
-    /etc/init.d/easyscp_daemon start > /dev/null
-  endscript
+  copytruncate
+#  prerotate
+#    /etc/init.d/easyscp_daemon stop > /dev/null
+#    /etc/init.d/easyscp_control stop > /dev/null
+#  endscript
+#  postrotate
+#    /etc/init.d/easyscp_control start > /dev/null
+#    /etc/init.d/easyscp_daemon start > /dev/null
+#  endscript
 }

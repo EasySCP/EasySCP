@@ -62,10 +62,12 @@ if ($template == 'index2.tpl'){
 	$tpl->assign(
 		array(
 			'HOST_OS'		=> getOS($xml),
-			'HOST_FQHN'		=> (isset($_POST['HOST_FQHN'])) ? trim($_POST['HOST_FQHN']) : $_SERVER['SERVER_NAME'],
+			// 'HOST_FQHN'		=> (isset($_POST['HOST_FQHN'])) ? trim($_POST['HOST_FQHN']) : $_SERVER['SERVER_NAME'],
+			'HOST_FQHN'		=> (isset($_POST['HOST_FQHN'])) ? trim($_POST['HOST_FQHN']) : gethostbyaddr(gethostbyname($_SERVER['SERVER_NAME'])),
 			'HOST_IP'		=> (isset($_POST['HOST_IP'])) ? trim($_POST['HOST_IP']) : gethostbyname($_SERVER['SERVER_NAME']),
 			'HOST_IPv6'		=> (isset($_POST['HOST_IPv6'])) ? trim($_POST['HOST_IPv6']) : $xml->HOST_IPv6,
-			'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : 'admin.'.$_SERVER['SERVER_NAME'],
+			// 'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : 'admin.'.$_SERVER['SERVER_NAME'],
+			'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : 'admin.'.gethostbyaddr(gethostbyname($_SERVER['SERVER_NAME'])),
 
 			'PANEL_ADMIN'	=> (isset($_POST['PANEL_ADMIN'])) ? trim($_POST['PANEL_ADMIN']) : $xml->PANEL_ADMIN,
 			'PANEL_PASS'	=> (isset($_POST['PANEL_PASS'])) ? trim($_POST['PANEL_PASS']) : $xml->PANEL_PASS,
@@ -179,6 +181,9 @@ function checkMySQL($xml){
 		catch(PDOException $e){
 			set_page_message('Can´t connect to database. Please check your data and make sure that database is running!', 'error');
 		}
+
+		// TODO This user has insufficient privileges
+
 		if ($connectid != ''){
 			$xml->DB_HOST = trim($_POST['DB_HOST']);
 			$xml->DB_DATABASE = trim($_POST['DB_DATABASE']);
@@ -350,6 +355,9 @@ function getOS($xml){
 			} elseif(strpos($temp, 'VERSION_ID="12.04"')  !== false) {
 				// Ubuntu 12.04
 				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"12.04"}');
+			} elseif(strpos($temp, 'VERSION_ID="14.04"')  !== false) {
+				// Ubuntu 14.04
+				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"14.04"}');
 			} else {
 				// Unbekannt
 				$select = '';

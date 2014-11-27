@@ -47,7 +47,7 @@ if (isset($_POST['uaction']) && ('sub_data' === $_POST['uaction'])) {
 		user_goto('users.php?psi=last');
 	}
 
-	if (check_user_data($sql, $_SESSION['user_id'], $editid)) { // Save data to db
+	if (check_user_data($_SESSION['user_id'], $editid)) { // Save data to db
 		$_SESSION['dedit'] = "_yes_";
 		user_goto('users.php?psi=last');
 	}
@@ -369,14 +369,14 @@ function gen_editdomain_page($tpl) {
 
 /**
  * Check input data
- * @param EasySCP_Database $sql
  * @param int $reseller_id
  * @param int $user_id
  */
-function check_user_data($sql, $reseller_id, $user_id) {
+function check_user_data($reseller_id, $user_id) {
 
-	global $sub, $als, $mail, $ftp, $sql_db, $sql_user, $traff, $disk, $sql,
-		$domain_php, $domain_php_edit, $domain_cgi, $domain_ssl, $allowbackup, $domain_dns, $domain_expires;
+	$sql = EasySCP_Registry::get('Db');
+
+	global $sub, $als, $mail, $ftp, $sql_db, $sql_user, $traff, $disk, $domain_php, $domain_php_edit, $domain_cgi, $domain_ssl, $allowbackup, $domain_dns, $domain_expires;
 
 	$domain_expires_date  = (isset($_POST['dmn_expire_date'])) ? clean_input($_POST['dmn_expire_date']) : 0;
 	$domain_expires_never = (isset($_POST['dmn_expire_never'])) ? $_POST['dmn_expire_never'] : "off";

@@ -147,7 +147,6 @@ function get_sql_user_count() {
  */
 function get_admin_general_info($tpl) {
 
-
 	$tpl->assign(
 		array(
 			'TR_GENERAL_INFORMATION'=> tr('General information'),

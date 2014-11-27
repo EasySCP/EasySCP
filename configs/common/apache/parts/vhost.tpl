@@ -114,7 +114,7 @@
 		</Directory>
 		<Directory "{$PHP_STARTER_DIR}/{$MASTER_DOMAIN}">
 			AllowOverride None
-			Options +ExecCGI MultiViews -Indexes
+			Options +ExecCGI +MultiViews -Indexes
 			Order allow,deny
 			Allow from all
 		</Directory>

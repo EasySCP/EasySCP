@@ -1,7 +1,7 @@
 EasySCP 2.0.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2014-08-16
+2014-10-01
 	- Config:
 		* Add: Fields for SSL support
 		* Add: Oracle Linux support

@@ -59,7 +59,7 @@ function read_line(&$socket) {
  * @return string Daemon answer
  * @todo Remove error operator
  */
-function send_request($execute = 'legacy') {
+function send_request($execute) {
 
 	// @$socket = socket_create (AF_INET, SOCK_STREAM, 0);
 	@$socket = socket_create (AF_UNIX, SOCK_STREAM, 0);

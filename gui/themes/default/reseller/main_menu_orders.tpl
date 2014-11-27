@@ -1,1 +1,0 @@
-{include file='reseller/main_menu_general_information.tpl'}

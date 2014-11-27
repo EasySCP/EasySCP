@@ -100,19 +100,6 @@ while (!System_Daemon::isDying() && $runningOkay) {
 				$retVal = Null;
 			
 				switch ($Input) {
-					case 'legacy':
-
-						System_Daemon::info('Running classic Request Manager subprocess.');
-
-						try {
-							exec('perl ' . dirname(__FILE__) . '/../engine/easyscp-rqst-mngr', $output, $error);
-						}
-						catch(Exception $e){
-							System_Daemon::info($e->getMessage());
-						}
-
-						break;
-
 					case '.':
 
 						break;

@@ -20,10 +20,10 @@ smtp      inet  n       -       -       -       -       smtpd
 #  -o smtpd_sasl_auth_enable=yes
 #  -o smtpd_client_restrictions=permit_sasl_authenticated,reject
 #  -o milter_macro_daemon_name=ORIGINATING
-#smtps     inet  n       -       -       -       -       smtpd
+smtps     inet  n       -       -       -       -       smtpd
 #  -o syslog_name=postfix/smtps
-#  -o smtpd_tls_wrappermode=yes
-#  -o smtpd_sasl_auth_enable=yes
+  -o smtpd_tls_wrappermode=yes
+  -o smtpd_sasl_auth_enable=yes
 #  -o smtpd_client_restrictions=permit_sasl_authenticated,reject
 #  -o milter_macro_daemon_name=ORIGINATING
 # For AOL-Accounts
@@ -81,12 +81,6 @@ localhost:10025 inet  n -       n       -      -        smtpd
 #   -o smtpd_override_options=no_address_mappings
    -o mynetworks=127.0.0.0/8
    -o strict_rfc821_envelopes=yes
-
-# TLS - Activate, if TLS is avaiable/used
-smtps     inet  n       -       -       -       -       smtpd
-   -o smtpd_tls_wrappermode=yes
-   -o smtpd_sasl_auth_enable=yes
-#   -o smtpd_client_restrictions=permit_sasl_authenticated,reject
 #
 # ====================================================================
 # Interfaces to non-Postfix software. Be sure to examine the manual

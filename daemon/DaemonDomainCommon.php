@@ -519,7 +519,7 @@ class DaemonDomainCommon {
 	protected static function deleteAliasSubDomain($aliasSubDomainData) {
 
 		$fqdn = $aliasSubDomainData['subdomain_name'] . "." . $aliasSubDomainData['alias_name'];
-		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . "/$fqdn.conf";
+		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . "/$fqdn.custom";
 		$retVal = unlink($confFile);
 		if ($retVal !== true ) {
 			$msg = 'Failed to delete ' .$confFile;
@@ -632,14 +632,14 @@ class DaemonDomainCommon {
 	protected static function deleteSubDomain($subDomainData) {
 		$returnOk = true;
 		//delete directories
-		$homeDir = DaemonConfig::$cfg->APACHE_WWW_DIR . "/" . $subDomainData['domain_name'] . "/" . $subDomainData['mount'];
+		$homeDir = DaemonConfig::$cfg->APACHE_WWW_DIR . "/" . $subDomainData['domain_name'] . $subDomainData['mount'];
 		$cmd = DaemonConfig::$cmd->CMD_RM . " -rf $homeDir";
 		System_Daemon::debug($cmd);
 		exec($cmd);
 		System_Daemon::warning("Deleted $homeDir");
 
 		$fqdn = $subDomainData['subdomain_name'] . "." . $subDomainData['domain_name'];
-		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . "/$fqdn.conf";
+		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . "/$fqdn.custom";
 		if (!unlink($confFile)) {
 			$returnOk = false;
 		}

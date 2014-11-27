@@ -31,10 +31,10 @@ $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'reseller/personal_change.tpl';
 
 if (isset($_POST['uaction']) && $_POST['uaction'] === 'updt_data') {
-	update_reseller_personal_data($sql, $_SESSION['user_id']);
+	update_reseller_personal_data($_SESSION['user_id']);
 }
 
-gen_reseller_personal_data($tpl, $sql, $_SESSION['user_id']);
+gen_reseller_personal_data($tpl, $_SESSION['user_id']);
 
 
 // static page messages
@@ -80,11 +80,11 @@ unset_messages();
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  * @param int $user_id
  */
-function gen_reseller_personal_data($tpl, $sql, $user_id) {
+function gen_reseller_personal_data($tpl, $user_id) {
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	$query = "
 		SELECT
@@ -130,52 +130,48 @@ function gen_reseller_personal_data($tpl, $sql, $user_id) {
 	);
 }
 
-function update_reseller_personal_data($sql, $user_id) {
-	$fname		= clean_input($_POST['fname']);
-	$lname		= clean_input($_POST['lname']);
-	$gender		= $_POST['gender'];
-	$firm		= clean_input($_POST['firm']);
-	$zip		= clean_input($_POST['zip']);
-	$city		= clean_input($_POST['city']);
-	$state		= clean_input($_POST['state']);
-	$country	= clean_input($_POST['country']);
-	$street1	= clean_input($_POST['street1']);
-	$street2	= clean_input($_POST['street2']);
-	$email		= clean_input($_POST['email']);
-	$phone		= clean_input($_POST['phone']);
-	$fax		= clean_input($_POST['fax']);
+function update_reseller_personal_data($user_id) {
 
-	$query = "
+	$sql_param = array(
+		':fname'		=> clean_input($_POST['fname']),
+		':lname'		=> clean_input($_POST['lname']),
+		':firm'			=> clean_input($_POST['firm']),
+		':zip'			=> clean_input($_POST['zip']),
+		':city'			=> clean_input($_POST['city']),
+		':state'		=> clean_input($_POST['state']),
+		':country'		=> clean_input($_POST['country']),
+		':email'		=> clean_input($_POST['email']),
+		':phone'		=> clean_input($_POST['phone']),
+		':fax'			=> clean_input($_POST['fax']),
+		':street1'		=> clean_input($_POST['street1']),
+		':street2'		=> clean_input($_POST['street2']),
+		':gender'		=> $_POST['gender'],
+		':admin_id'		=> $user_id
+	);
+
+	$sql_query = "
 		UPDATE
-			`admin`
+			domain_aliasses
 		SET
-			`fname` = ?,
-			`lname` = ?,
-			`firm` = ?,
-			`zip` = ?,
-			`city` = ?,
-			`state` = ?,
-			`country` = ?,
-			`email` = ?,
-			`phone` = ?,
-			`fax` = ?,
-			`street1` = ?,
-			`street2` = ?,
-			`gender` = ?
+			fname	= :fname,
+			lname	= :lname,
+			firm	= :firm,
+			zip		= :zip,
+			city	= :city,
+			state	= :state,
+			country	= :country,
+			email	= :email,
+			phone	= :phone,
+			fax		= :fax,
+			street1	= :street1,
+			street2	= :street2,
+			gender	= :gender
 		WHERE
-			`admin_id` = ?
+			admin_id = :alias_id
 	";
 
-	// NXW: Unused variable so...
-	// $rs = exec_query($sql, $query, array($fname, $lname, $firm, $zip, $city, $state, $country, $email, $phone, $fax, $street1, $street2, $gender, $user_id));
-	exec_query(
-			$sql,
-			$query,
-			array(
-				$fname, $lname, $firm, $zip, $city, $state, $country, $email,
-				$phone, $fax, $street1, $street2, $gender, $user_id
-			)
-	);
+	DB::prepare($sql_query);
+	DB::execute($sql_param)->closeCursor();
 
 	set_page_message(tr('Personal data updated successfully!'), 'success');
 }

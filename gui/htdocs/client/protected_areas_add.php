@@ -53,7 +53,9 @@ $tpl->assign(
 		'TR_USER_AUTH'		=> tr('User auth'),
 		'TR_GROUP_AUTH'		=> tr('Group auth'),
 		'TR_AREA_NAME'		=> tr('Area name'),
+		'TR_PROTECT_IT'		=> tr('Protect it'),
 		'TR_UNPROTECT_IT'	=> tr('Unprotect it'),
+		'TR_AREA_NAME'		=> tr('Area name'),
 		'TR_CANCEL'			=> tr('Cancel'),
 		'TR_MANAGE_USRES'	=> tr('Manage users and groups'),
 		'CHOOSE_DIR'		=> tr('Choose dir')

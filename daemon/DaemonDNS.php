@@ -222,13 +222,48 @@ class DaemonDNS {
 	}
 
 	/**
+	 * Adds DNS entry when adding a suddomain
+	 *
+	 * @param array $domainData
+	 * @return boolean
+	 */
+	public static function AddDNSEntry($domainData) {
+		System_Daemon::debug('Starting "DaemonDNS::AddDNSEntry" subprocess.');
+
+		$sql_param = array(
+				'domain_id'		=> $domainData['domain_id'],
+				'domain_name'	=> $domainData['subdomain_name'].'.'.$domainData['domain_name'],
+				'domain_type'	=> 'A',
+				'domain_content'=> $domainData['ip_number'],
+				'domain_ttl'	=> '7200',
+				'domain_prio'	=> NULL
+		);
+
+		$sql_query = "
+			INSERT INTO
+				powerdns.records (domain_id, name, type, content, ttl, prio)
+			VALUES
+				(:domain_id, :domain_name, :domain_type, :domain_content, :domain_ttl, :domain_prio)
+			ON DUPLICATE KEY UPDATE
+			 	name = :domain_name;
+			";
+
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+
+		System_Daemon::debug('Finished "DaemonDNS::AddDNSEntry" subprocess.');
+
+		return true;
+	}
+
+	/**
 	 * Delete all DNS entries when removing a domain/alias
 	 *
 	 * @param int $dmn_id
 	 * @param boolean $dmn_alias Domain is an Alias
 	 * @return boolean
 	 */
-	public static function DeleteDomainDNSEntries($dmn_id, $dmn_alias = false) {
+	public static function DeleteAllDomainDNSEntries($dmn_id, $dmn_alias = false) {
 		System_Daemon::debug('Starting "DaemonDNS::DeleteDomainDNSEntries" subprocess.');
 
 		if (!$dmn_alias){
@@ -257,6 +292,35 @@ class DaemonDNS {
 		DB::execute($sql_param)->closeCursor();
 
 		System_Daemon::debug('Finished "DaemonDNS::DeleteDomainDNSEntries" subprocess.');
+
+		return true;
+	}
+
+	/**
+	 * Delete DNS entry when removing a suddomain
+	 *
+	 * @param array $domainData
+	 * @return boolean
+	 */
+	public static function DeleteDNSEntry($domainData) {
+		System_Daemon::debug('Starting "DaemonDNS::DeleteDNSEntry" subprocess.');
+
+		$sql_param = array(
+				'domain_name'	=> $domainData['subdomain_name'].'.'.$domainData['domain_name']
+		);
+
+		$sql_query = "
+			DELETE FROM
+				`powerdns`.`records`
+			WHERE
+				name = :domain_name;
+
+			";
+
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+
+		System_Daemon::debug('Finished "DaemonDNS::DeleteDNSEntry" subprocess.');
 
 		return true;
 	}

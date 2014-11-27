@@ -28,7 +28,7 @@ check_login(__FILE__);
 $cfg = EasySCP_Registry::get('Config');
 
 $tpl = EasySCP_TemplateEngine::getInstance();
-$template = 'client/ticket_closed.tpl';
+$template = 'common/ticket_closed.tpl';
 
 // dynamic page data.
 $reseller_id = $_SESSION['user_created_by'];

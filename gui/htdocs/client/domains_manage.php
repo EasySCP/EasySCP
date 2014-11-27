@@ -32,8 +32,8 @@ $template = 'client/domains_manage.tpl';
 
 // dynamic page data.
 
-gen_user_sub_list($tpl, $sql, $_SESSION['user_id']);
-gen_user_als_list($tpl, $sql, $_SESSION['user_id']);
+gen_user_sub_list($tpl, $_SESSION['user_id']);
+gen_user_als_list($tpl, $_SESSION['user_id']);
 
 // static page messages.
 gen_logged_from($tpl);
@@ -133,10 +133,11 @@ function gen_user_sub_forward($sub_id, $sub_status, $url_forward, $dmn_type) {
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  * @param int $user_id
  */
-function gen_user_sub_list($tpl, $sql, $user_id) {
+function gen_user_sub_list($tpl, $user_id) {
+
+	$sql = EasySCP_Registry::get('Db');
 
 	$domain_id = get_user_domain_id($sql, $user_id);
 
@@ -271,10 +272,11 @@ function gen_user_als_forward($als_id, $als_status, $url_forward) {
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  * @param int $user_id
  */
-function gen_user_als_list($tpl, $sql, $user_id) {
+function gen_user_als_list($tpl, $user_id) {
+
+	$sql = EasySCP_Registry::get('Db');
 
 	$domain_id = get_user_domain_id($sql, $user_id);
 

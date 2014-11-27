@@ -35,7 +35,7 @@ generate_page_data($tpl, $_SESSION['user_id'], $_SESSION['user_logged']);
 
 gen_messages_table($tpl, $_SESSION['user_id']);
 
-gen_system_message($tpl, $sql);
+gen_system_message($tpl);
 
 // static page messages
 gen_logged_from($tpl);
@@ -65,9 +65,11 @@ unset_messages();
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function gen_system_message($tpl, $sql) {
+function gen_system_message($tpl) {
+
+	$sql = EasySCP_Registry::get('Db');
+
 	$user_id = $_SESSION['user_id'];
 
 	$query = "
@@ -218,23 +220,14 @@ function generate_page_data($tpl, $reseller_id, $reseller_name) {
 	if ($rtraff_max > 0) {
 		if ($utraff_current > $rtraff_max) {
 			$tpl->assign('TR_TRAFFIC_WARNING', tr('You are exceeding your traffic limit!'));
-		} else {
-			$tpl->assign('TRAFF_WARN', '');
 		}
-	} else {
-		$tpl->assign('TRAFF_WARN', '');
 	}
 	
 	// warning HDD Usage
 	if ($rdisk_max > 0) {
 		if ($udisk_current > $rdisk_max) {
-			$tpl->assign('TR_DISK_WARNING', tr('You are exceeding your disk limit!')
-				);
-		} else {
-			$tpl->assign('DISK_WARN', '');
+			$tpl->assign('TR_DISK_WARNING', tr('You are exceeding your disk limit!'));
 		}
-	} else {
-		$tpl->assign('DISK_WARN', '');
 	}
 
 	$tpl->assign(

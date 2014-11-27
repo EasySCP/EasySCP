@@ -58,7 +58,7 @@ list(
 		$ftp_acc_cnt,
 		$sqld_acc_cnt,
 		$sqlu_acc_cnt
-	) = get_domain_running_props_cnt($sql, $dmn_props['domain_id']);
+	) = get_domain_running_props_cnt($dmn_props['domain_id']);
 
 $dtraff_pr = 0;
 $dmn_traff_usage = 0;
@@ -72,7 +72,7 @@ gen_traff_usage($tpl, $dmn_traff_usage * 1024 * 1024, $dmn_traff_limit, 400);
 
 gen_disk_usage($tpl, $dmn_props['domain_disk_usage'], $dmn_disk_limit, 400);
 
-gen_user_messages_label($tpl, $sql, $_SESSION['user_id']);
+gen_user_messages_label($tpl, $_SESSION['user_id']);
 
 check_user_permissions(
 	$tpl, $dmn_props['domain_sqld_limit'], $dmn_props['domain_sqlu_limit'], $dmn_props['domain_php'],
@@ -123,11 +123,12 @@ if (time() < $dmn_props['domain_expires']) {
 $tpl->assign(
 	array(
 		'ACCOUNT_NAME'		=> tohtml($account_name),
-		'DOMAIN_IP' 		=> get_user_domain_ip($sql, $dmn_props['domain_ip_id']),
+		'DOMAIN_IP' 		=> get_user_domain_ip($dmn_props['domain_ip_id']),
 		'DOMAIN_ALS_URL' 	=> 'http://' . $cfg->APACHE_SUEXEC_USER_PREF . $dmn_props['domain_uid'] . '.' . $cfg->BASE_SERVER_VHOST,
 		'MAIN_DOMAIN'		=> tohtml($dmn_props['domain_name']),
 		'DMN_EXPIRES_DATE'	=> $dmn_expires_date,
-		'MYSQL_SUPPORT'		=> ($dmn_props['domain_sqld_limit'] != -1 && $dmn_props['domain_sqlu_limit'] != -1) ? tr('Yes') . ' / MySQL ' . substr($sql->getAttribute(PDO::ATTR_SERVER_VERSION), 0, strpos($sql->getAttribute(PDO::ATTR_SERVER_VERSION), '-')) : tr('No'),
+		//'MYSQL_SUPPORT'		=> ($dmn_props['domain_sqld_limit'] != -1 && $dmn_props['domain_sqlu_limit'] != -1) ? tr('Yes') . ' / MySQL ' . substr($sql->getAttribute(PDO::ATTR_SERVER_VERSION), 0, strpos($sql->getAttribute(PDO::ATTR_SERVER_VERSION), '-')) : tr('No'),
+		'MYSQL_SUPPORT'		=> ($dmn_props['domain_sqld_limit'] != -1 && $dmn_props['domain_sqlu_limit'] != -1) ? tr('Yes') . ' / MySQL ' . DB::getInstance()->getAttribute(PDO::ATTR_SERVER_VERSION) : tr('No'),
 		'SUBDOMAINS'		=> gen_num_limit_msg($sub_cnt, $dmn_props['domain_subd_limit']),
 		'DOMAIN_ALIASES'	=> gen_num_limit_msg($als_cnt, $dmn_props['domain_alias_limit']),
 		'MAIL_ACCOUNTS'		=> gen_num_limit_msg($mail_acc_cnt, $dmn_props['domain_mailacc_limit']),
@@ -140,7 +141,7 @@ $tpl->assign(
 // static page messages.
 gen_logged_from($tpl);
 
-gen_system_message($tpl, $sql);
+gen_system_message($tpl);
 
 check_permissions($tpl);
 
@@ -196,9 +197,9 @@ function gen_num_limit_msg($num, $limit) {
 
 /**
  * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  */
-function gen_system_message($tpl, $sql) {
+function gen_system_message($tpl) {
+	$sql = EasySCP_Registry::get('Db');
 	$user_id = $_SESSION['user_id'];
 
 	$query = "
@@ -424,7 +425,9 @@ function make_traff_usage($domain_id) {
  * @param EasySCP_Database $sql
  * @param int $user_id
  */
-function gen_user_messages_label($tpl, $sql, $user_id) {
+function gen_user_messages_label($tpl, $user_id) {
+	$sql = EasySCP_Registry::get('Db');
+
 	$query = "
 		SELECT
 			COUNT(`ticket_id`) AS cnum

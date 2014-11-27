@@ -28,6 +28,7 @@
 		</ul>
 	</li>
 	{/if}
+	<!--
 	<li>
 		<a href="orders.php" title="{$TR_MENU_ORDERS}" class="purchasing icon_link">{$TR_MENU_ORDERS}</a>
 		<ul>
@@ -36,6 +37,7 @@
 			<li><a href="order_email.php">{$TR_MENU_ORDER_EMAIL}</a></li>
 		</ul>
 	</li>
+	-->
 	<li class="menuLeft_expand">
 		<a href="user_statistics.php" title="{$TR_MENU_DOMAIN_STATISTICS}" class="statistics_active icon_link">{$TR_MENU_DOMAIN_STATISTICS}</a>
 		<ul>

@@ -28,7 +28,7 @@ check_login(__FILE__);
 $cfg = EasySCP_Registry::get('Config');
 
 $tpl = EasySCP_TemplateEngine::getInstance();
-$template = 'reseller/ticket_create.tpl';
+$template = 'common/ticket_create.tpl';
 
 // dynamic page data
 

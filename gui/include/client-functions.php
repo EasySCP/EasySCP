@@ -365,7 +365,9 @@ function get_domain_running_sql_acc_cnt($sql, $domain_id) {
 	return array($sqld_acc_cnt, $sqlu_acc_cnt);
 }
 
-function get_domain_running_props_cnt($sql, $domain_id) {
+function get_domain_running_props_cnt($domain_id) {
+
+	$sql = EasySCP_Registry::get('Db');
 
 	$sub_cnt = get_domain_running_sub_cnt($sql, $domain_id);
 	$als_cnt = get_domain_running_als_cnt($sql, $domain_id);
@@ -931,7 +933,9 @@ function mount_point_exists($dmn_id, $mnt_point) {
 	return false;
 }
 
-function get_user_domain_ip($sql, $dmn_ip_id) {
+function get_user_domain_ip($dmn_ip_id) {
+
+	$sql = EasySCP_Registry::get('Db');
 
 	$query = "
 		SELECT

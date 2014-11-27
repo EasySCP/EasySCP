@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `records` (
 -- Table structure for table `supermasters`
 --
 CREATE TABLE IF NOT EXISTS `supermasters` (
-  `ip` VARCHAR(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ip` VARCHAR(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `nameserver` VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `account` VARCHAR(40) COLLATE utf8_unicode_ci DEFAULT NULL
 );

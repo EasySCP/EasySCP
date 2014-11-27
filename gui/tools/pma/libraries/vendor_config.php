@@ -73,16 +73,4 @@ define('GETTEXT_INC', './libraries/php-gettext/gettext.inc');
  * eg. /usr/share/php/tcpdf/tcpdf.php.
  */
 define('TCPDF_INC', './libraries/tcpdf/tcpdf.php');
-
-/**
- * Path to the phpseclib. Useful when you want to use system phpseclib.
- */
-define('PHPSECLIB_INC_DIR', './libraries/phpseclib/');
-
-/**
- * Avoid referring to nonexistent files (causes warnings when open_basedir
- * is used)
- */
-define('K_PATH_IMAGES', '');
-
 ?>
