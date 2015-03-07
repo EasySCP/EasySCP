@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 	EasySCP a Virtual Hosting Control Panel
-	Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+	Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
 
 	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -29,6 +29,8 @@
 	<DATABASE_NAME />
 	<DATABASE_PASSWORD />
 	<DATABASE_USER />
+	<DATABASE_DEFAULT_CHARACTER_SET>utf8</DATABASE_DEFAULT_CHARACTER_SET>
+	<DATABASE_DEFAULT_COLLATE>utf8_unicode_ci</DATABASE_DEFAULT_COLLATE>
 
 	<!--
 		Main variables
@@ -59,9 +61,8 @@
 	-->
 	<FTPD_CONF_DIR>/etc/proftpd/conf.d</FTPD_CONF_DIR>
 	<FTPD_CONF_FILE>/etc/proftpd/proftpd.conf</FTPD_CONF_FILE>
+	<FTPD_MODULES_CONF_FILE>/etc/proftpd/modules.conf</FTPD_MODULES_CONF_FILE>
 	<FTPD_SQL_CONF_FILE>/etc/proftpd/sql.conf</FTPD_SQL_CONF_FILE>
-	<FTPD_LOG_DIR>/var/log/proftpd</FTPD_LOG_DIR>
-	<FTPD_TransferLog>/var/log/proftpd/xferlog</FTPD_TransferLog>
 
 	<!--
 		PowerDNS data
@@ -93,7 +94,7 @@
 	<APACHE_GROUP>www-data</APACHE_GROUP>
 	<APACHE_LOG_DIR>/var/log/apache2</APACHE_LOG_DIR>
 	<APACHE_MODS_DIR>/etc/apache2/mods-available</APACHE_MODS_DIR>
-	<APACHE_ROTATELOGS>/usr/sbin/rotatelogs</APACHE_ROTATELOGS>
+	<APACHE_ROTATELOGS />
 	<APACHE_SITES_DIR>/etc/apache2/sites-available</APACHE_SITES_DIR>
 	<APACHE_SUEXEC_MIN_GID>2000</APACHE_SUEXEC_MIN_GID>
 	<APACHE_SUEXEC_MIN_UID>2000</APACHE_SUEXEC_MIN_UID>

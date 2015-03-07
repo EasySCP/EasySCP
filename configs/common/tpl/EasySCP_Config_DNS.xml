@@ -9,10 +9,8 @@
 	@link 		http://www.easyscp.net
 	@author		EasySCP Team
 -->
-<EasySCP_Config_PMA>
-	<PMA_BLOWFISH />
-	<PMA_USER />
-	<PMA_PASSWORD />
-	<DATABASE_HOST />
-	<TMP_DIR />
-</EasySCP_Config_PMA>
+<EasySCP_Config_DNS>
+	<PDNS_USER />
+	<PDNS_PASS />
+	<HOSTNAME />
+</EasySCP_Config_DNS>
