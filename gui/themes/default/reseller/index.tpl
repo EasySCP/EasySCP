@@ -46,18 +46,6 @@
 		<td>{$SQL_DB_MSG}</td>
 	</tr>
 	<tr>
-		<td>{$MAIL_ACCOUNTS}</td>
-		<td>{$MAIL_MSG}</td>
-	</tr>
-	<tr>
-		<td>{$TR_FTP_ACCOUNTS}</td>
-		<td>{$FTP_MSG}</td>
-	</tr>
-	<tr>
-		<td>{$SQL_DATABASES}</td>
-		<td>{$SQL_DB_MSG}</td>
-	</tr>
-	<tr>
 		<td>{$SQL_USERS}</td>
 		<td>{$SQL_USER_MSG}</td>
 	</tr>

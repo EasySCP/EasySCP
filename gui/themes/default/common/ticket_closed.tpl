@@ -17,7 +17,12 @@
 	});
 
 	function action_delete(url, subject) {
-		return confirm(sprintf("{$TR_MESSAGE_DELETE}", subject));
+		if (confirm(sprintf("{$TR_MESSAGE_DELETE}", subject)))
+		{
+			document.location.href = url;
+		} else {
+			return false;
+		}
 	}
 	/* ]]> */
 </script>
