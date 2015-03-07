@@ -15,8 +15,6 @@
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-archive/
 */
-
-$labels = array();
 $labels['buttontext'] = 'Arşiv';
 $labels['buttontitle'] = 'Bu postayı arşivle';
 $labels['archived'] = 'Başarıyla arşivlendi';
@@ -24,11 +22,10 @@ $labels['archivedreload'] = 'Başarıyla arşivlendi. Yeni arşiv dosyalarını 
 $labels['archiveerror'] = 'Bazı mesajlar arşivlenemedi.';
 $labels['archivefolder'] = 'Arşiv';
 $labels['settingstitle'] = 'Arşiv';
-$labels['archivetype'] = 'Arşivi bunla böl';
+$labels['archivetype'] = 'Arşivi bununla böl';
 $labels['archivetypeyear'] = 'Yıl (Arşiv/2012)';
 $labels['archivetypemonth'] = 'Ay(Arşiv/2012/06)';
 $labels['archivetypefolder'] = 'Özgün dosya';
 $labels['archivetypesender'] = 'E-Posta Göndericisi';
 $labels['unkownsender'] = 'bilinmeyen';
-
 ?>

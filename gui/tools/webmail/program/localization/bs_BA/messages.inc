@@ -5,7 +5,7 @@
  | localization/<lang>/messages.inc                                      |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2014, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -15,8 +15,6 @@
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/messages/
 */
-
-$messages = array();
 $messages['errortitle']  = 'Desila se greška!';
 $messages['loginfailed']  = 'Prijava nije uspjela.';
 $messages['cookiesdisabled'] = 'Vaš preglednik ne prihvata kolačiće.';
@@ -24,7 +22,9 @@ $messages['sessionerror'] = 'Vaša sesija je neispravna ili je istekla.';
 $messages['storageerror'] = 'Neuspješna konekcija na IMAP server';
 $messages['servererror'] = 'Serverska greška!';
 $messages['servererrormsg'] = 'Serverska greška: $msg';
+$messages['connerror'] = 'Greška u povezivanju (Nije moguće kontaktirati server)!';
 $messages['dberror'] = 'Greška u bazi podataka!';
+$messages['windowopenerror'] = 'Popup prozor je blokiran!';
 $messages['requesttimedout'] = 'Zahtjev je istekao';
 $messages['errorreadonly'] = 'Nije moguće izvršiti operaciju. Folder je samo za čitanje.';
 $messages['errornoperm'] = 'Nije moguće izvršiti operaciju. Pristup je odbijen.';
@@ -34,7 +34,8 @@ $messages['invalidrequest'] = 'Neispravan zahtjev! Podaci nisu sačuvani.';
 $messages['invalidhost'] = 'Neispravno ime servera.';
 $messages['nomessagesfound'] = 'Nema poruka u ovom sandučetu.';
 $messages['loggedout'] = 'Uspješno ste se odjavili. Doviđenja!';
-$messages['mailboxempty'] = 'Sanduče je prazno.';
+$messages['mailboxempty'] = 'Sanduče je prazno';
+$messages['nomessages'] = 'Nema poruka';
 $messages['refreshing'] = 'Osvježavam...';
 $messages['loading'] = 'Učitavanje...';
 $messages['uploading'] = 'Dodajem datoteku...';
@@ -46,6 +47,8 @@ $messages['messagesent'] = 'Poruka je uspješno poslana.';
 $messages['savingmessage'] = 'Poruka se snima...';
 $messages['messagesaved'] = 'Poruka je uspješno sačuvana u skicama.';
 $messages['successfullysaved'] = 'Uspješno sačuvano.';
+$messages['savingresponse'] = 'Snimam teksta odgovora...';
+$messages['deleteresponseconfirm'] = 'Da li zaista želite obrisati tekst ovog odgovora?';
 $messages['addedsuccessfully'] = 'Kontakt uspješno dodan u adresar.';
 $messages['contactexists'] = 'Kontakt sa ovom email adresom već postoji u adresaru.';
 $messages['contactnameexists'] = 'Kontakt s tim imenom već postoji.';
@@ -82,6 +85,7 @@ $messages['norecipientwarning'] = 'Molimo vas da upišete barem jednog primaoca.
 $messages['nosubjectwarning']  = 'Polje \'Naslov\' je prazno. Želite li unijeti naslov?';
 $messages['nobodywarning'] = 'Želite li poslati poruku bez teksta?';
 $messages['notsentwarning'] = 'Poruka nije poslana. Želite li odbaciti ovu poruku?';
+$messages['restoresavedcomposedata'] = 'Pronađena je prethodno napisana poruka koja nije poslana..\n\nTema:$subject\nSnimljeno: $date\n\nŽelite li vratiti ovu poruku?';
 $messages['noldapserver'] = 'Molimo vas da odaberete LDAP server za pretragu.';
 $messages['nosearchname'] = 'Molimo vas da upišete ime kontakta ili email adresu.';
 $messages['notuploadedwarning'] = 'Neki od priloga još nisu dodani na server. Molimo vas da sačekate ili da otkažete dodavanje.';
@@ -90,6 +94,7 @@ $messages['contactsearchsuccessful'] = '$nr kontakata je pronađeno.';
 $messages['searchnomatch'] = 'Traženi pojam nije pronađen ni u jednoj poruci.';
 $messages['searching'] = 'Pretražujem...';
 $messages['checking'] = 'Provjeravam...';
+$messages['stillsearching'] = 'I dalje pretražujem...';
 $messages['nospellerrors'] = 'Pravopisne greške nisu pronađene.';
 $messages['folderdeleted'] = 'Folder je uspješno obrisan.';
 $messages['foldersubscribed'] = 'Uspješno ste pretplaćeni na folder.';
@@ -101,13 +106,16 @@ $messages['converting'] = 'Uklanjam formatiranje...';
 $messages['messageopenerror'] = 'Nije moguće učitati poruku sa servera.';
 $messages['fileuploaderror'] = 'Dodavanje datoteke nije uspjelo.';
 $messages['filesizeerror'] = 'Datoteka je prevelika. Maksimalna veličina je $size.';
-$messages['copysuccess'] = 'Uspješno kopirano $n adresa.';
-$messages['copyerror'] = 'Nije moguće kopirati adrese.';
+$messages['copysuccess'] = 'Uspješno kopirano $nr kontakata.';
+$messages['movesuccess'] = 'Uspješno premješteno $nr kontakata.';
+$messages['copyerror'] = 'Nije moguće kopirati kontakte.';
+$messages['moveerror'] = 'Nije moguće premjestiti kontakte.';
 $messages['sourceisreadonly'] = 'Ovaj izvor adresa je samo za čitanje.';
 $messages['errorsavingcontact'] = 'Nije moguće sačuvati kontakt adresu.';
 $messages['movingmessage'] = 'Premještam poruke...';
 $messages['copyingmessage'] = 'Kopiram poruke...';
 $messages['copyingcontact'] = 'Kopiram kontakte...';
+$messages['movingcontact'] = 'Premještam kontakte...';
 $messages['deletingmessage'] = 'Brišem poruke...';
 $messages['markingmessage'] = 'Označavam poruke...';
 $messages['addingmember'] = 'Dodajem kontakte u grupu...';
@@ -126,9 +134,11 @@ $messages['importwait'] = 'Uvoz u toku, molimo sačekajte...';
 $messages['importformaterror'] = 'Uvoz nije uspio! Dodana datoteka nije u ispravnom formatu za uvoz podataka.';
 $messages['importconfirm'] = '<b>Uspješno je uvezeno $inserted kontakata</b>';
 $messages['importconfirmskipped'] = '<b>Preskočeno $skipped postojećih unosa</b>';
+$messages['importmessagesuccess'] = 'Uspješno uvezeno $nr poruka';
+$messages['importmessageerror'] = 'Uvoz nije uspio! Dodana datoteke nije ispravna datoteka sa porukama';
 $messages['opnotpermitted'] = 'Operacija nije dozvoljena!';
 $messages['nofromaddress'] = 'U odabrani identitet nije upisana email adresa.';
-$messages['editorwarning'] = 'Prebacivanje u obični tekstualni uređivač će prouzrokovati gubljenje formatiranja teksta. Želite li nastaviti?';
+$messages['editorwarning'] = 'Promjenom uređivača biste mogli izgubiti formatiranje teksta. Želite li nastaviti?';
 $messages['httpreceivedencrypterror'] = 'Dogodila se fatalna konfiguracijska greška. Odmah kontaktirajte administratora. <b>Vaša poruka se ne poslati.</b>';
 $messages['smtpconnerror'] = 'SMTP greška ($code): Veza sa serverom nije uspostavljena.';
 $messages['smtpautherror'] = 'SMTP greška ($code): Autentifikacija nije uspjela.';
@@ -167,5 +177,4 @@ $messages['parentnotwritable'] = 'Nije moguće kreirati/premjestiti folder u oda
 $messages['messagetoobig'] = 'Dio poruke je prevelik za procesiranje.';
 $messages['attachmentvalidationerror'] = 'UPOZORENJE! Ovaj prilog je sumnjiv zbog toga što se njegov tip ne poklapa s tipom navedenim u poruci. Ako nemate povjerenja u pošiljaova, ne biste trebali da otvarate ovaj prilog u vašem browseru jer bi on mogao da sadrži zlonamjerni sadržaj.<br/><br/><em>Očekivano: $expected; pronađeno: $detected</em>';
 $messages['noscriptwarning'] = 'Upozorenje! Ovom webmail servisu je potreban Javascript! Da biste ga mogli koristiti, prvo je potrebno da omogućite Javascript u postavkama vašeg browsera.';
-
 ?>

@@ -15,15 +15,14 @@
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-newmail_notifier/
 */
-
-$labels['basic'] = 'Display browser notifications on new message';
-$labels['desktop'] = 'Display desktop notifications on new message';
+$labels['basic'] = 'Diskouez kemennoù ar merdeer evit kemennadennoù nevez';
+$labels['desktop'] = 'Diskouez kemennoù ar burev evit kemennadennoù nevez';
 $labels['sound'] = 'Seniñ ar son pa kemennadenn nevez';
-$labels['test'] = 'Test';
+$labels['test'] = 'Taol-arnod';
 $labels['title'] = 'Kemennadenn nevez !';
-$labels['body'] = 'You\'ve received a new message.';
-$labels['testbody'] = 'This is a test notification.';
-$labels['desktopdisabled'] = 'Desktop notifications are disabled in your browser.';
-$labels['desktopunsupported'] = 'Your browser does not support desktop notifications.';
-
+$labels['body'] = 'Resevet ho p\'eus ur postel nevez';
+$labels['testbody'] = 'An dra se a zo un taol arnod kemenn';
+$labels['desktopdisabled'] = 'Diweredekaet eo kemennoù ar burev en ho merdeer.';
+$labels['desktopunsupported'] = 'N\'eo ket skoret kemennoù ar burev gant ho merdeer.';
+$labels['desktoptimeout'] = 'Serr burev kemen';
 ?>

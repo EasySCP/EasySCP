@@ -15,21 +15,20 @@
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-acl/
 */
-
 $labels['sharing'] = 'Jagamine';
 $labels['myrights'] = 'Ligipääsuõigused';
 $labels['username'] = 'Kasutaja:';
 $labels['advanced'] = 'laiendatud režiim';
 $labels['newuser'] = 'Lisa sissekanne';
+$labels['editperms'] = 'Muuda õigusi';
 $labels['actions'] = 'Ligipääsuõiguste toimingud...';
 $labels['anyone'] = 'Kõik kasutajad';
 $labels['anonymous'] = 'Külalised (anonüümsed)';
 $labels['identifier'] = 'Tuvastaja';
-
-$labels['acll'] = 'Lookup';
+$labels['acll'] = 'Ülevaade';
 $labels['aclr'] = 'Lugeda kirju';
-$labels['acls'] = 'Keep Seen state';
-$labels['aclw'] = 'Write flags';
+$labels['acls'] = 'Hoia nähtud olekut';
+$labels['aclw'] = 'Salvesta lipud';
 $labels['acli'] = 'Sisesta (kopeeri)';
 $labels['aclp'] = 'Postita';
 $labels['aclc'] = 'Luua alamkaustu';
@@ -39,14 +38,13 @@ $labels['aclt'] = 'Kustutada kirju';
 $labels['acle'] = 'Eemalda';
 $labels['aclx'] = 'Kustutada kausta';
 $labels['acla'] = 'Administreerida';
-
+$labels['acln'] = 'Annoteeri kirja';
 $labels['aclfull'] = 'Täis kontroll';
 $labels['aclother'] = 'Muu';
 $labels['aclread'] = 'Loe';
 $labels['aclwrite'] = 'Kirjuta';
 $labels['acldelete'] = 'Kustuta';
-
-$labels['shortacll'] = 'Lookup';
+$labels['shortacll'] = 'Ülevaade';
 $labels['shortaclr'] = 'Loe';
 $labels['shortacls'] = 'Säilita';
 $labels['shortaclw'] = 'Kirjuta';
@@ -59,41 +57,42 @@ $labels['shortaclt'] = 'Kustuta';
 $labels['shortacle'] = 'Eemalda';
 $labels['shortaclx'] = 'Kausta kustutamine';
 $labels['shortacla'] = 'Administreerida';
-
+$labels['shortacln'] = 'Annoteeri';
 $labels['shortaclother'] = 'Muu';
 $labels['shortaclread'] = 'Loe';
 $labels['shortaclwrite'] = 'Kirjuta';
 $labels['shortacldelete'] = 'Kustuta';
-
 $labels['longacll'] = 'See kaust on nimekirjas nähtav ja seda saab tellida';
 $labels['longaclr'] = 'Kausta saab lugemiseks avada';
-$labels['longacls'] = 'Messages Seen flag can be changed';
-$labels['longaclw'] = 'Messages flags and keywords can be changed, except Seen and Deleted';
-$labels['longacli'] = 'Messages can be written or copied to the folder';
-$labels['longaclp'] = 'Messages can be posted to this folder';
-$labels['longaclc'] = 'Folders can be created (or renamed) directly under this folder';
-$labels['longaclk'] = 'Folders can be created (or renamed) directly under this folder';
-$labels['longacld'] = 'Messages Delete flag can be changed';
-$labels['longaclt'] = 'Messages Delete flag can be changed';
+$labels['longacls'] = 'Kirja loetuse lippu saab muuta';
+$labels['longaclw'] = 'Kirja lippe ja otsingusõnu saab muuta, väljaarvatud loetud ja kustutatud';
+$labels['longacli'] = 'Kirju saab salvestada ja kopeerida antud kausta';
+$labels['longaclp'] = 'Kirju saab postitada antud kausta';
+$labels['longaclc'] = 'Kaustasi saab luua (või ümber nimetada) otse siia kausta alla.';
+$labels['longaclk'] = 'Kaustu saab luua (või ümber nimetada) otse siia kausta alla';
+$labels['longacld'] = 'Kirja kustutamis lippu saab muuta';
+$labels['longaclt'] = 'Kirja kustutamis lippu saab muuta';
 $labels['longacle'] = 'Kirju saab eemaldada';
 $labels['longaclx'] = 'Seda kausta ei saa kustutada ega ümber nimetada';
 $labels['longacla'] = 'Selle kausta ligipääsuõigusi saab muuta';
-
+$labels['longacln'] = 'Kirja jagatud metainfot (annotatsioonid) saab muuta';
 $labels['longaclfull'] = 'Täielik kontroll koos kaustade haldamisega';
 $labels['longaclread'] = 'Kausta saab lugemiseks avada';
-$labels['longaclwrite'] = 'Messages can be marked, written or copied to the folder';
+$labels['longaclwrite'] = 'Kirju saab märgistada, salvestada või kopeerida kausta';
 $labels['longacldelete'] = 'Kirju saab kustutada';
-
+$labels['longaclother'] = 'Muud ligipääsu õigused';
+$labels['ariasummaryacltable'] = 'Nimekir ligipääsu õigustest';
+$labels['arialabelaclactions'] = 'Näita tegevusi';
+$labels['arialabelaclform'] = 'Ligipääsu õiguste vorm';
 $messages['deleting'] = 'Ligipääsuõiguste kustutamine...';
 $messages['saving'] = 'Ligipääsuõiguste salvestamine...';
 $messages['updatesuccess'] = 'Ligipääsuõigused on muudetud';
 $messages['deletesuccess'] = 'Ligipääsuõigused on kustutatud';
 $messages['createsuccess'] = 'Ligipääsuõigused on lisatud';
-$messages['updateerror'] = 'Unable to update access rights';
+$messages['updateerror'] = 'Ligipääsuõiguste uuendamine nurjus';
 $messages['deleteerror'] = 'Ligipääsuõiguste kustutamine nurjus';
 $messages['createerror'] = 'Ligipääsuõiguste andmine nurjus';
 $messages['deleteconfirm'] = 'Oled sa kindel, et sa soovid valitudkasutaja(te) õiguseid kustutada?';
 $messages['norights'] = 'Õigusi pole määratud!';
 $messages['nouser'] = 'Kasutajanime pole määratud!';
-
 ?>

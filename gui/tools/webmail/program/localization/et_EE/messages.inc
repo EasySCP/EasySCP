@@ -5,7 +5,7 @@
  | localization/<lang>/messages.inc                                      |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2014, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -15,8 +15,6 @@
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/messages/
 */
-
-$messages = array();
 $messages['errortitle']  = 'Ilmnes tõrge!';
 $messages['loginfailed']  = 'Sisselogimine ebaõnnestus';
 $messages['cookiesdisabled'] = 'Sinu veebilehitseja ei võta präänikuid vastu';
@@ -24,7 +22,9 @@ $messages['sessionerror'] = 'Sinu seanss on aegunud või vigane';
 $messages['storageerror'] = 'Ei õnnestunud IMAP serveriga ühendust luua';
 $messages['servererror'] = 'Serveri tõrge!';
 $messages['servererrormsg'] = 'Serveri tõrge: $msg';
+$messages['connerror'] = 'Viga ühenduses (Ei suutnud luua ühendust serveriga)';
 $messages['dberror'] = 'Andmebaasi tõrge!';
+$messages['windowopenerror'] = 'Hüpikaken blokeeriti!';
 $messages['requesttimedout'] = 'Päring aegus';
 $messages['errorreadonly'] = 'Operatsioon nurjus. Kaustale on vaid lugemisõigus';
 $messages['errornoperm'] = 'Operatsioon nurjus. Ligipääsu õigused puuduvad';
@@ -34,7 +34,8 @@ $messages['invalidrequest'] = 'Lubamatu päring! Andmeid ei salvestatud.';
 $messages['invalidhost'] = 'Lubamatu serveri nimi.';
 $messages['nomessagesfound'] = 'Postkast paistab tühi olevat';
 $messages['loggedout'] = 'Sinu seanss on edukalt lõpetatud. Nägemiseni!';
-$messages['mailboxempty'] = 'Postkast on tühi';
+$messages['mailboxempty'] = 'Kirjakast on tühi';
+$messages['nomessages'] = 'Pole teateid';
 $messages['refreshing'] = 'Värskendamine…';
 $messages['loading'] = 'Laadin...';
 $messages['uploading'] = 'Laadin faili üles...';
@@ -46,6 +47,8 @@ $messages['messagesent'] = 'Kiri edukalt saadetud';
 $messages['savingmessage'] = 'Salvestan kirja...';
 $messages['messagesaved'] = 'Kiri salvestatud mustanditesse';
 $messages['successfullysaved'] = 'Edukalt salvestatud';
+$messages['savingresponse'] = 'Salvestan vastuse teksti...';
+$messages['deleteresponseconfirm'] = 'Soovid valitud vastuse kustutada?';
 $messages['addedsuccessfully'] = 'Kontakt lisati edukalt aadressiraamatusse';
 $messages['contactexists'] = 'Sellise e-posti aadressiga kontakt on juba olemas';
 $messages['contactnameexists'] = 'Sama nimega kontakt on juba olemas.';
@@ -57,7 +60,7 @@ $messages['contactsearchonly'] = 'Sisesta otsingusõna kontaktide leidmiseks';
 $messages['sendingfailed'] = 'Kirja saatmine ebaõnnestus';
 $messages['senttooquickly'] = 'Palun oota enne selle kirja saatmist $sec sekundit.';
 $messages['errorsavingsent'] = 'Saadetud kirja salvestamisel ilmnes tõrge';
-$messages['errorsaving'] = 'Salvestamise ajal ilmnes viga';
+$messages['errorsaving'] = 'Salvestamisel ilmnes tõrge.';
 $messages['errormoving'] = 'Ei suutnud seda kirja liigutada';
 $messages['errorcopying'] = 'Kirju ei õnnestunud kopeerida';
 $messages['errordeleting'] = 'Ei suutnud seda kirja kustutada';
@@ -82,6 +85,7 @@ $messages['norecipientwarning'] = 'Palun sisesta vähemalt üks adressaat';
 $messages['nosubjectwarning']  = 'Väli „Pealkiri“ on tühi. Soovid selle ära täita?';
 $messages['nobodywarning'] = 'Saadan selle kirja ilma tekstita?';
 $messages['notsentwarning'] = 'Kirja saatmine nurjus. Soovid selle ära visata?';
+$messages['restoresavedcomposedata'] = 'Eelnevalt loodud aga saatmatta kiri leiti.\n\nTeema: $subject\nSalvestatud: $date\n\nKas sa soovid antud kirja taastada?';
 $messages['noldapserver'] = 'Palun vali otsinguks LDAPi server';
 $messages['nosearchname'] = 'Palun sisesta kontakti nimi või e-posti aadress';
 $messages['notuploadedwarning'] = 'Kõiki manuseid ei ole veel üles laaditud. Palun oota või tühista üleslaadimine.';
@@ -90,6 +94,7 @@ $messages['contactsearchsuccessful'] = 'Leiti $nr kontakti.';
 $messages['searchnomatch'] = 'Otsingule vastavaid kirju ei leitud';
 $messages['searching'] = 'Otsin...';
 $messages['checking'] = 'Kontrollin...';
+$messages['stillsearching'] = 'Otsin....';
 $messages['nospellerrors'] = 'Õigekirjavigu ei leitud';
 $messages['folderdeleted'] = 'Kausta kustutamine õnnestus';
 $messages['foldersubscribed'] = 'Kausta tellimine õnnestus';
@@ -101,13 +106,16 @@ $messages['converting'] = 'Eemaldan kirjast vormindust...';
 $messages['messageopenerror'] = 'Kirjade serverist laadimine ebaõnnestus';
 $messages['fileuploaderror'] = 'Faili üleslaadimine ebaõnnestus';
 $messages['filesizeerror'] = 'Üleslaetava faili suurus ületab maksimaalse suuruse $size';
-$messages['copysuccess'] = '$nr aadressi edukalt kopeeritud';
-$messages['copyerror'] = 'Ühegi aadressi kopeerimine ei õnnestunud';
+$messages['copysuccess'] = '$nr kontakti edukalt kopeeritud.';
+$messages['movesuccess'] = '$nr kontakti edukalt liigutatud.';
+$messages['copyerror'] = 'Ühegi kontakti kopeerimine ei õnnestunud.';
+$messages['moveerror'] = 'Ühegi kontakti liigutamine ei õnnestunud.';
 $messages['sourceisreadonly'] = 'Aadressi asukohas puuduvad kirjutusõigused';
 $messages['errorsavingcontact'] = 'Kontakti aadressi salvestamine ebaõnnestus';
 $messages['movingmessage'] = 'Liigutan kirja...';
 $messages['copyingmessage'] = 'Kopeerin kirja...';
 $messages['copyingcontact'] = 'Kontakti(de) kopeerimine…';
+$messages['movingcontact'] = 'Kontakti(de) liigutamine…';
 $messages['deletingmessage'] = 'Kustutan kirja...';
 $messages['markingmessage'] = 'Märgin kirja...';
 $messages['addingmember'] = 'Kontakti(de) gruppi lisamine…';
@@ -126,6 +134,8 @@ $messages['importwait'] = 'Impordin, palun oota...';
 $messages['importformaterror'] = 'Import nurjus! Laaditud fail ei sisalda sobilikke andmeid.';
 $messages['importconfirm'] = '<b>Edukalt imporditud $inserted kontakti, $skipped olemasolevat sissekannet vahele jäetud</b>:<p><em>$names</em></p>';
 $messages['importconfirmskipped'] = '<b> $skipped olemasolevat kirjet jäeti vahele</b>';
+$messages['importmessagesuccess'] = '$nr kirja edukalt imporditud';
+$messages['importmessageerror'] = 'Import nurjus! Laaditud fail ei ole kirja ega postkasti fail';
 $messages['opnotpermitted'] = 'Tegevus pole lubatud!';
 $messages['nofromaddress'] = 'Valitud identiteedil puudub e-posti aadress';
 $messages['editorwarning'] = 'Klaarteksti redaktorile lülitamine kaotab kogu teksti vorminduse. Soovid jätkata?';
@@ -167,5 +177,4 @@ $messages['parentnotwritable'] = 'Kasuta loomine/liigutamine valitud kausta nurj
 $messages['messagetoobig'] = 'Kiri on töötlemiseks liiga suur.';
 $messages['attachmentvalidationerror'] = 'HOIATUS! See manus on kahtlane, sest selle tüüp ei ole vastavuses kirjas määratuga. Kui sa ei usalda kirja saatjat, siis ei tohiks seda brauseris avada, sest see võib sisaldada pahavara.<br/><br/><em>Oodati: $expected; leiti: $detected</em>';
 $messages['noscriptwarning'] = 'Hoiatus: see veebimaili teenus vajab Javascripti! Teenuse kasutamiseks luba Javascript oma brauseri seadetes.';
-
 ?>

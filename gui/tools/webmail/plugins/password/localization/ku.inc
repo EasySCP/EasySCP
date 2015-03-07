@@ -15,23 +15,19 @@
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-password/
 */
-
-$labels = array();
-$labels['changepasswd']  = 'گۆڕینی ووشەی نهێنی';
-$labels['curpasswd']  = 'Current Password:';
-$labels['newpasswd']  = 'New Password:';
-$labels['confpasswd']  = 'Confirm New Password:';
-
-$messages = array();
-$messages['nopassword'] = 'Please input new password.';
-$messages['nocurpassword'] = 'Please input current password.';
-$messages['passwordincorrect'] = 'Current password incorrect.';
-$messages['passwordinconsistency'] = 'Passwords do not match, please try again.';
-$messages['crypterror'] = 'Could not save new password. Encryption function missing.';
-$messages['connecterror'] = 'Could not save new password. Connection error.';
-$messages['internalerror'] = 'Could not save new password.';
-$messages['passwordshort'] = 'Password must be at least $length characters long.';
-$messages['passwordweak'] = 'Password must include at least one number and one punctuation character.';
-$messages['passwordforbidden'] = 'Password contains forbidden characters.';
-
+$labels['changepasswd']  = 'Şîfreyê biguherîne';
+$labels['curpasswd']  = 'Şîfreya niha:';
+$labels['newpasswd']  = 'Şîfreya nû:';
+$labels['confpasswd']  = 'Şîfreya nû bipejirîne:';
+$messages['nopassword'] = 'Şîfreya nû binivîse.';
+$messages['nocurpassword'] = 'Şîfreya niha binivîse.';
+$messages['passwordincorrect'] = 'Şîfreya niha xelet e.';
+$messages['passwordinconsistency'] = 'Şîfre hevdu nagirin, dîsa biceribîne.';
+$messages['crypterror'] = 'Şîfreya nû nehat tomarkirin. Fonksiyona şîfrekirinê hat jibîrkirin.';
+$messages['connecterror'] = 'Şîfreya nû nehat tomarkirin. Çewtiya girêdanê.';
+$messages['internalerror'] = 'Şîfre nehat tomarkirin.';
+$messages['passwordshort'] = 'Divê şîfre ji $length karakteran kêmtir nebe.';
+$messages['passwordweak'] = 'Divê di şîfreyê de herî kêm hejmarek û karakterekî xalbendiyê hebe.';
+$messages['passwordforbidden'] = 'Şîfre karakterên qedexe dihewîne.';
+$messages['firstloginchange'] = 'Ev têketina te ya yekemîn e. Ji kerema xwe şîfreya xwe biguherîne.';
 ?>
