@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 	EasySCP a Virtual Hosting Control Panel
-	Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+	Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
 
 	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -16,6 +16,11 @@
 			<DistName>CentOS</DistName>
 			<DistVersion>6</DistVersion>
 		</OS>
+		<OS>
+			<Name>CentOS 7</Name>
+			<DistName>CentOS</DistName>
+			<DistVersion>7</DistVersion>
+		</OS>
 	</Dist>
 
 	<Dist Name="Debian">
@@ -28,6 +33,11 @@
 			<Name>Debian GNU/Linux 7 (Wheezy)</Name>
 			<DistName>Debian</DistName>
 			<DistVersion>7</DistVersion>
+		</OS>
+		<OS>
+			<Name>Debian GNU/Linux 8 (Wheezy)</Name>
+			<DistName>Debian</DistName>
+			<DistVersion>8</DistVersion>
 		</OS>
 	</Dist>
 

@@ -1,6 +1,6 @@
 --
 -- EasySCP a Virtual Hosting Control Panel
--- Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+-- Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
 --
 -- This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 -- To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -82,7 +82,7 @@ INSERT INTO `config` (`name`, `value`) VALUES
 ('SSL_CACERT', ''),
 ('SSL_STATUS',0),
 ('MIGRATION_ENABLED',0),
-('DATABASE_REVISION', '59');
+('DATABASE_REVISION', '61');
 
 -- --------------------------------------------------------
 
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `cronjobs` (
   `description` varchar(500) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `name` varchar(200) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `user` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `status` varchar(15) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `domain` (
   `domain_disk_limit` bigint(20) unsigned DEFAULT NULL,
   `domain_disk_usage` bigint(20) unsigned DEFAULT NULL,
   `domain_php` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
-  `domain_php_config` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '8M;2M',
+  `domain_php_config` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '32M;8M',
   `domain_php_edit` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
   `domain_cgi` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
   `allowbackup` varchar(8) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'full',
@@ -320,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `htaccess` (
   `auth_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `auth_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `path` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -336,7 +336,7 @@ CREATE TABLE IF NOT EXISTS `htaccess_groups` (
   `dmn_id` int(10) unsigned NOT NULL DEFAULT '0',
   `ugroup` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `members` text COLLATE utf8_unicode_ci,
-  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -352,7 +352,7 @@ CREATE TABLE IF NOT EXISTS `htaccess_users` (
   `dmn_id` int(10) unsigned NOT NULL DEFAULT '0',
   `uname` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `upass` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -400,9 +400,9 @@ CREATE TABLE IF NOT EXISTS `mail_users` (
   `domain_id` int(10) unsigned DEFAULT NULL,
   `mail_type` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `sub_id` int(10) unsigned DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `quota` int(10) DEFAULT '10485760',
+  `quota` int(10) DEFAULT '104857600',
   `mail_addr` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`mail_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -570,6 +570,8 @@ CREATE TABLE IF NOT EXISTS `sql_database` (
   `sqld_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `domain_id` int(10) unsigned DEFAULT '0',
   `sqld_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT 'n/a',
+  `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `sqld_id` (`sqld_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -584,6 +586,8 @@ CREATE TABLE IF NOT EXISTS `sql_user` (
   `sqld_id` int(10) unsigned DEFAULT '0',
   `sqlu_name` varchar(64) COLLATE utf8_unicode_ci DEFAULT 'n/a',
   `sqlu_pass` varchar(64) COLLATE utf8_unicode_ci DEFAULT 'n/a',
+  `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `sqlu_id` (`sqlu_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

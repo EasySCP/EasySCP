@@ -25,7 +25,7 @@
 	DirectoryIndex index.php index.htm index.html
 
 	<Directory {$WWW_DIR}/{$DOMAIN_NAME}/htdocs>
-		Options -Indexes Includes FollowSymLinks MultiViews
+		Options -Indexes +Includes +FollowSymLinks +MultiViews
 		AllowOverride All
 		Order allow,deny
 		Allow from all

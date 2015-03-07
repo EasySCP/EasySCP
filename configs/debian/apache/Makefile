@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 # EasySCP a Virtual Hosting Control Panel
-# Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+# Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
 #
 # This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -21,12 +21,12 @@ install:
 	$(SYSTEM_MAKE_DIRS) $(ROOT_APACHE_CONF)/mods-available
 	$(SYSTEM_MAKE_DIRS) $(ROOT_APACHE_CONF)/easyscp
 
-	cp ./01_awstats.conf $(SYSTEM_CONF)/apache
+	cp -p ./01_awstats.conf $(SYSTEM_CONF)/apache
 
-	cp ./easyscp-setup.conf $(ROOT_APACHE_CONF)/sites-available
-	cp ./fcgid.conf $(SYSTEM_CONF)/apache/fcgid_easyscp.conf
-	cp ./fcgid.load $(SYSTEM_CONF)/apache/fcgid_easyscp.load
-	cp ./ports.conf $(ROOT_APACHE_CONF)
+	cp -p ./easyscp-setup.conf $(ROOT_APACHE_CONF)/sites-available
+	cp -p ./fcgid.conf $(SYSTEM_CONF)/apache/fcgid_easyscp.conf
+	cp -p ./fcgid.load $(SYSTEM_CONF)/apache/fcgid_easyscp.load
+	cp -p ./ports.conf $(ROOT_APACHE_CONF)
 
 uninstall:
 
