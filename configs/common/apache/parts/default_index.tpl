@@ -24,7 +24,7 @@
 		<div class="content">
 			<p>This is the default page for <strong>{$DOMAIN_NAME}</strong>. This page was generated automatically via EasySCP. Please upload your own index.html file.</p>
 			<p>If you are the Administrator of this domain, please login <a href="{$BASE_SERVER_VHOST_PREFIX}{$BASE_SERVER_VHOST}" class="link">here</a>.</p>
-			<div class="login"><p>Powered by <a class="link" href="http://www.easyscp.net" title="Easy Server Control Panel">Easy Server Control Panel</a></p></div>
+			<div class="login"><p>Powered by <a class="link" href="http://www.easyscp.net" title="EasySCP - The Easy Server Control Panel">EasySCP - The Easy Server Control Panel</a></p></div>
 		</div>
 	</div>
 

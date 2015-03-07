@@ -1,5 +1,5 @@
 # EasySCP a Virtual Hosting Control Panel
-# Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+# Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
 #
 # This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -27,7 +27,7 @@ EasySCP Version: 	2.0.0
 INSTALL Script:		1.00
 Maintainer:			Markus Szywon
 Homepage:			http://www.easyscp.net
-Linux Distros:		Ubuntu Server 12.04 LTS
+Linux Distros:		Ubuntu Server 12.04 LTS / Ubuntu Server 14.04 LTS
 
 ================================================================================
 2) Requirements
@@ -40,6 +40,7 @@ Pentium III or K6-4 with 500 MHz
 Debian (or even any other *NIX-Distribution)
 
 All required packages for "Ubuntu 12.04 LTS" are listed in "./docs/ubuntu-packages-1204"
+All required packages for "Ubuntu 14.04 LTS" are listed in "./docs/ubuntu-packages-1404"
 
 ================================================================================
 3) Introduction
@@ -75,6 +76,8 @@ provides graphic user interfaces for the administrators, resellers and users.
 	Install all required packages:
 
 	# sudo apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-1204)
+	or
+	# sudo apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-1404)
 
 	If you get to the "ProFTPD configuration" screen, select 'standalone'.
 	If you get to the "Postfix configuration" screen select 'internet site'.
@@ -82,7 +85,11 @@ provides graphic user interfaces for the administrators, resellers and users.
 		If you've set debian up correctly on install your domain should be already shown.
 	If you get to the 'Configuring pdns-backend-mysql' screen about database configuration, select 'no'.
 
-4. Start the basic setup:
+4.	Enable php modul mcrypt (only needed on Ubuntu 14.04)
+
+	# php5enmod mcrypt
+
+5. Start the basic setup:
 	# ./easyscp-setup.sh
 
 	Setup will now Build the Software and copy all the directories into your system.

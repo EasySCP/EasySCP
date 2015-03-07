@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@
  *
  * @package     EasySCP_Config
  * @subpackage  Handler
- * @copyright 	2010-2014 by EasySCP | http://www.easyscp.net
+ * @copyright 	2010-2015 by EasySCP | http://www.easyscp.net
  * @author 		EasySCP Team
  */
 class EasySCP_Config_Handler implements ArrayAccess {

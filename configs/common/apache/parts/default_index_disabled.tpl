@@ -24,7 +24,7 @@
 		<div class="content">
 			<p>The Domain <strong>{$DOMAIN_NAME}</strong> is disabled.</p>
 			<p>Please get in contact with your Reseller for more information.</p>
-			<div class="login"><p>Powered by <a class="link" href="http://www.easyscp.net" title="Easy Server Control Panel">Easy Server Control Panel</a></p></div>
+			<div class="login"><p>Powered by <a class="link" href="http://www.easyscp.net" title="EasySCP - The Easy Server Control Panel">EasySCP - The Easy Server Control Panel</a></p></div>
 		</div>
 	</div>
 
