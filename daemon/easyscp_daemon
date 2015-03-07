@@ -3,7 +3,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -56,7 +56,7 @@ $options = array(
     'logLocation' => '/var/log/easyscp/easyscp_daemon.log',
 );
 
-if (DaemonConfig::$cfg->DEBUG == '1'){
+if (DaemonConfig::$cfg->{'DEBUG'} == '1'){
 	// Default: 6
 	$options['logVerbosity'] = 7;
 }
@@ -65,7 +65,7 @@ System_Daemon::setOptions($options);
 System_Daemon::start();
 
 try {
-	SocketHandler::$File = DaemonConfig::$cfg->SOCK_EASYSCPD;
+	SocketHandler::$File = DaemonConfig::$cfg->{'SOCK_EASYSCPD'};
 	SocketHandler::Create();
 	SocketHandler::Bind();
 	SocketHandler::Listen();
@@ -125,7 +125,7 @@ while (!System_Daemon::isDying() && $runningOkay) {
 								System_Daemon::info($e->getMessage());
 							}
 
-							if (file_exists(DaemonConfig::$cfg->CONF_DIR . '/EasySCP_Config_DB.php')){
+							if (file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DB.php')){
 								// Close DB connection
 								DB::closeInstance();
 							}

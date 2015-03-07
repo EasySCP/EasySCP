@@ -3,7 +3,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -18,7 +18,7 @@ require_once(dirname(__FILE__).'/DaemonConfig.php');
 
 $daten = array();
 $dateien = array();
-$LOG_DIR = DaemonConfig::$cfg->APACHE_TRAFFIC_LOG_DIR.'/';
+$LOG_DIR = DaemonConfig::$cfg->{'APACHE_TRAFFIC_LOG_DIR'}.'/';
 
 foreach(glob($LOG_DIR.'*') as $datei) {
 	$domain = substr(str_replace($LOG_DIR, '', $datei), 0, -11);
@@ -83,7 +83,7 @@ foreach ($daten as $domain => $id){
 unset($datei);
 
 foreach ($dateien as $datei){
-	exec(DaemonConfig::$cmd->CMD_RM . ' -rf '.$datei);
+	exec(DaemonConfig::$cmd->{'CMD_RM'} . ' -rf '.$datei);
 }
 
 function datumIO($zeile){

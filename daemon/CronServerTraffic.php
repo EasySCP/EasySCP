@@ -3,7 +3,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -16,22 +16,22 @@ require_once(dirname(__FILE__).'/DaemonDummy.php');
 require_once(dirname(__FILE__).'/DaemonCommon.php');
 require_once(dirname(__FILE__).'/DaemonConfig.php');
 
-$LOG_DIR = DaemonConfig::$cfg->SRV_TRAFF_LOG_DIR.'/'.time();
+$LOG_DIR = DaemonConfig::$cfg->{'SRV_TRAFF_LOG_DIR'}.'/'.time();
 mkdir($LOG_DIR, 0700);
-exec('export COLUMNS=120;'.DaemonConfig::$cmd->CMD_IPTABLES.' -nvxL EASYSCP_INPUT 1>'.$LOG_DIR.'/easyscp-iptables-input.log');
-exec(DaemonConfig::$cmd->CMD_IPTABLES.' -Z EASYSCP_INPUT');
+exec('export COLUMNS=120;'.DaemonConfig::$cmd->{'CMD_IPTABLES'}.' -nvxL EASYSCP_INPUT 1>'.$LOG_DIR.'/easyscp-iptables-input.log');
+exec(DaemonConfig::$cmd->{'CMD_IPTABLES'}.' -Z EASYSCP_INPUT');
 
-if (isset(DaemonConfig::$cfg->BASE_SERVER_IPv6) && DaemonConfig::$cfg->BASE_SERVER_IPv6 != ''){
-	exec('export COLUMNS=120;'.DaemonConfig::$cmd->CMD_IPTABLESv6.' -nvxL EASYSCP_INPUT 1>'.$LOG_DIR.'/easyscp-iptables-input-v6.log');
-	exec(DaemonConfig::$cmd->CMD_IPTABLESv6.' -Z EASYSCP_INPUT');
+if (isset(DaemonConfig::$cfg->{'BASE_SERVER_IPv6'}) && DaemonConfig::$cfg->{'BASE_SERVER_IPv6'} != ''){
+	exec('export COLUMNS=120;'.DaemonConfig::$cmd->{'CMD_IPTABLESv6'}.' -nvxL EASYSCP_INPUT 1>'.$LOG_DIR.'/easyscp-iptables-input-v6.log');
+	exec(DaemonConfig::$cmd->{'CMD_IPTABLESv6'}.' -Z EASYSCP_INPUT');
 }
 
-exec('export COLUMNS=120;'.DaemonConfig::$cmd->CMD_IPTABLES.' -nvxL EASYSCP_OUTPUT 1>'.$LOG_DIR.'/easyscp-iptables-output.log');
-exec(DaemonConfig::$cmd->CMD_IPTABLES.' -Z EASYSCP_OUTPUT');
+exec('export COLUMNS=120;'.DaemonConfig::$cmd->{'CMD_IPTABLES'}.' -nvxL EASYSCP_OUTPUT 1>'.$LOG_DIR.'/easyscp-iptables-output.log');
+exec(DaemonConfig::$cmd->{'CMD_IPTABLES'}.' -Z EASYSCP_OUTPUT');
 
-if (isset(DaemonConfig::$cfg->BASE_SERVER_IPv6) && DaemonConfig::$cfg->BASE_SERVER_IPv6 != ''){
-	exec('export COLUMNS=120;'.DaemonConfig::$cmd->CMD_IPTABLESv6.' -nvxL EASYSCP_OUTPUT 1>'.$LOG_DIR.'/easyscp-iptables-output-v6.log');
-	exec(DaemonConfig::$cmd->CMD_IPTABLESv6.' -Z EASYSCP_OUTPUT');
+if (isset(DaemonConfig::$cfg->{'BASE_SERVER_IPv6'}) && DaemonConfig::$cfg->{'BASE_SERVER_IPv6'} != ''){
+	exec('export COLUMNS=120;'.DaemonConfig::$cmd->{'CMD_IPTABLESv6'}.' -nvxL EASYSCP_OUTPUT 1>'.$LOG_DIR.'/easyscp-iptables-output-v6.log');
+	exec(DaemonConfig::$cmd->{'CMD_IPTABLESv6'}.' -Z EASYSCP_OUTPUT');
 }
 
 $smtp_in = 0;
@@ -223,5 +223,5 @@ $sql_query = "
 DB::prepare($sql_query);
 DB::execute($sql_param)->closeCursor();
 
-exec(DaemonConfig::$cmd->CMD_RM . ' -rf '.$LOG_DIR);
+exec(DaemonConfig::$cmd->{'CMD_RM'} . ' -rf '.$LOG_DIR);
 ?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -29,7 +29,7 @@ class DaemonDNS {
 	/**
 	 * Adds default DNS entries when adding a domain
 	 *
-	 * @param string Domain Name
+	 * @param int $dmn_id Domain ID
 	 * @param boolean $dmn_alias Domain is an Alias
 	 * @return boolean
 	 */
@@ -111,7 +111,7 @@ class DaemonDNS {
 			'domain_id'		=> $dmn_dns_id,
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'SOA',
-			'domain_content'=> 'ns1.'.$dmn_name.'. '.DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS.' 1 12000 1800 604800 86400',
+			'domain_content'=> 'ns1.'.$dmn_name.'. '.DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' 1 12000 1800 604800 86400',
 			'domain_ttl'	=> '3600',
 			'domain_prio'	=> Null
 		);

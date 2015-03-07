@@ -3,7 +3,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -20,7 +20,7 @@ function getDiskUsage($path){
 	$usage = null;
 	if (file_exists($path)){
 		$usage = null;
-		exec(DaemonConfig::$cmd->CMD_DU .' -bcs ' . $path ,$usage);
+		exec(DaemonConfig::$cmd->{'CMD_DU'} .' -bcs ' . $path ,$usage);
 		$diskUsage = preg_split('/\s/', $usage[0]);
 		return $diskUsage[0];
 	}
@@ -80,8 +80,8 @@ $sql_query = "
 $domainData = DB::query($sql_query);
 
 while ($row = $domainData->fetch()) {
-	$wwwPath = DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $row['domain_name'];
-	$mailPath = DaemonConfig::$cfg->MTA_VIRTUAL_MAIL_DIR . '/' . $row['domain_name'];
+	$wwwPath = DaemonConfig::$cfg->{'APACHE_WWW_DIR'} . '/' . $row['domain_name'];
+	$mailPath = DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $row['domain_name'];
 	
 	$webUsage = getDiskUsage($wwwPath);
 	$mailUsage = getDiskUsage($mailPath);
