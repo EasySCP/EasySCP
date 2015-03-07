@@ -1,5 +1,5 @@
 user = {$MTA_DB_USER}
 password = {$MTA_DB_PASS}
 dbname = mail
-query = SELECT destination FROM forwardings WHERE source='%s'
+query = SELECT destination FROM forwardings WHERE source='%s' UNION SELECT CONCAT(username, '@', domain) AS destination FROM users WHERE CONCAT(username, '@', domain)='%s'
 hosts = 127.0.0.1

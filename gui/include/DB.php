@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -198,19 +198,7 @@ class DB extends DB_Config {
 		}
 
 		if (extension_loaded('mcrypt')) {
-
-			$text = @base64_decode($data);
-			$td = @mcrypt_module_open(MCRYPT_BLOWFISH, '', MCRYPT_MODE_CBC, '');
-
-			// Initialize encryption
-			@mcrypt_generic_init($td, self::$DB_KEY, self::$DB_IV);
-
-			// Decrypt encrypted string
-			$decrypted = @mdecrypt_generic($td, $text);
-			@mcrypt_module_close($td);
-
-			// Return decrypted string
-			return trim($decrypted);
+			return trim(mcrypt_decrypt(MCRYPT_BLOWFISH, self::$DB_KEY, base64_decode($data), MCRYPT_MODE_CBC, self::$DB_IV));
 		} else {
 			throw new Exception('Error: PHP extension "mcrypt" not loaded!');
 		}
@@ -225,21 +213,7 @@ class DB extends DB_Config {
 	 */
 	static public function encrypt_data($data) {
 		if (extension_loaded('mcrypt')) {
-			$td = @mcrypt_module_open(MCRYPT_BLOWFISH, '', MCRYPT_MODE_CBC, '');
-
-			// Initialize encryption
-			@mcrypt_generic_init($td, self::$DB_KEY, self::$DB_IV);
-
-			// Encrypt string
-			$encrypted = @mcrypt_generic($td, $data);
-			@mcrypt_generic_deinit($td);
-			@mcrypt_module_close($td);
-
-			$text = @base64_encode($encrypted);
-
-			// Return encrypted string
-			return trim($text);
-			// return trim($encrypted);
+			return trim(base64_encode(mcrypt_encrypt(MCRYPT_BLOWFISH, self::$DB_KEY, $data, MCRYPT_MODE_CBC, self::$DB_IV)));
 		} else {
 			throw new Exception('Error: PHP extension "mcrypt" not loaded!');
 		}
@@ -270,7 +244,10 @@ class DB extends DB_Config {
 	 * @param string $DB_BACKUP_FILE File name/path to store the Backup
 	 */
 	static public function backupDatabase($Database, $DB_BACKUP_FILE) {
-		exec(DaemonConfig::$cmd->CMD_MYSQLDUMP . ' --add-drop-table --allow-keywords --quote-names -h'.self::$DB_HOST.' -u'.self::$DB_USER.' -p'.self::decrypt_data(self::$DB_PASSWORD).' '.$Database.' > ' . $DB_BACKUP_FILE);
+		if (file_exists($DB_BACKUP_FILE)){
+			unlink($DB_BACKUP_FILE);
+		}
+		exec(DaemonConfig::$cmd->{'CMD_MYSQLDUMP'} . ' --add-drop-table --allow-keywords --quote-names -h'.self::$DB_HOST.' -u'.self::$DB_USER.' -p'.self::decrypt_data(self::$DB_PASSWORD).' '.$Database.' > ' . $DB_BACKUP_FILE);
 	}
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -483,6 +483,98 @@ class EasySCP_Update_Database extends EasySCP_Update {
 				`domain`
 			ADD
 				`ssl_cacert` varchar(5000) COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER ssl_cert;
+		";
+
+		return $sqlUpd;
+	}
+
+	/**
+	 * Adds status and status msg fields for sql data
+	 * Update status fields
+	 *
+	 * @author Markus Szywon <markus.szywon@easyscp.net>
+	 * @return array
+	 */
+	protected function _databaseUpdate_60(){
+		$sqlUpd = array();
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`htaccess`
+			CHANGE
+				`status` `status` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`htaccess_groups`
+			CHANGE
+				`status` `status` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`htaccess_users`
+			CHANGE
+				`status` `status` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`mail_users`
+			CHANGE
+				`status` `status` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`sql_database`
+			ADD
+				`status` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,
+			ADD
+				`status_msg` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL;
+		";
+
+		$sqlUpd[] = "
+			UPDATE
+				`sql_database`
+			SET
+				`status` = 'ok';
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`sql_user`
+			ADD
+				`status` VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,
+			ADD
+				`status_msg` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL;
+		";
+
+		$sqlUpd[] = "
+			UPDATE
+				`sql_user`
+			SET
+				`status` = 'ok';
+		";
+
+		return $sqlUpd;
+	}
+
+	/**
+	 * Add/Update database field for php support
+	 *
+	 * @author Markus Szywon <markus.szywon@easyscp.net>
+	 * @return array
+	 */
+	protected function _databaseUpdate_61(){
+		$sqlUpd = array();
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`domain`
+			CHANGE
+				`domain_php_config` `domain_php_config` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '32M;8M';
 		";
 
 		return $sqlUpd;
