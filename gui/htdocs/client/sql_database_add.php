@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,17 +180,22 @@ function add_sql_database($sql, $user_id) {
 		return;
 	}
 
-	$query = 'create database ' . quoteIdentifier($db_name);
-	exec_query($sql, $query);
+	DB::query('CREATE DATABASE IF NOT EXISTS `' . $db_name . '` DEFAULT CHARACTER SET ' . EasyConfig::$cfg->DATABASE_DEFAULT_CHARACTER_SET . ' COLLATE ' . EasyConfig::$cfg->DATABASE_DEFAULT_COLLATE . ';')->closeCursor();
 
-	$query = "
-		INSERT INTO `sql_database`
-			(`domain_id`, `sqld_name`)
+	$sql_param = array(
+		':domain_id'	=> $dmn_id,
+		':sqld_name'	=> $db_name
+	);
+
+	$sql_query = "
+		INSERT INTO
+			sql_database (domain_id, sqld_name, status)
 		VALUES
-			(?, ?)
+			(:domain_id, :sqld_name, 'ok');
 	";
 
-	exec_query($sql, $query, array($dmn_id, $db_name));
+	DB::prepare($sql_query);
+	DB::execute($sql_param)->closeCursor();
 
 	update_reseller_c_props(get_reseller_id($dmn_id));
 
