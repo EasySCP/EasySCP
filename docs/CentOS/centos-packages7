@@ -1,6 +1,5 @@
 bash
 bzip2
-chkrootkit
 dovecot-mysql
 gamin
 glibc-common
@@ -10,11 +9,10 @@ httpd-tools
 iptables
 lzma
 make
+mariadb-server
 mc
 mod_fcgid
 mod_ssl
-mod_auth_mysql
-mysql-server
 openssh
 openssh-server
 pdns-backend-mysql

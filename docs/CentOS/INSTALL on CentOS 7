@@ -1,0 +1,156 @@
+# EasySCP a Virtual Hosting Control Panel
+# Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
+#
+# This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+# To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+#
+# @link 		http://www.easyscp.net
+# @author 		EasySCP Team
+
+HowTo Install EasySCP on CentOS 7.0
+================================================================================
+For other Linux distributions please check the other INSTALL files.
+================================================================================
+
+Table of Content
+================
+1) Version info
+2) System Requirements
+3) Introduction
+4) Preparation
+5) Installation
+6) Credits
+
+================================================================================
+1) Version info
+---------------
+EasySCP Version:	2.0.0
+INSTALL Script:		1.0.0
+Maintainer:			Markus Szywon
+Homepage:			http://www.easyscp.net
+Linux Distros:		CentOS 7.0
+
+This documentation was written for CentOS 7.0. While you might
+be able to install on earlier versions, you may encounter difficulties or
+differences. In addition, this guide uses the YUM tool to install packages. If
+you normally use a different tool, you will need to modify the instructions to
+fit your system.
+The instructions are based on a minimum installation of CentOS with no optional
+packages marked during OS install. If you selected additional options during the
+install process, some extra server services may need to be disabled to avoid
+interfering with the packages used by EasySCP.
+The install instructions attempt to keep system changes to a minimum, so these
+instructions should also work under Red Hat Enterprise Linux 7. If you encounter
+differences, please notify the maintainer.
+The installation tasks should be run as root
+
+================================================================================
+2) System requirements
+---------------
+There are no real requirements. The following just resembles an advice:
+
+Pentium III or K6-4 with 500 MHz
+512 MB RAM (768 MB and higher recommended)
+100 MB Space for the EasySCP Setup data
+Basic CentOS 7.0 (do not install any additional software on the server as it will conflict with EasySCP)
+
+All required packages for "CentOS 7.0" are listed in /docs/CentOS/centos-packages7
+
+================================================================================
+3) Introduction
+---------------
+EasySCP delivers a complete hosting automation appliance by offering significant
+security, total-cost-of-ownership, and performance advantages over competing
+commercial solutions.
+
+With EasySCP you can configure your server and applications, create user with
+domains with a few point-and-click operations that take less than a minute.
+There is no limit to the number of resellers, users and domains that can be
+created. The core of EasySCP are 3 easy-to-use, web-based control panels. EasySCP
+provides graphic user interfaces for the administrators, resellers and users.
+
+================================================================================
+4) Preparation
+--------------
+For the following steps, you will need to be logged in as root.
+
+1.	Make sure your OS is updated
+	The very first thing you should do is make sure your base Linux install is
+	fully updated. To do so, simply run "yum update" as root. If there was a
+	kernel upgrade, you will want to reboot before continuing.
+		# yum update
+
+
+2.	Additional Software Repositories
+	The CentOS repositories do not include all the software needed to run EasySCP.
+	You will need to add another repositories to your system to install everything
+	you need.
+
+	EPEL (Extra Packages for Enterprise Linux):
+		EPEL contains most of the additional packages needed.
+		Install this repository following
+		http://fedoraproject.org/wiki/EPEL/FAQ#howtouse
+
+	Example:
+		# rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+
+
+3. Disabling SELinux
+	SELinux will need to be disabled if it is enabled. To disable, run
+
+	# setenforce 0
+
+	as root. To ensure that it stays disabled between reboots, edit the file
+	/etc/selinux/config and change the value of SELINUX to disabled. 
+
+================================================================================
+5) Installation
+---------------
+Be sure you are logged in as root.
+
+1.	Untar or unzip the distribution files to a secure directory:
+		# cd /usr/local/src
+		# tar xjvf easyscp-2.0.0.tar.bz2
+
+2.	Change to the newly created directory:
+		# cd ./easyscp-2.0.0
+
+3.	Install the required modules
+	A list of packages required by this software is located in
+	/docs/CentOS/centos-packages and can be used to easily install the packages
+	you need by running the following commands:
+		# yum install $(cat ./docs/CentOS/centos-packages7)
+
+	NOTE: Running this command will install both x86_64 and i3/5/686 packages on
+	x86_64 installs for all packages that have both architectures in the
+	repository! To avoid, either add "exclude=*.i386 *.i586 *.i686" for your yum
+	repository configuration files, or install the packages listed in the file
+	one-by-one, making sure to specify the package name in the format
+	packagename.x86_64.
+
+4.	Make sure that SQL Server is running for setup:
+		# service mariadb start
+
+5.	Start the basic setup:
+		# ./easyscp-setup.sh
+
+	Setup will now Build the Software and copy all the directories into your system.
+	After that, Setup will then secure your MariaDB installation.
+	Change or create MariaDB root password, remove anonymous users, disallow root login remotely, remove test database (and access to it), reload privilege tables.
+
+	If no error occour go to the web-frontend and install EasySCP step-by-step.
+
+	If you get no error, all went good; if you get one, look at http://www.easyscp.net to solve the problem.
+
+================================================================================
+6) Credits
+----------
+
+EasySCP is a project of Easy Server Control Panel.
+EasySCP, Easy Server Control Panel and the EasySCP logo are trademarks of the EasySCP Project.
+
+Please visit our site under http://www.easyscp.net for further information on
+EasySCP and other themes.
+
+We hope you enjoy using EasySCP. If you like it, help us, to make it better. We
+would be glad on any help provided!

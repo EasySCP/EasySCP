@@ -2,13 +2,13 @@ apache2-mpm-worker
 apache2
 apache2-suexec
 apache2-utils
-awstats
 bash
 bzip2
 chkrootkit
 dnsutils
 dovecot-core
 dovecot-imapd
+dovecot-lmtpd
 dovecot-mysql
 dovecot-pop3d
 dovecot-sieve
