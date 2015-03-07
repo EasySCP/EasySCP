@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -49,11 +49,11 @@ $tpl->assign(
 if ($template == 'index.tpl'){
 	$tpl->assign(
 		array(
-			'DB_HOST'		=> (isset($_POST['DB_HOST'])) ? trim($_POST['DB_HOST']) : $xml->DB_HOST,
-			'DB_DATABASE'	=> (isset($_POST['DB_DATABASE'])) ? trim($_POST['DB_DATABASE']) : $xml->DB_DATABASE,
-			'DB_USER'		=> (isset($_POST['DB_USER'])) ? trim($_POST['DB_USER']) : $xml->DB_USER,
-			'DB_PASSWORD'	=> (isset($_POST['DB_PASSWORD'])) ? trim($_POST['DB_PASSWORD']) : $xml->DB_PASSWORD,
-			'DB_PASSWORD2'	=> (isset($_POST['DB_PASSWORD2'])) ? trim($_POST['DB_PASSWORD2']) :$xml->DB_PASSWORD2
+			'DB_HOST'		=> (isset($_POST['DB_HOST'])) ? trim($_POST['DB_HOST']) : $xml->{'DB_HOST'},
+			'DB_DATABASE'	=> (isset($_POST['DB_DATABASE'])) ? trim($_POST['DB_DATABASE']) : $xml->{'DB_DATABASE'},
+			'DB_USER'		=> (isset($_POST['DB_USER'])) ? trim($_POST['DB_USER']) : $xml->{'DB_USER'},
+			'DB_PASSWORD'	=> (isset($_POST['DB_PASSWORD'])) ? trim($_POST['DB_PASSWORD']) : $xml->{'DB_PASSWORD'},
+			'DB_PASSWORD2'	=> (isset($_POST['DB_PASSWORD2'])) ? trim($_POST['DB_PASSWORD2']) :$xml->{'DB_PASSWORD2'}
 		)
 	);
 }
@@ -65,16 +65,16 @@ if ($template == 'index2.tpl'){
 			// 'HOST_FQHN'		=> (isset($_POST['HOST_FQHN'])) ? trim($_POST['HOST_FQHN']) : $_SERVER['SERVER_NAME'],
 			'HOST_FQHN'		=> (isset($_POST['HOST_FQHN'])) ? trim($_POST['HOST_FQHN']) : gethostbyaddr(gethostbyname($_SERVER['SERVER_NAME'])),
 			'HOST_IP'		=> (isset($_POST['HOST_IP'])) ? trim($_POST['HOST_IP']) : gethostbyname($_SERVER['SERVER_NAME']),
-			'HOST_IPv6'		=> (isset($_POST['HOST_IPv6'])) ? trim($_POST['HOST_IPv6']) : $xml->HOST_IPv6,
+			'HOST_IPv6'		=> (isset($_POST['HOST_IPv6'])) ? trim($_POST['HOST_IPv6']) : $xml->{'HOST_IPv6'},
 			// 'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : 'admin.'.$_SERVER['SERVER_NAME'],
 			'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : 'admin.'.gethostbyaddr(gethostbyname($_SERVER['SERVER_NAME'])),
 
-			'PANEL_ADMIN'	=> (isset($_POST['PANEL_ADMIN'])) ? trim($_POST['PANEL_ADMIN']) : $xml->PANEL_ADMIN,
-			'PANEL_PASS'	=> (isset($_POST['PANEL_PASS'])) ? trim($_POST['PANEL_PASS']) : $xml->PANEL_PASS,
-			'PANEL_PASS2'	=> (isset($_POST['PANEL_PASS2'])) ? trim($_POST['PANEL_PASS2']) : $xml->PANEL_PASS2,
-			'PANEL_MAIL'	=> (isset($_POST['PANEL_MAIL'])) ? trim($_POST['PANEL_MAIL']) : $xml->PANEL_MAIL,
+			'PANEL_ADMIN'	=> (isset($_POST['PANEL_ADMIN'])) ? trim($_POST['PANEL_ADMIN']) : $xml->{'PANEL_ADMIN'},
+			'PANEL_PASS'	=> (isset($_POST['PANEL_PASS'])) ? trim($_POST['PANEL_PASS']) : $xml->{'PANEL_PASS'},
+			'PANEL_PASS2'	=> (isset($_POST['PANEL_PASS2'])) ? trim($_POST['PANEL_PASS2']) : $xml->{'PANEL_PASS2'},
+			'PANEL_MAIL'	=> (isset($_POST['PANEL_MAIL'])) ? trim($_POST['PANEL_MAIL']) : $xml->{'PANEL_MAIL'},
 
-			'Secondary_DNS'	=> (isset($_POST['Secondary_DNS'])) ? trim($_POST['Secondary_DNS']) : $xml->Secondary_DNS,
+			'Secondary_DNS'	=> (isset($_POST['Secondary_DNS'])) ? trim($_POST['Secondary_DNS']) : $xml->{'Secondary_DNS'},
 			'Timezone'		=> (isset($_POST['Timezone'])) ? trim($_POST['Timezone']) : date_default_timezone_get(),
 
 		)
@@ -111,6 +111,7 @@ if ($template == 'index2.tpl'){
 			)
 		);
 	}
+	/*
 	if(isset($_POST['AWStats'])){
 		$tpl->assign(
 			array(
@@ -126,6 +127,7 @@ if ($template == 'index2.tpl'){
 			)
 		);
 	}
+	*/
 }
 
 gen_page_message($tpl);
@@ -185,11 +187,11 @@ function checkMySQL($xml){
 		// TODO This user has insufficient privileges
 
 		if ($connectid != ''){
-			$xml->DB_HOST = trim($_POST['DB_HOST']);
-			$xml->DB_DATABASE = trim($_POST['DB_DATABASE']);
-			$xml->DB_USER = trim($_POST['DB_USER']);
-			$xml->DB_PASSWORD = trim($_POST['DB_PASSWORD']);
-			$xml->DB_PASSWORD2 = trim($_POST['DB_PASSWORD2']);
+			$xml->{'DB_HOST'} = trim($_POST['DB_HOST']);
+			$xml->{'DB_DATABASE'} = trim($_POST['DB_DATABASE']);
+			$xml->{'DB_USER'} = trim($_POST['DB_USER']);
+			$xml->{'DB_PASSWORD'} = trim($_POST['DB_PASSWORD']);
+			$xml->{'DB_PASSWORD2'} = trim($_POST['DB_PASSWORD2']);
 
 			$handle = fopen("config.xml", "wb");
 			fwrite($handle, $xml->asXML());
@@ -264,35 +266,35 @@ function checkData($xml){
 	}
 
 	$HOST_OS = json_decode(base64_decode(trim($_POST['HOST_OS'])));
-	$xml->DistName = $HOST_OS->DistName;
-	$xml->DistVersion = $HOST_OS->DistVersion;
+	$xml->{'DistName'} = $HOST_OS->{'DistName'};
+	$xml->{'DistVersion'} = $HOST_OS->{'DistVersion'};
 
-	$xml->HOST_FQHN = trim($_POST['HOST_FQHN']);
-	$xml->HOST_IP = trim($_POST['HOST_IP']);
-	$xml->HOST_IPv6 = trim($_POST['HOST_IPv6']);
-	$xml->HOST_NAME = trim($_POST['HOST_NAME']);
+	$xml->{'HOST_FQHN'} = trim($_POST['HOST_FQHN']);
+	$xml->{'HOST_IP'} = trim($_POST['HOST_IP']);
+	$xml->{'HOST_IPv6'} = trim($_POST['HOST_IPv6']);
+	$xml->{'HOST_NAME'} = trim($_POST['HOST_NAME']);
 
-	if ($xml->FTP_PASSWORD == 'AUTO'){
-		$xml->FTP_PASSWORD = generatePassword(18);
+	if ($xml->{'FTP_PASSWORD'} == 'AUTO'){
+		$xml->{'FTP_PASSWORD'} = generatePassword(18);
 	}
 
-	if ($xml->PMA_PASSWORD == 'AUTO'){
-		$xml->PMA_PASSWORD = generatePassword(18);
+	if ($xml->{'PMA_PASSWORD'} == 'AUTO'){
+		$xml->{'PMA_PASSWORD'} = generatePassword(18);
 	}
-	if ($xml->PMA_BLOWFISH == 'AUTO'){
-		$xml->PMA_BLOWFISH = generatePassword(31);
+	if ($xml->{'PMA_BLOWFISH'} == 'AUTO'){
+		$xml->{'PMA_BLOWFISH'} = generatePassword(31);
 	}
 
-	$xml->PANEL_ADMIN = trim($_POST['PANEL_ADMIN']);
-	$xml->PANEL_PASS = trim($_POST['PANEL_PASS']);
-	$xml->PANEL_PASS2 = trim($_POST['PANEL_PASS2']);
-	$xml->PANEL_MAIL = trim($_POST['PANEL_MAIL']);
+	$xml->{'PANEL_ADMIN'} = trim($_POST['PANEL_ADMIN']);
+	$xml->{'PANEL_PASS'} = trim($_POST['PANEL_PASS']);
+	$xml->{'PANEL_PASS2'} = trim($_POST['PANEL_PASS2']);
+	$xml->{'PANEL_MAIL'} = trim($_POST['PANEL_MAIL']);
 
-	$xml->Secondary_DNS = trim($_POST['Secondary_DNS']);
-	$xml->LocalNS = trim($_POST['LocalNS']);
-	$xml->MySQL_Prefix = trim($_POST['MySQL_Prefix']);
-	$xml->Timezone = trim($_POST['Timezone']);
-	$xml->AWStats = trim($_POST['AWStats']);
+	$xml->{'Secondary_DNS'} = trim($_POST['Secondary_DNS']);
+	$xml->{'LocalNS'} = trim($_POST['LocalNS']);
+	$xml->{'MySQL_Prefix'} = trim($_POST['MySQL_Prefix']);
+	$xml->{'Timezone'} = trim($_POST['Timezone']);
+	$xml->{'AWStats'} = trim($_POST['AWStats']);
 
 	$handle = fopen("config.xml", "wb");
 	fwrite($handle, $xml->asXML());
@@ -339,23 +341,40 @@ function getOS($xml){
 	$os = simplexml_load_file('/etc/easyscp/EasySCP_OS.xml');
 	if (isset($_POST['HOST_OS'])){
 		$select = trim($_POST['HOST_OS']);
-	} elseif ($xml->DistName != '' && $xml->DistVersion != ''){
-		$select = base64_encode('{"DistName":"'.$xml->DistName.'","DistVersion":"'.$xml->DistVersion.'"}');
+	} elseif ($xml->{'DistName'} != '' && $xml->{'DistVersion'} != ''){
+		$select = base64_encode('{"DistName":"'.$xml->{'DistName'}.'","DistVersion":"'.$xml->{'DistVersion'}.'"}');
 	} else {
 		if(file_exists('/etc/centos-release')){
-			// CentOS 6
-			$select = base64_encode('{"DistName":"CentOS","DistVersion":"6"}');
+			// CentOS
+			if(file_exists('/etc/os-release')) {
+				$fp = @fopen('/etc/os-release', "r");
+				$temp = fread($fp, filesize('/etc/os-release'));
+				fclose($fp);
+				if (strpos($temp, 'VERSION_ID="7"') !== false) {
+					// CentOS 7
+					$select = base64_encode('{"DistName":"CentOS","DistVersion":"7"}');
+				} else {
+					// Unbekannt
+					$select = '';
+				}
+			} else {
+				// CentOS 6
+				$select = base64_encode('{"DistName":"CentOS","DistVersion":"6"}');
+			}
 		} elseif(file_exists('/etc/os-release')){
 			$fp = @fopen('/etc/os-release', "r");
 			$temp = fread($fp, filesize('/etc/os-release'));
 			fclose($fp);
-			if(strpos($temp, 'VERSION_ID="7"') !== false){
+			if(strpos($temp, 'VERSION_ID="8"') !== false){
+				// Debian 8
+				$select = base64_encode('{"DistName":"Debian","DistVersion":"8"}');
+			} elseif(strpos($temp, 'VERSION_ID="7"') !== false){
 				// Debian 7
 				$select = base64_encode('{"DistName":"Debian","DistVersion":"7"}');
-			} elseif(strpos($temp, 'VERSION_ID="12.04"')  !== false) {
+			} elseif(strpos($temp, 'VERSION_ID="12.04"')  !== false){
 				// Ubuntu 12.04
 				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"12.04"}');
-			} elseif(strpos($temp, 'VERSION_ID="14.04"')  !== false) {
+			} elseif(strpos($temp, 'VERSION_ID="14.04"')  !== false){
 				// Ubuntu 14.04
 				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"14.04"}');
 			} else {
@@ -368,13 +387,13 @@ function getOS($xml){
 	}
 	$temp = '';
 
-	for( $i = 0; $i < count($os->Dist); $i++) {
-		for( $x = 0; $x < count($os->Dist[$i]->OS); $x++) {
-			$value = base64_encode('{"DistName":"'.$os->Dist[$i]->OS[$x]->DistName.'","DistVersion":"'.$os->Dist[$i]->OS[$x]->DistVersion.'"}');
+	for( $i = 0; $i < count($os->{'Dist'}); $i++) {
+		for( $x = 0; $x < count($os->{'Dist'}[$i]->OS); $x++) {
+			$value = base64_encode('{"DistName":"'.$os->{'Dist'}[$i]->OS[$x]->{'DistName'}.'","DistVersion":"'.$os->{'Dist'}[$i]->OS[$x]->{'DistVersion'}.'"}');
 			if ($select == $value){
-				$temp .= '<option value="'.$value.'" selected="selected">'.$os->Dist[$i]->OS[$x]->Name.'</option>';
+				$temp .= '<option value="'.$value.'" selected="selected">'.$os->{'Dist'}[$i]->OS[$x]->{'Name'}.'</option>';
 			} else {
-				$temp .= '<option value="'.$value.'">'.$os->Dist[$i]->OS[$x]->Name.'</option>';
+				$temp .= '<option value="'.$value.'">'.$os->{'Dist'}[$i]->OS[$x]->{'Name'}.'</option>';
 			}
 		}
 	}

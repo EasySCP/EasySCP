@@ -1,5 +1,5 @@
 # EasySCP a Virtual Hosting Control Panel
-# Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+# Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
 #
 # This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -10,37 +10,63 @@
 # Rotation for apache user logs
 #
 /var/log/apache2/users/*.log {
-  daily
-  missingok
-  rotate 185
-  dateext
-  compress
-  delaycompress
-  notifempty
-  create 640 root adm
-  sharedscripts
-  postrotate
-    if [ -f "`. /etc/apache2/envvars ; echo ${APACHE_PID_FILE:-/var/run/apache2.pid}`" ]; then
-      /etc/init.d/apache2 reload > /dev/null
-    fi
-  endscript
+	daily
+	missingok
+	rotate 365
+	dateext
+	compress
+	delaycompress
+	notifempty
+	create 640 root adm
+	sharedscripts
+	postrotate
+   		/etc/init.d/apache2 restart > /dev/null
+   	endscript
+   	prerotate
+   		if [ -d /etc/logrotate.d/httpd-prerotate ]; then \
+   			run-parts /etc/logrotate.d/httpd-prerotate; \
+   		fi; \
+   	endscript
+}
+
+# Rotation for apache user logs
+#
+/var/www/virtual/*/logs/*.log {
+	weekly
+	missingok
+	rotate 52
+	dateext
+	compress
+	delaycompress
+	notifempty
+	create 644 root root
+	sharedscripts
+	postrotate
+		/etc/init.d/apache2 restart > /dev/null
+	endscript
+	prerotate
+		if [ -d /etc/logrotate.d/httpd-prerotate ]; then \
+			run-parts /etc/logrotate.d/httpd-prerotate; \
+		fi; \
+	endscript
 }
 
 # Rotation for EasySCP logs
 #
 /var/log/easyscp/*.log {
-  weekly
-  rotate 52
-  missingok
-  compress
-  delaycompress
-  copytruncate
-#  prerotate
-#    /etc/init.d/easyscp_daemon stop > /dev/null
-#    /etc/init.d/easyscp_control stop > /dev/null
-#  endscript
-#  postrotate
-#    /etc/init.d/easyscp_control start > /dev/null
-#    /etc/init.d/easyscp_daemon start > /dev/null
-#  endscript
+	weekly
+	missingok
+	rotate 52
+	compress
+	delaycompress
+	notifempty
+	copytruncate
+	# prerotate
+		# /etc/init.d/easyscp_daemon stop > /dev/null
+		# /etc/init.d/easyscp_control stop > /dev/null
+	# endscript
+	# postrotate
+		# /etc/init.d/easyscp_control start > /dev/null
+		# /etc/init.d/easyscp_daemon start > /dev/null
+	# endscript
 }

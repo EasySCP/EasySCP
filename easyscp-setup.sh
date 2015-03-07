@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # EasySCP a Virtual Hosting Control Panel
-# Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+# Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
 #
 # This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -59,7 +59,7 @@ do
 			make -f Makefile.$Auswahl install > /dev/null
 
 			echo "Copy required files to your system"
-			cp -RLf /tmp/easyscp/* / > /dev/null
+			cp -fLpR /tmp/easyscp/* / > /dev/null
 
 			if [ ! -f /etc/easyscp/EasySCP_Config.xml ]; then
 				cp /etc/easyscp/tpl/EasySCP_Config.xml /etc/easyscp/EasySCP_Config.xml
@@ -90,7 +90,12 @@ do
 
 			echo "Prepare system config"
 
-			TIMEZONE=`cat /etc/sysconfig/clock | sed "s/^[^\"]*\"//" | sed  "s/\".*//"`
+			if [ -d /etc/sysconfig/clock ]; then
+				TIMEZONE=`cat /etc/sysconfig/clock | sed "s/^[^\"]*\"//" | sed  "s/\".*//"`
+			fi
+			if [ ! -d /etc/sysconfig/clock ]; then
+				TIMEZONE=`timedatectl | gawk -F'[: ]+' ' $2 ~ /Timezone/ {print $3}'`
+			fi
 			echo $TIMEZONE > /etc/timezone
 			TIMEZONE=$(cat /etc/timezone | sed "s/\//\\\\\//g")
 			sed -i".bak" "s/^\;date\.timezone.*$/date\.timezone = \"${TIMEZONE}\" /g" /etc/php.ini
@@ -155,10 +160,10 @@ do
 			make -f Makefile.$Auswahl install > /dev/null
 
 			echo "Copy required files to your system"
-			cp -R /tmp/easyscp/* / > /dev/null
+			cp -pR /tmp/easyscp/* / > /dev/null
 
 			if [ ! -f /etc/easyscp/EasySCP_Config.xml ]; then
-				cp /etc/easyscp/tpl/EasySCP_Config.xml /etc/easyscp/EasySCP_Config.xml
+				cp -p /etc/easyscp/tpl/EasySCP_Config.xml /etc/easyscp/EasySCP_Config.xml
 			fi
 
 			while :

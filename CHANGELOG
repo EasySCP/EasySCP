@@ -10,11 +10,12 @@ EasySCP 2.0.0 ChangeLog
 		* Add: New EasySCP Daemon
 
 	- DOCS:
+		* Add: Debian 8.x ("Jessie") package file
 		* Add: Oracle Linux package file
 		* Add: Ubuntu 14.04 LTS package file
 
 		* Update: CentOS 6.x package file
-		* Update: Debian 7.x (Wheezy) package file
+		* Update: Debian 7.x ("Wheezy") package file
 
 	- GUI:
 		* Add: New Language Files
@@ -71,6 +72,7 @@ EasySCP 2.0.0 ChangeLog
 		* Remove: The old engine is no longer used
 
 	- Setup:
+		* Add: Debian 8.x ("Jessie") Support
 		* Add: Dovecot Support
 		* Add: Postfix MySQL Support
 
@@ -85,5 +87,5 @@ EasySCP 2.0.0 ChangeLog
 		* Fix: net2ftp does not work in some situations.
 
 		* Update: net2ftp to version 1.0
-		* Update: phpMyAdmin to version 4.0.10.7
-		* Update: Roundcube to version 0.9.5
+		* Update: phpMyAdmin to version 4.0.10.9
+		* Update: Roundcube to version 1.0.5

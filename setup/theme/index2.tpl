@@ -81,7 +81,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>Use MySQL Prefix?</td>
+							<td>Use Database Prefix?</td>
 							<td>
 								<input type="radio" name="MySQL_Prefix" id="MySQL_Prefix_infront" value="infront" {$MySQL_infront} />
 								<label for="MySQL_Prefix_infront">infront</label>
@@ -95,6 +95,7 @@
 							<td><label for="Timezone">Please enter Server's Timezone</label></td>
 							<td><input type="text" name="Timezone" id="Timezone" value="{$Timezone}"/></td>
 						</tr>
+						<!--
 						<tr>
 							<td>Should AWStats be activated?</td>
 							<td>
@@ -104,6 +105,7 @@
 								<label for="AWStats_no">No</label>
 							</td>
 						</tr>
+						-->
 					</table>
 				</fieldset>
 				<div class="buttons">

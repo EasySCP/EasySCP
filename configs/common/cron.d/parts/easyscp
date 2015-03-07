@@ -1,4 +1,11 @@
-# delayed tasks START.
+# EasySCP a Virtual Hosting Control Panel
+# Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
+#
+# This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+# To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+#
+# @link 		http://www.easyscp.net
+# @author 		EasySCP Team
 
 # Disk usage
 @daily root umask 027; {$ROOT_DIR}/daemon/CronDiskUsage.php &>{$LOG_DIR}/CronDiskUsage.log
@@ -7,10 +14,11 @@
 0,30	*	*	*	*  root umask 027; {$ROOT_DIR}/daemon/CronServerTraffic.php &>{$LOG_DIR}/CronServerTraffic.log
 0,30	*	*	*	*  root umask 027; {$ROOT_DIR}/daemon/CronDomainTraffic.php &>{$LOG_DIR}/CronDomainTraffic.log
 
+# Backup for all the customers' data depending of the domain properties
+@daily root umask 027; {$ROOT_DIR}/daemon/CronDomainBackup.php &>{$LOG_DIR}/CronDomainBackup.log
+
 # Backup for EasySCP database and all EasySCP configuration files
 @daily root umask 027; {$ROOT_DIR}/daemon/CronSystemBackup.php &>{$LOG_DIR}/CronSystemBackup.log
 
 # Rootkit Hunter
 0 	*/12	*	*	*	root {$RKHUNTER} --cronjob --createlogfile {$RKHUNTER_LOG}.root --display-logfile 1>{$RKHUNTER_LOG} 2>/dev/null
-
-# delayed tasks END.

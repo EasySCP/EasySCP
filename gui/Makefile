@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 # EasySCP a Virtual Hosting Control Panel
-# Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+# Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,16 +28,16 @@ install:
 
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_GUI_ROOT)
 
-	cp -dR ./domain_default_page $(SYSTEM_GUI_ROOT)
-	cp -dR ./domain_disable_page $(SYSTEM_GUI_ROOT)
-	cp -dR ./errordocs $(SYSTEM_GUI_ROOT)
-	cp -dR ./htdocs $(SYSTEM_GUI_ROOT)
-	cp -dR ./include $(SYSTEM_GUI_ROOT)
-	cp -dR ./locale $(SYSTEM_GUI_ROOT)
-	cp -dR ./phptmp $(SYSTEM_GUI_ROOT)
-	cp -dR ./themes $(SYSTEM_GUI_ROOT)
-	cp -dR ./tools $(SYSTEM_GUI_ROOT)
-	cp -dR ./updates $(SYSTEM_GUI_ROOT)
+	cp -dpR ./domain_default_page $(SYSTEM_GUI_ROOT)
+	cp -dpR ./domain_disable_page $(SYSTEM_GUI_ROOT)
+	cp -dpR ./errordocs $(SYSTEM_GUI_ROOT)
+	cp -dpR ./htdocs $(SYSTEM_GUI_ROOT)
+	cp -dpR ./include $(SYSTEM_GUI_ROOT)
+	cp -dpR ./locale $(SYSTEM_GUI_ROOT)
+	cp -dpR ./phptmp $(SYSTEM_GUI_ROOT)
+	cp -dpR ./themes $(SYSTEM_GUI_ROOT)
+	cp -dpR ./tools $(SYSTEM_GUI_ROOT)
+	cp -dpR ./updates $(SYSTEM_GUI_ROOT)
 
 uninstall:
 

@@ -18,7 +18,7 @@
 			<br />
 			<form action="" method="post" id="setup">
 				<fieldset>
-					<legend>MySQL database settings</legend>
+					<legend>Database settings</legend>
 					<table>
 						<tr>
 							<td><label for="DB_HOST">Please enter SQL server hostname</label></td>
