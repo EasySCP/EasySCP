@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -55,6 +55,34 @@ spl_autoload_register('AutoLoader::loadClass');
 class DaemonCommon {
 
 	/**
+	 * Stell eine Verbindung zum EasySCP Controller her
+	 *
+	 * @param string $execute Befehl der an den Controller gesendet wird.
+	 *
+	 * @return mixed
+	 */
+	public static function ControlConnect($execute){
+		if (file_exists(DaemonConfig::$cfg->{'SOCK_EASYSCPC'})){
+			$socket = socket_create(AF_UNIX, SOCK_STREAM, 0);
+			if ($socket < 0) {return 'socket_create() failed.<br />';}
+
+			$result = socket_connect($socket, DaemonConfig::$cfg->{'SOCK_EASYSCPC'});
+			if ($result == false) {return 'socket_connect() failed.<br />';	}
+
+			socket_read($socket, 1024, PHP_NORMAL_READ);
+
+			socket_write($socket, $execute . "\n", strlen($execute . "\n"));
+
+			socket_shutdown($socket, 2);
+			socket_close($socket);
+		} else {
+			return 'EasySCP Controller not running.';
+		}
+
+		return true;
+	}
+
+	/**
 	 * Passwort zufällig erzeugen
 	 *
 	 * Mit dieser Funktion kann man ein zufälliges Passwort erzeugen. Als Parameter kann man die gewünschte Passwort länge übergeben.
@@ -71,6 +99,93 @@ class DaemonCommon {
 			$pw .= $salt[mt_rand(0, strlen($salt)-1)];
 		}
 		return $pw;
+	}
+
+	/**
+	 *
+	 * @param array $tpl_param
+	 * @return Smarty
+	 */
+	public static function getTemplate($tpl_param) {
+		require_once('../gui/include/Smarty/Smarty.class.php');
+		$tpl = new Smarty();
+		$tpl->caching = false;
+		$tpl->setTemplateDir(
+				array(
+						'EasySCP' => '/etc/easyscp/'
+				)
+		);
+		$tpl->setCompileDir('/tmp/templates_c/');
+
+		$tpl->assign($tpl_param);
+
+		return $tpl;
+	}
+
+	/**
+	 * Split an given array in single lines for GUI display
+	 * @static
+	 * @param $array
+	 * @return string
+	 */
+	public static function listArrayforGUI($array){
+		$temp = '';
+		foreach($array AS $line){
+			$temp .= $line.'<br />';
+		}
+		return $temp;
+	}
+
+	/**
+	 * Split an given array in single lines for LOG display
+	 * @static
+	 * @param $array
+	 * @return string
+	 */
+	public static function listArrayforLOG($array){
+		$temp = '';
+		foreach($array AS $line){
+			$temp .= $line.'\n';
+		}
+		return $temp;
+	}
+
+	/**
+	 *
+	 * @param String $directory directory path
+	 * @param String $user system user
+	 * @param String $group system group
+	 * @param int $perm directory permission
+	 * @return boolean
+	 */
+	public static function systemCreateDirectory($directory, $user, $group, $perm = 0775) {
+		if (!file_exists($directory)) {
+			if (mkdir("$directory", $perm, true)) {
+				System_Daemon::debug("Created $directory with permission $perm");
+			} else {
+				System_Daemon::warning("Failed to create $directory with permission $perm");
+				return false;
+			}
+		} else {
+			if (chmod("$directory", $perm)){
+				System_Daemon::debug("Change permission of $directory to $perm");
+			} else {
+				System_Daemon::warning("Failed to change permission of $directory to $perm");
+				return false;
+			}
+		}
+		if (chown("$directory", "$user")) {
+			System_Daemon::debug("Changed ownership of $directory to $user");
+		} else {
+			System_Daemon::warning("Failed to change ownership of $directory to $user");
+			return false;
+		}
+		if (chgrp("$directory", "$group")) {
+			System_Daemon::debug("Changed group ownership of $directory to $group");
+		} else {
+			System_Daemon::warning("Failed to change group ownership of $directory to $group");
+		}
+		return true;
 	}
 
 	/**
@@ -139,59 +254,20 @@ class DaemonCommon {
 	 * @return boolean.
 	 */
 	public static function systemSetGUIPermissions(){
-		// By default, gui files must be readable by both the panel user (php files are
-		// run under this user) and apache (static files are served by it).
-		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->GUI_ROOT_DIR.'/', DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF.DaemonConfig::$cfg->APACHE_SUEXEC_MIN_GID, DaemonConfig::$cfg->APACHE_GROUP, '0550', '0440');
+		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, '0755', '0644');
 
-		// But the following folders must be writable by the panel user, because
-		// php-generated or uploaded files will be stored there.
-		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->GUI_ROOT_DIR.'/phptmp', DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF.DaemonConfig::$cfg->APACHE_SUEXEC_MIN_UID, DaemonConfig::$cfg->APACHE_GROUP, '0750', '0640');
-		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->GUI_ROOT_DIR.'/themes/**/templates_c', DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF.DaemonConfig::$cfg->APACHE_SUEXEC_MIN_UID, DaemonConfig::$cfg->APACHE_GROUP, '0750', '0640');
-		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->GUI_ROOT_DIR.'/tools/filemanager/temp', DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF.DaemonConfig::$cfg->APACHE_SUEXEC_MIN_UID, DaemonConfig::$cfg->APACHE_GROUP, '0750', '0640');
-		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->GUI_ROOT_DIR.'/tools/webmail/logs', DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF.DaemonConfig::$cfg->APACHE_SUEXEC_MIN_UID, DaemonConfig::$cfg->APACHE_GROUP, '0750', '0640');
-		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->GUI_ROOT_DIR.'/tools/webmail/temp', DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF.DaemonConfig::$cfg->APACHE_SUEXEC_MIN_UID, DaemonConfig::$cfg->APACHE_GROUP, '0750', '0640');
-		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->GUI_ROOT_DIR.'/updates', DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF.DaemonConfig::$cfg->APACHE_SUEXEC_MIN_UID, DaemonConfig::$cfg->APACHE_GROUP, '0750', '0640');
+		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/phptmp', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, '0770', '0640');
+		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/themes/**/templates_c', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, '0750', '0640');
+		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/tools/filemanager/temp', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, '0750', '0640');
+		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/tools/webmail/logs', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, '0750', '0640');
+		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/tools/webmail/temp', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, '0750', '0640');
+		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/updates', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, '0750', '0640');
 
 		// Main virtual webhosts directory must be owned by root and readable by all the domain-specific users.
-		self::systemSetFolderPermissions(DaemonConfig::$cfg->APACHE_WWW_DIR, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0555);
+		self::systemSetFolderPermissions(DaemonConfig::$cfg->{'APACHE_WWW_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0555);
 
 		// Main fcgid directory must be world-readable, because all the domain-specific users must be able to access its contents.
-		self::systemSetFolderPermissions(DaemonConfig::$cfg->PHP_STARTER_DIR, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0555);
-
-		// Required on CentOS
-		if (DaemonConfig::$cfg->DistName == 'CentOS') {
-			self::systemSetFolderPermissions(DaemonConfig::$cfg->PHP_STARTER_DIR.'/master', DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF.DaemonConfig::$cfg->APACHE_SUEXEC_MIN_UID, DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF.DaemonConfig::$cfg->APACHE_SUEXEC_MIN_GID, 0755);
-		}
-
-		return true;
-	}
-
-	/**
-	 * Rechte für das System setzen
-	 *
-	 * Mit dieser Funktion kann man die Rechte des Systems neu setzen lassen (z.b. Konfiguration, Daemon etc.).
-	 * Nützlich falls da mal was durcheinander gekommen sein sollte
-	 *
-	 * @return boolean.
-	 */
-	public static function systemSetSystemPermissions(){
-
-		// TODO: Remove them when GUI Config has changed to XML
-		// Außerdem wird die Datei beim Schreiben der OldConfig bereits mit den richtigen Rechten versehen, das hier wäre nur für den Notfall falls die Rechte durcheinander geraten sind
-		// easyscp.conf must be world readable because user "vmail" needs to access it.
-		self::systemSetFilePermissions(DaemonConfig::$cfg->CONF_DIR.'/easyscp.conf', DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644);
-		self::systemSetFilePermissions(DaemonConfig::$cfg->CONF_DIR.'/EasySCP_CMD.xml', DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644);
-		self::systemSetFilePermissions(DaemonConfig::$cfg->CONF_DIR.'/EasySCP_Config.xml', DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644);
-		self::systemSetFilePermissions(DaemonConfig::$cfg->CONF_DIR.'/EasySCP_Config_DB.php', DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644);
-		self::systemSetFilePermissions(DaemonConfig::$cfg->CONF_DIR.'/EasySCP_OS.xml', DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644);
-		self::systemSetFilePermissions(DaemonConfig::$cfg->CONF_DIR.'/easyscp-keys.conf', DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644);
-		self::systemSetFilePermissions(DaemonConfig::$cfg->CONF_DIR.'/Iana_TLD.xml', DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644);
-
-		self::systemSetFilePermissions('/etc/logrotate.d/easyscp', DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644);
-
-		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->DAEMON_ROOT_DIR, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, '0700', '0700');
-
-		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->SRV_TRAFF_LOG_DIR, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, '0700', '0700');
+		self::systemSetFolderPermissions(DaemonConfig::$cfg->{'PHP_STARTER_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0555);
 
 		return true;
 	}
@@ -209,70 +285,41 @@ class DaemonCommon {
 	 * @return boolean.
 	 */
 	public static function systemSetPermissionsRecursive($pathName, $user, $group, $dirPerm, $filePerm){
-		exec('find '.$pathName.' -type d -print0 | xargs -r -0 '.DaemonConfig::$cmd->CMD_CHMOD.' '.$dirPerm, $result, $error);
-		exec('find '.$pathName.' -type f -print0 | xargs -r -0 '.DaemonConfig::$cmd->CMD_CHMOD.' '.$filePerm, $result, $error);
-		exec('find '.$pathName.' -print0 | xargs -r -0 '.DaemonConfig::$cmd->CMD_CHOWN.' '.$user.':'.$group, $result, $error);
+		exec('find '.$pathName.' -type d -print0 | xargs -r -0 '.DaemonConfig::$cmd->{'CMD_CHMOD'}.' '.$dirPerm, $result, $error);
+		exec('find '.$pathName.' -type f -print0 | xargs -r -0 '.DaemonConfig::$cmd->{'CMD_CHMOD'}.' '.$filePerm, $result, $error);
+		exec('find '.$pathName.' -print0 | xargs -r -0 '.DaemonConfig::$cmd->{'CMD_CHOWN'}.' '.$user.':'.$group, $result, $error);
 
 		return true;
 	}
 
 	/**
+	 * Rechte für das System setzen
 	 *
-	 * @param String $directory directory path
-	 * @param String $user system user
-	 * @param String $group system group
-	 * @param int $perm directory permission
-	 * @return boolean
+	 * Mit dieser Funktion kann man die Rechte des Systems neu setzen lassen (z.b. Konfiguration, Daemon etc.).
+	 * Nützlich falls da mal was durcheinander gekommen sein sollte
+	 *
+	 * @return boolean.
 	 */
-	public static function systemCreateDirectory($directory, $user, $group, $perm = 0775) {
-		if (!file_exists($directory)) {
-			if (mkdir("$directory", $perm, true)) {
-				System_Daemon::debug("Created $directory with permission $perm");
-			} else {
-				System_Daemon::warning("Failed to create $directory with permission $perm");
-				return false;
-			}
-		} else {
-			if (chmod("$directory", $perm)){
-				System_Daemon::debug("Change permission of $directory to $perm");
-			} else {
-				System_Daemon::warning("Failed to change permission of $directory to $perm");
-				return false;
-			}
-		}
-		if (chown("$directory", "$user")) {
-			System_Daemon::debug("Changed ownership of $directory to $user");
-		} else {
-			System_Daemon::warning("Failed to change ownership of $directory to $user");
-			return false;
-		}
-		if (chgrp("$directory", "$group")) {
-			System_Daemon::debug("Changed group ownership of $directory to $group");
-		} else {
-			System_Daemon::warning("Failed to change group ownership of $directory to $group");
-		}
+	public static function systemSetSystemPermissions(){
+
+		// TODO: Remove them when GUI Config has changed to XML
+		// Außerdem wird die Datei beim Schreiben der OldConfig bereits mit den richtigen Rechten versehen, das hier wäre nur für den Notfall falls die Rechte durcheinander geraten sind
+		// easyscp.conf must be world readable because user "vmail" needs to access it.
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/easyscp.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_CMD.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_Config.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_Config_DB.php', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_OS.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/easyscp-keys.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/Iana_TLD.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+
+		self::systemSetFilePermissions('/etc/logrotate.d/easyscp', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+
+		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->DAEMON_ROOT_DIR, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, '0700', '0700');
+
+		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->SRV_TRAFF_LOG_DIR, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, '0700', '0700');
+
 		return true;
-	}
-
-	/**
-	 *
-	 * @param array $tpl_param
-	 * @return Smarty
-	 */
-	public static function getTemplate($tpl_param) {
-		require_once('../gui/include/Smarty/Smarty.class.php');
-		$tpl = new Smarty();
-		$tpl->caching = false;
-		$tpl->setTemplateDir(
-			array(
-				'EasySCP' => '/etc/easyscp/'
-			)
-		);
-		$tpl->setCompileDir('/tmp/templates_c/');
-
-		$tpl->assign($tpl_param);
-
-		return $tpl;
 	}
 
 	/**
@@ -293,34 +340,6 @@ class DaemonCommon {
 			System_Daemon::warning("Failed to write content to $fileName");
 			return false;
 		}
-	}
-
-	/**
-	 * Split an given array in single lines for GUI display
-	 * @static
-	 * @param $array
-	 * @return string
-	 */
-	public static function listArrayforGUI($array){
-		$temp = '';
-		foreach($array AS $line){
-			$temp .= $line.'<br />';
-		}
-		return $temp;
-	}
-
-	/**
-	 * Split an given array in single lines for LOG display
-	 * @static
-	 * @param $array
-	 * @return string
-	 */
-	public static function listArrayforLOG($array){
-		$temp = '';
-		foreach($array AS $line){
-			$temp .= $line.'\n';
-		}
-		return $temp;
 	}
 }
 ?>

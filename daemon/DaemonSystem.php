@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -14,65 +14,89 @@
  * EasySCP Daemon system functions
  */
 class DaemonSystem {
+	/**
+	 * Handles DaemonSystem requests
+	 *
+	 * @param string $Input
+	 * @return mixed
+	 */
 	public static function Start($Input) {
+		System_Daemon::debug('Starting "DaemonSystem::Start" subprocess.');
+
 		$data = explode(" ", $Input);
 		switch ($data[0]) {
 			case 'cron':
-				System_Daemon::debug('DaemonSystem Cronjob called ');
+				System_Daemon::debug('Starting "cron" subprocess.');
 				$retVal = self::handleCronjob($data[1]);
 				if ($retVal!==true){
 					System_Daemon::warning('Failed to handle Cronjob for '.$data[1]);
+					System_Daemon::debug('Finished "cron" subprocess.');
 					return false;
 				}
+				System_Daemon::debug('Finished "cron" subprocess.');
 				break;
 			case 'direxists':
+				System_Daemon::debug('Starting "direxists" subprocess.');
 				if (is_dir($data[1])){
 					System_Daemon::debug('Directory '.$data[1].' exists');
+					System_Daemon::debug('Finished "direxists" subprocess.');
 					return true;
 				} else {
 					System_Daemon::debug('Directory '.$data[1].' does not exist');
+					System_Daemon::debug('Finished "direxists" subprocess.');
 					return false;
 				}
 				break;
 			case 'fileexists':
+				System_Daemon::debug('Starting "fileexists" subprocess.');
 				if (is_file($data[1])){
 					System_Daemon::debug('File '.$data[1].' exists');
+					System_Daemon::debug('Finished "fileexists" subprocess.');
 					return true;
 				} else {
 					System_Daemon::debug('File '.$data[1].' does not exist');
+					System_Daemon::debug('Finished "fileexists" subprocess.');
 					return false;
 				}
 				break;
 			case 'isexecutable':
+				System_Daemon::debug('Starting "isexecutable" subprocess.');
 				if(self::Start('fileexists '.$data[1])){
 					if (is_executable($data[1])){
 						System_Daemon::debug('File '.$data[1].' is executable');
+						System_Daemon::debug('Finished "isexecutable" subprocess.');
 						return true;
 					} else {
 						System_Daemon::debug('File '.$data[1].' is not executable');
+						System_Daemon::debug('Finished "isexecutable" subprocess.');
 						return false;
 					}
 				} else {
+					System_Daemon::debug('Finished "isexecutable" subprocess.');
 					return false;
 				}
+				break;
+			case 'rebuildConfig':
+				System_Daemon::debug('Starting "rebuildConfig" subprocess.');
+				$rebuildConfig = DaemonSystemCommon::rebuildConfig($data[1]);
+				if ($rebuildConfig !== true){
+					return $rebuildConfig;
+				}
+				System_Daemon::debug('Finished "rebuildConfig" subprocess.');
 				break;
 			case 'setPermissions':
-				System_Daemon::debug('DaemonSystem setPermissions called ');
+				System_Daemon::debug('Starting "setPermissions" subprocess.');
 				DaemonCommon::systemSetSystemPermissions();
 				DaemonCommon::systemSetGUIPermissions();
-				break;
-			case 'userexists':
-				exec(DaemonConfig::$cmd->CMD_ID.' -u '.$data['1'].' 2>&1', $result, $error);
-				if ($error != 0){
-					System_Daemon::debug('User '.$data['1'].' does not exist');
-					unset($result);
-					return false;
-				}
+				System_Daemon::debug('Finished "setPermissions" subprocess.');
 				break;
 			default:
 				System_Daemon::warning("Don't know what to do with ".$data[0]);
 				return false;
 		}
+
+		System_Daemon::debug('Finished "DaemonSystem::Start" subprocess.');
+
 		return true;
 	}
 	protected static function handleCronjob($userID){
@@ -125,9 +149,9 @@ class DaemonSystem {
 		}
 		// write Apache config
 		$config = $tpl->fetch("tpl/cron.tpl");
-		$confFile = DaemonConfig::$cfg->CRON_DIR . '/' . $adminData['admin_name'];
+		$confFile = DaemonConfig::$cfg->{'CRON_DIR'} . '/' . $adminData['admin_name'];
 		System_Daemon::debug($confFile);
-		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->CRON_GROUP, 0600, false);
+		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'CRON_GROUP'}, 0600, false);
 
 		if ($retVal !== true) {
 			$msg = 'Failed to write'. $confFile;

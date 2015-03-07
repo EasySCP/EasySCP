@@ -1206,11 +1206,15 @@ class System_Daemon
      * @see setSigHandler()
      * @see $_sigHandlers
      */
-    static public function defaultSigHandler($signo)
+	// TODO Debug Meldungen bzgl. "Received signal: 17" und "Received signal: child" überprüfen
+	// Für den Moment deaktiviert um das LOG sauber zu halten
+	// self::debug('Received signal: %s', $signo);
+	// self::debug('Received signal: child');
+	static public function defaultSigHandler($signo)
     {
         // Must be public or else will throw a
         // fatal error: Call to protected method
-        self::debug('Received signal: %s', $signo);
+        // self::debug('Received signal: %s', $signo);
 
         switch ($signo) {
         case SIGTERM:
@@ -1227,7 +1231,7 @@ class System_Daemon
             break;
         case SIGCHLD:
             // A child process has died
-            self::debug('Received signal: child');
+            // self::debug('Received signal: child');
             while (pcntl_wait($status, WNOHANG OR WUNTRACED) > 0) {
                 usleep(1000);
             }

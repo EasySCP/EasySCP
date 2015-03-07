@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -135,20 +135,20 @@ class DaemonDomainCommon {
 	 */
 	protected static function apacheWriteDisabledSiteConfig($domainData) {
 		$tpl_param = array(
-			"DOMAIN_IP"			=> $domainData['ip_number'],
-			"DOMAIN_NAME"		=> $domainData['domain_name'],
-			"DOMAIN_GID"		=> DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'],
-			"DOMAIN_UID"		=> DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'],
-			"AWSTATS"			=> (DaemonConfig::$cfg->AWSTATS_ACTIVE == 'yes') ? true : false,
-			"DOMAIN_CGI"		=> ($domainData['domain_cgi'] == 'yes') ? true : false,
-			"DOMAIN_PHP"		=> ($domainData['domain_php'] == 'yes') ? true : false,
-			"BASE_SERVER_VHOST"	=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
-			"WWW_DIR"			=> DaemonConfig::$cfg->APACHE_WWW_DIR
+			'DOMAIN_IP'			=> $domainData['ip_number'],
+			'DOMAIN_NAME'		=> $domainData['domain_name'],
+			'DOMAIN_GID'		=> DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'],
+			'DOMAIN_UID'		=> DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'],
+			'AWSTATS'			=> (DaemonConfig::$cfg->AWSTATS_ACTIVE == 'yes') ? true : false,
+			'DOMAIN_CGI'		=> ($domainData['domain_cgi'] == 'yes') ? true : false,
+			'DOMAIN_PHP'		=> ($domainData['domain_php'] == 'yes') ? true : false,
+			'BASE_SERVER_VHOST'	=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
+			'WWW_DIR'			=> DaemonConfig::$cfg->APACHE_WWW_DIR
 		);
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);
 
-		$config = $tpl->fetch("apache/parts/vhost_disabled.tpl");
+		$config = $tpl->fetch('apache/parts/vhost_disabled.tpl');
 		$tpl = NULL;
 		unset($tpl);
 		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
@@ -172,29 +172,29 @@ class DaemonDomainCommon {
 		$serverName = $domainData['domain_name'];
 
 		$tpl_param = array(
-			"DOMAIN_IP"					=> $domainData['ip_number'],
-			"DOMAIN_GID"				=> $sysUser,
-			"DOMAIN_UID"				=> $sysGroup,
-			"SERVER_ADMIN"				=> $domainData['email'],
-			"DOC_ROOT"					=> $domainData['domain_name'],
-			"SERVER_NAME"				=> $serverName,
-			"SERVER_ALIAS"				=> 'www.'.$domainData['domain_name'].' '.$sysGroup.'.'.DaemonConfig::$cfg->BASE_SERVER_VHOST,
-			"MASTER_DOMAIN"				=> $domainData['domain_name'],
-			"AWSTATS"					=> (DaemonConfig::$cfg->AWSTATS_ACTIVE == 'yes') ? true : false,
-			"DOMAIN_CGI"				=> ($domainData['domain_cgi'] == 'yes') ? true : false,
-			"DOMAIN_PHP"				=> ($domainData['domain_php'] == 'yes') ? true : false,
-			"BASE_SERVER_VHOST"			=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
-			"BASE_SERVER_VHOST_PREFIX"	=> DaemonConfig::$cfg->BASE_SERVER_VHOST_PREFIX,
-			"WWW_DIR"					=> DaemonConfig::$cfg->APACHE_WWW_DIR,
-			"CUSTOM_SITES_CONFIG_DIR"	=> DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR,
-			"HTACCESS_USERS_FILE_NAME"	=> DaemonConfig::$cfg->HTACCESS_USERS_FILE_NAME,
-			"HTACCESS_GROUPS_FILE_NAME" => DaemonConfig::$cfg->HTACCESS_GROUPS_FILE_NAME,
-			"AWSTATS_GROUP_AUTH"		=> DaemonConfig::$cfg->AWSTATS_GROUP_AUTH,
-			"PHP_STARTER_DIR"			=> DaemonConfig::$cfg->PHP_STARTER_DIR,
-			"APACHE_LOG_DIR"			=> DaemonConfig::$cfg->APACHE_LOG_DIR,
-			"APACHE_ROTATELOGS"			=> DaemonConfig::$cfg->APACHE_ROTATELOGS,
-			"APACHE_TRAFFIC_LOG_DIR"	=> DaemonConfig::$cfg->APACHE_TRAFFIC_LOG_DIR,
-			"SELF"						=> $domainData['domain_name']
+			'DOMAIN_IP'					=> $domainData['ip_number'],
+			'DOMAIN_GID'				=> $sysUser,
+			'DOMAIN_UID'				=> $sysGroup,
+			'SERVER_ADMIN'				=> $domainData['email'],
+			'DOC_ROOT'					=> $domainData['domain_name'],
+			'SERVER_NAME'				=> $serverName,
+			'SERVER_ALIAS'				=> 'www.'.$domainData['domain_name'].' '.$sysGroup.'.'.DaemonConfig::$cfg->BASE_SERVER_VHOST,
+			'MASTER_DOMAIN'				=> $domainData['domain_name'],
+			'AWSTATS'					=> (DaemonConfig::$cfg->AWSTATS_ACTIVE == 'yes') ? true : false,
+			'DOMAIN_CGI'				=> ($domainData['domain_cgi'] == 'yes') ? true : false,
+			'DOMAIN_PHP'				=> ($domainData['domain_php'] == 'yes') ? true : false,
+			'BASE_SERVER_VHOST'			=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
+			'BASE_SERVER_VHOST_PREFIX'	=> DaemonConfig::$cfg->BASE_SERVER_VHOST_PREFIX,
+			'WWW_DIR'					=> DaemonConfig::$cfg->APACHE_WWW_DIR,
+			'CUSTOM_SITES_CONFIG_DIR'	=> DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR,
+			'HTACCESS_USERS_FILE_NAME'	=> DaemonConfig::$cfg->HTACCESS_USERS_FILE_NAME,
+			'HTACCESS_GROUPS_FILE_NAME' => DaemonConfig::$cfg->HTACCESS_GROUPS_FILE_NAME,
+			'AWSTATS_GROUP_AUTH'		=> DaemonConfig::$cfg->AWSTATS_GROUP_AUTH,
+			'PHP_STARTER_DIR'			=> DaemonConfig::$cfg->PHP_STARTER_DIR,
+			'APACHE_LOG_DIR'			=> DaemonConfig::$cfg->APACHE_LOG_DIR,
+			'APACHE_ROTATELOGS'			=> DaemonConfig::$cfg->APACHE_ROTATELOGS,
+			'APACHE_TRAFFIC_LOG_DIR'	=> DaemonConfig::$cfg->APACHE_TRAFFIC_LOG_DIR,
+			'SELF'						=> $domainData['domain_name']
 		);
 
 		if ($tpl_param['SERVER_ADMIN'] == null || $tpl_param['SERVER_ADMIN'] == ''){
@@ -237,7 +237,7 @@ class DaemonDomainCommon {
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);
 		// write Apache config
-		$config = $tpl->fetch("apache/parts/vhost.tpl");
+		$config = $tpl->fetch('apache/parts/vhost.tpl');
 		$tpl = NULL;
 		unset($tpl);
 		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
@@ -255,7 +255,7 @@ class DaemonDomainCommon {
 
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 			// write Apache config
-			$config = $tpl->fetch("apache/parts/vhost.tpl");
+			$config = $tpl->fetch('apache/parts/vhost.tpl');
 			$tpl = NULL;
 			unset($tpl);
 			$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
@@ -289,7 +289,7 @@ class DaemonDomainCommon {
 
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 			// write Apache config
-			$config = $tpl->fetch("apache/parts/vhost.tpl");
+			$config = $tpl->fetch('apache/parts/vhost.tpl');
 			$tpl = NULL;
 			unset($tpl);
 			$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
@@ -307,7 +307,7 @@ class DaemonDomainCommon {
 
 				$tpl = DaemonCommon::getTemplate($tpl_param);
 				// write Apache config
-				$config = $tpl->fetch("apache/parts/vhost.tpl");
+				$config = $tpl->fetch('apache/parts/vhost.tpl');
 				$tpl = NULL;
 				unset($tpl);
 				$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
@@ -323,7 +323,7 @@ class DaemonDomainCommon {
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);
 		// write Apache config
-		$config = $tpl->fetch("apache/parts/custom.conf.tpl");
+		$config = $tpl->fetch('apache/parts/custom.conf.tpl');
 		$tpl = NULL;
 		unset($tpl);
 
@@ -367,8 +367,7 @@ class DaemonDomainCommon {
 			return $msg.'<br />'.$retVal;
 		}
 
-		System_Daemon::debug("Successfully created domain " . $domainData['domain_name']);
-		// System_Daemon::warning("Creation of domain " . $domainData['domain_name'] . " failed!");
+		System_Daemon::debug('Successfully created domain ' . $domainData['domain_name']);
 
 		return true;
 	}
@@ -379,14 +378,14 @@ class DaemonDomainCommon {
 			':status' => $status
 		);
 
-		$sql_query = "
+		$sql_query = '
 			UPDATE
 				domain_aliasses
 			SET
 				status=:status
 			WHERE
 				alias_id = :alias_id
-		";
+		';
 
 		DB::prepare($sql_query);
 		if ($row = DB::execute($sql_param)->closeCursor()) {
@@ -404,14 +403,14 @@ class DaemonDomainCommon {
 			':status' => $status
 		);
 
-		$sql_query = "
+		$sql_query = '
 			UPDATE
 				subdomain_alias
 			SET
 				status=:status
 			WHERE
 				subdomain_alias_id = :subdomain_alias_id
-		";
+		';
 
 		DB::prepare($sql_query);
 		if ($row = DB::execute($sql_param)->closeCursor()) {
@@ -436,14 +435,14 @@ class DaemonDomainCommon {
 			':status'	=> $status
 		);
 
-		$sql_query = "
+		$sql_query = '
 			UPDATE
 				domain
 			SET
 				status = :status
 			WHERE
 				domain_id = :domain_id;
-		";
+		';
 
 		DB::prepare($sql_query);
 		if (DB::execute($sql_param)->closeCursor()) {
@@ -462,14 +461,14 @@ class DaemonDomainCommon {
 			':status' => $status
 		);
 
-		$sql_query = "
+		$sql_query = '
 			UPDATE
 				subdomain
 			SET
 				status = :status
 			WHERE
 				subdomain_id = :subdomain_id;
-		";
+		';
 
 		DB::prepare($sql_query);
 		if ($row = DB::execute($sql_param)->closeCursor()) {
@@ -496,19 +495,19 @@ class DaemonDomainCommon {
 		}
 
 		$fqdn = $aliasData['domain_name'];
-		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . "/$fqdn.conf";
+		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $fqdn . '.conf';
 		if (!unlink($confFile)) {
 			$returnOk = false;
 		}
 		$sql_param = array(
 			':alias_id' => $aliasData['alias_id']
 		);
-		$sql_query = "
+		$sql_query = '
 			DELETE FROM
 				domain_aliasses
 			WHERE
 				alias_id=:alias_id
-		";
+		';
 		DB::prepare($sql_query);
 		if ($row = DB::execute($sql_param)->closeCursor()) {
 
@@ -518,8 +517,8 @@ class DaemonDomainCommon {
 
 	protected static function deleteAliasSubDomain($aliasSubDomainData) {
 
-		$fqdn = $aliasSubDomainData['subdomain_name'] . "." . $aliasSubDomainData['alias_name'];
-		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . "/$fqdn.custom";
+		$fqdn = $aliasSubDomainData['subdomain_name'] . '.' . $aliasSubDomainData['alias_name'];
+		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $fqdn . '.custom';
 		$retVal = unlink($confFile);
 		if ($retVal !== true ) {
 			$msg = 'Failed to delete ' .$confFile;
@@ -529,12 +528,12 @@ class DaemonDomainCommon {
 		$sql_param = array(
 			':subdomain_alias_id' => $aliasSubDomainData['subdomain_alias_id']
 		);
-		$sql_query = "
+		$sql_query = '
 			DELETE FROM
 				subdomain_alias
 			WHERE
 				subdomain_alias_id=:subdomain_alias_id
-		";
+		';
 		DB::prepare($sql_query);
 		if ($row = DB::execute($sql_param)->closeCursor()) {
 
@@ -552,19 +551,19 @@ class DaemonDomainCommon {
 		//delete user and group
 		$sysGroup = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'];
 		$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
-		$cmdGroup = DaemonConfig::$cmd->CMD_GROUPDEL . " $sysGroup";
-		$cmdUser = DaemonConfig::$cmd->CMD_USERDEL . " $sysUser";
+		$cmdGroup = DaemonConfig::$cmd->CMD_GROUPDEL . ' ' . $sysGroup;
+		$cmdUser = DaemonConfig::$cmd->CMD_USERDEL . ' ' . $sysUser;
 		exec($cmdUser);
 		exec($cmdGroup);
 
 		//delete directories
-		$homeDir = DaemonConfig::$cfg->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
-		$fcgiDir = $fcgiDir = DaemonConfig::$cfg->PHP_STARTER_DIR . "/" . $domainData['domain_name'];
-		$cmd = DaemonConfig::$cmd->CMD_RM . " -rf $homeDir";
+		$homeDir = DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
+		$fcgiDir = $fcgiDir = DaemonConfig::$cfg->PHP_STARTER_DIR . '/' . $domainData['domain_name'];
+		$cmd = DaemonConfig::$cmd->CMD_RM . ' -rf ' . $homeDir;
 		exec($cmd);
-		System_Daemon::debug('Deleted '.$homeDir);
+		System_Daemon::debug('Deleted ' . $homeDir);
 
-		$cmd = DaemonConfig::$cmd->CMD_RM . " -rf $fcgiDir";
+		$cmd = DaemonConfig::$cmd->CMD_RM . ' -rf ' . $fcgiDir;
 		exec($cmd);
 		System_Daemon::debug('Deleted '.$fcgiDir);
 
@@ -587,12 +586,12 @@ class DaemonDomainCommon {
 			':domain_id' => $domainData['domain_id']
 		);
 
-		$sql_query = "
+		$sql_query = '
 			DELETE FROM
 				domain
 			WHERE
 				domain_id = :domain_id
-		";
+		';
 
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
@@ -616,12 +615,12 @@ class DaemonDomainCommon {
 			':id' => $row['id']
 		);
 
-		$sql_query = "
+		$sql_query = '
 			DELETE FROM
 				htaccess
 			WHERE
 				id = :id
-	";
+	';
 
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
@@ -667,26 +666,26 @@ class DaemonDomainCommon {
 	 */
 	protected static function directoriesCreateDisabled($domainData) {
 		$returnOk = true;
-		$disabledDir = DaemonConfig::$cfg->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
+		$disabledDir = DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
-			$disabledDir .= "/" . $domainData['mount'];
+			$disabledDir .= '/' . $domainData['mount'];
 		}
-		$disabledDir .= "/disabled";
+		$disabledDir .= '/disabled';
 
 		$sysGroup = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'];
 		$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
 
 		if (!DaemonCommon::systemCreateDirectory($disabledDir, $sysUser, $sysGroup) ||
-				!DaemonCommon::systemCreateDirectory("$disabledDir/images", $sysUser, $sysGroup)){
+				!DaemonCommon::systemCreateDirectory($disabledDir . '/images', $sysUser, $sysGroup)){
 			$returnOk = false;
 		} else {
-			System_Daemon::debug("Created $disabledDir");
+			System_Daemon::debug('Created ' . $disabledDir);
 		}
 
 		$tpl_param = array(
-			"THEME_CHARSET" => "UTF8",
-			"BASE_SERVER_VHOST_PREFIX" => DaemonConfig::$cfg->BASE_SERVER_VHOST_PREFIX,
-			"DOMAIN_NAME" => $domainData['domain_name']
+			'THEME_CHARSET' => 'UTF8',
+			'BASE_SERVER_VHOST_PREFIX' => DaemonConfig::$cfg->BASE_SERVER_VHOST_PREFIX,
+			'DOMAIN_NAME' => $domainData['domain_name']
 		);
 		$tpl = DaemonCommon::getTemplate($tpl_param);
 
@@ -694,23 +693,23 @@ class DaemonDomainCommon {
 		$config = $tpl->fetch("apache/parts/default_index_disabled.tpl");
 		$tpl = NULL;
 		unset($tpl);
-		$htmlFile = $disabledDir . "/index.html";
+		$htmlFile = $disabledDir . '/index.html';
 		if (!DaemonCommon::systemWriteContentToFile($htmlFile, $config, $sysUser, DaemonConfig::$cfg->APACHE_GROUP, 0644)||
-				!copy(DaemonConfig::$cfg->ROOT_DIR . "/gui/domain_disable_page/easyscp.css", $disabledDir . "/easyscp.css")||
-				!DaemonCommon::systemSetFolderPermissions($disabledDir . "/easyscp.css", $sysUser, $sysGroup, 0755)){
+				!copy(DaemonConfig::$cfg->ROOT_DIR . '/gui/domain_disable_page/easyscp.css', $disabledDir . '/easyscp.css')||
+				!DaemonCommon::systemSetFolderPermissions($disabledDir . '/easyscp.css', $sysUser, $sysGroup, 0755)){
 			$returnOk = false;
 		}
 
 		//copy images
-		$sourceDir = dir(DaemonConfig::$cfg->ROOT_DIR . "/gui/domain_disable_page/images");
+		$sourceDir = dir(DaemonConfig::$cfg->ROOT_DIR . '/gui/domain_disable_page/images');
 		while (false !== $entry = $sourceDir->read()) {
 			// Skip pointers
 			if ($entry == '.' || $entry == '..') {
 				continue;
 			}
-			if ("$disabledDir/images/$entry" !== DaemonConfig::$cfg->ROOT_DIR . "/gui/domain_disable_page/images/$entry") {
-				if(!copy(DaemonConfig::$cfg->ROOT_DIR . "/gui/domain_disable_page/images/$entry", "$disabledDir/images/$entry")){
-					System_Daemon::debug(DaemonConfig::$cfg->ROOT_DIR . "/gui/domain_disable_page/images/$entry to $disabledDir/images/$entry");
+			if ($disabledDir . '/images/' . $entry !== DaemonConfig::$cfg->ROOT_DIR . '/gui/domain_disable_page/images/' . $entry) {
+				if(!copy(DaemonConfig::$cfg->ROOT_DIR . '/gui/domain_disable_page/images/' . $entry, $disabledDir . '/images/' . $entry)){
+					System_Daemon::debug(DaemonConfig::$cfg->ROOT_DIR . '/gui/domain_disable_page/images/' . $entry . ' to ' . $disabledDir . '/images/' . $entry);
 					$returnOk = false;
 				}
 			}
@@ -724,47 +723,47 @@ class DaemonDomainCommon {
 	 */
 	protected static function directoriesCreateError($domainData) {
 		$returnOk = true;
-		$errorDir = DaemonConfig::$cfg->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
+		$errorDir = DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
-			$errorDir .= "/" . $domainData['mount'];
+			$errorDir .= '/' . $domainData['mount'];
 		}
-		$errorDir .= "/errors";
+		$errorDir .= '/errors';
 
 		$sysGroup = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'];
 		$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
 
 		if(!DaemonCommon::systemCreateDirectory($errorDir, $sysUser, $sysGroup, 0775)){
-			System_Daemon::warning("Creating directory $errorDir failed!");
+			System_Daemon::warning('Creating directory ' . $errorDir . 'failed!');
 			$returnOk = false;
 		}
-		if(!DaemonCommon::systemCreateDirectory($errorDir . "/inc", $sysUser, $sysGroup, 0775)){
-			System_Daemon::warning("Creating directory $errorDir/inc failed!");
+		if(!DaemonCommon::systemCreateDirectory($errorDir . '/inc', $sysUser, $sysGroup, 0775)){
+			System_Daemon::warning('Creating directory ' . $errorDir . '/inc failed!');
 			$returnOk = false;
 		}
 
 		// copy errorfiles
 		$errorFiles = array(401, 403, 404, 500, 503, 'bw_exceeded');
 		foreach ($errorFiles as $file) {
-			System_Daemon::debug($errorDir . "/" . $file . ".html");
-			if (!file_exists($errorDir . "/" . $file . ".html")) {
-				System_Daemon::debug("Copying file " . $errorDir . "/" . $file . ".html");
-				if (!copy(DaemonConfig::$cfg->ROOT_DIR . "/gui/errordocs/$file.html", $errorDir . "/" . $file . ".html")){
-					System_Daemon::warning("Copying file $file.html failed!");
+			System_Daemon::debug($errorDir . '/' . $file . '.html');
+			if (!file_exists($errorDir . '/' . $file . '.html')) {
+				System_Daemon::debug('Copying file ' . $errorDir . '/' . $file . '.html');
+				if (!copy(DaemonConfig::$cfg->ROOT_DIR . '/gui/errordocs/' . $file . '.html', $errorDir . '/' . $file . '.html')){
+					System_Daemon::warning('Copying file ' . $file . '.html failed!');
 					$returnOk = false;
 				}
 			}
 		}
 
 		// copy inc
-		$sourceDir = dir(DaemonConfig::$cfg->ROOT_DIR . "/gui/errordocs/inc");
+		$sourceDir = dir(DaemonConfig::$cfg->ROOT_DIR . '/gui/errordocs/inc');
 		while (false !== $entry = $sourceDir->read()) {
 			// Skip pointers
 			if ($entry == '.' || $entry == '..') {
 				continue;
 			}
-			if (DaemonConfig::$cfg->ROOT_DIR . "/gui/errordocs/inc/$entry" !== "$errorDir/inc/$entry") {
-				if (!copy(DaemonConfig::$cfg->ROOT_DIR . "/gui/errordocs/inc/$entry", "$errorDir/inc/$entry")){
-					System_Daemon::warning("Copying file $entry failed!");
+			if (DaemonConfig::$cfg->ROOT_DIR . '/gui/errordocs/inc/' . $entry !== $errorDir . '/inc/' . $entry) {
+				if (!copy(DaemonConfig::$cfg->ROOT_DIR . '/gui/errordocs/inc/' . $entry, $errorDir . '/inc/' . $entry)){
+					System_Daemon::warning('Copying file ' . $entry . ' failed!');
 					$returnOk = false;
 				}
 			}
@@ -894,38 +893,16 @@ class DaemonDomainCommon {
 		}
 		$sysUser	= DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
 		$sysGroup	= DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'];
-		$httpGroup	= DaemonConfig::$cfg->APACHE_GROUP;
 
-		$retVal = DaemonCommon::systemCreateDirectory($homeDir, $sysUser, $httpGroup, 0770);
+		$retVal = DaemonCommon::systemCreateDirectory($homeDir, $sysUser, $sysGroup, 0755);
 		if ($retVal!==true){
 			$msg = 'Failed to create '.$homeDir.'!';
 			System_Daemon::warning($msg);
 			return $msg . '<br />' . $retVal;
 		}
 
-		$retVal = DaemonCommon::systemCreateDirectory("$homeDir/cgi-bin", $sysUser, $sysGroup, 0755);
-		if ($retVal!==true){
-			$msg = 'Failed to create '.$homeDir.'/cgi-bin!';
-			System_Daemon::warning($msg);
-			return $msg . '<br />' . $retVal;
-		}
-		
-		$retVal = DaemonCommon::systemCreateDirectory("$homeDir/logs", $sysUser, $sysGroup, 0770);
-		if ($retVal!==true){
-			$msg = 'Failed to create '.$homeDir.'/logs!';
-			System_Daemon::warning($msg);
-			return $msg . '<br />' . $retVal;
-		}
-		
 		if (!isset($domainData['mount'])){
-			$retVal = DaemonCommon::systemCreateDirectory("$homeDir/phptmp", $sysUser, $sysGroup, 0770);
-			if ($retVal!==true){
-				$msg = 'Failed to create '.$homeDir.'/phptmp!';
-				System_Daemon::warning($msg);
-				return $msg . '<br />' . $retVal;
-			}
-
-			$retVal = DaemonCommon::systemCreateDirectory("$homeDir/backups", $sysUser, $sysGroup, 0755);
+			$retVal = DaemonCommon::systemCreateDirectory($homeDir . '/backups', $sysUser, $sysGroup, 0755);
 			if ($retVal!==true){
 				$msg = 'Failed to create '.$homeDir.'/backups!';
 				System_Daemon::warning($msg);
@@ -938,11 +915,32 @@ class DaemonDomainCommon {
 				System_Daemon::warning($msg);
 				return $msg . '<br />' . $retVal;
 			}
+
+			$retVal = DaemonCommon::systemCreateDirectory($homeDir . '/logs', $sysUser, $sysGroup, 0700);
+			if ($retVal!==true){
+				$msg = 'Failed to create '.$homeDir.'/logs!';
+				System_Daemon::warning($msg);
+				return $msg . '<br />' . $retVal;
+			}
+
+			$retVal = DaemonCommon::systemCreateDirectory($homeDir . '/phptmp', $sysUser, $sysGroup, 0770);
+			if ($retVal!==true){
+				$msg = 'Failed to create '.$homeDir.'/phptmp!';
+				System_Daemon::warning($msg);
+				return $msg . '<br />' . $retVal;
+			}
 		}
 
-		$retVal = DaemonCommon::systemCreateDirectory("$homeDir/statistics", $sysUser, $sysGroup, 0755);
+		$retVal = DaemonCommon::systemCreateDirectory($homeDir . '/cgi-bin', $sysUser, $sysGroup, 0755);
 		if ($retVal!==true){
-			$msg = 'Failed to create '.$homeDir.'/statistics!';
+			$msg = 'Failed to create '.$homeDir.'/cgi-bin!';
+			System_Daemon::warning($msg);
+			return $msg . '<br />' . $retVal;
+		}
+
+		$retVal = self::directoriesCreateError($domainData);
+		if ($retVal!==true){
+			$msg = 'Failed to create error directory!';
 			System_Daemon::warning($msg);
 			return $msg . '<br />' . $retVal;
 		}
@@ -954,9 +952,9 @@ class DaemonDomainCommon {
 			return $msg . '<br />' . $retVal;
 		}
 
-		$retVal = self::directoriesCreateError($domainData);
+		$retVal = DaemonCommon::systemCreateDirectory($homeDir . '/statistics', $sysUser, $sysGroup, 0755);
 		if ($retVal!==true){
-			$msg = 'Failed to create error directory!';
+			$msg = 'Failed to create '.$homeDir.'/statistics!';
 			System_Daemon::warning($msg);
 			return $msg . '<br />' . $retVal;
 		}
@@ -1150,7 +1148,7 @@ class DaemonDomainCommon {
 		$sql_param = array(
 			':subdomain_id' => $subDomainID
 		);
-		$sql_query = "
+		$sql_query = '
 			SELECT
 				d.*,
 				s.ip_number, s.ip_number_v6
@@ -1167,7 +1165,7 @@ class DaemonDomainCommon {
 				sd.domain_id = d.domain_id
 			AND
 				sd.subdomain_id = :subdomain_id;
-		";
+		';
 		DB::prepare($sql_query);
 		$subDomainData = DB::execute($sql_param);
 

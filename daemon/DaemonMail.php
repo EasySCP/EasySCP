@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -71,14 +71,30 @@ class DaemonMail {
 	}
 
 	private static function DaemonMailAdd($row) {
-		$mail_ok = true;
-		self::DaemonMailAddDomain(substr(strstr($row['mail_addr'], '@'), 1));
-		if ( $row['mail_type'] == 'normal_mail' || $row['mail_type'] == 'alias_mail' || $row['mail_type'] == 'subdom_mail'){
-			self::DaemonMailAddNormalMail($row);
-		}
+		System_Daemon::debug('Starting "DaemonMail::DaemonMailAdd = '.json_encode($row).'" subprocess.');
 
-		if ( $row['mail_type'] == 'normal_forward' || $row['mail_type'] == 'alias_forward' || $row['mail_type'] == 'subdom_forward'){
-			self::DaemonMailAddNormalForward($row);
+		$mail_ok = self::DaemonMailAddDomain(substr(strstr($row['mail_addr'], '@'), 1));
+		if ( $mail_ok ){
+			$type_recognised = false;
+			if ( $row['mail_type'] == 'normal_mail' || $row['mail_type'] == 'alias_mail' || $row['mail_type'] == 'subdom_mail'){
+				$mail_ok = self::DaemonMailAddNormalMail($row);
+				$type_recognised = true;
+			}
+
+			if ( $row['mail_type'] == 'normal_forward' || $row['mail_type'] == 'alias_forward' || $row['mail_type'] == 'subdom_forward'){
+				$mail_ok = self::DaemonMailAddNormalForward($row);
+				$type_recognised = true;
+			}
+
+			if ( $row['mail_type'] == 'normal_catchall' || $row['mail_type'] == 'alias_catchall' || $row['mail_type'] == 'subdom_catchall'){
+				$mail_ok = self::DaemonMailAddCatchall($row);
+				$type_recognised = true;
+			}
+
+			if ( ! $type_recognised ){
+				System_Daemon::info('DaemonMail::DaemonMailAdd : Mail type was not recognized: ' . $row['mail_type']);
+				$mail_ok = false;
+			}
 		}
 
 		if ( $mail_ok ){
@@ -96,10 +112,14 @@ class DaemonMail {
 			DB::prepare($sql_query);
 			DB::execute($sql_param)->closeCursor();
 
-			exec(DaemonConfig::$cmd->SRV_MTA . ' reload');
+			exec(DaemonConfig::$cmd->{'SRV_MTA'} . ' reload');
 
 			//mail($row['mail_addr'], 'Welcome to EasySCP!', "\nA new EasySCP Mail account has been created for you.\n\nBest wishes with EasySCP!\nThe EasySCP Team.");
+		} else {
+			System_Daemon::info('DaemonMail::DaemonMailAdd was not successful.');
 		}
+
+		System_Daemon::debug('Finished "DaemonMail::DaemonMailAdd" subprocess.');
 	}
 
 	public static function DaemonMailAddDomain($domain_name) {
@@ -119,17 +139,27 @@ class DaemonMail {
 					domain = :domain
 			";
 			DB::prepare($sql_query);
-			DB::execute($sql_param)->closeCursor();
+			// DB::execute($sql_param)->closeCursor();
+			$stmt = DB::execute($sql_param);
+			if ($stmt->errorCode() == '00000'){
+				$mail_ok = true;
+			} else {
+				$mail_ok = false;
+			}
+			$stmt->closeCursor();
 		}
 
 		System_Daemon::debug('Finished "DaemonMail::DaemonMailAddDomain" subprocess.');
 
+		return $mail_ok;
 	}
 
 	private static function DaemonMailAddNormalMail($row) {
+		System_Daemon::debug('Starting "DaemonMail::DaemonMailAddNormalMail = '.json_encode($row).'" subprocess.');
+
 		$sql_param = array(
-				':email'=> $row['mail_addr'],
-				':pass' => DB::decrypt_data($row['mail_pass'])
+			':email'=> $row['mail_addr'],
+			':pass' => DB::decrypt_data($row['mail_pass'])
 		);
 		$sql_query = "
 			INSERT INTO
@@ -142,17 +172,31 @@ class DaemonMail {
 
 		";
 		DB::prepare($sql_query);
-		DB::execute($sql_param)->closeCursor();
+		// DB::execute($sql_param)->closeCursor();
+		$stmt = DB::execute($sql_param);
+		if ($stmt->errorCode() == '00000'){
+			$mail_ok = true;
+		} else {
+			$mail_ok = false;
+		}
+		$stmt->closeCursor();
+
+		System_Daemon::debug('Finished "DaemonMail::DaemonMailAddNormalMail" subprocess.');
+
+		return $mail_ok;
 	}
 
 	private static function DaemonMailAddNormalForward($row) {
+		System_Daemon::debug('Starting "DaemonMail::DaemonMailAddNormalForward = '.json_encode($row).'" subprocess.');
+		$mail_ok = true;
+
 		if(strpos($row['mail_forward'], ",") !== false){
 			$row['mail_forward'] = str_replace(",", " ", $row['mail_forward']);
 		}
 		$sql_param = array(
 			// ':source'		=> $row['mail_acc'] . '@' . $row['domain_name'],
-				':source'		=> $row['mail_addr'],
-				':destination'	=> $row['mail_forward']
+			':source'		=> $row['mail_addr'],
+			':destination'	=> $row['mail_forward']
 		);
 		$sql_query = "
 			INSERT INTO
@@ -164,7 +208,52 @@ class DaemonMail {
 				source = :source, destination = :destination;
 		";
 		DB::prepare($sql_query);
-		DB::execute($sql_param)->closeCursor();
+		// DB::execute($sql_param)->closeCursor();
+		$stmt = DB::execute($sql_param);
+		if ($stmt->errorCode() == '00000'){
+			$mail_ok = true;
+		} else {
+			$mail_ok = false;
+		}
+		$stmt->closeCursor();
+
+		System_Daemon::debug('Finished "DaemonMail::DaemonMailAddNormalForward" subprocess.');
+
+		return $mail_ok;
+	}
+
+	private static function DaemonMailAddCatchall($row) {
+		System_Daemon::debug('Starting "DaemonMail::DaemonMailAddCatchall = '.json_encode($row).'" subprocess.');
+
+		if(strpos($row['mail_acc'], ",") !== false){
+			$row['mail_acc'] = str_replace(",", " ", $row['mail_acc']);
+		}
+		$sql_param = array(
+			// ':source'		=> $row['mail_acc'] . '@' . $row['domain_name'],
+			':source'		=> $row['mail_addr'],
+			':destination'	=> $row['mail_acc']
+		);
+		$sql_query = "
+			INSERT INTO
+				mail.forwardings (source, destination)
+			VALUES
+				(:source, :destination)
+			ON DUPLICATE KEY UPDATE
+				source = :source, destination = :destination;
+		";
+		DB::prepare($sql_query);
+		// DB::execute($sql_param)->closeCursor();
+		$stmt = DB::execute($sql_param);
+		if ($stmt->errorCode() == '00000'){
+			$mail_ok = true;
+		} else {
+			$mail_ok = false;
+		}
+		$stmt->closeCursor();
+
+		System_Daemon::debug('Finished "DaemonMail::DaemonMailAddCatchall" subprocess.');
+
+		return $mail_ok;
 	}
 
 	private static function DaemonMailChange($row) {
@@ -175,6 +264,10 @@ class DaemonMail {
 
 		if ( $row['mail_type'] == 'normal_forward' || $row['mail_type'] == 'alias_forward' || $row['mail_type'] == 'subdom_forward'){
 			self::DaemonMailAddNormalForward($row);
+		}
+
+		if ( $row['mail_type'] == 'normal_catchall' || $row['mail_type'] == 'alias_catchall' || $row['mail_type'] == 'subdom_catchall'){
+			self::DaemonMailAddCatchall($row);
 		}
 
 		if ( $mail_ok ){
@@ -206,11 +299,15 @@ class DaemonMail {
 			self::DaemonMailDelete_normal_forward($row);
 		}
 
+		if ( $row['mail_type'] == 'normal_catchall' || $row['mail_type'] == 'alias_catchall' || $row['mail_type'] == 'subdom_catchall'){
+			self::DaemonMailDelete_catchall($row);
+		}
+
 		if ( $mail_ok ){
 			$mail_dir = substr($row['mail_addr'], strpos($row['mail_addr'], '@') + 1);
-			System_Daemon::info('Delete Mail User Directory ' . DaemonConfig::$cfg->MTA_VIRTUAL_MAIL_DIR . '/' . $mail_dir . '/' . $row['mail_acc']);
-			if (file_exists(DaemonConfig::$cfg->MTA_VIRTUAL_MAIL_DIR . '/' . $mail_dir . '/' . $row['mail_acc'])){
-				exec('rm -R ' . DaemonConfig::$cfg->MTA_VIRTUAL_MAIL_DIR . '/' . $mail_dir . '/' . $row['mail_acc']);
+			System_Daemon::info('Delete Mail User Directory ' . DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $mail_dir . '/' . $row['mail_acc']);
+			if (file_exists(DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $mail_dir . '/' . $row['mail_acc'])){
+				exec('rm -R ' . DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $mail_dir . '/' . $row['mail_acc']);
 			}
 
 
@@ -259,7 +356,7 @@ class DaemonMail {
 
 		if ( $mail_ok ){
 			$sql_param = array(
-					':mail_id'=> $row['mail_id']
+				':mail_id'=> $row['mail_id']
 			);
 
 			$sql_query = "
@@ -312,6 +409,27 @@ class DaemonMail {
 		DB::execute($sql_param)->closeCursor();
 	}
 
+	private static function DaemonMailDelete_catchall($row) {
+		if(strpos($row['mail_acc'], ",") !== false){
+			$row['mail_acc'] = str_replace(",", " ", $row['mail_acc']);
+		}
+		$sql_param = array(
+			// ':source'            => $row['mail_acc'] . '@' . $row['domain_name'],
+			':source'               => $row['mail_addr'],
+			':destination'  => $row['mail_acc']
+		);
+		$sql_query = "
+			DELETE FROM
+				mail.forwardings
+			WHERE
+				source = :source
+			AND
+				destination = :destination
+		";
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+	}
+
 	private static function DaemonMailEnable($row) {
 		System_Daemon::debug('Starting "DaemonMailDisable" subprocess.');
 
@@ -319,7 +437,7 @@ class DaemonMail {
 
 		if ( $mail_ok ){
 			$sql_param = array(
-					':mail_id'=> $row['mail_id']
+				':mail_id'=> $row['mail_id']
 			);
 
 			$sql_query = "
