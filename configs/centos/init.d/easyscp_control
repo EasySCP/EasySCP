@@ -1,4 +1,13 @@
 #!/bin/bash
+
+# EasySCP a Virtual Hosting Control Panel
+# Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
+#
+# This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+# To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+#
+# @link 		http://www.easyscp.net
+# @author 		EasySCP Team
 #
 # /etc/rc.d/init.d/easyscp_control
 #
@@ -8,7 +17,6 @@
 # pidfile: /var/run/easyscp_control/easyscp_control.pid
 PID_FILE=/var/run/easyscp_control/easyscp_control.pid
 BIN_FILE=/var/www/easyscp/daemon/easyscp_control
-BIN_CONTROL=/var/www/easyscp/daemon/Daemon.php
 
 
 # Source function library.
@@ -29,8 +37,7 @@ start() {
 stop() {
     PID=`cat /var/run/easyscp_control/easyscp_control.pid  2>/dev/null `
     if [ -n "$PID" ]; then
-        #/bin/kill "$PID" >/dev/null 2>&1
-		${BIN_CONTROL} Control Stop
+        /bin/kill "$PID" >/dev/null 2>&1
         ret=$?
         if [ $ret -eq 0 ]; then
             STOPTIMEOUT=60

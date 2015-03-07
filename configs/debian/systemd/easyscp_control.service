@@ -1,0 +1,12 @@
+[Unit]
+Description=EasySCP Controller
+After=network-online.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/easyscp_control/easyscp_control.pid
+ExecStart=/var/www/easyscp/daemon/easyscp_control
+ExecStop=/var/www/easyscp/daemon/Daemon.php Control Stop
+
+[Install]
+WantedBy=multi-user.target

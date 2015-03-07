@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # EasySCP a Virtual Hosting Control Panel
-# Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+# Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
 #
 # This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -28,7 +28,6 @@ PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="EasySCP-Controller"
 NAME=easyscp_control
 DAEMON=/var/www/easyscp/daemon/$NAME
-DAEMONCONTROL=/var/www/easyscp/daemon/Daemon.php
 DAEMON_ARGS=""
 PIDFILE=/var/run/easyscp_control/easyscp_control.pid
 SCRIPTNAME=/etc/init.d/easyscp_control
@@ -75,9 +74,7 @@ do_stop()
 	#   1 if daemon was already stopped
 	#   2 if daemon could not be stopped
 	#   other if a failure occurred
-	# start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE
-	$DAEMONCONTROL Control Stop
-	#start-stop-daemon --stop --quiet --retry=TERM/1/KILL/5 --pidfile $PIDFILE
+	start-stop-daemon --stop --quiet --retry=TERM/1/KILL/5 --pidfile $PIDFILE
 	RETVAL="$?"
 	[ "$RETVAL" = 2 ] && return 2
 	# Wait for children to finish too if this is a daemon that forks
@@ -86,7 +83,6 @@ do_stop()
 	# that waits for the process to drop all resources that could be
 	# needed by services started subsequently.  A last resort is to
 	# sleep for some time.
-	# start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
 	start-stop-daemon --stop --quiet --oknodo --retry=0/1/KILL/5 --exec $DAEMON
 	[ "$?" = 2 ] && return 2
 	# Many daemons don't delete their pidfiles when they exit.
