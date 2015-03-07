@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2014 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,16 +107,17 @@ function update_ssl_data($domain_id){
 		 isset($_POST['ssl_cert']) &&
 		 isset($_POST['ssl_status'])) {
 
-		$sql_param = array(
-			"ssl_cert"	=> clean_input($_POST['ssl_cert']),
-			"ssl_cacert"=> clean_input($_POST['ssl_cacert']),
-			"ssl_key"	=> clean_input($_POST['ssl_key']),
-			"ssl_status"=> $_POST['ssl_status'],
-			"domain_id"	=> $domain_id
+		if (openssl_x509_check_private_key(clean_input($_POST['ssl_cert']), clean_input($_POST['ssl_key']))) {
+			$sql_param = array(
+					"ssl_cert"	=> clean_input($_POST['ssl_cert']),
+					"ssl_cacert"=> clean_input($_POST['ssl_cacert']),
+					"ssl_key"	=> clean_input($_POST['ssl_key']),
+					"ssl_status"=> $_POST['ssl_status'],
+					"domain_id"	=> $domain_id
 
-		);
+			);
 
-		$sql_query = "
+			$sql_query = "
 			UPDATE
 				domain
 			SET
@@ -131,15 +132,18 @@ function update_ssl_data($domain_id){
 				domain_id	= :domain_id;
 		";
 
-		DB::prepare($sql_query);
-		$rs = DB::execute($sql_param);
+			DB::prepare($sql_query);
+			$rs = DB::execute($sql_param);
 
-		if ($rs->rowCount() == 0) {
-			set_page_message(tr("SSL configuration unchanged"), 'info');
-		} else {
-			$_SESSION['ssl_configuration_updated'] = "_yes_";
-			set_page_message(tr('SSL configuration updated!'), 'success');
-			send_request('110 DOMAIN domain '.$domain_id);
+			if ($rs->rowCount() == 0) {
+				set_page_message(tr("SSL configuration unchanged"), 'info');
+			} else {
+				$_SESSION['ssl_configuration_updated'] = "_yes_";
+				set_page_message(tr('SSL configuration updated!'), 'success');
+				send_request('110 DOMAIN domain '.$domain_id);
+			}
+		} else{
+			set_page_message(tr("SSL Certificate and key don't match!"), 'error');
 		}
 	}
 
