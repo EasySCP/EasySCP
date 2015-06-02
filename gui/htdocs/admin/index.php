@@ -73,7 +73,7 @@ function gen_system_message($tpl) {
 		':user_id'	=> $_SESSION['user_id']
 	);
 
-	$query = "
+	$sql_query = "
 		SELECT
 			COUNT(ticket_id) AS cnum
 		FROM
