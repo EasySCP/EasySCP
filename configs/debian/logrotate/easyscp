@@ -20,13 +20,13 @@
 	create 640 root adm
 	sharedscripts
 	postrotate
-   		/etc/init.d/apache2 restart > /dev/null
-   	endscript
-   	prerotate
-   		if [ -d /etc/logrotate.d/httpd-prerotate ]; then \
-   			run-parts /etc/logrotate.d/httpd-prerotate; \
-   		fi; \
-   	endscript
+		/etc/init.d/apache2 restart > /dev/null
+	endscript
+	prerotate
+		if [ -d /etc/logrotate.d/httpd-prerotate ]; then \
+			run-parts /etc/logrotate.d/httpd-prerotate; \
+		fi; \
+	endscript
 }
 
 # Rotation for apache user logs
