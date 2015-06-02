@@ -87,7 +87,7 @@ INSERT INTO `config` (`name`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `crontabs`
+-- Table structure for table `cronjobs`
 --
 
 CREATE TABLE IF NOT EXISTS `cronjobs` (
