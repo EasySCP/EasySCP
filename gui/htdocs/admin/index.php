@@ -86,6 +86,7 @@ function gen_system_message($tpl) {
 			ticket_reply = 0;
 	";
 
+	DB::prepare($sql_query);
 	$row = DB::execute($sql_param, true);
 
 	$num_question = (isset($row['cnum'])) ? $row['cnum'] : 0;

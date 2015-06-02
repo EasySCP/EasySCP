@@ -99,7 +99,7 @@ function get_server_trafic($from, $to) {
 		FROM
 			`server_traffic`
 		WHERE
-			`traff_time` > ? AND `traff_time` < ?
+			`traff_time` > ? AND `traff_time` <= ?
 	";
 
 	$rs = exec_query($sql, $query, array($from, $to));
@@ -150,7 +150,7 @@ function generate_page($month, $year) {
 
 	for ($i = 1; $i <= $curday; $i++) {
 		$ftm = mktime(0, 0, 0, $month, $i, $year);
-		$ltm = mktime(23, 59, 59, $month, $i, $year);
+		$ltm = mktime(0, 0, 0, $month, $i+1, $year);
 
 		$query = "
 			SELECT
@@ -158,11 +158,11 @@ function generate_page($month, $year) {
 			FROM
 				`server_traffic`
 			WHERE
-				`traff_time` > ? AND `traff_time` < ?
+				`traff_time` > ? AND `traff_time` <= ?
 		";
 
 		$rs = exec_query($sql, $query, array($ftm, $ltm));
-		$has_data = false;
+
 		// if ($rs->fields['cnt'] > 0) {
 		if ($rs->recordCount() > 0) {
 			list(
@@ -177,8 +177,6 @@ function generate_page($month, $year) {
 				$all_in,
 				$all_out
 			) = get_server_trafic($ftm, $ltm);
-
-			$has_data = true;
 
 			$tpl->append(
 				array(
@@ -209,9 +207,6 @@ function generate_page($month, $year) {
 
 		} // if count
 	} // end for
-	if (!$has_data) {
-		$tpl->assign('DAY_LIST', '');
-	}
 
 	$all_other_in = $all[6] - ($all[0] + $all[2] + $all[4]);
 	$all_other_out = $all[7] - ($all[1] + $all[3] + $all[5]);
