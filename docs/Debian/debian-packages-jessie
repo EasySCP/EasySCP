@@ -10,6 +10,7 @@ dovecot-core
 dovecot-imapd
 dovecot-lmtpd
 dovecot-managesieved
+dovecot-mysql
 dovecot-pop3d
 gamin
 gzip
