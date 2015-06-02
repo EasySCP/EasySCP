@@ -236,7 +236,7 @@ class DaemonConfigMail {
 				/**
 				 * 10-master.conf
 				 */
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -f ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/10-master.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/10-master.conf', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/10-master.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/10-master.conf', $result, $error);
 				DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-master.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-master.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/10-master.conf', $result, $error);
 
@@ -258,6 +258,26 @@ class DaemonConfigMail {
 				}
 
 				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/15-lda.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/15-lda.conf', $result, $error);
+
+				/**
+				 * 20-lmtp.conf
+				 */
+
+				if(file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/20-lmtp.conf')){
+					exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/20-lmtp.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/20-lmtp.conf', $result, $error);
+					DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/20-lmtp.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/20-lmtp.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/20-lmtp.conf', $result, $error);
+				}
+
+				/**
+				 * 20-managesieve.conf
+				 */
+
+				if(file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/20-managesieve.conf')){
+					exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/20-managesieve.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/20-managesieve.conf', $result, $error);
+					DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/20-managesieve.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/20-managesieve.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/20-managesieve.conf', $result, $error);
+				}
 
 				/**
 				 * 90-sieve.conf
