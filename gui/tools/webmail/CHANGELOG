@@ -1,6 +1,21 @@
 CHANGELOG Roundcube Webmail
 ===========================
 
+RELEASE 1.0.6
+-------------
+- Make SMTP error log more verbose - include server response and error code
+- Fix rows count when messages search fails (#1490266)
+- Fix security issue in DBMail driver of password plugin (#1490261)
+- Fix handling of some improper constructs in format=flowed text as per the RFC3676[4.5] (#1490284)
+- Fix missing or not up-to-date CATEGORIES entry in vCard export (#1490277)
+- Fix duplicate entry on timezones list in rcube_config::timezone_name_from_abbr() (#1490293)
+- Fix handling of %-encoded entities in mailto: URLs (#1490346)
+- Fix bug where messages count was not updated after message move/delete with skip_deleted=false (#1490372)
+- Fix security issue in contact photo handling (#1490379)
+- Fix bug where database_attachments_cache setting was not working
+- Fix attached file path unsetting in database_attachments plugin (#1490393)
+- Fix issues when using moduserprefs.sh without --user argument (#1490399)
+
 RELEASE 1.0.5
 -------------
 - Fix bug where some valid text in a message was handled as uuencoded attachment
