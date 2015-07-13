@@ -67,7 +67,8 @@ if ($template == 'index2.tpl'){
 			'HOST_IP'		=> (isset($_POST['HOST_IP'])) ? trim($_POST['HOST_IP']) : gethostbyname($_SERVER['SERVER_NAME']),
 			'HOST_IPv6'		=> (isset($_POST['HOST_IPv6'])) ? trim($_POST['HOST_IPv6']) : $xml->{'HOST_IPv6'},
 			// 'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : 'admin.'.$_SERVER['SERVER_NAME'],
-			'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : 'admin.'.gethostbyaddr(gethostbyname($_SERVER['SERVER_NAME'])),
+			// 'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : 'admin.'.gethostbyaddr(gethostbyname($_SERVER['SERVER_NAME'])),
+			'HOST_NAME'		=> (isset($_POST['HOST_NAME'])) ? trim($_POST['HOST_NAME']) : gethostbyaddr(gethostbyname($_SERVER['SERVER_NAME'])),
 
 			'PANEL_ADMIN'	=> (isset($_POST['PANEL_ADMIN'])) ? trim($_POST['PANEL_ADMIN']) : $xml->{'PANEL_ADMIN'},
 			'PANEL_PASS'	=> (isset($_POST['PANEL_PASS'])) ? trim($_POST['PANEL_PASS']) : $xml->{'PANEL_PASS'},
@@ -233,7 +234,7 @@ function checkData($xml){
 		return false;
 	} else {
 		$checkHOST = explode('.', trim($_POST['HOST_NAME']));
-		if (count($checkHOST) < 3 || $_POST['HOST_NAME'] == $_POST['HOST_FQHN']){
+		if (count($checkHOST) < 3){
 			set_page_message('Please enter the domain name where EasySCP will be reachable on!', 'error');
 			return false;
 		}
