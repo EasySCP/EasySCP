@@ -338,7 +338,9 @@ function schedule_mail_account($sql, $domain_id, $dmn_name, $mail_acc) {
 
 	$cfg = EasySCP_Registry::get('Config');
 
-	$mail_addr = $mail_acc.'@'.decode_idna($dmn_name); // the complete address
+	// TODO Check
+	// $mail_addr = $mail_acc.'@'.decode_idna($dmn_name); // the complete address
+	$mail_addr = $mail_acc.'@'.$dmn_name; // the complete address
 
 	if (array_key_exists('mail_type_normal',$_POST)) {
 		$mail_pass = $_POST['pass'];
@@ -406,7 +408,7 @@ function schedule_mail_account($sql, $domain_id, $dmn_name, $mail_acc) {
 				);
 				return false;
 			}
-			$mail_accs[] = $value;
+			$mail_accs[] = encode_idna($value);
 		}
 		$mail_forward = implode(',', $mail_accs);
 	}

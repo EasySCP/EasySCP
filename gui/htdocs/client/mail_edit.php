@@ -323,7 +323,7 @@ function update_email_forward() {
 				set_page_message(tr("Mail forward list error!"), 'error');
 				return false;
 			}
-			$mail_accs[] = $value;
+			$mail_accs[] = encode_idna($value);;
 		}
 
 		$forward_list = implode(',', $mail_accs);
