@@ -30,9 +30,25 @@ CREATE TABLE IF NOT EXISTS `domains` (
   `type` VARCHAR(6) COLLATE utf8_unicode_ci DEFAULT NULL,
   `notified_serial` INT DEFAULT NULL,
   `account` VARCHAR(40) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name_index` (`name`)
+  PRIMARY KEY (`id`)
 );
+
+CREATE UNIQUE INDEX name_index ON domains(name);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `domainmetadata`
+--
+CREATE TABLE IF NOT EXISTS `domainmetadata` (
+		`id` INT NOT NULL AUTO_INCREMENT,
+		`domain_id` INT NOT NULL,
+		`kind` VARCHAR(32),
+		`content` TEXT,
+		PRIMARY KEY (`id`)
+);
+
+CREATE INDEX domainmetadata_idx ON domainmetadata (domain_id, kind);
 -- --------------------------------------------------------
 
 --
@@ -47,13 +63,17 @@ CREATE TABLE IF NOT EXISTS `records` (
   `ttl` INT DEFAULT NULL,
   `prio` INT DEFAULT NULL,
   `change_date` INT DEFAULT NULL,
+  `disabled` TINYINT(1) DEFAULT 0,
+  `ordername` VARCHAR(255) BINARY DEFAULT NULL,
+  `auth` TINYINT(1) DEFAULT 1,
   `protected` TINYINT(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `DomainRecords` (`domain_id`,`name`,`type`,`content`),
-  KEY `rec_name_index` (`name`),
-  KEY `nametype_index` (`name`, `type`),
-  KEY `domain_id` (`domain_id`)
+  UNIQUE KEY `DomainRecords` (`domain_id`,`name`,`type`,`content`)
 );
+
+CREATE INDEX nametype_index ON records(name,type);
+CREATE INDEX domain_id ON records(domain_id);
+CREATE INDEX recordorder ON records (domain_id, ordername);
 -- --------------------------------------------------------
 
 --
