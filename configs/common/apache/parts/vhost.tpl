@@ -10,7 +10,7 @@
 	RewriteEngine On
 	{literal}
 	RewriteCond %{HTTPS} !on
-	RewriteRule ^/(.*) https://%{SERVER_NAME}%{REQUEST_URI} [R]
+	RewriteRule ^/(.*) https://%{SERVER_NAME}%{REQUEST_URI} [R=301]
 	{/literal}
 </VirtualHost>
 {else}
