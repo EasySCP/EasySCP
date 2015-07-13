@@ -110,6 +110,20 @@ function update_ssl_data() {
 
 		$cfg->replaceWith($db_cfg);
 
+		/*
+		$data = array (
+			'SSL_KEY'	=> $sslkey,
+			'SSL_CERT'	=> $sslcert,
+			'SSL_STATUS'=> $sslstatus
+		);
+		*/
+
+		$data = array (
+			'SSL_STATUS'=> $sslstatus
+		);
+
+		EasyConfig::Save($data);
+
 		write_log(
 				get_session('user_logged') . ": Updated SSL configuration!"
 		);
