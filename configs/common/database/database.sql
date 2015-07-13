@@ -63,10 +63,10 @@ INSERT INTO `config` (`name`, `value`) VALUES
 ('PORT_HTTP', '80;tcp;HTTP;1;0;'),
 ('PORT_HTTPS', '443;tcp;HTTPS;0;0;'),
 ('PORT_IMAP', '143;tcp;IMAP;1;0;'),
-('PORT_IMAP-SSL', '993;tcp;IMAP-SSL;0;0;'),
+('PORT_IMAP-SSL', '993;tcp;IMAP-SSL;1;0;'),
 ('PORT_POLICYD-WEIGHT', '12525;tcp;POLICYD-WEIGHT;1;1;localhost'),
 ('PORT_POP3', '110;tcp;POP3;1;0;'),
-('PORT_POP3-SSL', '995;tcp;POP3-SSL;0;0;'),
+('PORT_POP3-SSL', '995;tcp;POP3-SSL;1;0;'),
 ('PORT_POSTGREY', '10023;tcp;POSTGREY;1;1;localhost'),
 ('PORT_SMTP', '25;tcp;SMTP;1;0;'),
 ('PORT_SMTP-SSL', '465;tcp;SMTP-SSL;1;0;'),
@@ -81,8 +81,12 @@ INSERT INTO `config` (`name`, `value`) VALUES
 ('SSL_CERT', ''),
 ('SSL_CACERT', ''),
 ('SSL_STATUS',0),
+('MTA_SSL_KEY', ''),
+('MTA_SSL_CERT', ''),
+('MTA_SSL_CACERT', ''),
+('MTA_SSL_STATUS',0),
 ('MIGRATION_ENABLED',0),
-('DATABASE_REVISION', '61');
+('DATABASE_REVISION', '62');
 
 -- --------------------------------------------------------
 

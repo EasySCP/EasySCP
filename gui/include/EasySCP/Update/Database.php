@@ -580,6 +580,29 @@ class EasySCP_Update_Database extends EasySCP_Update {
 		return $sqlUpd;
 	}
 
+	/**
+	 * Adds database fields for MTA SSL configuration
+	 *
+	 * @author Markus Szywon <markus.szywon@easyscp.net>
+	 * @return array
+	 */
+	protected function _databaseUpdate_62(){
+		$sqlUpd = array();
+
+		$sqlUpd[] = "
+			INSERT INTO
+				`config` (name, value)
+			VALUES
+				('MTA_SSL_KEY', ''),
+				('MTA_SSL_CERT',''),
+				('MTA_SSL_CACERT', ''),
+				('MTA_SSL_STATUS','0')
+			;
+		";
+
+		return $sqlUpd;
+	}
+
 	/*
 	 * DO NOT CHANGE ANYTHING BELOW THIS LINE!
 	 */
