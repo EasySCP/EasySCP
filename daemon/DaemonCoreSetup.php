@@ -318,7 +318,7 @@ function EasySCP_Directories(){
 function EasySCP_main_configuration_file(){
 	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
-	DaemonConfig::$cfg->{'BuildDate'} = '20150307';
+	DaemonConfig::$cfg->{'BuildDate'} = '20150624';
 	DaemonConfig::$cfg->{'DistName'} = $xml->{'DistName'};
 	DaemonConfig::$cfg->{'DistVersion'} = $xml->{'DistVersion'};
 	DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} = $xml->{'PANEL_MAIL'};
@@ -543,59 +543,15 @@ function EasySCP_crontab_file(){
 }
 
 function EasySCP_Powerdns_main_configuration_file(){
-	DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'PDNS_DB_DIR'}.'/', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640);
-
-	$pdnsUser = 'powerdns';
-	$pdnsUserPwd = DaemonCommon::generatePassword(18);
-	$pdnsDBHost = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'});
-
-	$dns = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_DNS.xml');
-
-	System_Daemon::debug('Building the new pdns config file');
-
-	$dns->{'PDNS_USER'} = $pdnsUser;
-	$dns->{'PDNS_PASS'} = DB::encrypt_data($pdnsUserPwd);
-	$dns->{'HOSTNAME'} = $pdnsDBHost;
-
-	$handle = fopen(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml', "wb");
-	fwrite($handle, $dns->asXML());
-	fclose($handle);
-
-	DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640);
+	$CreatePDNSPass = DaemonConfigDNS::CreatePDNSPass();
+	if ($CreatePDNSPass !== true){
+		return $CreatePDNSPass;
+	}
 
 	$SavePDNSConfig = DaemonConfigDNS::SavePDNSConfig();
 	if ($SavePDNSConfig !== true){
 		return $SavePDNSConfig;
 	}
-
-	// Creating Powerdns control user account if needed
-
-	System_Daemon::debug('Adding the PowerDNS control user');
-
-	$sql_param = array(
-		':PDNS_USER'=> $pdnsUser,
-		':PDNS_PASS'=> $pdnsUserPwd,
-		':HOSTNAME'	=> $pdnsDBHost
-	);
-	$sql_query = "
-		GRANT ALL PRIVILEGES ON powerdns.* TO :PDNS_USER@:HOSTNAME IDENTIFIED BY :PDNS_PASS;
-		FLUSH PRIVILEGES;
-	";
-
-	DB::prepare($sql_query);
-	DB::execute($sql_param)->closeCursor();
-
-	$sql_param = array(
-		':DATABASE_USER'=> DaemonConfig::$cfg->DATABASE_USER,
-		':DATABASE_HOST'=> idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'})
-	);
-	$sql_query = "
-		GRANT ALL PRIVILEGES ON powerdns.* TO :DATABASE_USER@:DATABASE_HOST;
-		FLUSH PRIVILEGES;
-	";
-
-	DB::prepare($sql_query);
-	DB::execute($sql_param)->closeCursor();
 
 	// Creating Panel Main DNS config
 	$sql_param = array(
@@ -738,6 +694,23 @@ function EasySCP_Apache_AWStats_vhost_file(){
 }
 
 function EasySCP_MTA_configuration_files(){
+
+	if (DaemonConfig::$cfg->{'MTA_SSL_STATUS'} == '1'){
+		// Generate SSL Certificate
+		switch(DaemonConfig::$cfg->{'DistName'}){
+			case 'Debian':
+				if (file_exists("/etc/ssl/certs/ssl-cert-snakeoil.pem")){
+					exec(DaemonConfig::$cmd->{'CMD_RM'}.' /etc/ssl/certs/ssl-cert-snakeoil.pem', $result, $error);
+				}
+				if (file_exists("/etc/ssl/private/ssl-cert-snakeoil.key")){
+					exec(DaemonConfig::$cmd->{'CMD_RM'}.' /etc/ssl/private/ssl-cert-snakeoil.key', $result, $error);
+				}
+				exec('make-ssl-cert generate-default-snakeoil', $result, $error);
+				break;
+			default:
+		}
+	}
+
 	$SaveMTAConfig = DaemonConfigMail::SaveMTAConfig();
 	if ($SaveMTAConfig !== true){
 		return $SaveMTAConfig;
@@ -747,41 +720,12 @@ function EasySCP_MTA_configuration_files(){
 }
 
 function EasySCP_ProFTPd_configuration_file(){
-	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
+	//TODO Übernahme der Daten aus der Setup config.xml (FTP user und Pass) implementieren
+	//$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
-	System_Daemon::debug('Create/Update Proftpd SQL user data');
-
-	$sql_param = array(
-		':DATABASE_HOST'=> $xml->{'DB_HOST'},
-		':FTP_USER'		=> $xml->{'FTP_USER'},
-		':FTP_PASSWORD'	=> $xml->{'FTP_PASSWORD'}
-	);
-
-	$sql_query = "
-		GRANT SELECT,INSERT,UPDATE,DELETE ON ftp_group TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
-		GRANT SELECT,INSERT,UPDATE,DELETE ON ftp_log TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
-		GRANT SELECT,INSERT,UPDATE,DELETE ON ftp_users TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
-		GRANT SELECT,INSERT,UPDATE,DELETE ON quotalimits TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
-		GRANT SELECT,INSERT,UPDATE,DELETE ON quotatallies TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
-		FLUSH PRIVILEGES;
-	";
-
-	DB::prepare($sql_query);
-	DB::execute($sql_param)->closeCursor();
-
-	if (!file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_FTP.xml')) {
-		$ftp = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_FTP.xml');
-
-		System_Daemon::debug('Building the new ftp config file');
-
-		$ftp->{'DB_DATABASE'}	= $xml->{'DB_DATABASE'};
-		$ftp->{'DB_HOST'}		= $xml->{'DB_HOST'};
-		$ftp->{'FTP_USER'}		= $xml->{'FTP_USER'};
-		$ftp->{'FTP_PASSWORD'}	= DB::encrypt_data($xml->{'FTP_PASSWORD'});
-
-		$handle = fopen(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_FTP.xml', "wb");
-		fwrite($handle, $ftp->asXML());
-		fclose($handle);
+	$CreateProFTPdPass = DaemonConfigFTP::CreateProFTPdPass();
+	if ($CreateProFTPdPass !== true){
+		return $CreateProFTPdPass;
 	}
 
 	$SaveProFTPdConfig = DaemonConfigFTP::SaveProFTPdConfig();
@@ -796,7 +740,7 @@ function EasySCP_init_scripts(){
 
 	switch(DaemonConfig::$cfg->{'DistName'}){
 		case 'CentOS':
-			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cmd->{'SRV_EASYSCPD'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
+			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cmd->{'SRV_EASYSCPC'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
 			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cmd->{'SRV_EASYSCPD'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
 
 			exec('/sbin/chkconfig easyscp_control on', $result, $error);
@@ -804,14 +748,19 @@ function EasySCP_init_scripts(){
 
 			break;
 		default:
-			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cmd->{'SRV_EASYSCPD'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
+			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cmd->{'SRV_EASYSCPC'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
 			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cmd->{'SRV_EASYSCPD'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
 
-			exec('/usr/sbin/update-rc.d -f easyscp_control remove', $result, $error);
-			exec('/usr/sbin/update-rc.d -f easyscp_daemon remove', $result, $error);
+			if (DaemonConfig::$cfg->{'DistName'} == 'Debian' && DaemonConfig::$cfg->{'DistVersion'} == '8' ){
+				exec('/bin/systemctl enable easyscp_control', $result, $error);
+				exec('/bin/systemctl enable easyscp_daemon', $result, $error);
+			} else {
+				exec('/usr/sbin/update-rc.d -f easyscp_control remove', $result, $error);
+				exec('/usr/sbin/update-rc.d -f easyscp_daemon remove', $result, $error);
 
-			exec('/usr/sbin/update-rc.d easyscp_control defaults 99', $result, $error);
-			exec('/usr/sbin/update-rc.d easyscp_daemon defaults 99', $result, $error);
+				exec('/usr/sbin/update-rc.d easyscp_control defaults 99', $result, $error);
+				exec('/usr/sbin/update-rc.d easyscp_daemon defaults 99', $result, $error);
+			}
 	}
 
 	return 'Ok';
@@ -1129,7 +1078,7 @@ function System_cleanup(){
 			// Enable GUI vhost (Debian like distributions)
 			exec('a2ensite 00_master.conf');
 
-			// Apache 2.4 Module
+			// Apache Module
 
 			// Dieses Modul ermöglicht die Ausführung von CGI-Skripten in Abhängigkeit von Medientypen und Anfragemethoden.
 			//exec('a2enmod actions');
@@ -1137,11 +1086,20 @@ function System_cleanup(){
 			// Execution of CGI scripts using an external CGI daemon
 			//exec('a2enmod cgid');
 
+			// Enabling mod_expires
+			// Controls the setting of the Expires HTTP header and the max-age directive of the Cache-Control HTTP header in server responses.
+			// The expiration date can set to be relative to either the time the source file was last modified, or to the time of the client access.
+			exec('a2enmod expires');
+
 			// Disable default fcgid modules loaders to avoid conflicts with EasySCP loaders
 			exec('a2dismod fcgid');
 
 			// Enable EasySCP fcgi loader
 			exec('a2enmod fcgid_easyscp');
+
+			// Enabling mod_headers
+			// Provides directives to control and modify HTTP request and response headers. Headers can be merged, replaced or removed.
+			exec('a2enmod headers');
 
 			// Enabling mod proxy
 			// HTTP/1.1 proxy/gateway server

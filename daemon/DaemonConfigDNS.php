@@ -19,8 +19,67 @@ class DaemonConfigDNS {
 	/**
 	 * @return mixed
 	 */
+	public static function CreatePDNSPass(){
+		System_Daemon::debug('Starting "DaemonConfigDNS::createPDNSPass" subprocess.');
+
+		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_DNS.xml');
+
+		System_Daemon::debug('Building the new pdns config file');
+
+		$xml->{'PDNS_USER'} = 'powerdns';
+		$xml->{'PDNS_PASS'} = DB::encrypt_data(DaemonCommon::generatePassword(18));
+		$xml->{'HOSTNAME'} = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'});
+
+		$handle = fopen(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml', "wb");
+		fwrite($handle, $xml->asXML());
+		fclose($handle);
+
+		DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640);
+
+		// Create/Update Powerdns control user account if needed
+
+		System_Daemon::debug('Adding the PowerDNS control user');
+
+		$sql_param = array(
+			':PDNS_USER'=> $xml->{'PDNS_USER'},
+			':PDNS_PASS'=> DB::decrypt_data($xml->{'PDNS_PASS'}),
+			':HOSTNAME'	=> $xml->{'HOSTNAME'}
+		);
+		$sql_query = "
+			GRANT ALL PRIVILEGES ON powerdns.* TO :PDNS_USER@:HOSTNAME IDENTIFIED BY :PDNS_PASS;
+			FLUSH PRIVILEGES;
+		";
+
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+
+		$sql_param = array(
+			':DATABASE_USER'=> DaemonConfig::$cfg->DATABASE_USER,
+			':DATABASE_HOST'=> idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'})
+		);
+
+		$sql_query = "
+			GRANT ALL PRIVILEGES ON powerdns.* TO :DATABASE_USER@:DATABASE_HOST;
+			FLUSH PRIVILEGES;
+		";
+
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+
+		System_Daemon::debug('Finished "DaemonConfigDNS::createPDNSPass" subprocess.');
+
+		return true;
+	}
+
+	/**
+	 * @return mixed
+	 */
 	public static function SavePDNSConfig(){
 		System_Daemon::debug('Starting "DaemonConfigDNS::SavePDNSConfig" subprocess.');
+
+		if (!file_exists(DaemonConfig::$cfg->{'PDNS_DB_DIR'}.'/')){
+			DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'PDNS_DB_DIR'}.'/', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640);
+		}
 
 		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml');
 
@@ -77,6 +136,10 @@ class DaemonConfigDNS {
 
 				if(file_exists(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
 					unlink(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
+				}
+
+				if(file_exists(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf')) {
+					unlink(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf');
 				}
 
 				break;

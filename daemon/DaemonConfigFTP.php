@@ -19,6 +19,90 @@ class DaemonConfigFTP {
 	/**
 	 * @return mixed
 	 */
+	public static function CreateProFTPdPass(){
+		System_Daemon::debug('Starting "DaemonConfigFTP::CreateProFTPdPass" subprocess.');
+
+		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_FTP.xml');
+
+		System_Daemon::debug('Building the new ftp config file');
+
+		$xml->{'DB_DATABASE'}	= DB::$DB_DATABASE;
+		$xml->{'DB_HOST'}		= idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'});
+		$xml->{'FTP_USER'}		= 'vftp';
+		$xml->{'FTP_PASSWORD'}	= DB::encrypt_data(DaemonCommon::generatePassword(18));
+
+		$handle = fopen(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_FTP.xml', "wb");
+		fwrite($handle, $xml->asXML());
+		fclose($handle);
+
+		System_Daemon::debug('Create/Update Proftpd SQL user data');
+
+		$sql_param = array(
+			':DATABASE_HOST'=> $xml->{'DB_HOST'},
+			':FTP_USER'		=> $xml->{'FTP_USER'},
+			':FTP_PASSWORD'	=> DB::decrypt_data($xml->{'FTP_PASSWORD'})
+		);
+
+		$sql_query = "
+			GRANT SELECT,INSERT,UPDATE,DELETE ON ftp_group TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
+			GRANT SELECT,INSERT,UPDATE,DELETE ON ftp_log TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
+			GRANT SELECT,INSERT,UPDATE,DELETE ON ftp_users TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
+			GRANT SELECT,INSERT,UPDATE,DELETE ON quotalimits TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
+			GRANT SELECT,INSERT,UPDATE,DELETE ON quotatallies TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
+			FLUSH PRIVILEGES;
+		";
+
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+
+		/*
+
+		$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
+
+		System_Daemon::debug('Create/Update Proftpd SQL user data');
+
+		$sql_param = array(
+			':DATABASE_HOST'=> $xml->{'DB_HOST'},
+			':FTP_USER'		=> $xml->{'FTP_USER'},
+			':FTP_PASSWORD'	=> $xml->{'FTP_PASSWORD'}
+		);
+
+		$sql_query = "
+			GRANT SELECT,INSERT,UPDATE,DELETE ON ftp_group TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
+			GRANT SELECT,INSERT,UPDATE,DELETE ON ftp_log TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
+			GRANT SELECT,INSERT,UPDATE,DELETE ON ftp_users TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
+			GRANT SELECT,INSERT,UPDATE,DELETE ON quotalimits TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
+			GRANT SELECT,INSERT,UPDATE,DELETE ON quotatallies TO :FTP_USER@:DATABASE_HOST IDENTIFIED BY :FTP_PASSWORD;
+			FLUSH PRIVILEGES;
+		";
+
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+
+		if (!file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_FTP.xml')) {
+			$ftp = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_FTP.xml');
+
+			System_Daemon::debug('Building the new ftp config file');
+
+			$ftp->{'DB_DATABASE'}	= $xml->{'DB_DATABASE'};
+			$ftp->{'DB_HOST'}		= $xml->{'DB_HOST'};
+			$ftp->{'FTP_USER'}		= $xml->{'FTP_USER'};
+			$ftp->{'FTP_PASSWORD'}	= DB::encrypt_data($xml->{'FTP_PASSWORD'});
+
+			$handle = fopen(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_FTP.xml', "wb");
+			fwrite($handle, $ftp->asXML());
+			fclose($handle);
+		}
+		*/
+
+		System_Daemon::debug('Finished "DaemonConfigFTP::CreateProFTPdPass" subprocess.');
+
+		return true;
+	}
+
+	/**
+	 * @return mixed
+	 */
 	public static function SaveProFTPdConfig(){
 		System_Daemon::debug('Starting "DaemonConfigFTP::SaveProFTPdConfig" subprocess.');
 
@@ -38,7 +122,7 @@ class DaemonConfigFTP {
 		// Store the new file in working directory
 
 		$tpl_param = array(
-				'HOST_NAME' => idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'})
+			'HOST_NAME' => idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'})
 		);
 
 		$tpl_param['UseIPv6'] = (isset(DaemonConfig::$cfg->{'BASE_SERVER_IPv6'}) && DaemonConfig::$cfg->{'BASE_SERVER_IPv6'} != '') ? 'on' : 'off';
@@ -57,12 +141,12 @@ class DaemonConfigFTP {
 		exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/proftpd.conf '.DaemonConfig::$cfg->{'FTPD_CONF_FILE'}, $result, $error);
 
 		$tpl_param = array(
-				'DATABASE_NAME'		=> $xml->{'DB_DATABASE'},
-				'DATABASE_HOST'		=> $xml->{'DB_HOST'},
-				'DATABASE_USER'		=> $xml->{'FTP_USER'},
-				'DATABASE_PASS'		=> DB::decrypt_data($xml->{'FTP_PASSWORD'}),
-				'FTPD_MIN_UID'		=> DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'},
-				'FTPD_MIN_GID'		=> DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}
+			'DATABASE_NAME'		=> $xml->{'DB_DATABASE'},
+			'DATABASE_HOST'		=> $xml->{'DB_HOST'},
+			'DATABASE_USER'		=> $xml->{'FTP_USER'},
+			'DATABASE_PASS'		=> DB::decrypt_data($xml->{'FTP_PASSWORD'}),
+			'FTPD_MIN_UID'		=> DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'},
+			'FTPD_MIN_GID'		=> DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}
 		);
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -86,7 +170,7 @@ class DaemonConfigFTP {
 		}
 
 		$tpl_param = array(
-				'APACHE_WWW_DIR'	=> DaemonConfig::$cfg->{'APACHE_WWW_DIR'}
+			'APACHE_WWW_DIR'	=> DaemonConfig::$cfg->{'APACHE_WWW_DIR'}
 		);
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);

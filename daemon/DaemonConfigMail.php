@@ -21,7 +21,10 @@ class DaemonConfigMail {
 	 */
 	public static function SaveMTAConfig(){
 		System_Daemon::debug('Starting "DaemonConfigMail::SaveMTAConfig" subprocess.');
-		// Postfix main.cf
+
+		/**
+		 * Postfix main.cf
+		 */
 
 		// Backup current main.cf if exists
 		if (file_exists(DaemonConfig::$cfg->{'POSTFIX_CONF_FILE'})){
@@ -44,7 +47,8 @@ class DaemonConfigMail {
 			'MTA_MAILBOX_MIN_UID'	=> DaemonConfig::$cfg->{'MTA_MAILBOX_MIN_UID'},
 			'MTA_MAILBOX_UID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_UID'},
 			'MTA_MAILBOX_GID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_GID'},
-			'PORT_POSTGREY'			=> DaemonConfig::$cfg->{'PORT_POSTGREY'}
+			'PORT_POSTGREY'			=> DaemonConfig::$cfg->{'PORT_POSTGREY'},
+			'MTA_SSL'				=> (DaemonConfig::$cfg->{'MTA_SSL_STATUS'} == '1') ? true : false
 		);
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -58,24 +62,13 @@ class DaemonConfigMail {
 			return 'Error: Failed to write '.$confFile;
 		}
 
-		// Generate SSL Certificate
-		switch(DaemonConfig::$cfg->{'DistName'}){
-			case 'Debian':
-				if (file_exists("/etc/ssl/certs/ssl-cert-snakeoil.pem")){
-					exec(DaemonConfig::$cmd->{'CMD_RM'}.' /etc/ssl/certs/ssl-cert-snakeoil.pem', $result, $error);
-				}
-				if (file_exists("/etc/ssl/private/ssl-cert-snakeoil.key")){
-					exec(DaemonConfig::$cmd->{'CMD_RM'}.' /etc/ssl/private/ssl-cert-snakeoil.key', $result, $error);
-				}
-				exec('make-ssl-cert generate-default-snakeoil', $result, $error);
-				break;
-			default:
-		}
-
 		// Installing the new file in production directory
 		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/working/main.cf '.DaemonConfig::$cfg->{'POSTFIX_CONF_FILE'}, $result, $error);
 
-		// Postfix master.cf
+
+		/**
+		 * Postfix master.cf
+		 */
 
 		// Backup current master.cf if exists
 		if (file_exists(DaemonConfig::$cfg->{'POSTFIX_MASTER_CONF_FILE'})){
@@ -241,6 +234,15 @@ class DaemonConfigMail {
 				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-master.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/10-master.conf', $result, $error);
 
 				/**
+				 * 10-ssl.conf
+				 */
+				if(file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/10-ssl.conf')){
+					exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/10-ssl.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/10-ssl.conf', $result, $error);
+					DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-ssl.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-ssl.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/10-ssl.conf', $result, $error);
+				}
+
+				/**
 				 * 15-lda.conf
 				 */
 				$tpl_param = array(
@@ -306,6 +308,7 @@ class DaemonConfigMail {
 				/**
 				 * auth-sql.conf.ext
 				 */
+
 				$tpl_param = array(
 					'MTA_MAILBOX_UID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_UID'},
 					'MTA_MAILBOX_GID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_GID'},

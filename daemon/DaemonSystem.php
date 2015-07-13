@@ -78,7 +78,7 @@ class DaemonSystem {
 				break;
 			case 'rebuildConfig':
 				System_Daemon::debug('Starting "rebuildConfig" subprocess.');
-				$rebuildConfig = DaemonSystemCommon::rebuildConfig($data[1]);
+				$rebuildConfig = DaemonConfigCommon::rebuildConfig($data[1]);
 				if ($rebuildConfig !== true){
 					return $rebuildConfig;
 				}

@@ -163,12 +163,11 @@ class DaemonMail {
 		);
 		$sql_query = "
 			INSERT INTO
-				mail.users
-					(email, password)
+				mail.users (email, password)
 			VALUES
-				(:email, ENCRYPT(:pass))
+				(:email, SHA2(:pass, 256))
 			ON DUPLICATE KEY UPDATE
-				email = :email, password = ENCRYPT(:pass);
+				email = :email, password = SHA2(:pass, 256);
 
 		";
 		DB::prepare($sql_query);
@@ -200,8 +199,7 @@ class DaemonMail {
 		);
 		$sql_query = "
 			INSERT INTO
-				mail.forwardings
-					(source, destination)
+				mail.forwardings (source, destination)
 			VALUES
 				(:source, :destination)
 			ON DUPLICATE KEY UPDATE
