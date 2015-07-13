@@ -121,6 +121,7 @@
 	<MTA_MAILBOX_UID_NAME>vmail</MTA_MAILBOX_UID_NAME>
 	<MTA_MAILBOX_GID>8</MTA_MAILBOX_GID>
 	<MTA_MAILBOX_GID_NAME>mail</MTA_MAILBOX_GID_NAME>
+	<MTA_SSL_STATUS>0</MTA_SSL_STATUS>
 
 	<!--
 		Dovecot
@@ -172,6 +173,7 @@
 	-->
 	<SSL_CERT_DIR>/etc/pki/tls/certs</SSL_CERT_DIR>
 	<SSL_KEY_DIR>/etc/pki/tls/private</SSL_KEY_DIR>
+	<SSL_STATUS>0</SSL_STATUS>
 
 	<!--
 		CRON data
