@@ -247,7 +247,7 @@ class DB extends DB_Config {
 		if (file_exists($DB_BACKUP_FILE)){
 			unlink($DB_BACKUP_FILE);
 		}
-		exec(DaemonConfig::$cmd->{'CMD_MYSQLDUMP'} . ' --add-drop-table --allow-keywords --quote-names -h'.self::$DB_HOST.' -u'.self::$DB_USER.' -p'.self::decrypt_data(self::$DB_PASSWORD).' '.$Database.' > ' . $DB_BACKUP_FILE);
+		exec(DaemonConfig::$cmd->{'CMD_MYSQLDUMP'} . ' --add-drop-table --allow-keywords --quote-names -h'.self::$DB_HOST.' -u'.self::$DB_USER.' -p\''.self::decrypt_data(self::$DB_PASSWORD).'\' \''.$Database.'\' > ' . $DB_BACKUP_FILE);
 	}
 }
 ?>

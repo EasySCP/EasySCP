@@ -461,6 +461,6 @@ function finishMigration() {
 
 	DB::query($sql_query)->closeCursor();
 
-	send_request();
+	send_request('100 CORE checkAll');
 }
 ?>

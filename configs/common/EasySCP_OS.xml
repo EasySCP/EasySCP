@@ -35,7 +35,7 @@
 			<DistVersion>7</DistVersion>
 		</OS>
 		<OS>
-			<Name>Debian GNU/Linux 8 (Wheezy)</Name>
+			<Name>Debian GNU/Linux 8 (Jessie)</Name>
 			<DistName>Debian</DistName>
 			<DistVersion>8</DistVersion>
 		</OS>
