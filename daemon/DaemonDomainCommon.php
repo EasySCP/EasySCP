@@ -166,6 +166,12 @@ class DaemonDomainCommon {
 	 * @return boolean
 	 */
 	protected static function apacheWriteDomainConfig($domainData) {
+		if ($domainData['domain_mailacc_limit'] == '-1'){
+			DaemonMail::DaemonMailDeleteDomain($domainData['domain_name']);
+		} else {
+			DaemonMail::DaemonMailAddDomain($domainData['domain_name']);
+		}
+
 		$append = false;
 		$sysGroup = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'];
 		$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
@@ -1453,6 +1459,7 @@ class DaemonDomainCommon {
 			"DEFAULT_ADMIN_ADDRESS"		=> DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS,
 			"GUI_ROOT_DIR"				=> DaemonConfig::$cfg->GUI_ROOT_DIR,
 			"BASE_SERVER_VHOST"			=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
+			'APACHE_LOG_DIR'			=> DaemonConfig::$cfg->APACHE_LOG_DIR,
 			"PHP_STARTER_DIR"			=> DaemonConfig::$cfg->PHP_STARTER_DIR,
 			"PHP_VERSION"				=> DaemonConfig::$cfg->PHP_VERSION
 		);
