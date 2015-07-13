@@ -319,6 +319,14 @@ class DaemonCommon {
 
 		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->SRV_TRAFF_LOG_DIR, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, '0700', '0700');
 
+		if (file_exists('/lib/systemd/system/easyscp_control.service')){
+			self::systemSetFilePermissions('/lib/systemd/system/easyscp_control.service', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		}
+
+		if (file_exists('/lib/systemd/system/easyscp_daemon.service')){
+			self::systemSetFilePermissions('/lib/systemd/system/easyscp_daemon.service', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		}
+
 		return true;
 	}
 
