@@ -211,8 +211,16 @@ do
 			a2ensite easyscp-setup.conf > /dev/null
 			/etc/init.d/apache2 restart
 
+			if [ -f /lib/systemd/system/easyscp_control.service ]; then
+				chmod 0644 /lib/systemd/system/easyscp_control.service
+			fi
+
 			echo "Starting EasySCP Controller"
 			/etc/init.d/easyscp_control start > /dev/null
+
+			if [ -f /lib/systemd/system/easyscp_daemon.service ]; then
+				chmod 0644 /lib/systemd/system/easyscp_daemon.service
+			fi
 
 			echo "Starting EasySCP Daemon"
 			/etc/init.d/easyscp_daemon start > /dev/null
