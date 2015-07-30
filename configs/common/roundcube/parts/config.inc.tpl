@@ -19,6 +19,10 @@
 
 $config = array();
 
+// ----------------------------------
+// SQL DATABASE
+// ----------------------------------
+
 // Database connection string (DSN) for read+write operations
 // Format (compatible with PEAR MDB2): db_provider://user:password@host/database
 // Currently supported db_providers: mysql, pgsql, sqlite, mssql or sqlsrv
@@ -66,18 +70,17 @@ $config['smtp_pass'] = '%p';
 // PLEASE DO NOT LINK TO THE ROUNDCUBE.NET WEBSITE HERE!
 $config['support_url'] = '';
 
-// Name your service. This is displayed on the login screen and in the window title
-$config['product_name'] = 'Roundcube Webmail';
+// Allow browser-autocompletion on login form.
+// 0 - disabled, 1 - username and host only, 2 - username, host, password
+$config['login_autocomplete'] = 1;
 
 // this key is used to encrypt the users imap password which is stored
 // in the session record (and the client cookie if remember password is enabled).
 // please provide a string of exactly 24 chars.
-// YOUR KEY MUST BE DIFFERENT THAN THE SAMPLE VALUE FOR SECURITY REASONS
 $config['des_key'] = 'rcmail-!24ByteDESkey*Str';
 
-// Allow browser-autocompletion on login form.
-// 0 - disabled, 1 - username and host only, 2 - username, host, password
-$config['login_autocomplete'] = 1;
+// Name your service. This is displayed on the login screen and in the window title
+$config['product_name'] = 'Roundcube Webmail';
 
 // List of active plugins (in plugins/ directory)
 $config['plugins'] = array(

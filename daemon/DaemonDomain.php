@@ -306,6 +306,7 @@ class DaemonDomain extends DaemonDomainCommon {
 				}
 				break;
 			case 'disable':
+				// TODO Nochmal duchgehen, den eigentlich sollte hier die "disable" Page kommen bzw. ins system kopiert werden, und nicht die ganze Domain entfernt bzw. deaktiviert werden
 				$retVal = self::apacheDisableSite($domainData['domain_name']);
 				if ($retVal !== true) {
 					$msg = 'Disabling domain failed';
