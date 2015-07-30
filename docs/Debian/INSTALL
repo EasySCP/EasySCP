@@ -24,10 +24,10 @@ Table of Content
 1) Version info
 ---------------
 EasySCP Version:	2.0.0
-INSTALL Script:		1.0.2
+INSTALL Script:		1.0.3
 Maintainer:			Markus Szywon
 Homepage:			http://www.easyscp.net
-Linux Distros:		Debian 6 (Squeeze) / Debian 7 (Wheezy)
+Linux Distros:		Debian 6 (Squeeze) / Debian 7 (Wheezy) / Debian 8 (Jessie)
 
 ================================================================================
 2) System requirements
@@ -39,8 +39,9 @@ Pentium III or K6-4 with 500 MHz
 100 MB Space for the EasySCP Setup data
 Basic Debian (do not install any additional software on the server as it will conflict with EasySCP)
 
-All required packages for "Debian 6 (Squeeze)" are listed in "./docs/Debian/debian-packages-squeeze"
-All required packages for "Debian 7 (Wheezy)" are listed in "./docs/Debian/debian-packages-wheezy"
+All required packages for "Debian 6 (Squeeze)" are listed in "./docs/Debian/debian-packages-6"
+All required packages for "Debian 7 (Wheezy)" are listed in "./docs/Debian/debian-packages-7"
+All required packages for "Debian 8 (Jessie)" are listed in "./docs/Debian/debian-packages-8"
 
 ================================================================================
 3) Introduction
@@ -77,10 +78,13 @@ Be sure you are logged in as root.
 	Install all required packages:
 
 	If you running "Debian 6 (Squeeze)"
-	# apt-get install $(cat ./docs/Debian/debian-packages-squeeze)
+	# apt-get install $(cat ./docs/Debian/debian-packages-6)
 
 	or when you running "Debian 7 (Wheezy)"
-	# apt-get install $(cat ./docs/Debian/debian-packages-wheezy)
+	# apt-get install $(cat ./docs/Debian/debian-packages-7)
+
+	or when you running "Debian 8 (Jessie)"
+	# apt-get install $(cat ./docs/Debian/debian-packages-8)
 
 	Note:
 		If you get to the "ProFTPD configuration" screen, select 'standalone'.
