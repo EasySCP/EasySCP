@@ -32,7 +32,7 @@ if (isset($_GET['del_id']) && !empty($_GET['del_id'])) {
 	user_goto('domains_manage.php');
 }
 
-$domainId = get_user_domain_id($sql, $_SESSION['user_id']);
+$domainId = get_user_domain_id($_SESSION['user_id']);
 
 $query = "
 	DELETE FROM

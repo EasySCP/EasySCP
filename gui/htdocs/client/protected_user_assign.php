@@ -30,7 +30,7 @@ $cfg = EasySCP_Registry::get('Config');
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'client/protected_user_assign.tpl';
 
-$dmn_id = get_user_domain_id($sql, $_SESSION['user_id']);
+$dmn_id = get_user_domain_id($_SESSION['user_id']);
 
 add_user_to_group($tpl, $sql, $dmn_id);
 

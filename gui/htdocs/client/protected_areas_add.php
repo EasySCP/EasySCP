@@ -30,7 +30,7 @@ $cfg = EasySCP_Registry::get('Config');
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'client/protected_areas_add.tpl';
 
-$dmn_id = get_user_domain_id($sql, $_SESSION['user_id']);
+$dmn_id = get_user_domain_id($_SESSION['user_id']);
 
 protect_area($tpl, $sql, $dmn_id);
 

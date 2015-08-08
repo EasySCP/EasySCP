@@ -35,7 +35,7 @@ gen_logged_from($tpl);
 
 check_permissions($tpl);
 
-$dmn_default_id = get_user_domain_id($sql, $_SESSION['user_id']);
+$dmn_default_id = get_user_domain_id($_SESSION['user_id']);
 $dmn_alias = 0;
 $dmn_id = $dmn_default_id;
 

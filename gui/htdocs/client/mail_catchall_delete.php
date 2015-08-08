@@ -30,7 +30,7 @@ $cfg = EasySCP_Registry::get('Config');
 if (isset($_GET['id']) && $_GET['id'] !== '') {
 	$mail_id = $_GET['id'];
 	$item_delete_status = $cfg->ITEM_DELETE_STATUS;
-	$dmn_id = get_user_domain_id($sql, $_SESSION['user_id']);
+	$dmn_id = get_user_domain_id($_SESSION['user_id']);
 
 	$query = "
 		SELECT

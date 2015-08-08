@@ -33,8 +33,6 @@ $cfg = EasySCP_Registry::get('Config');
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'client/dns_edit.tpl';
 
-$DNS_allowed_types = array('A', 'AAAA', 'CNAME', 'MX', 'SRV', 'NS');
-
 $add_mode = preg_match('~dns_add.php~', $_SERVER['REQUEST_URI']);
 
 $tpl->assign(($add_mode) ? 'FORM_ADD_MODE' : 'FORM_EDIT_MODE', true);
@@ -71,16 +69,14 @@ if (isset($_POST['uaction']) && ($_POST['uaction'] === 'modify')) {
 	$_SESSION['edit_ID'] = $editid;
 }
 
-gen_editdns_page($tpl, $editid);
+gen_editdns_page($tpl, $editid, $add_mode);
 
 // static page messages
 gen_logged_from($tpl);
 
 $tpl->assign(
 	array(
-		'TR_PAGE_TITLE'			=> ($add_mode)
-			? tr("EasySCP - Manage Domain Alias/Add DNS zone's record")
-			: tr("EasySCP - Manage Domain Alias/Edit DNS zone's record"),
+		'TR_PAGE_TITLE'			=> ($add_mode) ? tr("EasySCP - Manage Domain Alias/Add DNS zone's record") : tr("EasySCP - Manage Domain Alias/Edit DNS zone's record"),
 		'ACTION_MODE'			=> ($add_mode) ? 'dns_add.php' : 'dns_edit.php?edit_id='.$editid,
 		'TR_MODIFY'				=> tr('Modify'),
 		'TR_CANCEL'				=> tr('Cancel'),
@@ -197,7 +193,7 @@ function decode_zone_data($data) {
 	}
 	return array(
 		$name, $address, $addressv6, $srv_name, $srv_proto, $srv_TTL, $srv_prio,
-		$srv_weight, $srv_host, $srv_port, $cname, $txt, $ns, $data['protected']
+		$srv_weight, $srv_host, $srv_port, $cname, $txt, $ns
 	);
 }
 
@@ -205,11 +201,14 @@ function decode_zone_data($data) {
  * @todo use template loop instead of this hardcoded HTML
  * @param EasySCP_TemplateEngine $tpl
  * @param int $edit_id
+ * @param bool $add_mode
  */
-function gen_editdns_page($tpl, $edit_id) {
+function gen_editdns_page($tpl, $edit_id, $add_mode) {
 
-	global $sql, $DNS_allowed_types, $add_mode;
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
+
+	$DNS_allowed_types = array('A', 'AAAA', 'CNAME', 'MX', 'SRV', 'NS');
 
 	$dmn_props = get_domain_default_props($_SESSION['user_id']);
 
@@ -253,6 +252,10 @@ function gen_editdns_page($tpl, $edit_id) {
 		);
 
 	} else {
+		$sql_param = array(
+			'record_id' => $edit_id,
+		);
+
 		$sql_query = "
 			SELECT
 				d.name AS domain_dns,
@@ -265,13 +268,10 @@ function gen_editdns_page($tpl, $edit_id) {
 			AND
 				d.id = r.domain_id
 		";
-		
-		$sql_param = array(
-			'record_id' => $edit_id,
-		);
+
 		DB::prepare($sql_query);
 
-		$statement = DB::execute($sql_param,false);
+		$statement = DB::execute($sql_param, false);
 		if ($statement->rowCount() <= 0) {
 			return not_allowed();
 		}
@@ -281,11 +281,11 @@ function gen_editdns_page($tpl, $edit_id) {
 	
 	list(
 		$name, $address, $addressv6, $srv_name, $srv_proto, $srv_ttl, $srv_prio,
-		$srv_weight, $srv_host, $srv_port, $cname, $plain, $protected, $ns
+		$srv_weight, $srv_host, $srv_port, $cname, $plain, $ns
 	) = decode_zone_data($data);
 
 	// Protection against edition (eg. for external mail MX record)
-	if($protected == '1') {
+	if(isset($data['protected']) && $data['protected'] == '1') {
 		set_page_message(
 			tr('You are not allowed to edit this DNS record!'),
 			'error'
@@ -318,7 +318,7 @@ function gen_editdns_page($tpl, $edit_id) {
 }
 
 // Check input data
-function tryPost($id, $data) {
+function tryPost($id, $data = '') {
 
 	if (array_key_exists($id, $_POST)) {
 		return $_POST[$id];
@@ -332,7 +332,7 @@ function validate_NS($record, &$err = null) {
 		return false;
 	}
 
-	if (preg_match('~([^a-z,^A-Z,^0-9,^\.])~u', $record['dns_ns'], $e)) {
+	if (preg_match('~([^a-z,^A-Z,^0-9,^\.-])~u', $record['dns_ns'], $e)) {
 		$err .= sprintf(tr('Use of disallowed char("%s") in NS'), $record['dns_ns']);
 		return false;
 	}
@@ -342,7 +342,7 @@ function validate_NS($record, &$err = null) {
 
 function validate_CNAME($record, &$err = null) {
 
-	if (preg_match('~([^a-z,A-Z,0-9\.-])~u', $record['dns_cname'], $e)) {
+	if (preg_match('~([^a-z,^A-Z,^0-9,^\.-])~u', $record['dns_cname'], $e)) {
 		$err .= sprintf(tr('Use of disallowed char("%s") in CNAME'), $e[1]);
 		return false;
 	}
@@ -489,7 +489,7 @@ function validate_NAME($domain, &$err) {
  */
 function check_fwd_data($edit_id) {
 
-	global $sql;
+	$sql = EasySCP_Registry::get('Db');
 
 	$add_mode = $edit_id === true;
 
@@ -529,10 +529,11 @@ function check_fwd_data($edit_id) {
 		if ($res->recordCount() <= 0) {
 			not_allowed();
 		}
-		$alias_id = $res->fetchRow();
-		$record_domain = $alias_id['domain_name'];
+		$data = $res->fetchRow();
+		$record_domain = $data['domain_name'];
 		// if no alias is selected, ID is 0 else the real alias_id
-		$alias_id = $alias_id['alias_id'];
+		$alias_id = $data['alias_id'];
+		$_dns = $data['domain_name'];
 	} else {
 		
 		$sql_query = "
@@ -569,6 +570,10 @@ function check_fwd_data($edit_id) {
 	if (!validate_NAME(array('name' => $_POST['dns_name'], 'domain' => $record_domain), $err)) {
 		$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
 	}
+
+	$_ttl = null;
+	$_dns_srv_prio = null;
+
 	switch ($_POST['type']) {
 		case 'CNAME':
 			if (!validate_CNAME($_POST, $err)) {
@@ -604,15 +609,14 @@ function check_fwd_data($edit_id) {
 			}
 			break;
 		case 'MX':
-			$_dns = '';
 			if (!validate_MX($_POST, $err, $_dns_srv_prio, $_text)) {
 				$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
 			} else {
-				$_dns = $record_domain . '.';
+				// $_dns = $record_domain . '.';
+				$_dns = $record_domain;
 			}
 			break;
 		case 'NS':
-			$_text = '';
 			if (!validate_NS($_POST, $err)) {
 				$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
 			}
@@ -631,83 +635,85 @@ function check_fwd_data($edit_id) {
 		if ($add_mode) {
 
 			if ($alias_id > 0) {
-				$sql_query = "
-					SELECT
-						`id`
-					FROM
-						`powerdns`.`domains`
-					WHERE
-						`easyscp_domain_alias_id` = :alias_id
-				";
 				$sql_param = array(
 					'alias_id' => $alias_id,
 				);
-				
+
+				$sql_query = "
+					SELECT
+						id
+					FROM
+						powerdns.domains
+					WHERE
+						easyscp_domain_alias_id = :alias_id
+				";
+
 				DB::prepare($sql_query);
 				$data = DB::execute($sql_param, true);
 			} else {
-				$sql_query = "
-					SELECT
-						`id`
-					FROM
-						`powerdns`.`domains`
-					WHERE
-						`easyscp_domain_id` = :domain_id
-				";
 				$sql_param = array(
 					'domain_id' => $dmn_props['domain_id'],
 				);
-				
+
+				$sql_query = "
+					SELECT
+						id
+					FROM
+						powerdns.domains
+					WHERE
+						easyscp_domain_id = :domain_id
+				";
+
 				DB::prepare($sql_query);
 				$data = DB::execute($sql_param, true);
 			}
-			$sql_query = "
-				INSERT INTO
-					`powerdns`.`records`
-				(`domain_id`, `name`, `type`, `content`, `ttl`, `prio`)
-					VALUES
-				(:domain_id, :name, :type, :content, :ttl, :prio)
-			";
-
 
 			$sql_param = array(
-				'domain_id' => $data['id'],
-				'name'	=> $_dns,
-				'type' => $_type,
-				'content' => $_text,
-				'ttl' => $_ttl,
-				'prio' => $_dns_srv_prio,
+				'domain_id'	=> $data['id'],
+				'name'		=> $_dns,
+				'type'		=> $_type,
+				'content'	=> $_text,
+				'ttl'		=> $_ttl,
+				'prio'		=> $_dns_srv_prio
 			);
-			
+
+			$sql_query = "
+				INSERT INTO
+					powerdns.records (domain_id, name, type, content, ttl, prio)
+				VALUES
+					(:domain_id, :name, :type, :content, :ttl, :prio)
+				ON DUPLICATE KEY UPDATE
+					domain_id = :domain_id, name = :name, type = :type, content = :content, ttl = :ttl, prio = :prio;
+			";
+
 			DB::prepare($sql_query);
 			DB::execute($sql_param);
 
 		} else {
-			
+			$sql_param = array(
+				'domain_id'	=> $domain_id,
+				'name'		=> $_dns,
+				'type'		=> $_type,
+				'content'	=> $_text,
+				'ttl'		=> $_ttl,
+				'prio'		=> $_dns_srv_prio,
+				'record_id'	=> $edit_id
+			);
+
 			$sql_query = "
 					UPDATE
-						`powerdns`.`records`
+						powerdns.records
 					SET
-						`domain_id` = :domain_id,
-						`name`	= :name,
-						`type` = :type,
-						`content` = :content,
-						`ttl` = :ttl,
-						`prio` = :prio
+						domain_id = :domain_id,
+						name	= :name,
+						type = :type,
+						content = :content,
+						ttl = :ttl,
+						prio = :prio
 					WHERE
-						`id` = :record_id
+						id = :record_id
 			";
-			
-			$sql_param = array(
-				'domain_id' => $domain_id,
-				'name'	=> $_dns,
-				'type' => $_type,
-				'content' => $_text,
-				'ttl' => $_ttl,
-				'prio' => $_dns_srv_prio,
-				'record_id' => $edit_id,
-			);
-			
+
 			DB::prepare($sql_query);
 			DB::execute($sql_param);
 		}

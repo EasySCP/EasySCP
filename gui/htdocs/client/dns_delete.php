@@ -30,7 +30,7 @@ if (isset($_GET['edit_id']) && !empty($_GET['edit_id'])) {
 	$cfg = EasySCP_Registry::get('Config');
 
 	$dns_id = (int) $_GET['edit_id'];
-	$dmn_id = get_user_domain_id($sql, $_SESSION['user_id']);
+	$dmn_id = get_user_domain_id($_SESSION['user_id']);
 	
 	if (!check_dns_record_owned($_SESSION['user_id'], $_GET['edit_id'])) {
 		user_goto('dns_overview.php');

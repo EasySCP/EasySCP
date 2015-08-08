@@ -30,7 +30,7 @@ $cfg = EasySCP_Registry::get('Config');
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'client/protected_group_add.tpl';
 
-padd_group($tpl, $sql, get_user_domain_id($sql, $_SESSION['user_id']));
+padd_group($tpl, $sql, get_user_domain_id($_SESSION['user_id']));
 
 // static page messages
 gen_logged_from($tpl);

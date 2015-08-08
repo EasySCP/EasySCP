@@ -130,7 +130,7 @@ function gen_db_user_list($tpl, $sql, $db_id) {
  */
 function gen_db_list($tpl, $sql, $user_id) {
 
-	$dmn_id = get_user_domain_id($sql, $user_id);
+	$dmn_id = get_user_domain_id($user_id);
 
 	$query = "
 		SELECT

@@ -27,7 +27,7 @@ check_login(__FILE__);
 
 $cfg = EasySCP_Registry::get('Config');
 
-$dmn_id = get_user_domain_id($sql, $_SESSION['user_id']);
+$dmn_id = get_user_domain_id($_SESSION['user_id']);
 
 
 if (isset($_GET['gname'])

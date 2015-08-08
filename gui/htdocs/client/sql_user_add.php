@@ -173,7 +173,7 @@ function gen_sql_user_list($sql, $tpl, $user_id, $db_id) {
 	$user_found = false;
 	$oldrs_name = '';
 	$userlist = get_sqluser_list_of_current_db($sql, $db_id);
-	$dmn_id = get_user_domain_id($sql, $user_id);
+	$dmn_id = get_user_domain_id($user_id);
 	// Let's select all sqlusers of the current domain except the users of the current database
 	$query = "
 		SELECT
@@ -321,7 +321,7 @@ function add_sql_user($sql, $user_id, $db_id) {
 		$user_pass = $_POST['pass'];
 	}
 
-	$dmn_id = get_user_domain_id($sql, $user_id);
+	$dmn_id = get_user_domain_id($user_id);
 
 	if (!isset($_POST['Add_Exist'])) {
 

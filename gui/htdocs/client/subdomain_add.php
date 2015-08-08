@@ -526,7 +526,7 @@ function check_subdomain_data(&$err_sub, $user_id, $dmn_name) {
 	$sql = EasySCP_Registry::get('Db');
 //	$vfs = new EasySCP_VirtualFileSystem($dmn_name, $sql);
 
-	$dmn_id = $domain_id = get_user_domain_id($sql, $user_id);
+	$dmn_id = $domain_id = get_user_domain_id($user_id);
 
 	if (isset($_POST['uaction']) && $_POST['uaction'] === 'add_subd') {
 

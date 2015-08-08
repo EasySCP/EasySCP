@@ -31,7 +31,7 @@ if (isset($_GET['id'])) {
 	user_goto('sql_manage.php');
 }
 
-$dmn_id = get_user_domain_id($sql, $_SESSION['user_id']);
+$dmn_id = get_user_domain_id($_SESSION['user_id']);
 
 check_db_sql_perms($sql, $db_id);
 

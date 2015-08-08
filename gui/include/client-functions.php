@@ -594,21 +594,26 @@ function gen_client_menu($tpl, $menu_file) {
 	$tpl->assign('MENU', $menu_file);
 }
 
-function get_user_domain_id($sql, $user_id) {
+function get_user_domain_id($user_id) {
 
-	$query = "
+	$sql_param = array(
+		':domain_admin_id' => $user_id
+	);
+
+	$sql_query = "
 		SELECT
-			`domain_id`
+			domain_id
 		FROM
-			`domain`
+			domain
 		WHERE
-			`domain_admin_id` = ?
+			domain_admin_id = :domain_admin_id
 		;
 	";
 
-	$rs = exec_query($sql, $query, $user_id);
+	DB::prepare($sql_query);
+	$row = DB::execute($sql_param, true);
 
-	return $rs->fields['domain_id'];
+	return $row['domain_id'];
 }
 
 function user_trans_mail_type($mail_type) {

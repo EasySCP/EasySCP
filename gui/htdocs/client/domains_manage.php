@@ -139,7 +139,7 @@ function gen_user_sub_list($tpl, $user_id) {
 
 	$sql = EasySCP_Registry::get('Db');
 
-	$domain_id = get_user_domain_id($sql, $user_id);
+	$domain_id = get_user_domain_id($user_id);
 
 	$query = "
 		SELECT
@@ -278,7 +278,7 @@ function gen_user_als_list($tpl, $user_id) {
 
 	$sql = EasySCP_Registry::get('Db');
 
-	$domain_id = get_user_domain_id($sql, $user_id);
+	$domain_id = get_user_domain_id($user_id);
 
 	$query = "
 		SELECT

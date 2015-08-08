@@ -215,7 +215,7 @@ function add_domain_alias(&$err_al) {
 	$cfg = EasySCP_Registry::get('Config');
 	$sql = EasySCP_Registry::get('Db');
 
-	$cr_user_id = get_user_domain_id($sql, $_SESSION['user_id']);
+	$cr_user_id = get_user_domain_id($_SESSION['user_id']);
 	$alias_name	= strtolower($_POST['ndomain_name']);
 //	$mount_point = array_encode_idna(strtolower($_POST['ndomain_mpoint']), true);
 

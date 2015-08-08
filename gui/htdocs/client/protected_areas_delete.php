@@ -30,7 +30,7 @@ $cfg = EasySCP_Registry::get('Config');
 if (isset($_GET['id']) && $_GET['id'] !== '') {
 
 	$id = $_GET['id'];
-	$dmn_id = get_user_domain_id($sql, $_SESSION['user_id']);
+	$dmn_id = get_user_domain_id($_SESSION['user_id']);
 
 	$sql_param = array(
 		':id'		=> $id,

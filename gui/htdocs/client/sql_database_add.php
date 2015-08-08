@@ -144,7 +144,7 @@ function add_sql_database($sql, $user_id) {
 		return;
 	}
 
-	$dmn_id = get_user_domain_id($sql, $user_id);
+	$dmn_id = get_user_domain_id($user_id);
 
 	if (isset($_POST['use_dmn_id']) && $_POST['use_dmn_id'] === 'on') {
 

@@ -34,7 +34,7 @@ $template = 'client/protected_user_manage.tpl';
 gen_logged_from($tpl);
 check_permissions($tpl);
 
-$dmn_id = get_user_domain_id($sql, $_SESSION['user_id']);
+$dmn_id = get_user_domain_id($_SESSION['user_id']);
 
 gen_pusres($tpl, $sql, $dmn_id);
 

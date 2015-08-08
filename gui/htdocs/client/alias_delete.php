@@ -27,7 +27,7 @@ check_login(__FILE__);
 
 if (isset($_GET['id']) && $_GET['id'] !== '') {
 	$als_id = $_GET['id'];
-	$dmn_id = get_user_domain_id($sql, $_SESSION['user_id']);
+	$dmn_id = get_user_domain_id($_SESSION['user_id']);
 
 	$query = "
 		SELECT
