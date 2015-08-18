@@ -109,7 +109,7 @@ smtpd_data_restrictions      = reject_multi_recipient_bounce,
 #smtpd_tls_received_header     = yes
 #smtp_tls_mandatory_protocols  = !SSLv2 !SSLv3
 #smtpd_tls_mandatory_protocols = !SSLv2 !SSLv3
-#smtp_tls_protocols            = !SSLv2, !SSLv3
+#smtp_tls_protocols            = !SSLv2 !SSLv3
 #smtpd_tls_protocols           = !SSLv2 !SSLv3
 {/if}
 
