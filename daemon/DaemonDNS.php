@@ -76,7 +76,7 @@ class DaemonDNS {
 		$dmn_id = $row['domain_id'];
 		$dmn_name = $row['domain_name'];
 		$dmn_ip = $row['ip_number'];
-
+		$dmn_notified_serial = date("Ymd")."00";
 
 		// Add some default DNS entries
 
@@ -87,9 +87,9 @@ class DaemonDNS {
 
 		$sql_query = "
 			INSERT INTO
-				powerdns.domains (".$easyscp_domain_id_string.", name, type)
+				powerdns.domains (".$easyscp_domain_id_string.", name, type, notified_serial)
 			VALUES
-				(:easyscp_domain_id, :domain_name, 'MASTER')
+				(:easyscp_domain_id, :domain_name, 'MASTER', '.$dmn_notified_serial.')
 			 ON DUPLICATE KEY UPDATE
 			 	name = :domain_name;
 		";
@@ -111,7 +111,7 @@ class DaemonDNS {
 			'domain_id'		=> $dmn_dns_id,
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'SOA',
-			'domain_content'=> 'ns1.'.$dmn_name.'. '.DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' 1 12000 1800 604800 86400',
+			'domain_content'=> 'ns1.'.$dmn_name.'. '.DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' '.$dmn_notified_serial.' 12000 1800 604800 86400',
 			'domain_ttl'	=> '3600',
 			'domain_prio'	=> Null
 		);
