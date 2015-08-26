@@ -76,7 +76,7 @@ class DaemonDNS {
 		$dmn_id = $row['domain_id'];
 		$dmn_name = $row['domain_name'];
 		$dmn_ip = $row['ip_number'];
-		$dmn_notified_serial = date("Ymd")."00";
+		$dmn_notified_serial = time();
 
 		// Add some default DNS entries
 
@@ -217,6 +217,45 @@ class DaemonDNS {
 		unset($stmt);
 
 		System_Daemon::debug('Finished "DaemonDNS::AddDefaultDNSEntries" subprocess.');
+
+		return true;
+	}
+	/**
+	 * Updates the DNS serial and notified_serial for a secondary DNS server
+	 */
+	public static function UpdateNotifiedSerial($dmn_id) {
+		System_Daemon::debug('Starting "DaemonDNS::UpdateNotifiedSerial" subprocess.');
+		
+		$sql_param = array(
+			"domain_id" => $dmn_id,
+		);
+		
+		$sql_query = "
+			SELECT
+				content 
+			FROM
+				powerdns.records 
+			WHERE
+				type = 'SOA';
+			";
+		
+		DB::prepare($sql_query);
+		$row = DB::execute($sql_param, true);
+		
+		$dmn_soa = explode(" ",$row['content']);
+		$dmn_soa[3] = $dmn_notified_serial;
+		
+		$sql_query = "
+			UPDATE
+				powerdns.records
+			SET
+				content = '$dmn_soa';
+				";
+				
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+
+		System_Daemon::debug('Finished "DaemonDNS::UpdateNotifiedSerial" subprocess.');
 
 		return true;
 	}
