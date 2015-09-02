@@ -87,9 +87,9 @@ class DaemonDNS {
 
 		$sql_query = "
 			INSERT INTO
-				powerdns.domains (".$easyscp_domain_id_string.", name, type, notified_serial)
+				powerdns.domains (".$easyscp_domain_id_string.", name, type)
 			VALUES
-				(:easyscp_domain_id, :domain_name, 'MASTER', '.$dmn_notified_serial.')
+				(:easyscp_domain_id, :domain_name, 'MASTER')
 			 ON DUPLICATE KEY UPDATE
 			 	name = :domain_name;
 		";
@@ -223,35 +223,27 @@ class DaemonDNS {
 	/**
 	 * Updates the DNS serial and notified_serial for a secondary DNS server
 	 */
-	public static function UpdateNotifiedSerial($dmn_id) {
+	public static function UpdateNotifiedSerial($domainData) {
 		System_Daemon::debug('Starting "DaemonDNS::UpdateNotifiedSerial" subprocess.');
 		
 		$sql_param = array(
-			"domain_id" => $dmn_id,
+			'domain_id' => $dmn_id,
+			'domain_name' => $dmn_name,
+            'domain_type' => 'SOA',
+            'domain_content' => 'ns1.'.$dmn_name.'. '.DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' '.time().' 12000 1800 604800 86400',
+            'domain_ttl' => '3600',
+            'domain_prio' => Null
 		);
 		
 		$sql_query = "
-			SELECT
-				content 
-			FROM
-				powerdns.records 
-			WHERE
-				type = 'SOA';
+			INSERT INTO
+				powerdns.records (domain_id, name, type, content, ttl, prio) 
+			VALUES
+				(:domain_id, :domain_name, :domain_type, :domain_content, :domain_ttl, :domain_prio) 
+			ON DUPLICATE KEY UPDATE
+				name = :domain_name, content = :domain_content;
 			";
 		
-		DB::prepare($sql_query);
-		$row = DB::execute($sql_param, true);
-		
-		$dmn_soa = explode(" ",$row['content']);
-		$dmn_soa[3] = $dmn_notified_serial;
-		
-		$sql_query = "
-			UPDATE
-				powerdns.records
-			SET
-				content = '$dmn_soa';
-				";
-				
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
 
