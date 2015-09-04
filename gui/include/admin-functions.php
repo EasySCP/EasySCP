@@ -1285,7 +1285,7 @@ function write_log($msg, $level = E_USER_WARNING) {
 		$client_ip = "unknown";
 	}
 
-	$msg = htmlentities($msg, ENT_QUOTES, tr('encoding'), false);
+	$msg = htmlentities($msg, ENT_NOQUOTES, tr('encoding'), false);
 
 	$msg = replace_html($msg, ENT_COMPAT, tr('encoding')).'<br /><small>User IP: '.$client_ip.'</small>';
 
