@@ -76,7 +76,7 @@ class DaemonDNS {
 		$dmn_id = $row['domain_id'];
 		$dmn_name = $row['domain_name'];
 		$dmn_ip = $row['ip_number'];
-		$dmn_notified_serial = time();
+
 
 		// Add some default DNS entries
 
@@ -111,14 +111,14 @@ class DaemonDNS {
 			'domain_id'		=> $dmn_dns_id,
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'SOA',
-			'domain_content'=> 'ns1.'.$dmn_name.'. '.DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' '.$dmn_notified_serial.' 12000 1800 604800 86400',
+			'domain_content'=> 'ns1.' . $dmn_name . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
 			'domain_ttl'	=> '3600',
 			'domain_prio'	=> Null
 		);
 
 		$sql_param[] = array(
 			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> 'ns1.'.$dmn_name,
+			'domain_name'	=> 'ns1.' . $dmn_name,
 			'domain_type'	=> 'A',
 			'domain_content'=> $dmn_ip,
 			'domain_ttl'	=> '7200',
@@ -129,23 +129,23 @@ class DaemonDNS {
 			'domain_id'		=> $dmn_dns_id,
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'NS',
-			'domain_content'=> 'ns1.'.$dmn_name,
+			'domain_content'=> 'ns1.' . $dmn_name,
 			'domain_ttl'	=> '28800',
 			'domain_prio'	=> NULL
 		);
 
 		$sql_param[] = array(
 			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> 'ns.'.$dmn_name,
+			'domain_name'	=> 'ns.' . $dmn_name,
 			'domain_type'	=> 'CNAME',
-			'domain_content'=> 'ns1.'.$dmn_name,
+			'domain_content'=> 'ns1.' . $dmn_name,
 			'domain_ttl'	=> '7200',
 			'domain_prio'	=> NULL
 		);
 
 		$sql_param[] = array(
 			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> 'mail.'.$dmn_name,
+			'domain_name'	=> 'mail.' . $dmn_name,
 			'domain_type'	=> 'A',
 			'domain_content'=> $dmn_ip,
 			'domain_ttl'	=> '7200',
@@ -156,7 +156,7 @@ class DaemonDNS {
 			'domain_id'		=> $dmn_dns_id,
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'MX',
-			'domain_content'=> 'mail.'.$dmn_name,
+			'domain_content'=> 'mail.' . $dmn_name,
 			'domain_ttl'	=> '7200',
 			'domain_prio'	=> '10'
 		);
@@ -172,7 +172,7 @@ class DaemonDNS {
 
 		$sql_param[] = array(
 			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> 'www.'.$dmn_name,
+			'domain_name'	=> 'www.' . $dmn_name,
 			'domain_type'	=> 'A',
 			'domain_content'=> $dmn_ip,
 			'domain_ttl'	=> '7200',
@@ -181,18 +181,18 @@ class DaemonDNS {
 
 		$sql_param[] = array(
 			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> 'ftp.'.$dmn_name,
+			'domain_name'	=> 'ftp.' . $dmn_name,
 			'domain_type'	=> 'CNAME',
-			'domain_content'=> 'www.'.$dmn_name,
+			'domain_content'=> 'www.' . $dmn_name,
 			'domain_ttl'	=> '7200',
 			'domain_prio'	=> NULL
 		);
 
 		$sql_param[] = array(
 			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> 'webmail.'.$dmn_name,
+			'domain_name'	=> 'webmail.' . $dmn_name,
 			'domain_type'	=> 'CNAME',
-			'domain_content'=> 'www.'.$dmn_name,
+			'domain_content'=> 'www.' . $dmn_name,
 			'domain_ttl'	=> '7200',
 			'domain_prio'	=> NULL
 		);
@@ -262,12 +262,30 @@ class DaemonDNS {
 		System_Daemon::debug('Starting "DaemonDNS::AddDNSEntry" subprocess.');
 
 		$sql_param = array(
-				'domain_id'		=> $domainData['domain_id'],
-				'domain_name'	=> $domainData['subdomain_name'].'.'.$domainData['domain_name'],
-				'domain_type'	=> 'A',
-				'domain_content'=> $domainData['ip_number'],
-				'domain_ttl'	=> '7200',
-				'domain_prio'	=> NULL
+			':name' => $domainData['domain_name']
+		);
+
+		$sql_query = "
+			SELECT
+				id
+			FROM
+				powerdns.domains
+			WHERE
+				name = :name;
+		";
+
+		DB::prepare($sql_query);
+		$row = DB::execute($sql_param, true);
+
+		$dmn_dns_id = $row['id'];
+
+		$sql_param = array(
+			'domain_id'		=> $dmn_dns_id,
+			'domain_name'	=> $domainData['subdomain_name'] . '.' . $domainData['domain_name'],
+			'domain_type'	=> 'A',
+			'domain_content'=> $domainData['ip_number'],
+			'domain_ttl'	=> '7200',
+			'domain_prio'	=> NULL
 		);
 
 		$sql_query = "
@@ -337,7 +355,7 @@ class DaemonDNS {
 		System_Daemon::debug('Starting "DaemonDNS::DeleteDNSEntry" subprocess.');
 
 		$sql_param = array(
-				'domain_name'	=> $domainData['subdomain_name'].'.'.$domainData['domain_name']
+			'domain_name'	=> $domainData['subdomain_name'] . '.' . $domainData['domain_name']
 		);
 
 		$sql_query = "

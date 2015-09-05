@@ -571,7 +571,7 @@ function EasySCP_Powerdns_main_configuration_file(){
 	DB::prepare($sql_query);
 	DB::execute($sql_param)->closeCursor();
 
-	$dmn_dns_id	= 0;
+	$dmn_dns_id	= 1;
 	$dmn_name	= DaemonConfig::$cfg->{'SERVER_HOSTNAME'};
 	$dmn_ip		= DaemonConfig::$cfg->BASE_SERVER_IP;
 
@@ -581,7 +581,7 @@ function EasySCP_Powerdns_main_configuration_file(){
 		'domain_id'		=> $dmn_dns_id,
 		'domain_name'	=> $dmn_name,
 		'domain_type'	=> 'SOA',
-		'domain_content'=> 'ns1.'.$dmn_name.'. '.DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS.' 1 12000 1800 604800 86400',
+		'domain_content'=> 'ns1.'.$dmn_name.'. '.DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' '.time().' 12000 1800 604800 86400',
 		'domain_ttl'	=> '3600',
 		'domain_prio'	=> Null
 	);
