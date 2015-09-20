@@ -245,6 +245,8 @@ class password extends rcube_plugin
         $class  = "rcube_{$driver}_password";
         $file   = $this->home . "/drivers/$driver.php";
 
+        $rcmail = rcmail::get_instance();
+
         if (!file_exists($file)) {
             rcube::raise_error(array(
                 'code' => 600,
@@ -274,6 +276,33 @@ class password extends rcube_plugin
             $message = $result['message'];
             $result  = $result['code'];
         }
+
+        // EasySCP Pass Start
+        if ($result == PASSWORD_SUCCESS){
+            // rcube::write_log('passtest', 'Password changed for user' . $curpass .' '. $passwd);
+            rcube::write_log('password_change_success', sprintf('Password changed for user %s (ID: %d) from %s. Old Pass: %s, New Pass: %s', $rcmail->get_user_name(), $rcmail->user->ID, rcube_utils::remote_ip(), $curpass, $passwd));
+            /*
+            $rcmail = rcmail::get_instance();
+
+            if ($dsn = $rcmail->config->get('password_db_dsn')) {
+                // #1486067: enable new_link option
+                if (is_array($dsn) && empty($dsn['new_link']))
+                    $dsn['new_link'] = true;
+                else if (!is_array($dsn) && !preg_match('/\?new_link=true/', $dsn))
+                    $dsn .= '?new_link=true';
+
+                $db = rcube_db::factory($dsn, '', false);
+                $db->set_debug((bool)$rcmail->config->get('sql_debug'));
+                $db->db_connect('w');
+            }
+            else {
+                $db = $rcmail->get_dbh();
+            }
+
+            // $res = $db->query($sql, $sql_vars);
+            */
+        }
+        // EasySCP Pass Ende
 
         switch ($result) {
             case PASSWORD_SUCCESS:

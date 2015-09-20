@@ -1,6 +1,22 @@
 CHANGELOG Roundcube Webmail
 ===========================
 
+RELEASE 1.0.7
+-------------
+- Get rid of Mail_mimeDecode package dependency (#1490416)
+- Fix compatibility with Net_SMTP > 1.6.3 and Mail_Mime >= 1.9.0
+- Fix SQL error on logout when using session_storage=php (#1490421)
+- Fix so plain text signature field uses monospace font (#1490435)
+- Fix draft removal after a message is sent and storing sent message is disabled (#1490467)
+- Fix handling of plus character in mailto: links (#1490510)
+- Fix so adding CC/BCC recipients from the sidebar unhides compose form fields in Classic skin (#1490472)
+- Fix so gc.sh script removes also expired sessions from sql database (#1490512)
+- Fix support for Mozilla-based browsers, e.g. Pale Moon (#1490517)
+- Fix various issues with Turkish (and similar) locales (#1490519)
+- Fix so In-Reply-To header is set also for MDN receipts (#1490523)
+- Fix XSS issue in drag-n-drop file uploads (#1490530)
+- Fix issue where Content-Length of some attachments could be set to wrong value causing browser errors (#1490482)
+
 RELEASE 1.0.6
 -------------
 - Make SMTP error log more verbose - include server response and error code

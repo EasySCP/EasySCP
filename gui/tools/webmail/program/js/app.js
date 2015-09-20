@@ -141,8 +141,8 @@ function rcube_webmail()
     var n, p = this;
     this.task = this.env.task;
 
-    // check browser
-    if (this.env.server_error != 409 && (!bw.dom || !bw.xmlhttp_test() || (bw.mz && bw.vendver < 1.9))) {
+    // check browser capabilities (never use version checks here)
+    if (this.env.server_error != 409 && (!bw.dom || !bw.xmlhttp_test())) {
       this.goto_url('error', '_code=0x199');
       return;
     }
@@ -7281,7 +7281,8 @@ function rcube_webmail()
     var submit_data = function() {
       var multiple = files.length > 1,
         ts = new Date().getTime(),
-        content = '<span>' + (multiple ? ref.get_label('uploadingmany') : files[0].name) + '</span>';
+        // jQuery way to escape filename (#1490530)
+        content = $('<span>').text(multiple ? ref.get_label('uploadingmany') : files[0].name).html();
 
       // add to attachments list
       if (!ref.add2attachment_list(ts, { name:'', html:content, classname:'uploading', complete:false }))
