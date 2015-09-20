@@ -13,6 +13,7 @@ dovecot-managesieved
 dovecot-pop3d
 gamin
 gzip
+imagemagick
 iptables
 iptables-persistent
 libapache2-mod-fcgid
@@ -36,6 +37,7 @@ php5-cgi
 php5-cli
 php5-curl
 php5-gd
+php5-imagick
 php5-intl
 php5-mcrypt
 php5-mysql
