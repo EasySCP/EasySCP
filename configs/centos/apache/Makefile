@@ -20,10 +20,12 @@ install:
 	$(SYSTEM_MAKE_DIRS) $(ROOT_APACHE_CONF)/easyscp
 	$(SYSTEM_MAKE_DIRS) $(ROOT_APACHE_CONF)/vhost.d
 
-	cp ./01_awstats.conf $(SYSTEM_CONF)/apache
+	cp -p ./01_awstats.conf $(SYSTEM_CONF)/apache
 
-	cp ./easyscp-setup.conf $(ROOT_APACHE_CONF)/vhost.d
-	cp ./fcgid.conf $(SYSTEM_CONF)/apache/fcgid_easyscp.conf
+	cp -p ./CronDomainTraffic $(SYSTEM_DAEMON)
+
+	cp -p ./easyscp-setup.conf $(ROOT_APACHE_CONF)/vhost.d
+	cp -p ./fcgid.conf $(SYSTEM_CONF)/apache/fcgid_easyscp.conf
 
 uninstall:
 

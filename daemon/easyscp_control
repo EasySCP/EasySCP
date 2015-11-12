@@ -91,12 +91,10 @@ while (!System_Daemon::isDying() && $runningOkay) {
 
 			switch (DaemonConfig::$cfg->DistName) {
 				case 'CentOS':
-					// exec(DaemonConfig::$cmd->{'SRV_HTTPD'} . ' graceful 1>&1 2>&1', $result, $error);
-					exec('service httpd restart 1>&1 2>&1', $result, $error);
+					exec('service httpd reload 1>&1 2>&1', $result, $error);
 					break;
 				default:
-					// exec(DaemonConfig::$cmd->{'CMD_HTTPD_CTL'} . ' graceful 1>&1 2>&1', $result, $error);
-					exec('service apache2 restart 1>&1 2>&1', $result, $error);
+					exec('service apache2 reload 1>&1 2>&1', $result, $error);
 			}
 
 			unset($ApacheRestart);

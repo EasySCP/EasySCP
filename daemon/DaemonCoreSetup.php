@@ -268,9 +268,6 @@ function EasySCP_Directories(){
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'APACHE_TRAFFIC_LOG_DIR'}, DaemonConfig::$cfg->{'APACHE_USER'}, DaemonConfig::$cfg->{'APACHE_GROUP'}, 0755)){
 		return 'Error: Failed to create '.DaemonConfig::$cfg->{'APACHE_TRAFFIC_LOG_DIR'};
 	}
-	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'APACHE_USERS_LOG_DIR'}, DaemonConfig::$cfg->{'APACHE_USER'}, DaemonConfig::$cfg->{'APACHE_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$cfg->{'APACHE_USERS_LOG_DIR'};
-	}
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'APACHE_BACKUP_LOG_DIR'}, DaemonConfig::$cfg->{'APACHE_USER'}, DaemonConfig::$cfg->{'APACHE_GROUP'}, 0755)){
 		return 'Error: Failed to create '.DaemonConfig::$cfg->{'APACHE_BACKUP_LOG_DIR'};
 	}
@@ -318,7 +315,7 @@ function EasySCP_Directories(){
 function EasySCP_main_configuration_file(){
 	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
-	DaemonConfig::$cfg->{'BuildDate'} = '20150713';
+	DaemonConfig::$cfg->{'BuildDate'} = '20151112';
 	DaemonConfig::$cfg->{'DistName'} = $xml->{'DistName'};
 	DaemonConfig::$cfg->{'DistVersion'} = $xml->{'DistVersion'};
 	DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} = $xml->{'PANEL_MAIL'};
@@ -355,13 +352,6 @@ function EasySCP_main_configuration_file(){
 	if ($xml->{'MySQL_Prefix'} != 'none'){
 		DaemonConfig::$cfg->{'MYSQL_PREFIX'} = 'yes';
 		DaemonConfig::$cfg->{'MYSQL_PREFIX_TYPE'} = $xml->{'MySQL_Prefix'};
-	}
-
-	// Pfad für rotatelogs des Apache ermitteln
-	unset($result);
-	exec('which rotatelogs 2>&1', $result, $error);
-	if ($error == 0){
-		DaemonConfig::$cfg->{'APACHE_ROTATELOGS'} = $result[0];
 	}
 
 	unset($xml);

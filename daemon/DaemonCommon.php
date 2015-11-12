@@ -317,6 +317,8 @@ class DaemonCommon {
 
 		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->DAEMON_ROOT_DIR, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, '0700', '0700');
 
+		self::systemSetFilePermissions(DaemonConfig::$cfg->DAEMON_ROOT_DIR.'CronDomainTraffic', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+
 		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->SRV_TRAFF_LOG_DIR, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, '0700', '0700');
 
 		if (file_exists('/lib/systemd/system/easyscp_control.service')){

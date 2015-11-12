@@ -198,7 +198,6 @@ class DaemonDomainCommon {
 			'AWSTATS_GROUP_AUTH'		=> DaemonConfig::$cfg->AWSTATS_GROUP_AUTH,
 			'PHP_STARTER_DIR'			=> DaemonConfig::$cfg->PHP_STARTER_DIR,
 			'APACHE_LOG_DIR'			=> DaemonConfig::$cfg->APACHE_LOG_DIR,
-			'APACHE_ROTATELOGS'			=> DaemonConfig::$cfg->APACHE_ROTATELOGS,
 			'APACHE_TRAFFIC_LOG_DIR'	=> DaemonConfig::$cfg->APACHE_TRAFFIC_LOG_DIR,
 			'SELF'						=> $domainData['domain_name']
 		);
@@ -1157,7 +1156,7 @@ class DaemonDomainCommon {
 		$sql_query = '
 			SELECT
 				d.*,
-				s.ip_number, s.ip_number_v6
+				s.ip_number, s.ip_number_v6,
 				sd.*,
 				sd.status as subdomain_status,
 				sd.subdomain_mount as mount

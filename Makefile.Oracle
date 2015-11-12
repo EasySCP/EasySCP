@@ -17,25 +17,26 @@ HOST_OS=oracle
 
 ROOT_CONF=$(INST_PREF)/etc
 
-SYSTEM_WWW=$(INST_PREF)/var/www
-SYSTEM_ROOT=$(INST_PREF)/var/www/easyscp
-SYSTEM_CONF=$(INST_PREF)/etc/easyscp
-SYSTEM_LOG=$(INST_PREF)/var/log/easyscp
 SYSTEM_APACHE_BACK_LOG=$(INST_PREF)/var/log/httpd/backup
-SYSTEM_VIRTUAL=$(INST_PREF)/var/www/virtual
 SYSTEM_AWSTATS=$(INST_PREF)/var/www/awstats
+SYSTEM_CONF=$(INST_PREF)/etc/easyscp
+SYSTEM_DAEMON=$(INST_PREF)/var/www/easyscp/daemon
 SYSTEM_FCGI=$(INST_PREF)/var/www/fcgi
-SYSTEM_SCOREBOARDS=$(INST_PREF)/var/www/scoreboards
+SYSTEM_LOG=$(INST_PREF)/var/log/easyscp
 SYSTEM_MAIL_VIRTUAL=$(INST_PREF)/var/spool/mail/virtual
 SYSTEM_MAKE_DIRS=/bin/mkdir -p
 SYSTEM_MAKE_FILE=/bin/touch
+SYSTEM_SCOREBOARDS=$(INST_PREF)/var/www/scoreboards
+SYSTEM_ROOT=$(INST_PREF)/var/www/easyscp
+SYSTEM_VIRTUAL=$(INST_PREF)/var/www/virtual
+SYSTEM_WWW=$(INST_PREF)/var/www
 
 export
 
 install:
 
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_CONF)
-	$(SYSTEM_MAKE_DIRS) $(SYSTEM_ROOT)
+	$(SYSTEM_MAKE_DIRS) $(SYSTEM_DAEMON)
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_LOG)
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_VIRTUAL)
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_FCGI)
@@ -47,8 +48,8 @@ install:
 	cd ./configs && $(MAKE) install
 	cd ./gui && $(MAKE) install
 
-	cp -dR ./daemon/ $(SYSTEM_ROOT)
-	cp -dR ./setup/ $(SYSTEM_WWW)
+	cp -dpR ./daemon/ $(SYSTEM_ROOT)
+	cp -dpR ./setup/ $(SYSTEM_WWW)
 
 uninstall:
 

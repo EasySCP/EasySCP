@@ -37,9 +37,8 @@
 
 	ErrorLog {$WWW_DIR}/{$MASTER_DOMAIN}/logs/{$SERVER_NAME}-error.log
 
-	CustomLog {$APACHE_LOG_DIR}/users/{$SERVER_NAME}-access.log combined
 	CustomLog {$WWW_DIR}/{$MASTER_DOMAIN}/logs/{$SERVER_NAME}-access.log combined
-	CustomLog "| {$APACHE_ROTATELOGS} -l {$APACHE_TRAFFIC_LOG_DIR}/{$TRAFFIC_PREFIX}{$SERVER_NAME} 300" "%{literal}{%Y_%m_%d_%H_%M_%S}{/literal}t %I %O"
+	CustomLog {$APACHE_TRAFFIC_LOG_DIR}/{$TRAFFIC_PREFIX}{$SERVER_NAME} "%{literal}{%Y_%m_%d_%H_%M_%S}{/literal}t %I %O"
 
 	Alias /errors	{$WWW_DIR}/{$DOC_ROOT}/errors/
 

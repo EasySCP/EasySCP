@@ -20,11 +20,12 @@ $daten = array();
 $dateien = array();
 $LOG_DIR = DaemonConfig::$cfg->{'APACHE_TRAFFIC_LOG_DIR'}.'/';
 
-foreach(glob($LOG_DIR.'*') as $datei) {
-	$domain = substr(str_replace($LOG_DIR, '', $datei), 0, -11);
-	$timestamp = substr(str_replace($LOG_DIR, '', $datei), -10) - date('Z');
+exec(DaemonConfig::$cmd->CMD_LOGROTATE . ' --force ' . dirname(__FILE__) . '/CronDomainTraffic >> /dev/null 2>&1', $result, $error);
 
-	if ($timestamp >= (time() - 720)){continue;}else{$dateien[] = $datei;}
+foreach(glob($LOG_DIR.'*.1') as $datei) {
+	$domain = substr(str_replace($LOG_DIR, '', $datei), 0, -2);
+
+	$dateien[] = $datei;
 
 	if(!isset($daten[$domain])){
 		$daten[$domain] = array();

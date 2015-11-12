@@ -21,11 +21,13 @@ install:
 	$(SYSTEM_MAKE_DIRS) $(ROOT_APACHE_CONF)/mods-available
 	$(SYSTEM_MAKE_DIRS) $(ROOT_APACHE_CONF)/easyscp
 
-	cp ./01_awstats.conf $(SYSTEM_CONF)/apache
+	cp -p ./01_awstats.conf $(SYSTEM_CONF)/apache
 
-	cp ./easyscp-setup.conf $(ROOT_APACHE_CONF)/sites-available
-	cp ./fcgid.conf $(SYSTEM_CONF)/apache/fcgid_easyscp.conf
-	cp ./fcgid.load $(SYSTEM_CONF)/apache/fcgid_easyscp.load
+	cp -p ./CronDomainTraffic $(SYSTEM_DAEMON)
+
+	cp -p ./easyscp-setup.conf $(ROOT_APACHE_CONF)/sites-available
+	cp -p ./fcgid.conf $(SYSTEM_CONF)/apache/fcgid_easyscp.conf
+	cp -p ./fcgid.load $(SYSTEM_CONF)/apache/fcgid_easyscp.load
 
 uninstall:
 
