@@ -33,7 +33,8 @@ $template = 'admin/tools_config_ssl.tpl';
 
 $html_selected = $cfg->HTML_SELECTED;
 
-if (isset($_POST['uaction']) && $_POST['uaction'] == 'apply') {
+$uaction = filter_input(INPUT_POST, 'uaction');
+if (isset($uaction) && $uaction == 'apply') {
     update_ssl_data();
 }
 
@@ -96,10 +97,10 @@ function update_ssl_data() {
     $db_cfg = EasySCP_Registry::get('Db_Config');
     $db_cfg->resetQueriesCounter('update');
 
-    $sslkey=clean_input($_POST['ssl_key']);
-    $sslcert=clean_input($_POST['ssl_cert']);
-	$sslcacert=clean_input($_POST['ssl_cacert']);
-    $sslstatus=clean_input($_POST['ssl_status']);
+    $sslkey=clean_input(filter_input(INPUT_POST, 'ssl_key'));
+    $sslcert=clean_input(filter_input(INPUT_POST, 'ssl_cert'));
+    $sslcacert=clean_input(filter_input(INPUT_POST, 'ssl_cacert'));
+    $sslstatus=clean_input(filter_input(INPUT_POST, 'ssl_status'));
 
 	if(openssl_x509_check_private_key($sslcert, $sslkey)){
 		// update the ssl related values
