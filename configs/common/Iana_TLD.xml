@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EasySCP a Virtual Hosting Control Panel
+	Copyright (C) 2010-2012 by Easy Server Control Panel - http://www.easyscp.net
+
+	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+
+	@link 		http://www.easyscp.net
+	@author		EasySCP Team
+-->
 <EasySCP_TLD>
   <domain>
     <tld>aaa</tld>
@@ -54,7 +64,7 @@ c/o Cable and Wireless (Ascension Island)</sponsor>
   <domain>
     <tld>aco</tld>
     <type>generic</type>
-    <sponsor>ACO Severin Ahlmann GmbH &amp;amp; Co. KG</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>active</tld>
@@ -154,7 +164,7 @@ c/o Cable and Wireless (Ascension Island)</sponsor>
   <domain>
     <tld>am</tld>
     <type>country-code</type>
-    <sponsor>&amp;quot;Internet Society&amp;quot; Non-governmental Organization</sponsor>
+    <sponsor>"Internet Society" Non-governmental Organization</sponsor>
   </domain>
   <domain>
     <tld>amica</tld>
@@ -272,6 +282,11 @@ c/o Cable and Wireless (Ascension Island)</sponsor>
     <sponsor>United TLD HoldCo, Ltd.</sponsor>
   </domain>
   <domain>
+    <tld>audi</tld>
+    <type>generic</type>
+    <sponsor>AUDI Aktiengesellschaft</sponsor>
+  </domain>
+  <domain>
     <tld>audio</tld>
     <type>generic</type>
     <sponsor>Uniregistry, Corp.</sponsor>
@@ -386,8 +401,7 @@ Telecommunications Unit</sponsor>
   <domain>
     <tld>bd</tld>
     <type>country-code</type>
-    <sponsor>Ministry of Post &amp;amp; Telecommunications
-Bangladesh Secretariat</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>be</tld>
@@ -412,7 +426,7 @@ Bangladesh Secretariat</sponsor>
   <domain>
     <tld>berlin</tld>
     <type>generic</type>
-    <sponsor>dotBERLIN GmbH &amp;amp; Co. KG</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>best</tld>
@@ -447,7 +461,7 @@ Bangladesh Secretariat</sponsor>
   <domain>
     <tld>bi</tld>
     <type>country-code</type>
-    <sponsor>Centre National de l&amp;#39;Informatique</sponsor>
+    <sponsor>Centre National de l'Informatique</sponsor>
   </domain>
   <domain>
     <tld>bible</tld>
@@ -556,6 +570,11 @@ Ministry of Labour and Immigration</sponsor>
     <sponsor>DERBoats, LLC</sponsor>
   </domain>
   <domain>
+    <tld>boehringer</tld>
+    <type>generic</type>
+    <sponsor>Boehringer Ingelheim International GmbH</sponsor>
+  </domain>
+  <domain>
     <tld>bom</tld>
     <type>generic</type>
     <sponsor>Núcleo de Informação e Coordenação do Ponto BR - NIC.br</sponsor>
@@ -601,6 +620,11 @@ Ministry of Labour and Immigration</sponsor>
     <sponsor>Bridgestone Corporation</sponsor>
   </domain>
   <domain>
+    <tld>broadway</tld>
+    <type>generic</type>
+    <sponsor>Celebrate Broadway, Inc.</sponsor>
+  </domain>
+  <domain>
     <tld>broker</tld>
     <type>generic</type>
     <sponsor>DOTBROKER REGISTRY LTD</sponsor>
@@ -629,6 +653,11 @@ Ministry of Labour and Immigration</sponsor>
     <tld>budapest</tld>
     <type>generic</type>
     <sponsor>Top Level Domain Holdings Limited</sponsor>
+  </domain>
+  <domain>
+    <tld>bugatti</tld>
+    <type>generic</type>
+    <sponsor>Bugatti International SA</sponsor>
   </domain>
   <domain>
     <tld>build</tld>
@@ -829,7 +858,7 @@ Ltd. d/b/a Island Internet Services</sponsor>
   <domain>
     <tld>cern</tld>
     <type>generic</type>
-    <sponsor>European Organization for Nuclear Research (&amp;quot;CERN&amp;quot;)</sponsor>
+    <sponsor>European Organization for Nuclear Research ("CERN")</sponsor>
   </domain>
   <domain>
     <tld>cf</tld>
@@ -854,7 +883,7 @@ Ltd. d/b/a Island Internet Services</sponsor>
   <domain>
     <tld>ch</tld>
     <type>country-code</type>
-    <sponsor>SWITCH The Swiss Education &amp;amp; Research Network</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>chanel</tld>
@@ -1815,7 +1844,7 @@ IT Services</sponsor>
   <domain>
     <tld>gdn</tld>
     <type>generic</type>
-    <sponsor>Joint Stock Company &amp;quot;Navigation-information systems&amp;quot;</sponsor>
+    <sponsor>Joint Stock Company "Navigation-information systems"</sponsor>
   </domain>
   <domain>
     <tld>ge</tld>
@@ -1925,7 +1954,7 @@ IT Services</sponsor>
   <domain>
     <tld>gmx</tld>
     <type>generic</type>
-    <sponsor>1&amp;amp;1 Mail &amp;amp; Media GmbH</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>gn</tld>
@@ -2535,7 +2564,7 @@ Cable and Wireless</sponsor>
   <domain>
     <tld>kn</tld>
     <type>country-code</type>
-    <sponsor>Ministry of Finance, Sustainable Development Information &amp;amp; Technology</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>koeln</tld>
@@ -2555,7 +2584,7 @@ Cable and Wireless</sponsor>
   <domain>
     <tld>kr</tld>
     <type>country-code</type>
-    <sponsor>Korea Internet &amp;amp; Security Agency (KISA)</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>krd</tld>
@@ -2595,7 +2624,12 @@ Cable and Wireless</sponsor>
   <domain>
     <tld>lacaixa</tld>
     <type>generic</type>
-    <sponsor>CAIXA D&amp;#39;ESTALVIS I PENSIONS DE BARCELONA</sponsor>
+    <sponsor>CAIXA D'ESTALVIS I PENSIONS DE BARCELONA</sponsor>
+  </domain>
+  <domain>
+    <tld>lamborghini</tld>
+    <type>generic</type>
+    <sponsor>Automobili Lamborghini S.p.A.</sponsor>
   </domain>
   <domain>
     <tld>lancaster</tld>
@@ -2691,7 +2725,7 @@ Computing and Networking Services</sponsor>
   <domain>
     <tld>lidl</tld>
     <type>generic</type>
-    <sponsor>Schwarz Domains und Services GmbH &amp;amp; Co. KG</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>life</tld>
@@ -3000,7 +3034,7 @@ Direction des Communications Electroniques</sponsor>
   <domain>
     <tld>mm</tld>
     <type>country-code</type>
-    <sponsor>Ministry of Communications, Posts &amp;amp; Telegraphs</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>mma</tld>
@@ -3060,7 +3094,7 @@ Direction des Communications Electroniques</sponsor>
   <domain>
     <tld>mormon</tld>
     <type>generic</type>
-    <sponsor>IRI Domain Management, LLC (&amp;quot;Applicant&amp;quot;)</sponsor>
+    <sponsor>IRI Domain Management, LLC ("Applicant")</sponsor>
   </domain>
   <domain>
     <tld>mortgage</tld>
@@ -3338,7 +3372,7 @@ Centro de Computo</sponsor>
   <domain>
     <tld>nyc</tld>
     <type>generic</type>
-    <sponsor>The City of New York by and through the New York City Department of Information Technology &amp;amp; Telecommunications</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>nz</tld>
@@ -3348,7 +3382,7 @@ Centro de Computo</sponsor>
   <domain>
     <tld>obi</tld>
     <type>generic</type>
-    <sponsor>OBI Group Holding SE &amp;amp; Co. KGaA</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>office</tld>
@@ -3676,9 +3710,7 @@ dba RegistryPro</sponsor>
   <domain>
     <tld>ps</tld>
     <type>country-code</type>
-    <sponsor>Ministry Of Telecommunications &amp;amp;
-Information Technology,
-Government Computer Center.</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>pt</tld>
@@ -3843,7 +3875,7 @@ Government Computer Center.</sponsor>
   <domain>
     <tld>ro</tld>
     <type>country-code</type>
-    <sponsor>National Institute for R&amp;amp;D in Informatics</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>rocher</tld>
@@ -3878,7 +3910,7 @@ Government Computer Center.</sponsor>
   <domain>
     <tld>ruhr</tld>
     <type>generic</type>
-    <sponsor>regiodot GmbH &amp;amp; Co. KG</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>run</tld>
@@ -3983,7 +4015,7 @@ Government Computer Center.</sponsor>
   <domain>
     <tld>scb</tld>
     <type>generic</type>
-    <sponsor>The Siam Commercial Bank Public Company Limited (&amp;quot;SCB&amp;quot;)</sponsor>
+    <sponsor>The Siam Commercial Bank Public Company Limited ("SCB")</sponsor>
   </domain>
   <domain>
     <tld>schmidt</tld>
@@ -4008,7 +4040,7 @@ Government Computer Center.</sponsor>
   <domain>
     <tld>schwarz</tld>
     <type>generic</type>
-    <sponsor>Schwarz Domains und Services GmbH &amp;amp; Co. KG</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>science</tld>
@@ -4068,7 +4100,7 @@ Government Computer Center.</sponsor>
   <domain>
     <tld>sew</tld>
     <type>generic</type>
-    <sponsor>SEW-EURODRIVE GmbH &amp;amp; Co KG</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>sex</tld>
@@ -4224,7 +4256,7 @@ NIC Senegal</sponsor>
   <domain>
     <tld>spiegel</tld>
     <type>generic</type>
-    <sponsor>SPIEGEL-Verlag Rudolf Augstein GmbH &amp;amp; Co. KG</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>spreadbetting</tld>
@@ -4396,7 +4428,7 @@ Department of Computer Science</sponsor>
   <domain>
     <tld>tatar</tld>
     <type>generic</type>
-    <sponsor>Limited Liability Company &amp;quot;Coordination Center of Regional Domain of Tatarstan Republic&amp;quot;</sponsor>
+    <sponsor>Limited Liability Company "Coordination Center of Regional Domain of Tatarstan Republic"</sponsor>
   </domain>
   <domain>
     <tld>tattoo</tld>
@@ -4536,13 +4568,13 @@ Department of Computer Science</sponsor>
   <domain>
     <tld>tn</tld>
     <type>country-code</type>
-    <sponsor>Agence Tunisienne d&amp;#39;Internet</sponsor>
+    <sponsor>Agence Tunisienne d'Internet</sponsor>
   </domain>
   <domain>
     <tld>to</tld>
     <type>country-code</type>
     <sponsor>Government of the Kingdom of Tonga
-H.R.H. Crown Prince Tupouto&amp;#39;a
+H.R.H. Crown Prince Tupouto'a
 c/o Consulate of Tonga</sponsor>
   </domain>
   <domain>
@@ -4563,7 +4595,7 @@ c/o Consulate of Tonga</sponsor>
   <domain>
     <tld>top</tld>
     <type>generic</type>
-    <sponsor>Jiangsu Bangning Science &amp;amp; Technology Co.,Ltd.</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>toray</tld>
@@ -4790,6 +4822,11 @@ c/o COBEX Internet Services</sponsor>
     <sponsor>Holly Shadow, LLC</sponsor>
   </domain>
   <domain>
+    <tld>vip</tld>
+    <type>generic</type>
+    <sponsor>Minds + Machines Group Limited</sponsor>
+  </domain>
+  <domain>
     <tld>virgin</tld>
     <type>generic</type>
     <sponsor>Virgin Enterprises Limited</sponsor>
@@ -4907,7 +4944,7 @@ c/o COBEX Internet Services</sponsor>
   <domain>
     <tld>whoswho</tld>
     <type>generic</type>
-    <sponsor>Who&amp;#39;s Who Registry</sponsor>
+    <sponsor>Who's Who Registry</sponsor>
   </domain>
   <domain>
     <tld>wien</tld>
@@ -4962,7 +4999,7 @@ c/o COBEX Internet Services</sponsor>
   <domain>
     <tld>ws</tld>
     <type>country-code</type>
-    <sponsor>Government of Samoa Ministry of Foreign Affairs &amp;amp; Trade</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>wtc</tld>
@@ -5027,7 +5064,7 @@ c/o COBEX Internet Services</sponsor>
   <domain>
     <tld>xn--3e0b707e</tld>
     <type>country-code</type>
-    <sponsor>KISA (Korea Internet &amp;amp; Security Agency)</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>xn--3pxu8k</tld>
@@ -5472,7 +5509,7 @@ c/o COBEX Internet Services</sponsor>
   <domain>
     <tld>xn--pgbs0dh</tld>
     <type>country-code</type>
-    <sponsor>Agence Tunisienne d&amp;#39;Internet</sponsor>
+    <sponsor>Agence Tunisienne d'Internet</sponsor>
   </domain>
   <domain>
     <tld>xn--pssy2u</tld>
@@ -5572,7 +5609,7 @@ c/o COBEX Internet Services</sponsor>
   <domain>
     <tld>xn--y9a3aq</tld>
     <type>country-code</type>
-    <sponsor>&amp;quot;Internet Society&amp;quot; Non-governmental Organization</sponsor>
+    <sponsor>"Internet Society" Non-governmental Organization</sponsor>
   </domain>
   <domain>
     <tld>xn--yfro4i67o</tld>
@@ -5582,7 +5619,7 @@ c/o COBEX Internet Services</sponsor>
   <domain>
     <tld>xn--ygbi2ammx</tld>
     <type>country-code</type>
-    <sponsor>Ministry of Telecom &amp;amp; Information Technology (MTIT)</sponsor>
+    <sponsor/>
   </domain>
   <domain>
     <tld>xn--zckzah</tld>
