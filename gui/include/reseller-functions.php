@@ -1161,17 +1161,21 @@ function reseller_limits_check($sql, &$err_msg, $reseller_id, $hpid, $newprops =
 
 			$res = exec_query($sql, $query, $hpid);
 			$data = $res->fetchRow();
-			$props = $data['props'];
+			$props = unserialize($data['props']);
 		}
 	} else {
 		// we want to check _before_ inserting
 		$props = $newprops;
 	}
-
-	list(, , , $sub_new,
-		$als_new, $mail_new, $ftp_new,
-		$sql_db_new, $sql_user_new,
-		$traff_new, $disk_new) = explode(";", $props);
+	
+	$sub_new = $props['subdomain_cnt'];
+	$als_new = $props['alias_cnt'];
+	$mail_new = $props['mail_cnt'];
+	$ftp_new = $props['ftp_cnt'];
+	$sql_db_new = $props['db_cnt'];
+	$sql_user_new = $props['sqluser_cnt'];
+	$traff_new = $props['traffic'];
+	$disk_new = $props['disk'];
 
 	$query = "
 		SELECT

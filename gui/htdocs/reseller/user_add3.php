@@ -248,25 +248,23 @@ function add_user_data($reseller_id) {
 		}
 
 		$data = $res->fetchRow();
-		$props = $data['props'];
+		$props = unserialize($data['props']);
 	}
 
-	list(
-		$php,
-		$phpe,
-		$cgi,
-		$sub,
-		$als,
-		$mail,
-		$ftp,
-		$sql_db,
-		$sql_user,
-		$traff,
-		$disk,
-		$backup,
-		$dns,
-		$ssl
-	) = explode(";", $props);
+	$php = $props['allow_php'];
+	$phpe = $props['allow_phpeditor'];
+	$cgi = $props['allow_cgi'];
+	$sub = $props['subdomain_cnt'];
+	$als = $props['alias_cnt'];
+	$mail = $props['mail_cnt'];
+	$ftp = $props['ftp_cnt'];
+	$sql_db = $props['db_cnt'];
+	$sql_user = $props['sqluser_cnt'];
+	$traff = $props['traffic'];
+	$disk = $props['disk'];
+	$backup = $props['allow_backup'];
+	$dns = $props['allow_dns'];
+	$ssl = $props['allow_ssl'];
 
 	$php			= preg_replace("/\_/", "", $php);
 	$phpe			= preg_replace("/\_/", "", $phpe);

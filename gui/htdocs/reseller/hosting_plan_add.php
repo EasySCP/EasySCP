@@ -385,7 +385,23 @@ function save_data_to_db($tpl, $admin_id) {
 			'error'
 		);
 	} else {
-		$hp_props = "$hp_php;$hp_cgi;$hp_sub;$hp_als;$hp_mail;$hp_ftp;$hp_sql_db;$hp_sql_user;$hp_traff;$hp_disk;$hp_backup;$hp_dns;$hp_ssl";
+		//$hp_props = "$hp_php;$hp_cgi;$hp_sub;$hp_als;$hp_mail;$hp_ftp;$hp_sql_db;$hp_sql_user;$hp_traff;$hp_disk;$hp_backup;$hp_dns;$hp_ssl";
+		$newProps = array(
+			'allow_php'	=> $hp_php,
+			'allow_cgi'	=> $hp_cgi,
+			'subdomain_cnt'	=> $hp_sub,
+			'alias_cnt'	=>	$hp_als,
+			'mail_cnt'	=> $hp_mail,
+			'ftp_cnt'	=> $hp_ftp,
+			'db_cnt'	=> $hp_sql_db,
+			'sqluser_cnt'	=> $hp_sql_user,
+			'traffic'	=> $hp_traff,
+			'disk'		=> $hp_disk,
+			'allow_backup'	=> $hp_backup,
+			'allow_dns'	=> $hp_dns,
+			'allow_ssl'	=> $hp_ssl,
+		);
+		$hp_props=  serialize($newProps);
 		// this id is just for fake and is not used in reseller_limits_check.
 		$hpid = 0;
 

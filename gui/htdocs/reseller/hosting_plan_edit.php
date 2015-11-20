@@ -213,7 +213,7 @@ function gen_load_ehp_page($tpl, $sql, $hpid, $admin_id) {
 
 	$data = $res->fetchRow();
 
-	$props = $data['props'];
+	$props = unserialize($data['props']);
 	$description = $data['description'];
 	$price = $data['price'];
 	$setup_fee = $data['setup_fee'];
@@ -222,10 +222,19 @@ function gen_load_ehp_page($tpl, $sql, $hpid, $admin_id) {
 	$status = $data['status'];
 	$tos = $data['tos'];
 
-	list(
-		$hp_php, $hp_cgi, $hp_sub, $hp_als, $hp_mail, $hp_ftp, $hp_sql_db,
-		$hp_sql_user, $hp_traff, $hp_disk, $hp_backup, $hp_dns, $hp_ssl
-	) = explode(';', $props);
+	$hp_php = $props['allow_php'];
+	$hp_cgi = $props['allow_cgi'];
+	$hp_sub = $props['subdomain_cnt'];
+	$hp_als = $props['alias_cnt'];
+	$hp_mail = $props['mail_cnt'];
+	$hp_ftp = $props['ftp_cnt'];
+	$hp_sql_db = $props['db_cnt'];
+	$hp_sql_user = $props['sqluser_cnt'];
+	$hp_traff = $props['traffic'];
+	$hp_disk = $props['disk'];
+	$hp_backup = $props['allow_backup'];
+	$hp_dns = $props['allow_dns'];
+	$hp_ssl = $props['allow_ssl'];
 
 	$hp_name = $data['name'];
 
@@ -452,9 +461,26 @@ function save_data_to_db() {
 	$status = clean_input($_POST['status']);
 	$tos = clean_input($_POST['hp_tos']);
 
-	$hp_props = "$hp_php;$hp_cgi;$hp_sub;$hp_als;$hp_mail;$hp_ftp;$hp_sql_db;" .
-		"$hp_sql_user;$hp_traff;$hp_disk;$hp_backup;$hp_dns;$hp_ssl";
-
+	//$hp_props = "$hp_php;$hp_cgi;$hp_sub;$hp_als;$hp_mail;$hp_ftp;$hp_sql_db;" .
+	//	"$hp_sql_user;$hp_traff;$hp_disk;$hp_backup;$hp_dns;$hp_ssl";
+	
+	$newProps = array(
+			'allow_php'	=> $hp_php,
+			'allow_cgi'	=> $hp_cgi,
+			'subdomain_cnt'	=> $hp_sub,
+			'alias_cnt'	=>	$hp_als,
+			'mail_cnt'	=> $hp_mail,
+			'ftp_cnt'	=> $hp_ftp,
+			'db_cnt'	=> $hp_sql_db,
+			'sqluser_cnt'	=> $hp_sql_user,
+			'traffic'	=> $hp_traff,
+			'disk'		=> $hp_disk,
+			'allow_backup'	=> $hp_backup,
+			'allow_dns'	=> $hp_dns,
+			'allow_ssl'	=> $hp_ssl,
+		);
+	$hp_props=  serialize($newProps);
+	
 	$admin_id = $_SESSION['user_id'];
 
 	if (reseller_limits_check($sql, $err_msg, $admin_id, $hpid, $hp_props)) {

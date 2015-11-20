@@ -209,10 +209,21 @@ function get_hp_data($hpid, $admin_id) {
 	if (0 !== $res->rowCount()) {
 		$data = $res->fetchRow();
 
-		$props = $data['props'];
-
-		list($hp_php, $hp_phpe, $hp_cgi, $hp_sub, $hp_als, $hp_mail, $hp_ftp, $hp_sql_db,
-			$hp_sql_user, $hp_traff, $hp_disk, $hp_backup, $hp_dns, $hp_ssl) = explode(";", $props);
+		$props = unserialize($data['props']);
+		$hp_php = $props['allow_php'];
+		$hp_phpe = $props['allow_phpeditor'];
+		$hp_cgi = $props['allow_cgi'];
+		$hp_sub = $props['subdomain_cnt'];
+		$hp_als = $props['alias_cnt'];
+		$hp_mail = $props['mail_cnt'];
+		$hp_ftp = $props['ftp_cnt'];
+		$hp_sql_db = $props['db_cnt'];
+		$hp_sql_user = $props['sqluser_cnt'];
+		$hp_traff = $props['traffic'];
+		$hp_disk = $props['disk'];
+		$hp_backup = $props['allow_backup'];
+		$hp_dns = $props['allow_dns'];
+		$hp_ssl = $props['allow_ssl'];
 
 		$hp_name = $data['name'];
 	} else {
