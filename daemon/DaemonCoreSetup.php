@@ -884,7 +884,7 @@ function GUI_VHOST(){
 	}
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
-	$config = $tpl->fetch('apache/parts/00_master.conf.tpl');
+	$config = $tpl->fetch('apache/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/00_master.conf.tpl');
 	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/apache/working/00_master.conf';
 	$tpl = NULL;
 	unset($tpl);
