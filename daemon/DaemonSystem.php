@@ -90,6 +90,16 @@ class DaemonSystem {
 				DaemonCommon::systemSetGUIPermissions();
 				System_Daemon::debug('Finished "setPermissions" subprocess.');
 				break;
+			case 'userexists':
+				System_Daemon::debug('Starting "userexists" subprocess.');
+                exec(DaemonConfig::$cmd->CMD_ID.' -u '.$data['1'].' 2>&1', $result, $error);
+                if ($error != 0){
+                    System_Daemon::debug('User '.$data['1'].' does not exist');
+                    unset($result);
+                    return false;
+                }
+				System_Daemon::debug('Finished "userexists" subprocess.');
+                break;
 			case 'updateIana':
 				System_Daemon::debug('Starting "updateIana" subprocess.');
 				updateIanaXML();
