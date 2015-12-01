@@ -602,6 +602,25 @@ class EasySCP_Update_Database extends EasySCP_Update {
 
 		return $sqlUpd;
 	}
+	
+	/**
+	 * Add/Update database field to count backup support
+	 *
+	 * @author Tom Winterhalder <tom.winterhalder@easyscp.net>
+	 * @return array
+	 */
+	protected function _databaseUpdate_63() {
+		
+		$sqlUpd = array();
+
+		$sqlUpd[] ="
+			ALTER TABLE 
+				`domain` 
+			ADD `domain_disk_countbackup` VARCHAR( 3 ) NOT NULL DEFAULT 'no' 
+			AFTER `domain_disk_usage`" ;		
+		
+		return $sqlUpd;
+	}
 
 	/*
 	 * DO NOT CHANGE ANYTHING BELOW THIS LINE!

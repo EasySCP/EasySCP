@@ -220,7 +220,7 @@ function add_user_data($reseller_id) {
 	global $hpid, $dmn_name, $dmn_expire, $dmn_user_name, $admin_login, 
 		$user_email, $customer_id, $first_name, $last_name, $gender, $firm,
 		$zip, $city, $state, $country, $street_one, $street_two, $phone,
-		$fax, $inpass, $domain_ip, $dns, $backup;
+		$fax, $inpass, $domain_ip, $dns, $backup,$countbackup;
 
 	$sql = EasySCP_Registry::get('Db');
 	$cfg = EasySCP_Registry::get('Config');
@@ -263,6 +263,7 @@ function add_user_data($reseller_id) {
 	$traff = $props['traffic'];
 	$disk = $props['disk'];
 	$backup = $props['allow_backup'];
+	$countbackup = $props['disk_countbackup'];
 	$dns = $props['allow_dns'];
 	$ssl = $props['allow_ssl'];
 
@@ -271,6 +272,7 @@ function add_user_data($reseller_id) {
 	$cgi			= preg_replace("/\_/", "", $cgi);
 	$ssl			= preg_replace("/\_/", "", $ssl);
 	$backup			= preg_replace("/\_/", "", $backup);
+	$countbackup	= preg_replace("/\_/", "", $countbackup);
 	$dns			= preg_replace("/\_/", "", $dns);
 	$pure_user_pass = $inpass;
 	$inpass			= crypt_user_pass($inpass);
@@ -326,7 +328,7 @@ function add_user_data($reseller_id) {
 	print $sql->errorMsg();
 
 	$record_id = $sql->insertId();
-
+	
 	$query = "
 		INSERT INTO `domain` (
 			`domain_name`, `domain_admin_id`,
@@ -337,33 +339,47 @@ function add_user_data($reseller_id) {
 			`domain_subd_limit`, `domain_alias_limit`,
 			`domain_ip_id`, `domain_disk_limit`,
 			`domain_disk_usage`, `domain_php`, `domain_php_edit`, `domain_cgi`,
-			`allowbackup`, `domain_dns`, `domain_ssl`
+			`allowbackup`, `domain_dns`, `domain_ssl`, `domain_disk_countbackup`
 		)
 		VALUES (
-			?, ?,
-			?, unix_timestamp(), $dmn_expire,
-			?, ?,
-			?, ?,
-			?, ?,
-			?, ?,
-			?, ?,
-			'0', ?, ?, ?,
-			?, ?, ?
+			:domain_name, :domain_admin_id,
+			:domain_created_id, unix_timestamp(), :domain_expires,
+			:domain_mailacc_limit, :domain_ftpacc_limit,
+			:domain_traffic_limit, :domain_sqld_limit,
+			:domain_sqlu_limit, :status,
+			:domain_subd_limit, :domain_alias_limit,
+			:domain_ip_id, :domain_disk_limit,
+			'0', :domain_php, :domain_php_edit, :domain_cgi,
+			:allowbackup, :domain_dns, :domain_ssl, :domain_disk_countbackup
 		)
 	";
-
-	exec_query(
-		$sql,
-		$query,
-		array(
-			$dmn_name, $record_id,
-			$reseller_id, $mail, $ftp, $traff, $sql_db,
-			$sql_user, $cfg->ITEM_ADD_STATUS, $sub, $als, $domain_ip,
-			$disk, $php, $phpe, $cgi, $backup, $dns, $ssl
-		)
+	$param = array(
+		':domain_name' => $dmn_name,
+		':domain_admin_id' => $record_id, 
+		':domain_created_id' => $reseller_id,
+		':domain_expires' => $dmn_expire,
+		':domain_mailacc_limit' => $mail,
+		':domain_ftpacc_limit' => $ftp,
+		':domain_traffic_limit' => $traff,
+		':domain_sqld_limit' => $sql_db,
+		':domain_sqlu_limit' => $sql_user,
+		':status' => $cfg->ITEM_ADD_STATUS,
+		':domain_subd_limit' => $sub,
+		':domain_alias_limit' => $als,
+		':domain_ip_id' => $domain_ip,
+		':domain_disk_limit' => $disk,
+		':domain_php' => $php,
+		':domain_php_edit' => $phpe,
+		':domain_cgi' => $cgi,
+		':allowbackup' => $backup,
+		':domain_dns' => $dns,
+		':domain_ssl' => $ssl,
+		':domain_disk_countbackup' => $countbackup,
 	);
-	
-	$dmn_id = $sql->insertId();
+
+	DB::prepare($query);
+	DB::execute($param);
+	$dmn_id = DB::getInstance()->lastInsertId();
 	
 	// AddDefaultDNSEntries($dmn_id, 0, $dmn_name, $domain_ip);
 

@@ -61,6 +61,7 @@ $tpl->assign(
 		'TR_BACKUP_SQL'				=> tr('SQL'),
 		'TR_BACKUP_FULL'			=> tr('Full'),
 		'TR_BACKUP_NO'				=> tr('No'),
+		'TR_BACKUP_COUNT'			=> tr('Count backups to disk usage'),
 		'TR_APACHE_LOGS'			=> tr('Apache logfiles'),
 		'TR_AWSTATS'				=> tr('AwStats'),
 		'TR_YES'					=> tr('Yes'),
@@ -154,6 +155,8 @@ function gen_empty_ahp_page($tpl) {
 			'VL_BACKUPS'			=> '',
 			'VL_BACKUPF'			=> '',
 			'VL_BACKUPN'			=> $cfg->HTML_CHECKED,
+			'TR_BACKUPCOUNT_YES'	=> '',
+			'TR_BACKUPCOUNT_NO'		=> $cfg->HTML_CHECKED,
 			'TR_DNS_YES'			=> '',
 			'TR_DNS_NO'				=> $cfg->HTML_CHECKED,
 			'HP_DISK_VALUE'			=> '',
@@ -172,7 +175,7 @@ function gen_data_ahp_page($tpl) {
 	global $hp_name, $description, $hp_php, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
-	global $hp_traff, $hp_disk;
+	global $hp_traff, $hp_disk, $hp_countbackup;
 	global $price, $setup_fee, $value, $payment, $status;
 	global $hp_backup, $hp_dns;
 	global $tos;
@@ -211,6 +214,8 @@ function gen_data_ahp_page($tpl) {
 			'VL_BACKUPS'	=> ($hp_backup == '_sql_') ? $cfg->HTML_CHECKED : '',
 			'VL_BACKUPF'	=> ($hp_backup == '_full_') ? $cfg->HTML_CHECKED : '',
 			'VL_BACKUPN'	=> ($hp_backup == '_no_') ? $cfg->HTML_CHECKED : '',
+			'TR_BACKUPCOUNT_YES'	=> ($hp_countbackup == '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_BACKUPCOUNT_NO'	=> ($hp_countbackup == '_no_') ? $cfg->HTML_CHECKED : '',
 			'TR_DNS_YES'	=> ($hp_dns == '_yes_') ? $cfg->HTML_CHECKED : '',
 			'TR_DNS_NO'		=> ($hp_dns == '_no_') ? $cfg->HTML_CHECKED : '',
 			'TR_STATUS_YES'	=> ($status) ? $cfg->HTML_CHECKED : '',
@@ -228,7 +233,7 @@ function check_data_correction($tpl) {
 	global $hp_name, $description, $hp_php, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
-	global $hp_traff, $hp_disk;
+	global $hp_traff, $hp_disk,$hp_countbackup;
 	global $price, $setup_fee, $value, $payment, $status;
 	global $hp_backup, $hp_dns;
 	global $tos;
@@ -280,6 +285,9 @@ function check_data_correction($tpl) {
 
 	if (isset($_POST['backup'])) {
 		$hp_backup = $_POST['backup'];
+	}
+	if (isset($_POST['countbackup'])){
+		$hp_countbackup = $_POST['countbackup'];
 	}
 
 	if ($hp_name == '') {
@@ -368,7 +376,7 @@ function save_data_to_db($tpl, $admin_id) {
 	global $hp_name, $description, $hp_php, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
-	global $hp_traff, $hp_disk;
+	global $hp_traff, $hp_disk,$hp_countbackup;
 	global $price, $setup_fee, $value, $payment, $status;
 	global $hp_backup, $hp_dns;
 	global $tos;
@@ -397,6 +405,7 @@ function save_data_to_db($tpl, $admin_id) {
 			'sqluser_cnt'	=> $hp_sql_user,
 			'traffic'	=> $hp_traff,
 			'disk'		=> $hp_disk,
+			'disk_countbackup'	=>  $hp_countbackup,
 			'allow_backup'	=> $hp_backup,
 			'allow_dns'	=> $hp_dns,
 			'allow_ssl'	=> $hp_ssl,

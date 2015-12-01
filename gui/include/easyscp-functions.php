@@ -145,7 +145,7 @@ function update_user_props($user_id, $props) {
 
 	list(
 		,$sub_max,,$als_max,,$mail_max,,$ftp_max,,$sql_db_max,,$sql_user_max,
-		$traff_max,$disk_max,$domain_php,$domain_php_edit,$domain_cgi,$domain_ssl,,$domain_dns
+		$traff_max,$disk_max,$domain_php,$domain_php_edit,$domain_cgi,$domain_ssl,,$domain_dns,$countbackup
 	) = explode (';', $props);
 
 	// have to check if PHP and/or CGI and/or IP change
@@ -199,6 +199,7 @@ function update_user_props($user_id, $props) {
 			':domain_ssl'			=> $domain_ssl,
 			':domain_dns'			=> $domain_dns,
 			':domain_id'			=> $user_id,
+			':domain_disk_countbackup'=>	$countbackup,
 		);
 
 		$sql_query = "
@@ -219,7 +220,8 @@ function update_user_props($user_id, $props) {
 				domain_php_edit = :domain_php_edit,
 				domain_cgi = :domain_cgi,
 				domain_ssl = :domain_ssl,
-				domain_dns = :domain_dns
+				domain_dns = :domain_dns,
+				domain_disk_countbackup = :domain_disk_countbackup
 			WHERE
 				domain_id = :domain_id;
 		";
@@ -282,32 +284,40 @@ function update_user_props($user_id, $props) {
 		// we do not have IP and/or PHP and/or CGI changes
 		// we have to update only the domain props and not
 		// to rebuild system entries
+		// update the domain
+		$sql_param = array(
+			':domain_mailacc_limit'	=> $mail_max,
+			':domain_ftpacc_limit'	=> $ftp_max,
+			':domain_traffic_limit'	=> $traff_max,
+			':domain_sqld_limit'	=> $sql_db_max,
+			':domain_sqlu_limit'	=> $sql_user_max,
+			':domain_alias_limit'	=> $als_max,
+			':domain_subd_limit'	=> $sub_max,
+			':domain_disk_limit'	=> $disk_max,
+			':domain_disk_countbackup'=>	$countbackup,
+			':domain_id'			=> $user_id
+		);
 
-		$query = "
+		$sql_query = "
 			UPDATE
-				`domain`
+				domain
 			SET
-				`domain_subd_limit` = ?,
-				`domain_alias_limit` = ?,
-				`domain_mailacc_limit` = ?,
-				`domain_ftpacc_limit` = ?,
-				`domain_sqld_limit` = ?,
-				`domain_sqlu_limit` = ?,
-				`domain_traffic_limit` = ?,
-				`domain_disk_limit` = ?
+				domain_mailacc_limit = :domain_mailacc_limit,
+				domain_ftpacc_limit = :domain_ftpacc_limit,
+				domain_traffic_limit = :domain_traffic_limit,
+				domain_sqld_limit = :domain_sqld_limit,
+				domain_sqlu_limit = :domain_sqlu_limit,
+				domain_alias_limit = :domain_alias_limit,
+				domain_subd_limit = :domain_subd_limit,
+				domain_disk_limit = :domain_disk_limit,
+				domain_disk_countbackup = :domain_disk_countbackup
 			WHERE
-				domain_id = ?
-			;
+				domain_id = :domain_id;
 		";
 
-		exec_query(
-			$db,
-			$query,
-			array(
-				$sub_max, $als_max, $mail_max, $ftp_max, $sql_db_max,
-				$sql_user_max, $traff_max, $disk_max, $user_id
-			)
-		);
+		DB::prepare($sql_query);
+		DB::execute($sql_param);
+
 	}
 }
 

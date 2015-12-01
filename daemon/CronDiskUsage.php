@@ -16,11 +16,15 @@ require_once(dirname(__FILE__).'/DaemonDummy.php');
 require_once(dirname(__FILE__).'/DaemonCommon.php');
 require_once(dirname(__FILE__).'/DaemonConfig.php');
 
-function getDiskUsage($path){
+function getDiskUsage($path,$excludeBackups=true){
 	$usage = null;
 	if (file_exists($path)){
 		$usage = null;
-		exec(DaemonConfig::$cmd->{'CMD_DU'} .' -bcs ' . $path ,$usage);
+		if ($excludeBackups){
+			exec(DaemonConfig::$cmd->{'CMD_DU'} .' -bcs ' . $path ,$usage);
+		}else {
+			exec(DaemonConfig::$cmd->{'CMD_DU'} .' -bcs --exclude '. $path .'/backups ' . $path ,$usage);
+		}
 		$diskUsage = preg_split('/\s/', $usage[0]);
 		return $diskUsage[0];
 	}
@@ -72,7 +76,7 @@ $dbUsage = 0;
 
 $sql_query = "
 		SELECT 
-			domain_id, domain_name 
+			domain_id, domain_name, domain_disk_countbackup 
 		FROM 
 			domain 
 		WHERE 
@@ -83,7 +87,11 @@ while ($row = $domainData->fetch()) {
 	$wwwPath = DaemonConfig::$cfg->{'APACHE_WWW_DIR'} . '/' . $row['domain_name'];
 	$mailPath = DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $row['domain_name'];
 	
-	$webUsage = getDiskUsage($wwwPath);
+	if ($row['domain_disk_countbackup']!=='yes'){
+		$webUsage = getDiskUsage($wwwPath, true);
+	} else {
+		$webUsage = getDiskUsage($wwwPath,false);
+	}
 	$mailUsage = getDiskUsage($mailPath);
 	$dbUsage = getDBUsage($row['domain_id']);
 	

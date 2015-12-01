@@ -1148,7 +1148,7 @@ function reseller_limits_check($sql, &$err_msg, $reseller_id, $hpid, $newprops =
 	if (empty($newprops)) {
 		// this hosting plan exists
 		if (isset($_SESSION["ch_hpprops"])) {
-			$props = $_SESSION["ch_hpprops"];
+			$props = unserialize($_SESSION["ch_hpprops"]);
 		} else {
 			$query = "
 				SELECT
@@ -1165,7 +1165,7 @@ function reseller_limits_check($sql, &$err_msg, $reseller_id, $hpid, $newprops =
 		}
 	} else {
 		// we want to check _before_ inserting
-		$props = $newprops;
+		$props = unserialize($newprops);
 	}
 	
 	$sub_new = $props['subdomain_cnt'];

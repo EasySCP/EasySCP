@@ -94,6 +94,7 @@ $tpl->assign(
 		'TR_BACKUP_SQL'			=> tr('SQL'),
 		'TR_BACKUP_FULL'		=> tr('Full'),
 		'TR_BACKUP_NO'			=> tr('No'),
+		'TR_BACKUP_COUNT'		=> tr('Count backups to disk usage'),
 		'TR_UPDATE_DATA'		=> tr('Submit changes'),
 		'TR_CANCEL'				=> tr('Cancel'),
 		'TR_YES'				=> tr('Yes'),
@@ -179,7 +180,7 @@ function load_user_data($user_id, $domain_id) {
  */
 function load_additional_data($user_id, $domain_id) {
 	global $domain_name, $domain_expires, $domain_ip, $php_sup, $phpe_sup;
-	global $cgi_supp, $ssl_supp, $username, $allowbackup;
+	global $cgi_supp, $ssl_supp, $username, $allowbackup, $countbackup;
 	global $dns_supp;
 
 	$sql = EasySCP_Registry::get('Db');
@@ -197,6 +198,7 @@ function load_additional_data($user_id, $domain_id) {
 			`domain_ssl`,
 			`domain_admin_id`,
 			`allowbackup`,
+			`domain_disk_countbackup`,
 			`domain_dns`
 		FROM
 			`domain`
@@ -225,6 +227,7 @@ function load_additional_data($user_id, $domain_id) {
 	$cgi_supp		= $data['domain_cgi'];
 	$ssl_supp		= $data['domain_ssl'];
 	$allowbackup	= $data['allowbackup'];
+	$countbackup	= $data['domain_disk_countbackup'];
 	$domain_admin_id= $data['domain_admin_id'];
 	$dns_supp		= $data['domain_dns'];
 	// Get IP of domain
@@ -271,7 +274,7 @@ function gen_editdomain_page($tpl) {
 	global $cgi_supp, $ssl_supp, $sub, $als;
 	global $mail, $ftp, $sql_db;
 	global $sql_user, $traff, $disk;
-	global $username, $allowbackup;
+	global $username, $allowbackup, $countbackup;
 	global $dns_supp;
 
 	$cfg = EasySCP_Registry::get('Config');
@@ -349,6 +352,8 @@ function gen_editdomain_page($tpl) {
 			'SSL_NO'					=> ($ssl_supp != 'yes') ? $cfg->HTML_SELECTED : '',
 			'DNS_YES'					=> ($dns_supp == 'yes') ? $cfg->HTML_SELECTED : '',
 			'DNS_NO'					=> ($dns_supp != 'yes') ? $cfg->HTML_SELECTED : '',
+			'BACKUPCOUNT_YES'			=> ($countbackup == 'yes') ? $cfg->HTML_CHECKED : '',
+			'BACKUPCOUNT_NO'			=> ($countbackup != 'yes') ? $cfg->HTML_CHECKED : '',
 			'VL_EXPIRE_DATE_DISABLED'	=> ($domain_expires == 0) ? $cfg->HTML_DISABLED : '',
 			'VL_EXPIRE_NEVER_SELECTED'	=> ($domain_expires == 0) ? $cfg->HTML_CHECKED : '',
 			'VL_DOMAIN_NAME'			=> tohtml($domain_name),
@@ -376,7 +381,7 @@ function check_user_data($reseller_id, $user_id) {
 
 	$sql = EasySCP_Registry::get('Db');
 
-	global $sub, $als, $mail, $ftp, $sql_db, $sql_user, $traff, $disk, $domain_php, $domain_php_edit, $domain_cgi, $domain_ssl, $allowbackup, $domain_dns, $domain_expires;
+	global $sub, $als, $mail, $ftp, $sql_db, $sql_user, $traff, $disk, $domain_php, $domain_php_edit, $domain_cgi, $domain_ssl, $allowbackup, $domain_dns, $domain_expires,$countbackup;
 
 	$domain_expires_date  = (isset($_POST['dmn_expire_date'])) ? clean_input($_POST['dmn_expire_date']) : 0;
 	$domain_expires_never = (isset($_POST['dmn_expire_never'])) ? $_POST['dmn_expire_never'] : "off";
@@ -396,6 +401,7 @@ function check_user_data($reseller_id, $user_id) {
 	$domain_ssl		= preg_replace("/\_/", "", $_POST['domain_ssl']);
 	$domain_dns		= preg_replace("/\_/", "", $_POST['domain_dns']);
 	$allowbackup	= preg_replace("/\_/", "", $_POST['backup']);
+	$countbackup	= preg_replace("/\_/", "", $_POST['countbackup']);
 
 	$ed_error = '';
 
@@ -534,7 +540,8 @@ function check_user_data($reseller_id, $user_id) {
 		$user_props .= "$domain_cgi;";
 		$user_props .= "$domain_ssl;";
 		$user_props .= "$allowbackup;";
-		$user_props .= "$domain_dns";
+		$user_props .= "$domain_dns;";
+		$user_props .= "$countbackup";
 		update_user_props($user_id, $user_props);
 
 		$domain_expires = $_SESSION['domain_expires'];
