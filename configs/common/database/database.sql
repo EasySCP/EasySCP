@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `domain` (
   `domain_ip_id` int(10) unsigned DEFAULT NULL,
   `domain_disk_limit` bigint(20) unsigned DEFAULT NULL,
   `domain_disk_usage` bigint(20) unsigned DEFAULT NULL,
-  `domain_disk_countbackup` VARCHAR( 3 ) NOT NULL DEFAULT 'no',
+  `domain_disk_countbackup` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
   `domain_php` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
   `domain_php_config` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '32M;8M',
   `domain_php_edit` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',

@@ -613,12 +613,15 @@ class EasySCP_Update_Database extends EasySCP_Update {
 		
 		$sqlUpd = array();
 
-		$sqlUpd[] ="
+		$sqlUpd[] = "
 			ALTER TABLE 
-				`domain` 
-			ADD `domain_disk_countbackup` VARCHAR( 3 ) NOT NULL DEFAULT 'no' 
-			AFTER `domain_disk_usage`" ;		
-		
+				`domain`
+			ADD
+				`domain_disk_countbackup` VARCHAR(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no'
+			AFTER
+				`domain_disk_usage`
+		";
+
 		return $sqlUpd;
 	}
 

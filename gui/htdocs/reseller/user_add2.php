@@ -55,6 +55,7 @@ $tpl->assign(
 			'TR_MAX_TRAFFIC'				=> tr('Traffic limit [MB]<br /><em>(0 unlimited)</em>'),
 			'TR_MAX_DISK_USAGE'				=> tr('Disk limit [MB]<br /><em>(0 unlimited)</em>'),
 			'TR_PHP'						=> tr('PHP'),
+			'TR_PHP_EDIT'					=> tr('PHP editor'),
 			'TR_CGI'						=> tr('CGI / Perl'),
 			'TR_SSL'						=> tr('SSL support'),
 			'TR_BACKUP'						=> tr('Backup'),
@@ -89,6 +90,7 @@ if (isset($_POST['uaction'])
 		$_SESSION["step_two_data"] = "$dmn_name;0;";
 		$newProps = array(
 			'allow_php'	=> $hp_php,
+			'allow_php_editor'=> $hp_phpe,
 			'allow_cgi'	=> $hp_cgi,
 			'subdomain_cnt'	=> $hp_sub,
 			'alias_cnt'	=>	$hp_als,
@@ -169,7 +171,7 @@ function get_pageone_param() {
  * @param EasySCP_TemplateEngine $tpl
  */
 function get_init_au2_page($tpl) {
-	global $hp_name, $hp_php, $hp_cgi, $hp_ssl;
+	global $hp_name, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk, $hp_countbackup, $hp_backup, $hp_dns;
@@ -190,6 +192,8 @@ function get_init_au2_page($tpl) {
 				'VL_MAX_DISK_USAGE'	=> $hp_disk,
 				'VL_PHPY'			=> ($hp_php === '_yes_') ? $cfg->HTML_CHECKED : '',
 				'VL_PHPN'			=> ($hp_php === '_no_') ? $cfg->HTML_CHECKED : '',
+				'VL_PHPEY'			=> ($hp_phpe === '_yes_') ? $cfg->HTML_CHECKED : '',
+				'VL_PHPEN'			=> ($hp_phpe === '_no_') ? $cfg->HTML_CHECKED : '',
 				'VL_CGIY'			=> ($hp_cgi === '_yes_') ? $cfg->HTML_CHECKED : '',
 				'VL_CGIN'			=> ($hp_cgi === '_no_') ? $cfg->HTML_CHECKED : '',
 				'VL_SSLY'			=> ($hp_ssl === '_yes_') ? $cfg->HTML_CHECKED : '',
@@ -202,7 +206,7 @@ function get_init_au2_page($tpl) {
 				'TR_BACKUPCOUNT_NO'	=> ($hp_countbackup == '_no_') ? $cfg->HTML_CHECKED : '',
 				'VL_DNSY'			=> ($hp_dns === '_yes_') ? $cfg->HTML_CHECKED : '',
 				'VL_DNSN'			=> ($hp_dns === '_no_') ? $cfg->HTML_CHECKED : '',
-				'BACKUPCOUNT' => isset($hp_countbackup)?$hp_countbackup:'null'
+				'BACKUPCOUNT' 		=> isset($hp_countbackup) ? $hp_countbackup : 'null'
 			)
 	);
 
@@ -212,7 +216,7 @@ function get_init_au2_page($tpl) {
  * Get data for hosting plan
  */
 function get_hp_data($hpid, $admin_id) {
-	global $hp_name, $hp_php, $hp_cgi, $hp_ssl;
+	global $hp_name, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk, $hp_countbackup, $hp_backup, $hp_dns;
@@ -228,6 +232,7 @@ function get_hp_data($hpid, $admin_id) {
 
 		$props = unserialize($data['props']);
 		$hp_php = $props['allow_php'];
+		$hp_phpe = $props['allow_php_editor'];
 		$hp_cgi = $props['allow_cgi'];
 		$hp_sub = $props['subdomain_cnt'];
 		$hp_als = $props['alias_cnt'];
@@ -246,6 +251,7 @@ function get_hp_data($hpid, $admin_id) {
 	} else {
 			$hp_name = 'Custom';
 			$hp_php = '_no_';
+			$hp_phpe = '_no_';
 			$hp_cgi = '_no_';
 			$hp_ssl = '_no_';
 			$hp_sub = '';
@@ -266,7 +272,7 @@ function get_hp_data($hpid, $admin_id) {
  * Check validity of input data
  */
 function check_user_data() {
-	global $hp_name, $hp_php, $hp_cgi, $hp_ssl;
+	global $hp_name, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk, $hp_countbackup, $hp_dmn, $hp_backup, $hp_dns;
@@ -318,6 +324,10 @@ function check_user_data() {
 
 	if (isset($_POST['php'])) {
 		$hp_php = $_POST['php'];
+	}
+
+	if (isset($_POST['php_edit'])) {
+		$hp_phpe = $_POST['php_edit'];
 	}
 
 	if (isset($_POST['cgi'])) {

@@ -16,13 +16,13 @@ require_once(dirname(__FILE__).'/DaemonDummy.php');
 require_once(dirname(__FILE__).'/DaemonCommon.php');
 require_once(dirname(__FILE__).'/DaemonConfig.php');
 
-function getDiskUsage($path,$excludeBackups=true){
+function getDiskUsage($path, $excludeBackups = true) {
 	$usage = null;
-	if (file_exists($path)){
+	if (file_exists($path)) {
 		$usage = null;
-		if ($excludeBackups){
+		if ($excludeBackups) {
 			exec(DaemonConfig::$cmd->{'CMD_DU'} .' -bcs ' . $path ,$usage);
-		}else {
+		} else {
 			exec(DaemonConfig::$cmd->{'CMD_DU'} .' -bcs --exclude '. $path .'/backups ' . $path ,$usage);
 		}
 		$diskUsage = preg_split('/\s/', $usage[0]);

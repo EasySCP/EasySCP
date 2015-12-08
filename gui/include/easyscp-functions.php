@@ -183,23 +183,23 @@ function update_user_props($user_id, $props) {
 
 		// update the domain
 		$sql_param = array(
-			':domain_last_modified'	=> $domain_last_modified,
-			':domain_mailacc_limit'	=> $mail_max,
-			':domain_ftpacc_limit'	=> $ftp_max,
-			':domain_traffic_limit'	=> $traff_max,
-			':domain_sqld_limit'	=> $sql_db_max,
-			':domain_sqlu_limit'	=> $sql_user_max,
-			':domain_status'		=> $update_status,
-			':domain_alias_limit'	=> $als_max,
-			':domain_subd_limit'	=> $sub_max,
-			':domain_disk_limit'	=> $disk_max,
-			':domain_php'			=> $domain_php,
-			':domain_php_edit'		=> $domain_php_edit,
-			':domain_cgi'			=> $domain_cgi,
-			':domain_ssl'			=> $domain_ssl,
-			':domain_dns'			=> $domain_dns,
-			':domain_id'			=> $user_id,
-			':domain_disk_countbackup'=>	$countbackup,
+			':domain_last_modified'		=> $domain_last_modified,
+			':domain_mailacc_limit'		=> $mail_max,
+			':domain_ftpacc_limit'		=> $ftp_max,
+			':domain_traffic_limit'		=> $traff_max,
+			':domain_sqld_limit'		=> $sql_db_max,
+			':domain_sqlu_limit'		=> $sql_user_max,
+			':domain_status'			=> $update_status,
+			':domain_alias_limit'		=> $als_max,
+			':domain_subd_limit'		=> $sub_max,
+			':domain_disk_limit'		=> $disk_max,
+			':domain_php'				=> $domain_php,
+			':domain_php_edit'			=> $domain_php_edit,
+			':domain_cgi'				=> $domain_cgi,
+			':domain_ssl'				=> $domain_ssl,
+			':domain_dns'				=> $domain_dns,
+			':domain_id'				=> $user_id,
+			':domain_disk_countbackup'	=> $countbackup
 		);
 
 		$sql_query = "
@@ -286,16 +286,16 @@ function update_user_props($user_id, $props) {
 		// to rebuild system entries
 		// update the domain
 		$sql_param = array(
-			':domain_mailacc_limit'	=> $mail_max,
-			':domain_ftpacc_limit'	=> $ftp_max,
-			':domain_traffic_limit'	=> $traff_max,
-			':domain_sqld_limit'	=> $sql_db_max,
-			':domain_sqlu_limit'	=> $sql_user_max,
-			':domain_alias_limit'	=> $als_max,
-			':domain_subd_limit'	=> $sub_max,
-			':domain_disk_limit'	=> $disk_max,
-			':domain_disk_countbackup'=>	$countbackup,
-			':domain_id'			=> $user_id
+			':domain_mailacc_limit'		=> $mail_max,
+			':domain_ftpacc_limit'		=> $ftp_max,
+			':domain_traffic_limit'		=> $traff_max,
+			':domain_sqld_limit'		=> $sql_db_max,
+			':domain_sqlu_limit'		=> $sql_user_max,
+			':domain_alias_limit'		=> $als_max,
+			':domain_subd_limit'		=> $sub_max,
+			':domain_disk_limit'		=> $disk_max,
+			':domain_disk_countbackup'	=> $countbackup,
+			':domain_id'				=> $user_id
 		);
 
 		$sql_query = "

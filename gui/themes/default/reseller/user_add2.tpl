@@ -63,6 +63,13 @@
 				</td>
 			</tr>
 			<tr>
+				<td>{$TR_PHP_EDIT}</td>
+				<td>
+					<input type="radio" name="php_edit" id="php_edit_yes" value="_yes_" {$VL_PHPEY} />&nbsp;{$TR_YES}
+					<input type="radio" name="php_edit" id="php_edit_no" value="_no_" {$VL_PHPEN} />&nbsp;{$TR_NO}
+				</td>
+			</tr>
+			<tr>
 				<td>{$TR_CGI}</td>
 				<td>
 					<input type="radio" name="cgi" id="cgi_yes" value="_yes_" {$VL_CGIY} />&nbsp;{$TR_YES}

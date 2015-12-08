@@ -82,12 +82,12 @@ class DaemonDNS {
 
 		$sql_param = array(
 			':domain_name'		=> $dmn_name,
-			':easyscp_domain_id'=> $dmn_id,
+			':easyscp_domain_id'=> $dmn_id
 		);
 
 		$sql_query = "
 			INSERT INTO
-				powerdns.domains (".$easyscp_domain_id_string.", name, type)
+				powerdns.domains ($easyscp_domain_id_string, name, type)
 			VALUES
 				(:easyscp_domain_id, :domain_name, 'MASTER')
 			 ON DUPLICATE KEY UPDATE
@@ -327,14 +327,14 @@ class DaemonDNS {
 
 		$sql_query = "
 			DELETE
-				`powerdns`.`domains`.*,
-				`powerdns`.`records`.*
+				powerdns.domains.*,
+				powerdns.records.*
 			FROM
-				`powerdns`.`domains` AS domains
+				powerdns.domains AS domains
 			LEFT JOIN
-				`powerdns`.`records` AS records ON domains.id = records.domain_id
+				powerdns.records AS records ON domains.id = records.domain_id
 			WHERE
-				domains.".$id_string." = :domain_id;
+				domains.$id_string = :domain_id;
 			";
 
 		DB::prepare($sql_query);
@@ -360,7 +360,7 @@ class DaemonDNS {
 
 		$sql_query = "
 			DELETE FROM
-				`powerdns`.`records`
+				powerdns.records
 			WHERE
 				name = :domain_name;
 

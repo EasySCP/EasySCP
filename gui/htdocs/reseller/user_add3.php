@@ -252,7 +252,7 @@ function add_user_data($reseller_id) {
 	}
 
 	$php = $props['allow_php'];
-	$phpe = $props['allow_phpeditor'];
+	$phpe = $props['allow_php_editor'];
 	$cgi = $props['allow_cgi'];
 	$sub = $props['subdomain_cnt'];
 	$als = $props['alias_cnt'];

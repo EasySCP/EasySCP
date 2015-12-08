@@ -931,7 +931,7 @@ function GUI_PMA(){
 		GRANT SELECT (Host, User, Select_priv, Insert_priv, Update_priv, Delete_priv, Create_priv, Drop_priv, Reload_priv, Shutdown_priv, Process_priv, File_priv, Grant_priv, References_priv, Index_priv, Alter_priv, Show_db_priv, Super_priv, Create_tmp_table_priv, Lock_tables_priv, Execute_priv, Repl_slave_priv, Repl_client_priv) ON mysql.user TO :PMA_USER@:DATABASE_HOST IDENTIFIED BY :PMA_PASSWORD;
 		GRANT SELECT ON mysql.host TO :PMA_USER@:DATABASE_HOST IDENTIFIED BY :PMA_PASSWORD;
 		GRANT SELECT (Host, Db, User, Table_name, Table_priv, Column_priv) ON mysql.tables_priv TO :PMA_USER@:DATABASE_HOST IDENTIFIED BY :PMA_PASSWORD;
-		GRANT SELECT, INSERT, DELETE, UPDATE ON phpmyadmin.* TO :PMA_USER@:DATABASE_HOST IDENTIFIED BY :PMA_PASSWORD;
+		GRANT SELECT, INSERT, DELETE, UPDATE, ALTER ON phpmyadmin.* TO :PMA_USER@:DATABASE_HOST IDENTIFIED BY :PMA_PASSWORD;
 		FLUSH PRIVILEGES;
 	";
 
@@ -994,6 +994,12 @@ function Set_gui_permissions(){
 			exec(DaemonConfig::$cmd->SRV_IPTABLES . ' restart >> /dev/null 2>&1', $result, $error);
 			break;
 		case 'Debian_6':
+			break;
+		case 'Debian_8':
+			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/iptables/rules.v4 /etc/iptables/rules.v4', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/iptables/rules.v6 /etc/iptables/rules.v6', $result, $error);
+
+			exec('service netfilter-persistent restart >> /dev/null 2>&1', $result, $error);
 			break;
 		default:
 			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/iptables/rules.v4 /etc/iptables/rules.v4', $result, $error);
