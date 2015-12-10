@@ -161,15 +161,32 @@ class DaemonMail {
 			':email'=> $row['mail_addr'],
 			':pass' => DB::decrypt_data($row['mail_pass'])
 		);
-		$sql_query = "
-			INSERT INTO
-				mail.users (email, password)
-			VALUES
-				(:email, SHA2(:pass, 256))
-			ON DUPLICATE KEY UPDATE
-				email = :email, password = SHA2(:pass, 256);
 
-		";
+		switch(DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'}){
+			case 'CentOS_6':
+				$sql_query = "
+					INSERT INTO
+						mail.users
+							(email, password)
+					VALUES
+						(:email, ENCRYPT(:pass))
+					ON DUPLICATE KEY UPDATE
+						email = :email, password = ENCRYPT(:pass);
+
+				";
+				break;
+			default:
+				$sql_query = "
+					INSERT INTO
+						mail.users (email, password)
+					VALUES
+						(:email, SHA2(:pass, 256))
+					ON DUPLICATE KEY UPDATE
+						email = :email, password = SHA2(:pass, 256);
+
+				";
+		}
+
 		DB::prepare($sql_query);
 		// DB::execute($sql_param)->closeCursor();
 		$stmt = DB::execute($sql_param);
