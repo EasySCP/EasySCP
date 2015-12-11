@@ -220,7 +220,7 @@ function add_user_data($reseller_id) {
 	global $hpid, $dmn_name, $dmn_expire, $dmn_user_name, $admin_login, 
 		$user_email, $customer_id, $first_name, $last_name, $gender, $firm,
 		$zip, $city, $state, $country, $street_one, $street_two, $phone,
-		$fax, $inpass, $domain_ip, $dns, $backup,$countbackup;
+		$fax, $inpass, $domain_ip, $dns, $backup, $countbackup;
 
 	$sql = EasySCP_Registry::get('Db');
 	$cfg = EasySCP_Registry::get('Config');

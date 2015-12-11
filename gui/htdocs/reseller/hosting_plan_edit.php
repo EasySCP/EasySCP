@@ -322,7 +322,7 @@ function check_data_iscorrect($tpl) {
 	global $hp_name, $hp_php, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
-	global $hp_traff, $hp_disk,$hp_countbackup;
+	global $hp_traff, $hp_disk, $hp_countbackup;
 	global $hpid;
 	global $price, $setup_fee;
 	global $hp_backup, $hp_dns;

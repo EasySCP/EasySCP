@@ -90,7 +90,7 @@ while ($row = $domainData->fetch()) {
 	if ($row['domain_disk_countbackup']!=='yes'){
 		$webUsage = getDiskUsage($wwwPath, true);
 	} else {
-		$webUsage = getDiskUsage($wwwPath,false);
+		$webUsage = getDiskUsage($wwwPath, false);
 	}
 	$mailUsage = getDiskUsage($mailPath);
 	$dbUsage = getDBUsage($row['domain_id']);
