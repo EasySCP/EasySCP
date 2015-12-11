@@ -157,13 +157,7 @@ function add_ip($tpl) {
 				INSERT INTO
 					server_ips (ip_number, ip_number_v6, ip_domain, ip_alias, ip_card, ip_ssl_domain_id, ip_status)
 				VALUES
-					ip_number		= :ip_number,
-					ip_number_v6	= :ip_number_v6,
-					ip_domain		= :ip_domain,
-					ip_alias		= :ip_alias,
-					ip_card			= :ip_card,
-					ip_ssl_domain_id= :ip_ssl_domain_id,
-					ip_status		= :ip_status
+					(:ip_number, :ip_number_v6, :ip_domain, :ip_alias, :ip_card, :ip_ssl_domain_id, :ip_status)
 			";
 
 			DB::prepare($sql_query);
