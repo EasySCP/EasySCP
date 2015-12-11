@@ -150,7 +150,10 @@ function add_ip($tpl) {
 				':ip_alias'			=> htmlspecialchars(trim($_POST['alias']), ENT_QUOTES, 'UTF-8'),
 				':ip_card'			=> htmlspecialchars(trim($_POST['ip_card']), ENT_QUOTES, 'UTF-8'),
 				':ip_ssl_domain_id'	=> NULL,
-				':ip_status'		=> $cfg->ITEM_ADD_STATUS
+				// TODO Check IP ADD Status
+				// ':ip_status'		=> $cfg->ITEM_ADD_STATUS
+				':ip_status'		=> $cfg->ITEM_OK_STATUS
+
 			);
 
 			$sql_query = "

@@ -88,6 +88,20 @@ $ip_number = $rs->fields['ip_number'];
 write_log("$user_logged: deletes IP address $ip_number");
 
 // delete it !
+$sql_param = array(
+	':ip_id'		=> $delete_id
+);
+
+$sql_query = "
+	DELETE FROM
+		server_ips
+	WHERE
+		ip_id = :ip_id
+";
+DB::prepare($sql_query);
+DB::execute($sql_param)->closeCursor();
+
+/*
 $query = "
 	UPDATE
 		`server_ips`
@@ -99,8 +113,9 @@ $query = "
 ";
 
 $rs = exec_query($sql, $query, array($cfg->ITEM_DELETE_STATUS, $delete_id));
+*/
 
-send_request();
+// send_request();
 
 set_page_message(tr('IP was deleted!'), 'success');
 
