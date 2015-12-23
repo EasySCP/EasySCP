@@ -61,6 +61,13 @@ class DaemonSystem extends DaemonSystemCommon {
 				break;
 			case 'isexecutable':
 				System_Daemon::debug('Starting "isexecutable" subprocess.');
+				$internalCMD = explode(',', DaemonConfig::$cmd->SHELL_INTERNAL_CMDS);
+				System_Daemon::debug(DaemonConfig::$cmd->SHELL_INTERNAL_CMDS);
+				if (in_array($data[1], $internalCMD)){
+					System_Daemon::debug('Command '.$data[1].' is an internal command');
+					System_Daemon::debug('Finished "isexecutable" subprocess.');
+					return true;
+				}
 				if(self::Start('fileexists '.$data[1])){
 					if (is_executable($data[1])){
 						System_Daemon::debug('File '.$data[1].' is executable');

@@ -36,8 +36,8 @@
 			<tr>
 				<th>&nbsp;</th>
 				<th>{$TR_CRONJOB_NAME}</th>
+				<th>{$TR_DESCR}</th>
 				<th>{$TR_USER}</th>
-				<th>{$TR_OWNER}</th>
 				<th>{$TR_STATUS}</th>
 				<th>{$TR_ADMIN_OPTIONS}</th>
 			</tr>
@@ -45,7 +45,7 @@
 		<tbody>
 			{section name=i loop=$CRON_NAME}
 			<tr>
-				<td><a href="#" onclick="action_status('{$CRON_STATUS_ACTION[i]}', '{$CRON_NAME[i]}')" title="{$STATUS_ICON[i]}" class="icon i_{$STATUS_ICON[i]}"></td>
+				<td><a href="#" onclick="action_status('{$CRON_STATUS_ACTION[i]}', '{$CRON_NAME[i]}')" title="{$STATUS_ICON[i]}" class="icon i_{$STATUS_ICON[i]}"></a></td>
 				<td>{$CRON_NAME[i]}</td>
 				<td>{$CRON_DESCR[i]}</td>
 				<td>{$CRON_USER[i]}</td>

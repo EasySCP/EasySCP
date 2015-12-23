@@ -622,6 +622,51 @@ class EasySCP_Update_Database extends EasySCP_Update {
 				`domain_disk_usage`
 		";
 
+		$sqlUpd[] = "
+			ALTER TABLE 
+				`cronjobs` 
+			ADD 
+				`schedule` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT ''
+			AFTER 
+				`user_id`
+		";
+
+		$sqlUpd[] = "SET SQL_SAFE_UPDATES = 0";
+		
+		$sqlUpd[] = "
+			UPDATE 
+				`cronjobs`
+			SET 
+				`schedule` = concat(`minute`,' ',`hour` ,' ',`dayofmonth`,' ',`month`,' ',`dayofweek`)
+			";
+		
+		$sqlUpd[] = "SET SQL_SAFE_UPDATES = 1";
+		
+		$sqlUpd[] = "
+			ALTER TABLE 
+				`cronjobs`
+			DROP 
+				`minute`,
+			DROP 
+				`hour`,
+			DROP 
+				`dayofmonth`,
+			DROP 
+				`month`,
+			DROP 
+				`dayofweek`
+			";
+
+		$sqlUpd[] = "
+			ALTER TABLE 
+				`cronjobs` 
+			ADD UNIQUE 
+				`schedcmd` 
+				(
+					`schedule`(50) ,
+					`command`(50)
+				)
+			";
 		return $sqlUpd;
 	}
 

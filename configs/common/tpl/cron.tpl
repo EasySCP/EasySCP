@@ -15,5 +15,6 @@
 # Any changes made to this file will be overwritten.
 #
 {section name=i loop=$COMMAND}
-{$MINUTE[i]} {$HOUR[i]} {$DOM[i]} {$MONTH[i]} {$DOW[i]} {$USER[i]} {$COMMAND[i]}
+{$DESCRIPTION[i]}
+{$SCHEDULE[i]} {$USER[i]} {$COMMAND[i]}
 {/section}

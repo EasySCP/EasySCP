@@ -74,13 +74,10 @@ class DaemonSystemCommon {
 		while ($cronJob = $cronData->fetch()){
 			$tpl->append(
 				array(
-					'MINUTE'	=> $cronJob['minute'],
-					'HOUR'		=> $cronJob['hour'],
-					'DOM'		=> $cronJob['dayofmonth'],
-					'MONTH'		=> $cronJob['month'],
-					'DOW'		=> $cronJob['dayofweek'],
-					'USER'		=> $cronJob['user'],
-					'COMMAND'	=> $cronJob['command'],
+					'DESCRIPTION'	=> "# ".$cronJob['description'],
+					'SCHEDULE'		=> $cronJob['schedule'],
+					'USER'			=> $cronJob['user'],
+					'COMMAND'		=> $cronJob['command'],
 				)
 			);
 		}
@@ -134,7 +131,7 @@ class DaemonSystemCommon {
 
 			@unlink(DaemonConfig::$cfg->{'GUI_ROOT_DIR'} . '/update/update.phar.gz');
 		} else {
-			System_Daemon::debug('Datei "update.php" nicht gefunden oder kein gültiges Dateiformat!');
+			System_Daemon::debug('Datei "update.php" nicht gefunden oder kein gÃ¼ltiges Dateiformat!');
 
 			@unlink(DaemonConfig::$cfg->{'GUI_ROOT_DIR'} . '/update/update.phar.gz');
 		}
@@ -144,8 +141,8 @@ class DaemonSystemCommon {
 
 	/**
 	 * updateIanaXML
-	 *
-	 * @return mixed
+	 * Download list of valid TLDs from IANA and create XML file
+	 * @return boolean
 	 */
 	protected static function updateIanaXML(){
 		System_Daemon::debug('Starting "updateIanaXML" subprocess.');

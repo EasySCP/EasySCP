@@ -109,7 +109,7 @@ $tpl->assign(
 		'TR_ADD'					=> tr('Add Cronjob'),
 		'TR_CRONJOB_NAME'			=> tr('Name'),
 		'TR_USER'					=> tr('User'),
-		'TR_OWNER'					=> tr('Owner'),
+		'TR_DESCR'					=> tr('Description'),
 		'TR_ADMIN_OPTIONS'			=> tr('Admin options'),
 		'TR_STATUS'					=> tr('Status'),
 	)

@@ -6,18 +6,21 @@
 <script type="text/javascript">
 	/* <![CDATA[ */
 	$(document).ready(function(){
-		document.forms[0].elements['minute'].disabled = false;
-		document.forms[0].elements['hour'].disabled = false;
-		document.forms[0].elements['day_of_month'].disabled = false;
-		document.forms[0].elements['month'].disabled = false;
-		document.forms[0].elements['day_of_week'].disabled = false;
-		document.forms[0].elements['minute_expert'].disabled = true;
-		document.forms[0].elements['hour_expert'].disabled = true;
-		document.forms[0].elements['day_of_month_expert'].disabled = true;
-		document.forms[0].elements['month_expert'].disabled = true;
-		document.forms[0].elements['day_of_week_expert'].disabled = true;
-		document.getElementById('normal_mode').style.display='block';
-		document.getElementById('expert_mode').style.display='none';
+		if (document.getElementById('expert_mode_simple').checked) {
+			disableDateTimeMode();
+			disableExpertMode();
+			enableSimpleMode();			
+		}
+		if (document.getElementById('expert_mode_datetime').checked) {
+			enableDateTimeMode();
+			disableExpertMode();
+			disableSimpleMode();						
+		}
+		if (document.getElementById('expert_mode_expert').checked) {
+			disableDateTimeMode();
+			enableExpertMode();
+			disableSimpleMode();	
+		}
 	});
 
 	function getSelected (obj) {
@@ -44,50 +47,59 @@
 		option.options[0].selected=true;
 	}
 
+	function disableSimpleMode(){
+		document.getElementById('simple_mode').style.display='none';
+	}
+	function disableDateTimeMode(){
+		document.forms[0].elements['minute'].disabled = true;
+		document.forms[0].elements['hour'].disabled = true;
+		document.forms[0].elements['day_of_month'].disabled = true;
+		document.forms[0].elements['month'].disabled = true;
+		document.forms[0].elements['day_of_week'].disabled = true;
+		document.getElementById('normal_mode').style.display='none';		
+	}
+	function disableExpertMode(){
+		document.forms[0].elements['minute_expert'].disabled = true;
+		document.forms[0].elements['hour_expert'].disabled = true;
+		document.forms[0].elements['day_of_month_expert'].disabled = true;
+		document.forms[0].elements['month_expert'].disabled = true;
+		document.forms[0].elements['day_of_week_expert'].disabled = true;
+		document.getElementById('expert_mode').style.display='none';
+	}
+	function enableSimpleMode(){
+		document.getElementById('simple_mode').style.display='block';
+		
+	}
+	function enableDateTimeMode(){
+		document.forms[0].elements['minute'].disabled = false;
+		document.forms[0].elements['hour'].disabled = false;
+		document.forms[0].elements['day_of_month'].disabled = false;
+		document.forms[0].elements['month'].disabled = false;
+		document.forms[0].elements['day_of_week'].disabled = false;
+		document.getElementById('normal_mode').style.display='block';
+		
+	}
+	function enableExpertMode(){
+		document.forms[0].elements['minute_expert'].disabled = false;
+		document.forms[0].elements['hour_expert'].disabled = false;
+		document.forms[0].elements['day_of_month_expert'].disabled = false;
+		document.forms[0].elements['month_expert'].disabled = false;
+		document.forms[0].elements['day_of_week_expert'].disabled = false;
+		document.getElementById('expert_mode').style.display='block';
+	}
 	function switchExpertMode(obj){
 		if(obj.value == 1) {
-			if (!confirm("{$TR_MESSAGE_EXPERT_MODE}")){
-				return false;
-			}
-			document.forms[0].elements['minute'].disabled = true;
-			document.forms[0].elements['hour'].disabled = true;
-			document.forms[0].elements['day_of_month'].disabled = true;
-			document.forms[0].elements['month'].disabled = true;
-			document.forms[0].elements['day_of_week'].disabled = true;
-			document.forms[0].elements['minute_expert'].disabled = false;
-			document.forms[0].elements['hour_expert'].disabled = false;
-			document.forms[0].elements['day_of_month_expert'].disabled = false;
-			document.forms[0].elements['month_expert'].disabled = false;
-			document.forms[0].elements['day_of_week_expert'].disabled = false;
-			document.getElementById('normal_mode').style.display='none';
-			document.getElementById('expert_mode').style.display='block';
+			enableDateTimeMode();
+			disableSimpleMode();
+			disableExpertMode();
+		} else if(obj.value == 2) {
+			disableDateTimeMode();
+			disableSimpleMode();
+			enableExpertMode();
 		} else {
-			if (!confirm("{$TR_MESSAGE_NORMAL_MODE}")){
-				return false;
-			}
-			deselectAllOptions(document.getElementById('minute'));
-			deselectAllOptions(document.getElementById('hour'));
-			deselectAllOptions(document.getElementById('month'));
-			deselectAllOptions(document.getElementById('day_of_month'));
-			deselectAllOptions(document.getElementById('day_of_week'));
-			document.forms[0].elements['minute'].disabled = false;
-			document.forms[0].elements['hour'].disabled = false;
-			document.forms[0].elements['day_of_month'].disabled = false;
-			document.forms[0].elements['month'].disabled = false;
-			document.forms[0].elements['day_of_week'].disabled = false;
-			document.forms[0].elements['minute_expert'].value = '*';
-			document.forms[0].elements['hour_expert'].value = '*';
-			document.forms[0].elements['day_of_month_expert'].value = '*';
-			document.forms[0].elements['month_expert'].value = '*';
-			document.forms[0].elements['day_of_week_expert'].value = '*';
-
-			document.forms[0].elements['minute_expert'].disabled = true;
-			document.forms[0].elements['hour_expert'].disabled = true;
-			document.forms[0].elements['day_of_month_expert'].disabled = true;
-			document.forms[0].elements['month_expert'].disabled = true;
-			document.forms[0].elements['day_of_week_expert'].disabled = true;
-			document.getElementById('normal_mode').style.display='block';
-			document.getElementById('expert_mode').style.display='none';
+			enableSimpleMode();
+			disableDateTimeMode();
+			disableExpertMode();
 		}
 	}
 	/* ]]> */
@@ -124,18 +136,40 @@
 				</td>
 			</tr>
 			<tr>
-				<td>{$TR_COMMAND}</td>
+				<td>{$TR_COMMAND}:</td>
 				<td colspan="4"><input name="cron_cmd" type="text" class="textinput" id="cron_cmd" value="{$CRON_CMD}"/></td>
 			</tr>
 			<tr>
 				<td>{$TR_USER}:</td>
-				<td colspan="4"><input name="user_name" type="text" class="textinput" id="user_name" value="{$USER_NAME}" /></td>
+				<td>
+					<select name="user_name[]" id="user_name">
+						{section name=i loop=$USER_NAME}
+						<option value="{$USER_ID[i]}" {$USER_SELECTED[i]}>{$USER_NAME[i]}</option>
+						{/section}
+					</select>
+				</td>
 			</tr>
 			<tr>
 				<td>{$TR_EXPERT_MODE}:</td>
 				<td>
-					<input type="radio" checked="checked" name="expert_mode" id="expert_mode_no" value="0" onchange="switchExpertMode(this);" /><label for="expert_mode_no"> {$TR_NO}</label>
-					<input type="radio" name="expert_mode" id="expert_mode_yes" value="1" onchange="switchExpertMode(this);" /><label for="expert_mode_yes"> {$TR_YES}</label>
+					<input type="radio" {$EXPERT_MODE_SIMPLE_CHECKED} name="expert_mode" id="expert_mode_simple" value="0" onchange="switchExpertMode(this);" /><label for="expert_mode_simple"> {$TR_CRON_SIMPLE}</label>
+					<input type="radio" {$EXPERT_MODE_DATETIME_CHECKED} name="expert_mode" id="expert_mode_datetime" value="1" onchange="switchExpertMode(this);" /><label for="expert_mode_datetime"> {$TR_CRON_DATETIME}</label>
+					<input type="radio" {$EXPERT_MODE_EXPERT_CHECKED} name="expert_mode" id="expert_mode_expert" value="2" onchange="switchExpertMode(this);" /><label for="expert_mode_expert"> {$TR_EXPERT_MODE}</label>
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+	<fieldset id="simple_mode">
+		<legend>{$TR_CRON_SCHEDULE}</legend>
+		<table>
+			<tr>
+				<td>{$TR_SIMPLE_SCHEDULE}</td>
+				<td colspan="8">
+					<select name="schedule[]" id="schedule">
+						{section name=i loop=$SIMPLE_TEXT}
+						<option value="{$SIMPLE_VALUE[i]}" {$SIMPLE_SELECTED[i]}>{$SIMPLE_TEXT[i]}</option>
+						{/section}
+					</select>
 				</td>
 			</tr>
 		</table>

@@ -90,4 +90,5 @@
 
 	<SRV_MTA>/etc/init.d/postfix</SRV_MTA>
 
+	<SHELL_INTERNAL_CMDS>alias,umask,unalias</SHELL_INTERNAL_CMDS>
 </EasySCP_CMD>
