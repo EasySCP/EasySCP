@@ -136,7 +136,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td>{$TR_COMMAND}:</td>
+				<td>{$TR_COMMAND}</td>
 				<td colspan="4"><input name="cron_cmd" type="text" class="textinput" id="cron_cmd" value="{$CRON_CMD}"/></td>
 			</tr>
 			<tr>

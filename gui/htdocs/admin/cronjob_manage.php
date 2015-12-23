@@ -23,8 +23,6 @@ $template = 'admin/cronjob_manage.tpl';
 $tpl->assign(
 	array(
 		'TR_CLIENT_CRONJOBS_TITLE'	=> tr('EasySCP - Admin/Cronjob Manager'),
-		'TR_MESSAGE_EXPERT_MODE'	=> tr('Warning!\nDo you really want to change into expert mode?\nYou should know what you are doing.'),
-		'TR_MESSAGE_NORMAL_MODE'	=> tr('Warning!\nIf you switch back to normal mode all schedule settings will be lost!')
 	)
 );
 
@@ -514,7 +512,7 @@ if (isset($_POST['uaction']) && $_POST['uaction'] === 'add_cronjob') {
 $tpl->assign(
 	array(
 		'TR_ACTIVE'			=> tr('Active'),
-		'TR_COMMAND'		=> tr('Command to run'),
+		'TR_COMMAND'		=> tr('Command to run:'),
 		'TR_CRON_SCHEDULE'	=> tr('Cronjob schedule'),
 		'TR_DAY'			=> tr('Day(s):'),
 		'TR_DESCRIPTION'	=> tr('Description'),
@@ -584,8 +582,6 @@ if (isset($_GET['edit_cron_id']) && is_numeric($_GET['edit_cron_id'])) {
 				'CRON_ID'					=> $row['id'],
 				'ACTIVE_YES_SELECTED'		=> $row['active']=='yes'?$cfg->HTML_SELECTED:'',
 				'ACTIVE_NO_SELECTED'		=> $row['active']=='no'?$cfg->HTML_SELECTED:'',
-				'TR_MESSAGE_EXPERT_MODE'	=> tr('Warning!\nDo you really want to change into expert mode?\nYou should know what you\'re doing'),
-				'TR_MESSAGE_NORMAL_MODE'	=> tr('Warning!\nIf you switch back to normal mode all schedule settings will be lost!'),
 				'SIMPLE_SELECT'				=>'',
 			)
 		);
