@@ -37,7 +37,7 @@ install:
 	cp -dpR ./phptmp $(SYSTEM_GUI_ROOT)
 	cp -dpR ./themes $(SYSTEM_GUI_ROOT)
 	cp -dpR ./tools $(SYSTEM_GUI_ROOT)
-	cp -dpR ./updates $(SYSTEM_GUI_ROOT)
+	cp -dpR ./update $(SYSTEM_GUI_ROOT)
 
 uninstall:
 
