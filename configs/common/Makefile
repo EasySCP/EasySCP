@@ -12,7 +12,6 @@
 install:
 	cp -pR ./apache $(SYSTEM_CONF)
 	cp -pR ./awstats $(SYSTEM_CONF)
-	cp -pR ./cron.d $(SYSTEM_CONF)
 	cp -pR ./database $(SYSTEM_CONF)
 	cp -pR ./dovecot $(SYSTEM_CONF)
 	cp -pR ./fcgi $(SYSTEM_CONF)
@@ -27,7 +26,6 @@ install:
 uninstall:
 	rm -rf $(SYSTEM_CONF)/apache
 	rm -rf $(SYSTEM_CONF)/awstats
-	rm -rf $(SYSTEM_CONF)/cron.d
 	rm -rf $(SYSTEM_CONF)/database
 	rm -rf $(SYSTEM_CONF)/dovecot
 	rm -rf $(SYSTEM_CONF)/fcgi

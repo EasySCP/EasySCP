@@ -83,9 +83,9 @@ class DaemonSystemCommon {
 		}
 		// write Cron config
 		$config = $tpl->fetch("tpl/cron.tpl");
-		$confFile = DaemonConfig::$cfg->{'CRON_DIR'} . '/' . $adminData['admin_name'];
+		$confFile = DaemonConfig::$cfg->{'CRON_DIR'} . '/EasySCP_' . $adminData['admin_name'];
 		System_Daemon::debug($confFile);
-		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'CRON_GROUP'}, 0600, false);
+		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644, false);
 
 		if ($retVal !== true) {
 			$msg = 'Failed to write'. $confFile;

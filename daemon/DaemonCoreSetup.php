@@ -510,6 +510,7 @@ function EasySCP_system_resolver(){
 }
 
 function EasySCP_crontab_file(){
+	/**
 	$tpl_param = array(
 		'ROOT_DIR'		=> DaemonConfig::$cfg->{'ROOT_DIR'},
 		'LOG_DIR'		=> DaemonConfig::$cfg->{'LOG_DIR'},
@@ -528,6 +529,9 @@ function EasySCP_crontab_file(){
 	}
 
 	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/cron.d/working/easyscp /etc/cron.d/easyscp', $result, $error);
+	 */
+	// if (send_request('160 SYSTEM cron '.$_SESSION['user_id'])){
+	DaemonSystem::Start('cron 1');
 
 	return 'Ok';
 }
