@@ -4,7 +4,7 @@
  *
  * @copyright 	2001-2006 by moleSoftware GmbH
  * @copyright 	2006-2010 by ispCP | http://isp-control.net
- * @copyright 	2010-2015 by Easy Server Control Panel - http://www.easyscp.net
+ * @copyright 	2010-2016 by Easy Server Control Panel - http://www.easyscp.net
  * @link 		http://www.easyscp.net
  * @author 		EasySCP Team
  *

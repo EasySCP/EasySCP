@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2015 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2016 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,6 @@ require_once  INCLUDEPATH . '/EasySCP/Config/Handler.php';
  *
  * @package     EasySCP_Config
  * @subpackage  Handler
- * @copyright 	2010-2015 by EasySCP | http://www.easyscp.net
- * @author 		EasySCP Team
  */
 class EasySCP_Config_Handler_Db extends EasySCP_Config_Handler implements iterator {
 
