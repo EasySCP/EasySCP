@@ -177,7 +177,6 @@
 	<!--
 		CRON data
 	-->
-	<CRON_DIR>/var/spool/cron/crontabs/</CRON_DIR>
-	<CRON_GROUP>crontab</CRON_GROUP>
+	<CRON_DIR>/etc/cron.d/</CRON_DIR>
 
 </EasySCP_Config>

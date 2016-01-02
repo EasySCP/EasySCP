@@ -1,7 +1,7 @@
 EasySCP 2.0.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2015-09-28
+2016-01-02
 	- Config:
 		* Add: Fields for SSL support
 		* Add: Oracle Linux support
@@ -21,6 +21,7 @@ EasySCP 2.0.0 ChangeLog
 		* Add: New Language Files
 		* Add: Chinese Simplified Language (thx to bspxm)
 		* Add: Chinese Traditional Language (thx to akong)
+		* Add: Cronjob Support
 		* Add: Italian Language (thx to theprincy)
 		* Add: IPv6 support
 		* Add: PHP/MySQL version info for clients
