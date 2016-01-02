@@ -16,7 +16,6 @@ install:
 		cp -R ./dovecot $(SYSTEM_CONF)
 		cp -R ./fcgi $(SYSTEM_CONF)
 		cd ./init.d && $(MAKE) install
-		cd ./logrotate && $(MAKE) install
 		cp -R ./pdns $(SYSTEM_CONF)
 		cp -R ./php5 $(SYSTEM_CONF)
 		cp -R ./postfix $(SYSTEM_CONF)
@@ -28,7 +27,6 @@ uninstall:
 		cd ./apache && $(MAKE) uninstall
 		rm -rf $(SYSTEM_CONF)/dovecot
 		cd ./init.d && $(MAKE) uninstall
-		cd ./logrotate && $(MAKE) uninstall
 		rm -rf $(SYSTEM_CONF)/pdns
 		rm -rf $(SYSTEM_CONF)/php5
 		rm -rf $(SYSTEM_CONF)/postfix

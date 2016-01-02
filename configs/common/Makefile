@@ -15,6 +15,7 @@ install:
 	cp -pR ./database $(SYSTEM_CONF)
 	cp -pR ./dovecot $(SYSTEM_CONF)
 	cp -pR ./fcgi $(SYSTEM_CONF)
+	cd ./logrotate && $(MAKE) install
 	cp -pR ./pma $(SYSTEM_CONF)
 	cp -pR ./postfix $(SYSTEM_CONF)
 	cp -pR ./proftpd $(SYSTEM_CONF)
@@ -29,6 +30,7 @@ uninstall:
 	rm -rf $(SYSTEM_CONF)/database
 	rm -rf $(SYSTEM_CONF)/dovecot
 	rm -rf $(SYSTEM_CONF)/fcgi
+	cd ./logrotate && $(MAKE) uninstall
 	rm -rf $(SYSTEM_CONF)/pma
 	rm -rf $(SYSTEM_CONF)/postfix
 	rm -rf $(SYSTEM_CONF)/proftpd

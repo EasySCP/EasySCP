@@ -16,7 +16,6 @@ install:
 		cp -R ./fcgi $(SYSTEM_CONF)
 		cd ./init.d && $(MAKE) install
 		cp -R ./iptables $(SYSTEM_CONF)
-		cd ./logrotate && $(MAKE) install
 		cp -R ./pdns $(SYSTEM_CONF)
 		cp -R ./php5 $(SYSTEM_CONF)
 		cp -R ./proftpd $(SYSTEM_CONF)
@@ -27,7 +26,6 @@ uninstall:
 		cd ./apache && $(MAKE) uninstall
 		cd ./init.d && $(MAKE) uninstall
 		rm -rf $(SYSTEM_CONF)/iptables
-		cd ./logrotate && $(MAKE) uninstall
 		rm -rf $(SYSTEM_CONF)/pdns
 		rm -rf $(SYSTEM_CONF)/php5
 		rm -rf $(SYSTEM_CONF)/proftpd
