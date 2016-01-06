@@ -25,14 +25,44 @@ class DaemonSystemCommon {
 	}
 
 	/**
-	 * handleCronjob
-	 *
-	 * @param string $userID
-	 * @return mixed
+	 * Handle cration of cron file for all users
+	 * 
+	 * @return boolean
 	 */
-	protected static function handleCronjob($userID){
-		System_Daemon::debug('Starting "handleCronjob" subprocess.');
+	protected static function handleCronjobsForAllUsers(){
+		System_Daemon::debug('Starting "handleCronjobs" subprocess.');
+		$sql_query = "
+			SELECT
+				admin_id, admin_name
+			FROM
+				admin
+		";
+		$admins = DB::query($sql_query);
+		
+		if ($admins->rowCount() > 0) {
+			foreach ($admins as $row){
+				$retVal = self::handleCronjobForUser($row['admin_id'], $row['admin_name']);
+				if ($retVal !== true) {
+					$msg = 'Handling of cronjobs for user ' . $row['admin_name'] . ' failed!';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
+			}
+		}
+		System_Daemon::debug('Finished "handleCronjobs" subprocess.');
+		return true;
+	}
 
+	/**
+	 * Create cron file for one user 
+	 * 
+	 * @param type $userID
+	 * @param type $userName
+	 * @return boolean
+	 */
+	protected static function handleCronjobForUser($userID, $userName){
+		$confFile = DaemonConfig::$cfg->{'CRON_DIR'} . '/EasySCP_' . $userName;
+		
 		$sql_param = array(
 			':user_id'	=> $userID,
 			':active'	=> 'yes'
@@ -51,24 +81,14 @@ class DaemonSystemCommon {
 
 		DB::prepare($sql_query);
 		$cronData = DB::execute($sql_param);
+		
+		// Stop if no cronjobs for user are available
+		if ($cronData->rowCount()==0){
+			unlink($confFile);
+			return true;
+		}
 
-		$sql_param = array(
-			':user_id'	=> $userID
-		);
-
-		$sql_query = "
-			SELECT
-				admin_name
-			FROM
-				admin
-			WHERE
-				admin_id = :user_id
-		";
-
-		DB::prepare($sql_query);
-		$adminData = DB::execute($sql_param,true);
-
-		$tpl_param = array('ADMIN'=>$adminData['admin_name']);
+		$tpl_param = array('ADMIN'=>$userName);
 		$tpl = DaemonCommon::getTemplate($tpl_param);
 
 		while ($cronJob = $cronData->fetch()){
@@ -83,7 +103,6 @@ class DaemonSystemCommon {
 		}
 		// write Cron config
 		$config = $tpl->fetch("tpl/cron.tpl");
-		$confFile = DaemonConfig::$cfg->{'CRON_DIR'} . '/EasySCP_' . $adminData['admin_name'];
 		System_Daemon::debug($confFile);
 		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644, false);
 
@@ -114,7 +133,6 @@ class DaemonSystemCommon {
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
 
-		System_Daemon::debug('Finished "handleCronjob" subprocess.');
 		return true;
 	}
 

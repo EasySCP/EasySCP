@@ -27,9 +27,9 @@ class DaemonSystem extends DaemonSystemCommon {
 		switch ($data[0]) {
 			case 'cron':
 				System_Daemon::debug('Starting "cron" subprocess.');
-				$retVal = self::handleCronjob($data[1]);
+				$retVal = self::handleCronjobsForAllUsers();
 				if ($retVal!==true){
-					System_Daemon::warning('Failed to handle Cronjob for '.$data[1]);
+					System_Daemon::warning('Failed to handle Cronjobs');
 					System_Daemon::debug('Finished "cron" subprocess.');
 					return false;
 				}

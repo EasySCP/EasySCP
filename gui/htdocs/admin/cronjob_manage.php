@@ -163,7 +163,6 @@ function add_cron_job() {
 			:user,
 			:status
 		) ON DUPLICATE KEY UPDATE
-			user_id		= :user_id,
 			schedule	= :schedule,
 			command		= :command,
 			active		= :active,
