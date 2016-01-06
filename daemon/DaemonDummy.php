@@ -19,7 +19,9 @@ class System_Daemon {
 	 * Logging shortcut
 	 */
 	public static function debug($msg) {
-		echo $msg."\n";
+		if (DaemonConfig::$cfg->{'DEBUG'} == '1'){
+			echo $msg."\n";
+		}
 	}
 
 	public static function info($msg) {
