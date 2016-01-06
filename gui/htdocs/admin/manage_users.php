@@ -80,6 +80,12 @@ if (isset($_SESSION['user_disabled'])) {
 	set_page_message(tr('User disabled successfully'), 'success');
 }
 
+if (isset($_SESSION['user_enabled'])) {
+	unset($_SESSION['user_enabled']);
+
+	set_page_message(tr('User enabled successfully'), 'success');
+}
+
 get_admin_manage_users($tpl);
 
 if (!$cfg->exists('HOSTING_PLANS_LEVEL') || strtolower($cfg->HOSTING_PLANS_LEVEL) === 'admin') {

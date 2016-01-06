@@ -245,6 +245,12 @@ class DaemonDomain extends DaemonDomainCommon {
 					return $msg . '<br />' . $retVal;
 				}
 
+				$retVal = self::apacheWriteDisabledSiteConfig($domainData);
+				if ($retVal !== true) {
+					$msg = 'Writing domain configuration failed';
+					return self::handleRetVal($msg,$retVal);
+				}
+
 				$retVal = DaemonDNS::AddDefaultDNSEntries($domainData['domain_id']);
 				if ($retVal !== true) {
 					$msg = 'Creating of default domain dns entries failed';
@@ -275,6 +281,12 @@ class DaemonDomain extends DaemonDomainCommon {
 					return $msg . '<br />' . $retVal;
 				}
 
+				$retVal = self::apacheWriteDisabledSiteConfig($domainData);
+				if ($retVal !== true) {
+					$msg = 'Writing domain configuration failed';
+					return self::handleRetVal($msg,$retVal);
+				}
+
 				$retVal = self::handleHTAccess($domainData);
 				if ($retVal !== true) {
 					$msg = 'Creating of htaccess data failed';
@@ -287,8 +299,7 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheDisableSite($domainData['domain_name']);
 				if ($retVal !== true) {
 					$msg = 'Disabling domain failed';
-					System_Daemon::warning($msg);
-					return $msg . '<br />' . $retVal;
+					return self::handleRetVal($msg,$retVal);
 				}
 
 				$retVal = self::deleteDomain($domainData);
@@ -313,6 +324,11 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::warning($msg);
 					return $msg . '<br />' . $retVal;
 				}
+				$retVal = self::apacheEnableDisabledSite($domainData['domain_name']);
+				if ($retVal !== true) {
+					$msg = 'Enabling disabled site of domain failed';
+					return self::handleRetVal($msg,$retVal);
+				}
 				break;
 			case 'enable':
 				$retVal = self::apacheEnableSite($domainData['domain_name']);
@@ -320,6 +336,11 @@ class DaemonDomain extends DaemonDomainCommon {
 					$msg = 'Enabling domain failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
+				}
+				$retVal = self::apacheDisableDisabledSite($domainData['domain_name']);
+				if ($retVal !== true) {
+					$msg = 'Disabling disabled site of domain failed';
+					return self::handleRetVal($msg,$retVal);
 				}
 				break;
 			case 'ok':
@@ -337,19 +358,6 @@ class DaemonDomain extends DaemonDomainCommon {
 				System_Daemon::warning($msg);
 				return $msg . '<br />';
 		}
-
-//		System_Daemon::debug('Set Domain status '.$domainData['status']);
-//		
-//		if($domainData['status']=='disable'){
-//			$retVal = self::dbSetDomainStatus('disabled', $domainData['domain_id']);
-//		} else {
-//			$retVal = self::dbSetDomainStatus('ok', $domainData['domain_id']);
-//		}
-//		if ($retVal !== true) {
-//			$msg = 'Setting Domain status failed';
-//			System_Daemon::debug($msg);
-//			return $msg . '<br />' . $retVal;
-//		}
 
 		System_Daemon::debug('Finished "DaemonDomain::handleDomain = ' . $domainData['domain_name'] . '" subprocess.');
 

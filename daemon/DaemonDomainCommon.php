@@ -11,6 +11,9 @@
  */
 
 class DaemonDomainCommon {
+	protected static function apacheDisableDisabledSite($siteName) {
+		return self::apacheDisableSite($siteName."-disabled");
+	}
 	/**
 	 * Disable a site in Apache web-server
 	 *
@@ -46,6 +49,9 @@ class DaemonDomainCommon {
 		return true;
 	}
 
+	protected static function apacheEnableDisabledSite($siteName) {
+		return self::apacheEnableSite($siteName."-disabled");
+	}
 	/**
 	 * Enable a site in Apache web-server
 	 *
@@ -151,7 +157,7 @@ class DaemonDomainCommon {
 		$config = $tpl->fetch('apache/parts/vhost_disabled.tpl');
 		$tpl = NULL;
 		unset($tpl);
-		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '-disabled.conf';
 		if (DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644)) {
 			return true;
 		} else {
@@ -567,6 +573,16 @@ class DaemonDomainCommon {
 		$cmd = DaemonConfig::$cmd->CMD_RM . ' -rf ' . $homeDir;
 		exec($cmd);
 		System_Daemon::debug('Deleted ' . $homeDir);
+
+		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+		if (!unlink($confFile)) {
+			$returnOk = false;
+		}
+
+		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '-disabled.conf';
+		if (!unlink($confFile)) {
+			$returnOk = false;
+		}
 
 		$cmd = DaemonConfig::$cmd->CMD_RM . ' -rf ' . $fcgiDir;
 		exec($cmd);

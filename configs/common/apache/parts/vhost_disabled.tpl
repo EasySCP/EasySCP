@@ -24,7 +24,7 @@
 
 	DirectoryIndex index.php index.htm index.html
 
-	<Directory {$WWW_DIR}/{$DOMAIN_NAME}/htdocs>
+	<Directory {$WWW_DIR}/{$DOMAIN_NAME}/disabled>
 		Options -Indexes +Includes +FollowSymLinks +MultiViews
 		AllowOverride All
 		Order allow,deny
