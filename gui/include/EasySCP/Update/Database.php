@@ -654,7 +654,11 @@ class EasySCP_Update_Database extends EasySCP_Update {
 			DROP 
 				`month`,
 			DROP 
-				`dayofweek`
+				`dayofweek`,
+			DROP 
+				`status`,
+			DROP
+				`status_msg`
 			";
 
 		$sqlUpd[] = "

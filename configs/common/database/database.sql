@@ -103,8 +103,6 @@ CREATE TABLE IF NOT EXISTS `cronjobs` (
   `description` varchar(500) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `name` varchar(200) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `user` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `schedcmd` (`schedule`(50),`command`(50))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

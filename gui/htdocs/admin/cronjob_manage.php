@@ -698,15 +698,13 @@ function toggle_cron_active($cron_id){
 	if($cronData['user_id']==$_SESSION['user_id']){
 		$sql_param = array (
 			':cron_id'	=> $cron_id,
-			':status'	=> $cfg->ITEM_CHANGE_STATUS,
 			':active'	=> $cronData['active']=='yes'?'no':'yes'
 		);
 		$sql_query = "
 			UPDATE 
 				cronjobs
 			SET 
-				active = :active,
-				status = :status
+				active = :active
 			WHERE
 				id = :cron_id
 		";
