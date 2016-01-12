@@ -87,7 +87,7 @@ class DaemonSystemCommon {
 		$cronData = DB::execute($sql_param);
 		
 		if ($cronData->rowCount()==0){
-			unlink($confFile);
+			@unlink($confFile);
 		} else {
 			$tpl_param = array('ADMIN'=>$userName);
 			$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -114,25 +114,6 @@ class DaemonSystemCommon {
 			} else {
 				System_Daemon::debug($confFile.' successfully written!');
 			}
-
-			$sql_param = array(
-				':user_id'	=> $userID,
-				':status'	=> 'ok'
-			);
-
-			$sql_query = "
-				UPDATE
-					cronjobs
-				SET
-					status = :status
-				WHERE
-					user_id = :user_id
-				AND
-					status != :status
-			";
-
-			DB::prepare($sql_query);
-			DB::execute($sql_param)->closeCursor();
 		}
 
 		System_Daemon::debug('Finished "handleCronjobForUser" subprocess.');

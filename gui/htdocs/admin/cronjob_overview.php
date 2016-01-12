@@ -62,7 +62,6 @@ function gen_cron_job_list($tpl) {
 					'CRON_NAME'				=> $row['name'],
 					'CRON_DESCR'			=> $row['description'],
 					'CRON_USER'				=> $row['user'],
-					'CRON_STATUS'			=> translate_dmn_status($row['status']),
 					'CRON_DELETE_ACTION'	=> 'cronjob_manage.php?delete_cron_id=' . $row['id'],
 					'CRON_EDIT_ACTION'		=> 'cronjob_manage.php?edit_cron_id=' . $row['id'],
 					'CRON_STATUS_ACTION'	=> 'cronjob_manage.php?status_cron_id=' . $row['id'],
@@ -111,7 +110,6 @@ $tpl->assign(
 		'TR_USER'					=> tr('User'),
 		'TR_DESCR'					=> tr('Description'),
 		'TR_ADMIN_OPTIONS'			=> tr('Admin options'),
-		'TR_STATUS'					=> tr('Status'),
 	)
 );
 

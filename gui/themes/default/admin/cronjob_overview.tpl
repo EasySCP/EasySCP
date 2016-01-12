@@ -38,7 +38,6 @@
 				<th>{$TR_CRONJOB_NAME}</th>
 				<th>{$TR_DESCR}</th>
 				<th>{$TR_USER}</th>
-				<th>{$TR_STATUS}</th>
 				<th>{$TR_ADMIN_OPTIONS}</th>
 			</tr>
 		</thead>
@@ -49,7 +48,6 @@
 				<td>{$CRON_NAME[i]}</td>
 				<td>{$CRON_DESCR[i]}</td>
 				<td>{$CRON_USER[i]}</td>
-				<td>{$CRON_STATUS[i]}</td>
 				<td>
 					<a href="{$CRON_EDIT_ACTION[i]}" title="{$TR_EDIT}" class="icon i_edit"></a>
 					<a href="#" onclick="action_delete('{$CRON_DELETE_ACTION[i]}', '{$CRON_NAME[i]}')" title="{$TR_DELETE}" class="icon i_delete"></a>

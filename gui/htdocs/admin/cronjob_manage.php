@@ -139,7 +139,6 @@ function add_cron_job() {
 			':description'	=> $_POST['description'],
 			':name'			=> $_POST['name'],
 			':user'			=> $userName[0],
-			':status'		=> $cfg->ITEM_ADD_STATUS
 	);
 	$sql_query = "
 		INSERT INTO cronjobs (
@@ -150,8 +149,7 @@ function add_cron_job() {
 			active,
 			description,
 			name,
-			user,
-			status
+			user
 		) VALUES (
 			:id,
 			:user_id,
@@ -160,16 +158,14 @@ function add_cron_job() {
 			:active,
 			:description,
 			:name,
-			:user,
-			:status
+			:user
 		) ON DUPLICATE KEY UPDATE
 			schedule	= :schedule,
 			command		= :command,
 			active		= :active,
 			description	= :description,
 			name		= :name,
-			user		= :user,
-			status		= 'change'
+			user		= :user
 	";
 
 	DB::prepare($sql_query);
