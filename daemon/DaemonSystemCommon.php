@@ -25,18 +25,20 @@ class DaemonSystemCommon {
 	}
 
 	/**
-	 * Handle cration of cron file for all users
+	 * Handle creation of cron file for all users
 	 * 
 	 * @return boolean
 	 */
 	protected static function handleCronjobsForAllUsers(){
 		System_Daemon::debug('Starting "handleCronjobs" subprocess.');
+
 		$sql_query = "
 			SELECT
 				admin_id, admin_name
 			FROM
 				admin
 		";
+
 		$admins = DB::query($sql_query);
 		
 		if ($admins->rowCount() > 0) {
@@ -56,11 +58,13 @@ class DaemonSystemCommon {
 	/**
 	 * Create cron file for one user 
 	 * 
-	 * @param type $userID
-	 * @param type $userName
+	 * @param int $userID
+	 * @param string $userName
 	 * @return boolean
 	 */
 	protected static function handleCronjobForUser($userID, $userName){
+		System_Daemon::debug('Starting "handleCronjobForUser" subprocess.');
+
 		$confFile = DaemonConfig::$cfg->{'CRON_DIR'} . '/EasySCP_' . $userName;
 		
 		$sql_param = array(
@@ -82,56 +86,56 @@ class DaemonSystemCommon {
 		DB::prepare($sql_query);
 		$cronData = DB::execute($sql_param);
 		
-		// Stop if no cronjobs for user are available
 		if ($cronData->rowCount()==0){
 			unlink($confFile);
-			return true;
-		}
-
-		$tpl_param = array('ADMIN'=>$userName);
-		$tpl = DaemonCommon::getTemplate($tpl_param);
-
-		while ($cronJob = $cronData->fetch()){
-			$tpl->append(
-				array(
-					'DESCRIPTION'	=> "# ".$cronJob['description'],
-					'SCHEDULE'		=> $cronJob['schedule'],
-					'USER'			=> $cronJob['user'],
-					'COMMAND'		=> $cronJob['command'],
-				)
-			);
-		}
-		// write Cron config
-		$config = $tpl->fetch("tpl/cron.tpl");
-		System_Daemon::debug($confFile);
-		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644, false);
-
-		if ($retVal !== true) {
-			$msg = 'Failed to write'. $confFile;
-			System_Daemon::warning($msg);
-			return $msg.'<br />'.$retVal;
 		} else {
-			System_Daemon::debug($confFile.' successfully written!');
+			$tpl_param = array('ADMIN'=>$userName);
+			$tpl = DaemonCommon::getTemplate($tpl_param);
+
+			while ($cronJob = $cronData->fetch()){
+				$tpl->append(
+					array(
+						'DESCRIPTION'	=> "# ".$cronJob['description'],
+						'SCHEDULE'		=> $cronJob['schedule'],
+						'USER'			=> $cronJob['user'],
+						'COMMAND'		=> $cronJob['command'],
+					)
+				);
+			}
+			// write Cron config
+			$config = $tpl->fetch("tpl/cron.tpl");
+			System_Daemon::debug($confFile);
+			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644, false);
+
+			if ($retVal !== true) {
+				$msg = 'Failed to write'. $confFile;
+				System_Daemon::warning($msg);
+				return $msg.'<br />'.$retVal;
+			} else {
+				System_Daemon::debug($confFile.' successfully written!');
+			}
+
+			$sql_param = array(
+				':user_id'	=> $userID,
+				':status'	=> 'ok'
+			);
+
+			$sql_query = "
+				UPDATE
+					cronjobs
+				SET
+					status = :status
+				WHERE
+					user_id = :user_id
+				AND
+					status != :status
+			";
+
+			DB::prepare($sql_query);
+			DB::execute($sql_param)->closeCursor();
 		}
 
-		$sql_param = array(
-			':user_id'	=> $userID,
-			':status'	=> 'ok'
-		);
-
-		$sql_query = "
-			UPDATE
-				cronjobs
-			SET
-				status = :status
-			WHERE
-				user_id = :user_id
-			AND
-				status != :status
-		";
-
-		DB::prepare($sql_query);
-		DB::execute($sql_param)->closeCursor();
+		System_Daemon::debug('Finished "handleCronjobForUser" subprocess.');
 
 		return true;
 	}
@@ -188,7 +192,7 @@ class DaemonSystemCommon {
 		$xml->formatOutput = true;
 		$comment = $xml->createComment("
 			EasySCP a Virtual Hosting Control Panel
-			Copyright (C) 2010-2012 by Easy Server Control Panel - http://www.easyscp.net
+			Copyright (C) 2010-2016 by Easy Server Control Panel - http://www.easyscp.net
 
 			This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 			To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.

@@ -159,13 +159,13 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheDisableSite($aliasData['alias_name']);
 				if ($retVal !== true) {
 					$msg = 'Failed to disable alias!';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 				$retVal = self::deleteAlias($aliasData);
 				if ($retVal !== true) {
 					$msg = 'Failed to delete alias!';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 				break;
@@ -173,7 +173,7 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheDisableSite($aliasData['alias_name']);
 				if ($retVal !== true) {
 					$msg = 'Disabling alias failed';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 				break;
@@ -248,7 +248,8 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheWriteDisabledSiteConfig($domainData);
 				if ($retVal !== true) {
 					$msg = 'Writing domain configuration failed';
-					return self::handleRetVal($msg,$retVal);
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
 				}
 
 				$retVal = DaemonDNS::AddDefaultDNSEntries($domainData['domain_id']);
@@ -277,14 +278,15 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheWriteDomainConfig($domainData);
 				if ($retVal !== true) {
 					$msg = 'Writing domain configuration failed';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 
 				$retVal = self::apacheWriteDisabledSiteConfig($domainData);
 				if ($retVal !== true) {
 					$msg = 'Writing domain configuration failed';
-					return self::handleRetVal($msg,$retVal);
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
 				}
 
 				$retVal = self::handleHTAccess($domainData);
@@ -299,20 +301,21 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheDisableSite($domainData['domain_name']);
 				if ($retVal !== true) {
 					$msg = 'Disabling domain failed';
-					return self::handleRetVal($msg,$retVal);
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
 				}
 
 				$retVal = self::deleteDomain($domainData);
 				if ($retVal !== true) {
 					$msg = 'Deleting domain failed';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 
 				$retVal = DaemonDNS::DeleteAllDomainDNSEntries($domainData['domain_id']);
 				if ($retVal !== true) {
 					$msg = 'Deleting of domain dns entries failed';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 				break;
@@ -321,13 +324,14 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheDisableSite($domainData['domain_name']);
 				if ($retVal !== true) {
 					$msg = 'Disabling domain failed';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 				$retVal = self::apacheEnableDisabledSite($domainData['domain_name']);
 				if ($retVal !== true) {
 					$msg = 'Enabling disabled site of domain failed';
-					return self::handleRetVal($msg,$retVal);
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
 				}
 				break;
 			case 'enable':
@@ -340,7 +344,8 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheDisableDisabledSite($domainData['domain_name']);
 				if ($retVal !== true) {
 					$msg = 'Disabling disabled site of domain failed';
-					return self::handleRetVal($msg,$retVal);
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
 				}
 				break;
 			case 'ok':
@@ -370,14 +375,14 @@ class DaemonDomain extends DaemonDomainCommon {
 		$retVal = self::writeHTAccessUser($domainData);
 		if ($retVal !== true) {
 			$msg = 'Writing htaccess users failed';
-			System_Daemon::warning($msg);
+			System_Daemon::debug($msg);
 			return $msg . '<br />' . $retVal;
 		}
 
 		$retVal = self::writeHTAccessGroup($domainData);
 		if ($retVal !== true) {
 			$msg = 'Writing htaccess groups failed';
-			System_Daemon::warning($msg);
+			System_Daemon::debug($msg);
 			return $msg . '<br />' . $retVal;
 		}
 
@@ -401,7 +406,7 @@ class DaemonDomain extends DaemonDomainCommon {
 					$retVal = self::writeHTAccessFile($domainData, $row);
 					if ($retVal !== true) {
 						$msg = 'Adding htaccess file failed';
-						System_Daemon::warning($msg);
+						System_Daemon::debug($msg);
 						return $msg . '<br />' . $retVal;
 					}
 					break;
@@ -409,7 +414,7 @@ class DaemonDomain extends DaemonDomainCommon {
 					$retVal = self::writeHTAccessFile($domainData, $row);
 					if ($retVal !== true) {
 						$msg = 'Change htaccess data failed';
-						System_Daemon::warning($msg);
+						System_Daemon::debug($msg);
 						return $msg . '<br />' . $retVal;
 					}
 					break;
@@ -417,7 +422,7 @@ class DaemonDomain extends DaemonDomainCommon {
 					$retVal = self::deleteHTAccessFile($domainData, $row);
 					if ($retVal !== true) {
 						$msg = 'Deleting htaccess file failed';
-						System_Daemon::warning($msg);
+						System_Daemon::debug($msg);
 						return $msg . '<br />' . $retVal;
 					}
 					break;
@@ -440,14 +445,14 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::createDomain($subDomainData);
 				if ($retVal !== true) {
 					$msg = 'Creation of subdomain failed!';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 
 				$retVal = self::apacheWriteDomainConfig($subDomainData);
 				if ($retVal !== true) {
 					$msg = 'Writing subdomain configuration failed!';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 
@@ -463,7 +468,7 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheWriteDomainConfig($subDomainData);
 				if ($retVal !== true) {
 					$msg = 'Writing subdomain configuration failed!';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 				//			$retVal = domainChange($domainData);
@@ -473,7 +478,7 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::deleteSubDomain($subDomainData);
 				if ($retVal !== true) {
 					$msg = 'Deleting subdomain failed!';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 
@@ -491,7 +496,7 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheWriteDomainConfig($subDomainData);
 				if ($retVal !== true) {
 					$msg = 'Writing subdomain configuration failed!';
-					System_Daemon::warning($msg);
+					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
 				break;
@@ -506,7 +511,7 @@ class DaemonDomain extends DaemonDomainCommon {
 			$retVal = self::dbSetSubDomainStatus('ok', $subDomainData['subdomain_id']);
 			if ($retVal !== true) {
 				$msg = 'Setting status to ok for subdomain with ID: '. $subDomainData['subdomain_id'] .' failed!';
-				System_Daemon::warning($msg);
+				System_Daemon::debug($msg);
 				return $msg . '<br />' . $retVal;
 			}
 		}
