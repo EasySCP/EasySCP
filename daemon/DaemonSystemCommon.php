@@ -27,7 +27,7 @@ class DaemonSystemCommon {
 	/**
 	 * Handle creation of cron file for all users
 	 * 
-	 * @return boolean
+	 * @return mixed
 	 */
 	protected static function handleCronjobsForAllUsers(){
 		System_Daemon::debug('Starting "handleCronjobs" subprocess.');
@@ -60,7 +60,7 @@ class DaemonSystemCommon {
 	 * 
 	 * @param int $userID
 	 * @param string $userName
-	 * @return boolean
+	 * @return mixed
 	 */
 	protected static function handleCronjobForUser($userID, $userName){
 		System_Daemon::debug('Starting "handleCronjobForUser" subprocess.');
