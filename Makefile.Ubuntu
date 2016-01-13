@@ -27,6 +27,7 @@ SYSTEM_MAIL_VIRTUAL=$(INST_PREF)/var/mail/virtual
 SYSTEM_MAKE_DIRS=/bin/mkdir -p
 SYSTEM_MAKE_FILE=/bin/touch
 SYSTEM_SCOREBOARDS=$(INST_PREF)/var/www/scoreboards
+SYSTEM_SYSTEMD=$(INST_PREF)/lib/systemd/system
 SYSTEM_ROOT=$(INST_PREF)/var/www/easyscp
 SYSTEM_VIRTUAL=$(INST_PREF)/var/www/virtual
 SYSTEM_WWW=$(INST_PREF)/var/www
@@ -42,6 +43,7 @@ install:
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_AWSTATS)
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_MAIL_VIRTUAL)
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_APACHE_BACK_LOG)
+	$(SYSTEM_MAKE_DIRS) $(SYSTEM_SYSTEMD)
 
 	cd ./configs && $(MAKE) install
 	cd ./gui && $(MAKE) install

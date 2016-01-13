@@ -13,14 +13,15 @@ export
 
 install:
 		cd ./apache && $(MAKE) install
-		cp -R ./fcgi $(SYSTEM_CONF)
+		cp -pR ./fcgi $(SYSTEM_CONF)
 		cd ./init.d && $(MAKE) install
-		cp -R ./iptables $(SYSTEM_CONF)
-		cp -R ./pdns $(SYSTEM_CONF)
-		cp -R ./php5 $(SYSTEM_CONF)
-		cp -R ./proftpd $(SYSTEM_CONF)
-		cp -R ./tpl $(SYSTEM_CONF) 
-		cp ./EasySCP_CMD.xml $(SYSTEM_CONF)
+		cp -pR ./iptables $(SYSTEM_CONF)
+		cp -pR ./pdns $(SYSTEM_CONF)
+		cp -pR ./php5 $(SYSTEM_CONF)
+		cp -pR ./proftpd $(SYSTEM_CONF)
+		cd ./systemd && $(MAKE) install
+		cp -pR ./tpl $(SYSTEM_CONF)
+		cp -p ./EasySCP_CMD.xml $(SYSTEM_CONF)
 
 uninstall:
 		cd ./apache && $(MAKE) uninstall
@@ -29,6 +30,7 @@ uninstall:
 		rm -rf $(SYSTEM_CONF)/pdns
 		rm -rf $(SYSTEM_CONF)/php5
 		rm -rf $(SYSTEM_CONF)/proftpd
+		cd ./systemd && $(MAKE) uninstall
 		rm -rf $(SYSTEM_CONF)/tpl
 		rm -rf $(SYSTEM_CONF)/easyscp.conf
 		rm -rf $(SYSTEM_CONF)/EasySCP_CMD.xml

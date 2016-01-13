@@ -52,5 +52,10 @@
 			<DistName>Ubuntu</DistName>
 			<DistVersion>14.04</DistVersion>
 		</OS>
+		<OS>
+			<Name>Ubuntu 16.04 LTS</Name>
+			<DistName>Ubuntu</DistName>
+			<DistVersion>16.04</DistVersion>
+		</OS>
 	</Dist>
 </EasySCP_OS>
