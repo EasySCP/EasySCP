@@ -11,7 +11,7 @@
 			<div class="{$MSG_TYPE}">{$MESSAGE}</div>
 		{/if}
 		<div class="content">
-			<h2 class="general"><span>Welcome to EasySCP 2.0.0 Setup</span></h2>
+			<h2 class="general"><span>Welcome to EasySCP WebGUI Setup</span></h2>
 			This program will set up the EasySCP system on your server.<br />
 			<br />
 			First we need the SQL settings.<br />

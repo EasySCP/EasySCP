@@ -10,7 +10,7 @@
 		<div id="EasySCP_Setup_Error_MSG" class="error" style="display: none;"></div>
 		<div id="EasySCP_Setup_Finish_MSG" class="success" style="display: none;"></div>
 		<div id="EasySCP_Setup" class="content">
-			<h2 class="general"><span>Welcome to EasySCP 2.0.0 Setup</span></h2>
+			<h2 class="general"><span>Welcome to EasySCP WebGUI Setup</span></h2>
 			<br />
 			<button type="button" onclick="EasySCP_Setup();">Start Setup</button>
 		</div>
