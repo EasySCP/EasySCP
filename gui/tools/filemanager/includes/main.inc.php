@@ -2,7 +2,7 @@
 
 //   -------------------------------------------------------------------------------
 //  |                  net2ftp: a web based FTP client                              |
-//  |              Copyright (c) 2003-2012 by David Gartner                         |
+//  |              Copyright (c) 2003-2013 by David Gartner                         |
 //  |                                                                               |
 //  | This program is free software; you can redistribute it and/or                 |
 //  | modify it under the terms of the GNU General Public License                   |
@@ -303,10 +303,12 @@ function net2ftp($action) {
 		elseif ($action == "printJavascript") { 
 			net2ftp_module_printJavascript(); 
 			net2ftp_plugin_printJavascript(); 
+			net2ftp_skin_printJavascript();
 		}
 		elseif ($action == "printCss")        { 
 			net2ftp_module_printCss();
 			net2ftp_plugin_printCss();
+			net2ftp_skin_printCss();
 		}
 		elseif ($action == "printBodyOnload") { 
 			net2ftp_module_printBodyOnload(); 
@@ -315,7 +317,7 @@ function net2ftp($action) {
 		elseif ($action == "printBody")       {
 			// Print the status bar to be able to show the progress
 			if (isStatusbarActive() == true) { 
-				require_once($net2ftp_globals["application_skinsdir"] . "/" . $net2ftp_globals["skin"] . "/statusbar.template.php"); 
+				require_once($net2ftp_globals["application_skinsdir"] . "/" . $net2ftp_globals["skin"] . "/header.template.php"); 
 			}
 			require_once($net2ftp_globals["application_skinsdir"] . "/" . $net2ftp_globals["skin"] . "/status/status.inc.php"); 
 

@@ -2,7 +2,7 @@
 
 //   -------------------------------------------------------------------------------
 //  |                  net2ftp: a web based FTP client                              |
-//  |              Copyright (c) 2003-2012 by David Gartner                         |
+//  |              Copyright (c) 2003-2013 by David Gartner                         |
 //  |                                                                               |
 //  | This program is free software; you can redistribute it and/or                 |
 //  | modify it under the terms of the GNU General Public License                   |
@@ -26,56 +26,8 @@ function getLanguageArray() {
 // Use the ISO 639 code described here: http://www.w3.org/WAI/ER/IG/ert/iso639.htm
 // --------------
 
-	$languageArray["ar"]["name"] = "Arabic";
-	$languageArray["ar"]["file"] = "ar.inc.php";
-	$languageArray["ar-utf"]["name"] = "Arabic UTF-8";
-	$languageArray["ar-utf"]["file"] = "ar-utf.inc.php";
-	$languageArray["zh"]["name"] = "Simplified Chinese";
-	$languageArray["zh"]["file"] = "zh.inc.php";
-	$languageArray["tc"]["name"] = "Traditional Chinese";
-	$languageArray["tc"]["file"] = "tc.inc.php";
-	$languageArray["cs"]["name"] = "Czech";
-	$languageArray["cs"]["file"] = "cs.inc.php";
-	$languageArray["da"]["name"] = "Danish UTF-8";
-	$languageArray["da"]["file"] = "da-utf.inc.php";
-	$languageArray["nl"]["name"] = "Dutch";
-	$languageArray["nl"]["file"] = "nl.inc.php";
 	$languageArray["en"]["name"] = "English";
 	$languageArray["en"]["file"] = "en.inc.php";
-	$languageArray["en-utf"]["name"] = "English UTF-8";
-	$languageArray["en-utf"]["file"] = "en-utf.inc.php";
-	$languageArray["fr"]["name"] = "French";
-	$languageArray["fr"]["file"] = "fr.inc.php";
-	$languageArray["de"]["name"] = "German";
-	$languageArray["de"]["file"] = "de.inc.php";
-	$languageArray["fi"]["name"] = "Finnish";
-	$languageArray["fi"]["file"] = "fi.inc.php";
-	$languageArray["he"]["name"] = "Hebrew";
-	$languageArray["he"]["file"] = "he-utf.inc.php";
-	$languageArray["hu"]["name"] = "Hungarian";
-	$languageArray["hu"]["file"] = "hu.inc.php";
-	$languageArray["hu-utf"]["name"] = "Hungarian UTF-8";
-	$languageArray["hu-utf"]["file"] = "hu-utf.inc.php";
-	$languageArray["it"]["name"] = "Italian";
-	$languageArray["it"]["file"] = "it.inc.php";
-	$languageArray["ja"]["name"] = "Japanese";
-	$languageArray["ja"]["file"] = "ja.inc.php";
-	$languageArray["pl"]["name"] = "Polish";
-	$languageArray["pl"]["file"] = "pl.inc.php";
-	$languageArray["pt"]["name"] = "Portugese";
-	$languageArray["pt"]["file"] = "pt.inc.php";
-	$languageArray["ru"]["name"] = "Russian";
-	$languageArray["ru"]["file"] = "ru.inc.php";
-	$languageArray["es"]["name"] = "Spanish";
-	$languageArray["es"]["file"] = "es.inc.php";
-	$languageArray["sv"]["name"] = "Swedish";
-	$languageArray["sv"]["file"] = "sv.inc.php";
-	$languageArray["tr"]["name"] = "Turkish";
-	$languageArray["tr"]["file"] = "tr.inc.php";
-	$languageArray["ua"]["name"] = "Ukrainian";
-	$languageArray["ua"]["file"] = "ua.inc.php";
-	$languageArray["vi"]["name"] = "Vietnamese";
-	$languageArray["vi"]["file"] = "vi.inc.php";
 
 	return $languageArray;
 

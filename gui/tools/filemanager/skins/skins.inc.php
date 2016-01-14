@@ -2,7 +2,7 @@
 
 //   -------------------------------------------------------------------------------
 //  |                  net2ftp: a web based FTP client                              |
-//  |              Copyright (c) 2003-2012 by David Gartner                         |
+//  |              Copyright (c) 2003-2013 by David Gartner                         |
 //  |                                                                               |
 //  | This program is free software; you can redistribute it and/or                 |
 //  | modify it under the terms of the GNU General Public License                   |
@@ -26,15 +26,62 @@ function getSkinArray() {
 // This function returns an array of skin names, file names, ...
 // --------------
 
-	global $net2ftp_globals;
+	global $net2ftp_globals, $net2ftp_settings;
 
 // -------------------------------------------------------------------------
-// Blue
+// Shinra
 // -------------------------------------------------------------------------
-	$skinArray["blue"]["name"]             = __("Blue");
-	$skinArray["blue"]["iconset"]          = "nuvola";
-	$skinArray["blue"]["image_url"]        = $net2ftp_globals["application_rootdir_url"] . "/skins/blue/images";
-	$skinArray["blue"]["icon_size_mime"]   = "16";
+	$stylesheet = "style.css.php?show_ads=" . $net2ftp_settings["show_ads"];
+
+	$skinArray["shinra"]["name"]           = "Shinra";
+	$skinArray["shinra"]["iconset"]        = "nuvola";
+	$skinArray["shinra"]["image_url"]      = $net2ftp_globals["application_rootdir_url"] . "/skins/shinra/images";
+	$skinArray["shinra"]["icon_size_mime"] = "16";
+
+	if ($net2ftp_settings["net2ftpdotcom"] == "yes") {
+		$skinArray["shinra"]["css"]            = "
+			<!-- /skins/skins.inc.php -->
+			<link rel=\"stylesheet\" href=\"skins/shinra/css/" . $stylesheet . "\" type=\"text/css\" media=\"screen\" />
+			<link rel=\"stylesheet\" href=\"skins/shinra/css/superfish.css\"      type=\"text/css\"  media=\"screen\" /> 
+			<link rel=\"stylesheet\" href=\"skins/shinra/css/superfish-left.css\" type=\"text/css\"  media=\"screen\" /> 
+			<link rel=\"stylesheet\" href=\"skins/shinra/skins/glossy/style.css\" type=\"text/css\" media=\"screen\" />
+			<link rel=\"stylesheet\" href=\"skins/shinra/js/poshytip-1.0/src/tip-twitter/tip-twitter.css\" type=\"text/css\" />
+			<link rel=\"stylesheet\" href=\"skins/shinra/js/poshytip-1.0/src/tip-yellowsimple/tip-yellowsimple.css\" type=\"text/css\" />
+		";
+
+		$skinArray["shinra"]["javascript"]     = "
+			<!-- /skins/skins.inc.php -->
+			<script type=\"text/javascript\" src=\"skins/shinra/js/jquery-1.5.1.min.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/jquery-ui-1.8.13.custom.min.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/custom.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/superfish-1.4.8/js/hoverIntent.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/superfish-1.4.8/js/superfish.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/superfish-1.4.8/js/supersubs.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/poshytip-1.0/src/jquery.poshytip.min.js\"></script>
+		";
+	}
+
+	else {
+		$skinArray["shinra"]["css"]            = "
+			<!-- /skins/skins.inc.php -->
+			<link rel=\"stylesheet\" href=\"skins/shinra/css/" . $stylesheet . "\" type=\"text/css\" media=\"screen\" />
+			<link rel=\"stylesheet\" href=\"skins/shinra/skins/glossy/style.css\" type=\"text/css\" media=\"screen\" />
+			<link rel=\"stylesheet\" href=\"skins/shinra/js/poshytip-1.0/src/tip-twitter/tip-twitter.css\" type=\"text/css\" />
+			<link rel=\"stylesheet\" href=\"skins/shinra/js/poshytip-1.0/src/tip-yellowsimple/tip-yellowsimple.css\" type=\"text/css\" />
+		";
+
+		$skinArray["shinra"]["javascript"]     = "
+			<!-- /skins/skins.inc.php -->
+			<script type=\"text/javascript\" src=\"skins/shinra/js/jquery-1.5.1.min.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/jquery-ui-1.8.13.custom.min.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/custom.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/superfish-1.4.8/js/hoverIntent.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/superfish-1.4.8/js/superfish.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/superfish-1.4.8/js/supersubs.js\"></script>
+			<script type=\"text/javascript\" src=\"skins/shinra/js/poshytip-1.0/src/jquery.poshytip.min.js\"></script>
+		";
+	}
+
 
 
 	return $skinArray;
@@ -54,8 +101,62 @@ function getSkinArray() {
 // **************************************************************************************
 // **                                                                                  **
 // **                                                                                  **
-function printSkinSelect($fieldname, $onchange, $style, $class) {
 
+function net2ftp_skin_printCSS() {
+
+	global $net2ftp_globals;
+	$skinArray = getSkinArray();
+
+	if     ($net2ftp_globals["skin"] != "")        { $currentskin = $net2ftp_globals["skin"]; }
+	elseif ($net2ftp_globals["cookie_skin"] != "") { $currentskin = $net2ftp_globals["cookie_skin"]; }
+	else                                           { $currentskin = "shinra"; }
+
+	echo $skinArray[$currentskin]["css"];
+
+} // End function net2ftp_skin_printCSS
+
+// **                                                                                  **
+// **                                                                                  **
+// **************************************************************************************
+// **************************************************************************************
+
+
+
+
+
+// **************************************************************************************
+// **************************************************************************************
+// **                                                                                  **
+// **                                                                                  **
+
+function net2ftp_skin_printJavascript() {
+
+	global $net2ftp_globals;
+	$skinArray = getSkinArray();
+
+	if     ($net2ftp_globals["skin"] != "")        { $currentskin = $net2ftp_globals["skin"]; }
+	elseif ($net2ftp_globals["cookie_skin"] != "") { $currentskin = $net2ftp_globals["cookie_skin"]; }
+	else                                           { $currentskin = "shinra"; }
+
+	echo $skinArray[$currentskin]["javascript"];
+
+} // End function net2ftp_skin_printJavascript
+
+// **                                                                                  **
+// **                                                                                  **
+// **************************************************************************************
+// **************************************************************************************
+
+
+
+
+
+// **************************************************************************************
+// **************************************************************************************
+// **                                                                                  **
+// **                                                                                  **
+
+function printSkinSelect($fieldname, $onchange, $style, $class) {
 
 // --------------
 // This function prints a select with the available skins
@@ -67,7 +168,7 @@ function printSkinSelect($fieldname, $onchange, $style, $class) {
 
 	if     ($net2ftp_globals["skin"] != "")        { $currentskin = $net2ftp_globals["skin"]; }
 	elseif ($net2ftp_globals["cookie_skin"] != "") { $currentskin = $net2ftp_globals["cookie_skin"]; }
-	else                                           { $currentskin = "blue"; }
+	else                                           { $currentskin = "shinra"; }
 
 	if ($onchange == "") { $onchange_full = ""; }
 	else                 { $onchange_full = "onchange=\"$onchange\""; }

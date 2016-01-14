@@ -2,7 +2,7 @@
 
 //   -------------------------------------------------------------------------------
 //  |                  net2ftp: a web based FTP client                              |
-//  |              Copyright (c) 2003-2012 by David Gartner                         |
+//  |              Copyright (c) 2003-2013 by David Gartner                         |
 //  |                                                                               |
 //   -------------------------------------------------------------------------------
 //  |                                                                               |
@@ -25,7 +25,7 @@ $net2ftp_settings["email_feedback"] = "webmaster@enter-your-domain-here.com";
 
 // Default language and skin (look in /languages and /skins to see which are available)
 $net2ftp_settings["default_language"] = "en";
-$net2ftp_settings["default_skin"]     = "blue";
+$net2ftp_settings["default_skin"]     = "shinra";
 
 // Enter the address of your help pages, support forum or ticket system
 // This will add a link in the footer; leave empty if you don't have this
@@ -41,7 +41,7 @@ $net2ftp_settings["error_reporting"] = "standard";
 $net2ftp_settings["fix_png"] = "yes";
 
 // MD5 salt and encryption string (change them to improve security)
-$net2ftp_settings["encryption_string"] = "D462EF4D368F14FFFCB7C3F9BBEE0A926169B3";
+$net2ftp_settings["encryption_string"] = "462E16CB7C3F369BD9F4DBEE0A926F8F14FFB3";
 
 
 // ----------------------------------------------------------------------------------
@@ -131,13 +131,13 @@ $net2ftp_settings["check_homedirectory"] = "yes";
 // ----------------------------------------------------------------------------------
 
 $net2ftp_settings["application_version"] = "1.0";
-$net2ftp_settings["application_build_nr"] = "46";
+$net2ftp_settings["application_build_nr"] = "47";
 
 // Is this net2ftp.com, or a net2ftp installation elsewhere
 $net2ftp_settings["net2ftpdotcom"] = "no";
 
-// Google Adsense advertisements 
+// Show advertisements 
 // Not shown when using HTTPS to avoid warnings on each pageload
-$net2ftp_settings["show_google_ads"] = "no";
+$net2ftp_settings["show_ads"] = "no";
 
 ?>

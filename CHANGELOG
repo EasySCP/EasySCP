@@ -6,3 +6,6 @@ EasySCP 2.1.0 ChangeLog
 		* Add: Ubuntu 16.04 LTS package file
 	- Setup:
 		* Add: Ubuntu 16.04 LTS support
+
+	- TOOLS:
+		* Update: net2ftp to version 1.0 build 47
