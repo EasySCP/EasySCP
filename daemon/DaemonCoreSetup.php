@@ -315,7 +315,7 @@ function EasySCP_Directories(){
 function EasySCP_main_configuration_file(){
 	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
-	DaemonConfig::$cfg->{'BuildDate'} = '20160101';
+	DaemonConfig::$cfg->{'BuildDate'} = '20160113';
 	DaemonConfig::$cfg->{'DistName'} = $xml->{'DistName'};
 	DaemonConfig::$cfg->{'DistVersion'} = $xml->{'DistVersion'};
 	DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} = $xml->{'PANEL_MAIL'};
