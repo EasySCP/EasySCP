@@ -111,13 +111,13 @@ CREATE TABLE IF NOT EXISTS `cronjobs` (
 -- Dumping data for table `cronjobs`
 --
 
-INSERT INTO `cronjobs` (`user_id`, `schedule`, `command`, `active`, `description`, `name`, `user`, `status`, `status_msg`) VALUES
-(1, '@daily', 'umask 027; /var/www/easyscp/daemon/CronDiskUsage.php > /var/log/easyscp/CronDiskUsage.log', 'yes', 'Disk usage', 'Disk usage', 'root', 'ok', NULL),
-(1, '0,30 * * * *', 'umask 027; /var/www/easyscp/daemon/CronServerTraffic.php > /var/log/easyscp/CronServerTraffic.log', 'yes', 'Server Traffic', 'Server Traffic', 'root', 'ok', NULL),
-(1, '0,30 * * * *', 'umask 027; /var/www/easyscp/daemon/CronDomainTraffic.php > /var/log/easyscp/CronDomainTraffic.log', 'yes', 'Domain Traffic', 'Domain Traffic', 'root', 'ok', NULL),
-(1, '@daily', 'umask 027; /var/www/easyscp/daemon/CronDomainBackup.php > /var/log/easyscp/CronDomainBackup.log', 'yes', 'Backup for all the customers'' data depending of the domain properties', 'Domain backup', 'root', 'ok', NULL),
-(1, '@daily', 'umask 027; /var/www/easyscp/daemon/CronSystemBackup.php > /var/log/easyscp/CronSystemBackup.log', 'yes', 'Backup for EasySCP database and all EasySCP configuration files', 'System backup', 'root', 'ok', NULL),
-(1, '0 */12 * * *', '/usr/bin/rkhunter --cronjob --createlogfile /var/log/rkhunter.log.root --display-logfile 1>/var/log/rkhunter.log 2>/dev/null', 'yes', 'Rootkit Hunter', 'Rootkit Hunter', 'root', 'ok', NULL);
+INSERT INTO `cronjobs` (`user_id`, `schedule`, `command`, `active`, `description`, `name`, `user`) VALUES
+(1, '@daily', 'umask 027; /var/www/easyscp/daemon/CronDiskUsage.php > /var/log/easyscp/CronDiskUsage.log', 'yes', 'Disk usage', 'Disk usage', 'root'),
+(1, '0,30 * * * *', 'umask 027; /var/www/easyscp/daemon/CronServerTraffic.php > /var/log/easyscp/CronServerTraffic.log', 'yes', 'Server Traffic', 'Server Traffic', 'root'),
+(1, '0,30 * * * *', 'umask 027; /var/www/easyscp/daemon/CronDomainTraffic.php > /var/log/easyscp/CronDomainTraffic.log', 'yes', 'Domain Traffic', 'Domain Traffic', 'root'),
+(1, '@daily', 'umask 027; /var/www/easyscp/daemon/CronDomainBackup.php > /var/log/easyscp/CronDomainBackup.log', 'yes', 'Backup for all the customers'' data depending of the domain properties', 'Domain backup', 'root'),
+(1, '@daily', 'umask 027; /var/www/easyscp/daemon/CronSystemBackup.php > /var/log/easyscp/CronSystemBackup.log', 'yes', 'Backup for EasySCP database and all EasySCP configuration files', 'System backup', 'root'),
+(1, '0 */12 * * *', '/usr/bin/rkhunter --cronjob --createlogfile /var/log/rkhunter.log.root --display-logfile 1>/var/log/rkhunter.log 2>/dev/null', 'yes', 'Rootkit Hunter', 'Rootkit Hunter', 'root');
 
 -- --------------------------------------------------------
 
