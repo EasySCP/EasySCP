@@ -131,66 +131,7 @@ class DaemonConfigMail {
 		$configPath = 'dovecot/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'};
 
 		switch(DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'}){
-			case 'Debian_6':
-				/**
-				 * dovecot.conf
-				 */
 
-				// Backup current dovecot.conf if exists
-				if (file_exists(DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/dovecot.conf')){
-					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'} .'/dovecot.conf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/backup/dovecot.conf'.'_'.date("Y_m_d_H_i_s"), $result, $error);
-				}
-
-				$tpl_param = array(
-					'DEFAULT_ADMIN_ADDRESS'	=> DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'},
-					'MTA_VIRTUAL_MAIL_DIR'	=> DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'},
-					'MTA_MAILBOX_UID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_UID'},
-					'MTA_MAILBOX_GID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_GID'}
-				);
-
-				$tpl = DaemonCommon::getTemplate($tpl_param);
-				$config = $tpl->fetch($configPath . '/dovecot.conf');
-				$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/dovecot.conf';
-				$tpl = NULL;
-				unset($tpl);
-
-				// Storing the new file in working directory
-				if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644 )){
-					return 'Error: Failed to write '.$confFile;
-				}
-
-				// Installing the new file in production directory
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/dovecot.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/dovecot.conf', $result, $error);
-
-				/**
-				 * dovecot-sql.conf
-				 */
-
-				// Backup current dovecot-sql.conf if exists
-				if (file_exists(DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/dovecot-sql.conf')){
-					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'} .'/dovecot-sql.conf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/backup/dovecot-sql.conf'.'_'.date("Y_m_d_H_i_s"), $result, $error);
-				}
-
-				$tpl_param = array(
-					'MTA_DB_HOST'	=> $MTA_DB_HOST,
-					'MTA_DB_USER'	=> $MTA_DB_USER,
-					'MTA_DB_PASS'	=> $MTA_DB_PASS
-				);
-
-				$tpl = DaemonCommon::getTemplate($tpl_param);
-				$config = $tpl->fetch($configPath . '/dovecot-sql.conf');
-				$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/dovecot-sql.conf';
-				$tpl = NULL;
-				unset($tpl);
-
-				// Storing the new file in working directory
-				if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644 )){
-					return 'Error: Failed to write '.$confFile;
-				}
-
-				// Installing the new file in production directory
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/dovecot-sql.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/dovecot-sql.conf', $result, $error);
-				break;
 			default:
 				/**
 				 * 10-auth.conf

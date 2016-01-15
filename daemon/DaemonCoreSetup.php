@@ -950,8 +950,6 @@ function Set_gui_permissions(){
 
 			exec(DaemonConfig::$cmd->SRV_IPTABLES . ' restart >> /dev/null 2>&1', $result, $error);
 			break;
-		case 'Debian_6':
-			break;
 		case 'Debian_8':
 			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/iptables/rules.v4 /etc/iptables/rules.v4', $result, $error);
 			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/iptables/rules.v6 /etc/iptables/rules.v6', $result, $error);
