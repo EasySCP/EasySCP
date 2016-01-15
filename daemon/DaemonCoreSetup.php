@@ -822,50 +822,6 @@ function GUI_PHP(){
 	// Install the new file
 	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/php5/master.php.ini '.DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master/php5/php.ini', $result, $error);
 
-
-	switch(DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'}){
-		case 'Debian_6':
-			// Disable "suhosin.session.encrypt"
-			// "suhosin.session.encrypt = off"
-
-			// Backup current suhosin.ini if exists
-			if (file_exists(DaemonConfig::$cfg->{'PHP5_CONF_DIR'}.'/suhosin.ini')){
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'PHP5_CONF_DIR'}.'/suhosin.ini '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php5/backup/suhosin.ini'.'_'.date("Y_m_d_H_i_s"), $result, $error);
-			}
-
-			// TODO Vorhandenes File Laden und entsprechend anpassen
-			/*
-			  $suhosin_ini = DaemonConfig::$cfg->{'PHP5_CONF_DIR'}.'/suhosin.ini';
-			  if (file_exists($suhosin_ini)){
-				  $fp = @fopen($suhosin_ini, "r");
-				  $temp = fread($fp, filesize($suhosin_ini));
-				  fclose($fp);
-
-				  $temp = str_replace('suhosin.session.encrypt = on', 'suhosin.session.encrypt = off', $temp);
-
-				  $fp = @fopen($suhosin_ini, "w");
-				  flock($fp,2);
-				  fputs($fp,$temp);
-				  flock($fp,3);
-				  fclose($fp);
-
-				  // Installing the new file in production directory
-				  exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php5/working/suhosin.ini '.DaemonConfig::$cfg->{'PHP5_CONF_DIR'}.'/suhosin.ini', $result, $error);
-			  }
-			  */
-
-			// Loading the template from /etc/easyscp/php5/parts/, Building the new file
-			// Store the new file in working directory
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php5/parts/suhosin.ini '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php5/working/suhosin.ini', $result, $error);
-			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/php5/working/suhosin.ini', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-
-
-			// Installing the new file in production directory
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php5/working/suhosin.ini '.DaemonConfig::$cfg->{'PHP5_CONF_DIR'}.'/suhosin.ini', $result, $error);
-			break;
-		default:
-	}
-
 	return 'Ok';
 }
 

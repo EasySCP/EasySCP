@@ -102,22 +102,6 @@ class DaemonConfigDNS {
 				}
 
 				break;
-			case 'Debian_6':
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -f '.DaemonConfig::$cfg->{'CONF_DIR'}.'/pdns/parts/pdns.conf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/pdns/working/pdns.conf', $result, $error);
-
-				$tpl = DaemonCommon::getTemplate($tpl_param);
-				$config = $tpl->fetch('pdns/parts/pdns.mysql');
-				$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/pdns/working/pdns.mysql';
-				$tpl = NULL;
-				unset($tpl);
-
-				if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640 )){
-					return 'Error: Failed to write '.$confFile;
-				}
-
-				// Installing the new file
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/pdns/working/pdns.mysql '.DaemonConfig::$cfg->{'PDNS_DB_DIR'}.'/pdns.mysql', $result, $error);
-				break;
 			case 'Debian_8':
 				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/parts/pdns_8.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf', $result, $error);
 
