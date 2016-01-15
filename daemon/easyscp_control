@@ -44,17 +44,18 @@ require_once(dirname(__FILE__).'/SocketHandler.php');
 
 // Setup
 $options = array(
-    'appName' => 'easyscp_control',
-    'appDir' => dirname(__FILE__),
-    'appDescription' => 'Controller for EasySCP',
-    'authorName' => 'EasySCP Team',
-    'authorEmail' => 'team@easyscp.net',
-    'sysMaxExecutionTime' => '0',
-    'sysMaxInputTime' => '0',
-    'sysMemoryLimit' => '1024M',
-    'appRunAsGID' => 0, // Maybe this should be changed later
-    'appRunAsUID' => 0, // Maybe this should be changed later
-    'logLocation' => '/var/log/easyscp/easyscp_control.log',
+	'appName' => 'easyscp_control',
+	'appDir' => dirname(__FILE__),
+	'appDescription' => 'Controller for EasySCP',
+	'authorName' => 'EasySCP Team',
+	'authorEmail' => 'team@easyscp.net',
+	'sysMaxExecutionTime' => '0',
+	'sysMaxInputTime' => '0',
+	'sysMemoryLimit' => '1024M',
+	'usePEAR' => false,
+	'appRunAsGID' => 0, // Maybe this should be changed later
+	'appRunAsUID' => 0, // Maybe this should be changed later
+	'logLocation' => '/var/log/easyscp/easyscp_control.log'
 );
  
 System_Daemon::setOptions($options);
