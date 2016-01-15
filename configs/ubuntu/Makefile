@@ -17,7 +17,6 @@ install:
 		cd ./init.d && $(MAKE) install
 		cp -pR ./iptables $(SYSTEM_CONF)
 		cp -pR ./pdns $(SYSTEM_CONF)
-		cp -pR ./php5 $(SYSTEM_CONF)
 		cp -pR ./proftpd $(SYSTEM_CONF)
 		cd ./systemd && $(MAKE) install
 		cp -pR ./tpl $(SYSTEM_CONF)
@@ -28,7 +27,6 @@ uninstall:
 		cd ./init.d && $(MAKE) uninstall
 		rm -rf $(SYSTEM_CONF)/iptables
 		rm -rf $(SYSTEM_CONF)/pdns
-		rm -rf $(SYSTEM_CONF)/php5
 		rm -rf $(SYSTEM_CONF)/proftpd
 		cd ./systemd && $(MAKE) uninstall
 		rm -rf $(SYSTEM_CONF)/tpl

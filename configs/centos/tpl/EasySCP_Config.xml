@@ -50,11 +50,11 @@
 		PHP data
 	-->
 	<PEAR_DIR>/usr/share/php</PEAR_DIR>
+	<PHP_FASTCGI_BIN>/usr/bin/php-cgi</PHP_FASTCGI_BIN>
 	<PHP_STARTER_DIR>/var/www/fcgi</PHP_STARTER_DIR>
 	<PHP_TIMEZONE />
-	<PHP_VERSION>5</PHP_VERSION>
 	<PHP5_CONF_DIR>/etc/php5/conf.d</PHP5_CONF_DIR>
-	<PHP5_FASTCGI_BIN>/usr/bin/php-cgi</PHP5_FASTCGI_BIN>
+	<PHP7_CONF_DIR />
 
 	<!--
 		ProFTPd data
@@ -88,7 +88,6 @@
 	<!--
 		Apache data
 	-->
-	<APACHE_BACKUP_LOG_DIR>/var/log/httpd/backup</APACHE_BACKUP_LOG_DIR>
 	<APACHE_CUSTOM_SITES_CONFIG_DIR>/etc/httpd/vhost.d</APACHE_CUSTOM_SITES_CONFIG_DIR>
 	<APACHE_GROUP>apache</APACHE_GROUP>
 	<APACHE_LOG_DIR>/var/log/httpd</APACHE_LOG_DIR>

@@ -129,7 +129,7 @@
 {if isset($DOMAIN_PHP) && $DOMAIN_PHP == true}
 	<IfModule mod_fcgid.c>
 		<Directory {$WWW_DIR}/{$DOC_ROOT}/htdocs>
-			FCGIWrapper {$PHP_STARTER_DIR}/{$MASTER_DOMAIN}/php5-fcgi-starter .php
+			FCGIWrapper {$PHP_STARTER_DIR}/{$MASTER_DOMAIN}/php-fcgi-starter .php
 			Options +ExecCGI
 		</Directory>
 		<Directory "{$PHP_STARTER_DIR}/{$MASTER_DOMAIN}">

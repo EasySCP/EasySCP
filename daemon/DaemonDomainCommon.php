@@ -805,29 +805,29 @@ class DaemonDomainCommon {
 
 		System_Daemon::debug("Creating $fcgiDir");
 		if (!DaemonCommon::systemCreateDirectory($fcgiDir, $sysUser, $sysGroup, 0555) ||
-				!DaemonCommon::systemCreateDirectory("$fcgiDir/php5", $sysUser, $sysGroup, 0555)) {
+				!DaemonCommon::systemCreateDirectory("$fcgiDir/php", $sysUser, $sysGroup, 0555)) {
 			return false;
 		}
 
 		//file
-		if (!file_exists($fcgiDir . "/php5-fcgi-starter")) {
+		if (!file_exists($fcgiDir . "/php-fcgi-starter")) {
 			$tpl_param = array(
 				"DOMAIN_NAME" => $domainData['domain_name'],
 				"WWW_DIR" => DaemonConfig::$cfg->APACHE_WWW_DIR,
 				"PHP_STARTER_DIR" => DaemonConfig::$cfg->PHP_STARTER_DIR,
-				"PHP5_FASTCGI_BIN" => DaemonConfig::$cfg->PHP5_FASTCGI_BIN
+				"PHP_FASTCGI_BIN" => DaemonConfig::$cfg->PHP_FASTCGI_BIN
 			);
 
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 
-			$config = $tpl->fetch("fcgi/parts/php5-fcgi-starter.tpl");
+			$config = $tpl->fetch("fcgi/parts/php-fcgi-starter.tpl");
 			$tpl = NULL;
 			unset($tpl);
-			if (!DaemonCommon::systemWriteContentToFile($fcgiDir . '/php5-fcgi-starter', $config, $sysUser, $sysGroup, 0550)) {
+			if (!DaemonCommon::systemWriteContentToFile($fcgiDir . '/php-fcgi-starter', $config, $sysUser, $sysGroup, 0550)) {
 				return false;
 			}
 		}
-		if (!file_exists($fcgiDir . "/php5/php.ini")) {
+		if (!file_exists($fcgiDir . "/php/php.ini")) {
 			$tpl_param = array(
 				"DOMAIN_NAME" => $domainData['domain_name'],
 				"WWW_DIR" => DaemonConfig::$cfg->APACHE_WWW_DIR,
@@ -837,10 +837,10 @@ class DaemonDomainCommon {
 			);
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 
-			$config = $tpl->fetch('fcgi/parts/php5/php_'.DaemonConfig::$cfg->DistVersion.'.ini');
+			$config = $tpl->fetch('fcgi/parts/php/php_'.DaemonConfig::$cfg->DistVersion.'.ini');
 			$tpl = NULL;
 			unset($tpl);
-			if (!DaemonCommon::systemWriteContentToFile($fcgiDir . '/php5/php.ini', $config, $sysUser, $sysGroup, 0440)) {
+			if (!DaemonCommon::systemWriteContentToFile($fcgiDir . '/php/php.ini', $config, $sysUser, $sysGroup, 0440)) {
 				return false;
 			}
 		}
@@ -1475,8 +1475,7 @@ class DaemonDomainCommon {
 			"GUI_ROOT_DIR"				=> DaemonConfig::$cfg->GUI_ROOT_DIR,
 			"BASE_SERVER_VHOST"			=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
 			'APACHE_LOG_DIR'			=> DaemonConfig::$cfg->APACHE_LOG_DIR,
-			"PHP_STARTER_DIR"			=> DaemonConfig::$cfg->PHP_STARTER_DIR,
-			"PHP_VERSION"				=> DaemonConfig::$cfg->PHP_VERSION
+			"PHP_STARTER_DIR"			=> DaemonConfig::$cfg->PHP_STARTER_DIR
 		);
 
 		if (isset(DaemonConfig::$cfg->BASE_SERVER_IPv6) && DaemonConfig::$cfg->BASE_SERVER_IPv6 != ''){

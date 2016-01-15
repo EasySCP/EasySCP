@@ -92,7 +92,7 @@ NameVirtualHost [{$BASE_SERVER_IPv6}]:443
 
 	<IfModule mod_fcgid.c>
 		<Directory {$GUI_ROOT_DIR}>
-			FCGIWrapper {$PHP_STARTER_DIR}/master/php{$PHP_VERSION}-fcgi-starter .php
+			FCGIWrapper {$PHP_STARTER_DIR}/master/php-fcgi-starter .php
 			Options +ExecCGI
 		</Directory>
 		<Directory "{$PHP_STARTER_DIR}/master">
@@ -183,7 +183,7 @@ NameVirtualHost [{$BASE_SERVER_IPv6}]:443
 
 	<IfModule mod_fcgid.c>
 		<Directory {$GUI_ROOT_DIR}>
-			FCGIWrapper {$PHP_STARTER_DIR}/master/php{$PHP_VERSION}-fcgi-starter .php
+			FCGIWrapper {$PHP_STARTER_DIR}/master/php-fcgi-starter .php
 			Options +ExecCGI
 		</Directory>
 		<Directory "{$PHP_STARTER_DIR}/master">

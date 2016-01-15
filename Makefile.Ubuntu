@@ -17,7 +17,6 @@ HOST_OS=ubuntu
 
 ROOT_CONF=$(INST_PREF)/etc
 
-SYSTEM_APACHE_BACK_LOG=$(INST_PREF)/var/log/apache2/backup
 SYSTEM_AWSTATS=$(INST_PREF)/var/www/awstats
 SYSTEM_CONF=$(INST_PREF)/etc/easyscp
 SYSTEM_DAEMON=$(INST_PREF)/var/www/easyscp/daemon
@@ -42,7 +41,6 @@ install:
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_SCOREBOARDS)
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_AWSTATS)
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_MAIL_VIRTUAL)
-	$(SYSTEM_MAKE_DIRS) $(SYSTEM_APACHE_BACK_LOG)
 	$(SYSTEM_MAKE_DIRS) $(SYSTEM_SYSTEMD)
 
 	cd ./configs && $(MAKE) install
@@ -64,7 +62,6 @@ uninstall:
 	rm -rf $(SYSTEM_FCGI)
 	rm -rf $(SYSTEM_SCOREBOARDS)
 	rm -rf $(SYSTEM_MAIL_VIRTUAL)
-	rm -rf $(SYSTEM_APACHE_BACK_LOG)
 
 clean:
 

@@ -268,9 +268,6 @@ function EasySCP_Directories(){
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'APACHE_TRAFFIC_LOG_DIR'}, DaemonConfig::$cfg->{'APACHE_USER'}, DaemonConfig::$cfg->{'APACHE_GROUP'}, 0755)){
 		return 'Error: Failed to create '.DaemonConfig::$cfg->{'APACHE_TRAFFIC_LOG_DIR'};
 	}
-	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'APACHE_BACKUP_LOG_DIR'}, DaemonConfig::$cfg->{'APACHE_USER'}, DaemonConfig::$cfg->{'APACHE_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$cfg->{'APACHE_BACKUP_LOG_DIR'};
-	}
 
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'MTA_VIRTUAL_CONF_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
 		return 'Error: Failed to create '.DaemonConfig::$cfg->{'MTA_VIRTUAL_CONF_DIR'};
@@ -650,8 +647,9 @@ function EasySCP_Apache_fcgi_modules_configuration(){
 	// Loading the template from the /etc/easyscp/apache directory, Building the new configuration file
 	// and Storing the new file
 
+	// TODO Datei muss nicht mehr bearbeitet werden, kann also direkt kopiert werden. Das noch anpassen
 	$tpl_param = array(
-		'PHP_VERSION'	=> DaemonConfig::$cfg->PHP_VERSION
+		//'PHP_VERSION'	=> DaemonConfig::$cfg->PHP_VERSION
 	);
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -763,7 +761,7 @@ function EasySCP_init_scripts(){
 function GUI_PHP(){
 	// Create the fcgi directories tree for the GUI if it doesn't exists
 	DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0555);
-	DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master/php5', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0555);
+	DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master/php', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0555);
 
 	// PHP5 Starter script
 	// Loading the template from /etc/easyscp/fcgi/parts/master, Building the new file
@@ -773,12 +771,12 @@ function GUI_PHP(){
 		'PHP_STARTER_DIR'	=> DaemonConfig::$cfg->{'PHP_STARTER_DIR'},
 		'DOMAIN_NAME'		=> 'master',
 		'GUI_ROOT_DIR'		=> DaemonConfig::$cfg->{'GUI_ROOT_DIR'},
-		'PHP5_FASTCGI_BIN'	=> DaemonConfig::$cfg->{'PHP5_FASTCGI_BIN'}
+		'PHP_FASTCGI_BIN'	=> DaemonConfig::$cfg->{'PHP_FASTCGI_BIN'}
 	);
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
-	$config = $tpl->fetch('fcgi/parts/master.php5-fcgi-starter.tpl');
-	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php5-fcgi-starter';
+	$config = $tpl->fetch('fcgi/parts/master.php-fcgi-starter.tpl');
+	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php-fcgi-starter';
 	$tpl = NULL;
 	unset($tpl);
 
@@ -787,11 +785,11 @@ function GUI_PHP(){
 	}
 
 	// Install the new file
-	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php5-fcgi-starter '.DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master/php5-fcgi-starter', $result, $error);
+	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php-fcgi-starter '.DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master/php-fcgi-starter', $result, $error);
 
 
 	// PHP5 php.ini file
-	// Loading the template from /etc/easyscp/fcgi/parts/master/php5, Building the new file
+	// Loading the template from /etc/easyscp/fcgi/parts/master/php, Building the new file
 	// and Store the new file in working directory
 
 	$tpl_param = array(
@@ -810,8 +808,8 @@ function GUI_PHP(){
 	);
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
-	$config = $tpl->fetch('fcgi/parts/php5/master.php_'.DaemonConfig::$cfg->{'DistVersion'}.'.ini');
-	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/php5/master.php.ini';
+	$config = $tpl->fetch('fcgi/parts/php/master.php_'.DaemonConfig::$cfg->{'DistVersion'}.'.ini');
+	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php.ini';
 	$tpl = NULL;
 	unset($tpl);
 
@@ -820,7 +818,7 @@ function GUI_PHP(){
 	}
 
 	// Install the new file
-	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/php5/master.php.ini '.DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master/php5/php.ini', $result, $error);
+	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php.ini '.DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master/php/php.ini', $result, $error);
 
 	return 'Ok';
 }
@@ -834,7 +832,6 @@ function GUI_VHOST(){
 		'DEFAULT_ADMIN_ADDRESS'		=> DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS,
 		'GUI_ROOT_DIR'				=> DaemonConfig::$cfg->GUI_ROOT_DIR,
 		'PHP_STARTER_DIR'			=> DaemonConfig::$cfg->{'PHP_STARTER_DIR'},
-		'PHP_VERSION'				=> DaemonConfig::$cfg->PHP_VERSION,
 		'SUEXEC_GID'				=> DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'},
 		'SUEXEC_UID'				=> DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}
 	);
