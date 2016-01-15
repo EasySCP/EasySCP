@@ -25,11 +25,6 @@
 
 	<Dist Name="Debian">
 		<OS>
-			<Name>Debian GNU/Linux 6 (Squeeze)</Name>
-			<DistName>Debian</DistName>
-			<DistVersion>6</DistVersion>
-		</OS>
-		<OS>
 			<Name>Debian GNU/Linux 7 (Wheezy)</Name>
 			<DistName>Debian</DistName>
 			<DistVersion>7</DistVersion>
