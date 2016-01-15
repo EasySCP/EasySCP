@@ -366,18 +366,21 @@ function getOS($xml){
 			$fp = @fopen('/etc/os-release', "r");
 			$temp = fread($fp, filesize('/etc/os-release'));
 			fclose($fp);
-			if(strpos($temp, 'VERSION_ID="8"') !== false){
-				// Debian 8
-				$select = base64_encode('{"DistName":"Debian","DistVersion":"8"}');
-			} elseif(strpos($temp, 'VERSION_ID="7"') !== false){
+			if(strpos($temp, 'VERSION_ID="7"') !== false){
 				// Debian 7
 				$select = base64_encode('{"DistName":"Debian","DistVersion":"7"}');
+			} elseif(strpos($temp, 'VERSION_ID="8"') !== false){
+				// Debian 8
+				$select = base64_encode('{"DistName":"Debian","DistVersion":"8"}');
 			} elseif(strpos($temp, 'VERSION_ID="12.04"')  !== false){
 				// Ubuntu 12.04
 				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"12.04"}');
 			} elseif(strpos($temp, 'VERSION_ID="14.04"')  !== false){
 				// Ubuntu 14.04
 				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"14.04"}');
+			} elseif(strpos($temp, 'VERSION_ID="16.04"')  !== false){
+				// Ubuntu 16.04
+				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"16.04"}');
 			} else {
 				// Unbekannt
 				$select = '';
