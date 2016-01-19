@@ -359,14 +359,12 @@ function EasySCP_main_configuration_file(){
 }
 
 function EasySCP_database(){
-	$sql = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
-
 	$connectid = '';
 	try {
 		$connectid = new PDO(
-			'mysql:host='.$sql->{'DB_HOST'}.';port=3306',
-			$sql->{'DB_USER'},
-			$sql->{'DB_PASSWORD'},
+			'mysql:host='.DaemonConfig::$cfg->{'DATABASE_HOST'}.';port=3306',
+			DaemonConfig::$cfg->{'DATABASE_USER'},
+			DB::decrypt_data(DaemonConfig::$cfg->{'DATABASE_PASSWORD'}),
 			array(
 				PDO::ATTR_PERSISTENT => true,
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -380,7 +378,7 @@ function EasySCP_database(){
 		System_Daemon::debug('Create EasySCP DB if not exists');
 
 		$query = "
-			CREATE DATABASE IF NOT EXISTS ".$sql->{'DB_DATABASE'}."
+			CREATE DATABASE IF NOT EXISTS ".DaemonConfig::$cfg->{'DATABASE_NAME'}."
   			DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
   		";
 
