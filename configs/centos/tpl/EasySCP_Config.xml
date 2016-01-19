@@ -53,8 +53,6 @@
 	<PHP_FASTCGI_BIN>/usr/bin/php-cgi</PHP_FASTCGI_BIN>
 	<PHP_STARTER_DIR>/var/www/fcgi</PHP_STARTER_DIR>
 	<PHP_TIMEZONE />
-	<PHP5_CONF_DIR>/etc/php5/conf.d</PHP5_CONF_DIR>
-	<PHP7_CONF_DIR />
 
 	<!--
 		ProFTPd data
