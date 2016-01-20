@@ -21,6 +21,7 @@ install:
 		cd ./systemd && $(MAKE) install
 		cp -R ./tpl $(SYSTEM_CONF) 
 		cp ./EasySCP_CMD.xml $(SYSTEM_CONF)
+		cp ./EasySCP_Distro.xml $(SYSTEM_CONF)
 
 uninstall:
 		cd ./apache && $(MAKE) uninstall
@@ -34,4 +35,5 @@ uninstall:
 		rm -rf $(SYSTEM_CONF)/EasySCP_CMD.xml
 		rm -rf $(SYSTEM_CONF)/EasySCP_Config.xml
 		rm -rf $(SYSTEM_CONF)/EasySCP_Config_DB.php
+		rm -rf $(SYSTEM_CONF)/EasySCP_Distro.xml
 
