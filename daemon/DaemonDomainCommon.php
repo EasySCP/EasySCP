@@ -22,7 +22,7 @@ class DaemonDomainCommon {
 	 */
 	protected static function apacheDisableSite($siteName) {
 		System_Daemon::debug('Disabling '.$siteName);
-		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $siteName . '.conf';
+		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $siteName . '.conf';
 
 		if (file_exists($confFile)) {
 			switch(DaemonConfig::$cfg->DistName){
@@ -60,7 +60,7 @@ class DaemonDomainCommon {
 	 */
 	protected static function apacheEnableSite($siteName) {
 		System_Daemon::debug('Enabling '.$siteName);
-		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $siteName . '.conf';
+		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $siteName . '.conf';
 
 		switch(DaemonConfig::$cfg->DistName){
 			case 'CentOS':
@@ -149,7 +149,7 @@ class DaemonDomainCommon {
 			'DOMAIN_CGI'		=> ($domainData['domain_cgi'] == 'yes') ? true : false,
 			'DOMAIN_PHP'		=> ($domainData['domain_php'] == 'yes') ? true : false,
 			'BASE_SERVER_VHOST'	=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
-			'WWW_DIR'			=> DaemonConfig::$cfg->APACHE_WWW_DIR
+			'WWW_DIR'			=> DaemonConfig::$distro->APACHE_WWW_DIR
 		);
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -157,7 +157,7 @@ class DaemonDomainCommon {
 		$config = $tpl->fetch('apache/parts/vhost_disabled.tpl');
 		$tpl = NULL;
 		unset($tpl);
-		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '-disabled.conf';
+		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '-disabled.conf';
 		if (DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644)) {
 			return true;
 		} else {
@@ -197,14 +197,14 @@ class DaemonDomainCommon {
 			'DOMAIN_PHP'				=> ($domainData['domain_php'] == 'yes') ? true : false,
 			'BASE_SERVER_VHOST'			=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
 			'BASE_SERVER_VHOST_PREFIX'	=> DaemonConfig::$cfg->BASE_SERVER_VHOST_PREFIX,
-			'WWW_DIR'					=> DaemonConfig::$cfg->APACHE_WWW_DIR,
-			'CUSTOM_SITES_CONFIG_DIR'	=> DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR,
+			'WWW_DIR'					=> DaemonConfig::$distro->APACHE_WWW_DIR,
+			'CUSTOM_SITES_CONFIG_DIR'	=> DaemonConfig::$distro->APACHE_CUSTOM_SITES_CONFIG_DIR,
 			'HTACCESS_USERS_FILE_NAME'	=> DaemonConfig::$cfg->HTACCESS_USERS_FILE_NAME,
 			'HTACCESS_GROUPS_FILE_NAME' => DaemonConfig::$cfg->HTACCESS_GROUPS_FILE_NAME,
 			'AWSTATS_GROUP_AUTH'		=> DaemonConfig::$cfg->AWSTATS_GROUP_AUTH,
-			'PHP_STARTER_DIR'			=> DaemonConfig::$cfg->PHP_STARTER_DIR,
-			'APACHE_LOG_DIR'			=> DaemonConfig::$cfg->APACHE_LOG_DIR,
-			'APACHE_TRAFFIC_LOG_DIR'	=> DaemonConfig::$cfg->APACHE_TRAFFIC_LOG_DIR,
+			'PHP_STARTER_DIR'			=> DaemonConfig::$distro->PHP_STARTER_DIR,
+			'APACHE_LOG_DIR'			=> DaemonConfig::$distro->APACHE_LOG_DIR,
+			'APACHE_TRAFFIC_LOG_DIR'	=> DaemonConfig::$distro->APACHE_TRAFFIC_LOG_DIR,
 			'SELF'						=> $domainData['domain_name']
 		);
 
@@ -251,7 +251,7 @@ class DaemonDomainCommon {
 		$config = $tpl->fetch('apache/parts/vhost.tpl');
 		$tpl = NULL;
 		unset($tpl);
-		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
 
 		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
 		if ($retVal !== true) {
@@ -269,7 +269,7 @@ class DaemonDomainCommon {
 			$config = $tpl->fetch('apache/parts/vhost.tpl');
 			$tpl = NULL;
 			unset($tpl);
-			$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+			$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
 
 			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
 			if ($retVal !== true) {
@@ -290,8 +290,8 @@ class DaemonDomainCommon {
 				return $msg.'<br />'.$retVal;
 			}
 			$tpl_param['DOMAIN_PORT']	= 443;
-			$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$cfg->SSL_CERT_DIR;
-			$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$cfg->SSL_KEY_DIR;
+			$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
+			$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
 			$tpl_param['REDIRECT']		= false;
 
 			if (isset($domainData['ssl_cacert']) && $domainData['ssl_cacert'] != ''){
@@ -303,7 +303,7 @@ class DaemonDomainCommon {
 			$config = $tpl->fetch('apache/parts/vhost.tpl');
 			$tpl = NULL;
 			unset($tpl);
-			$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+			$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
 
 			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
 			if ($retVal !== true) {
@@ -321,7 +321,7 @@ class DaemonDomainCommon {
 				$config = $tpl->fetch('apache/parts/vhost.tpl');
 				$tpl = NULL;
 				unset($tpl);
-				$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+				$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
 
 				$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
 				if ($retVal !== true) {
@@ -338,7 +338,7 @@ class DaemonDomainCommon {
 		$tpl = NULL;
 		unset($tpl);
 
-		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $serverName . '.custom';
+		$confFile = DaemonConfig::$distro->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $serverName . '.custom';
 		if (!file_exists($confFile)){
 			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644,$append);
 			if ($retVal !== true) {
@@ -506,7 +506,7 @@ class DaemonDomainCommon {
 		}
 
 		$fqdn = $aliasData['domain_name'];
-		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $fqdn . '.conf';
+		$confFile = DaemonConfig::$distro->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $fqdn . '.conf';
 		if (!unlink($confFile)) {
 			$returnOk = false;
 		}
@@ -529,7 +529,7 @@ class DaemonDomainCommon {
 	protected static function deleteAliasSubDomain($aliasSubDomainData) {
 
 		$fqdn = $aliasSubDomainData['subdomain_name'] . '.' . $aliasSubDomainData['alias_name'];
-		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $fqdn . '.custom';
+		$confFile = DaemonConfig::$distro->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $fqdn . '.custom';
 		$retVal = unlink($confFile);
 		if ($retVal !== true ) {
 			$msg = 'Failed to delete ' .$confFile;
@@ -568,18 +568,18 @@ class DaemonDomainCommon {
 		exec($cmdGroup);
 
 		//delete directories
-		$homeDir = DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
-		$fcgiDir = $fcgiDir = DaemonConfig::$cfg->PHP_STARTER_DIR . '/' . $domainData['domain_name'];
+		$homeDir = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
+		$fcgiDir = $fcgiDir = DaemonConfig::$distro->PHP_STARTER_DIR . '/' . $domainData['domain_name'];
 		$cmd = DaemonConfig::$cmd->CMD_RM . ' -rf ' . $homeDir;
 		exec($cmd);
 		System_Daemon::debug('Deleted ' . $homeDir);
 
-		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
 		if (!unlink($confFile)) {
 			$returnOk = false;
 		}
 
-		$confFile = DaemonConfig::$cfg->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '-disabled.conf';
+		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '-disabled.conf';
 		if (!unlink($confFile)) {
 			$returnOk = false;
 		}
@@ -589,8 +589,8 @@ class DaemonDomainCommon {
 		System_Daemon::debug('Deleted '.$fcgiDir);
 
 		// delete existing ssl key and certificate
-		$certFile = DaemonConfig::$cfg->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cert.pem';
-		$keyFile = DaemonConfig::$cfg->SSL_KEY_DIR . '/easyscp_' . $domainData['domain_name'] . '-key.pem';
+		$certFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cert.pem';
+		$keyFile = DaemonConfig::$distro->SSL_KEY_DIR . '/easyscp_' . $domainData['domain_name'] . '-key.pem';
 		if (file_exists($certFile)) {
 			$cmdCert = DaemonConfig::$cmd->CMD_RM . $certFile;
 			exec($cmdCert);
@@ -628,8 +628,8 @@ class DaemonDomainCommon {
 	 * @return bool
 	 */
 	protected static function deleteHTAccessFile($domainData, $row) {
-		if (file_exists(DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . $row['path'] . '/.htaccess')) {
-			unlink(DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . $row['path'] . '/.htaccess');
+		if (file_exists(DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . $row['path'] . '/.htaccess')) {
+			unlink(DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . $row['path'] . '/.htaccess');
 		}
 
 		$sql_param = array(
@@ -652,14 +652,14 @@ class DaemonDomainCommon {
 	protected static function deleteSubDomain($subDomainData) {
 		$returnOk = true;
 		//delete directories
-		$homeDir = DaemonConfig::$cfg->APACHE_WWW_DIR . "/" . $subDomainData['domain_name'] . $subDomainData['mount'];
+		$homeDir = DaemonConfig::$distro->APACHE_WWW_DIR . "/" . $subDomainData['domain_name'] . $subDomainData['mount'];
 		$cmd = DaemonConfig::$cmd->CMD_RM . " -rf $homeDir";
 		System_Daemon::debug($cmd);
 		exec($cmd);
 		System_Daemon::warning("Deleted $homeDir");
 
 		$fqdn = $subDomainData['subdomain_name'] . "." . $subDomainData['domain_name'];
-		$confFile = DaemonConfig::$cfg->APACHE_CUSTOM_SITES_CONFIG_DIR . "/$fqdn.custom";
+		$confFile = DaemonConfig::$distro->APACHE_CUSTOM_SITES_CONFIG_DIR . "/$fqdn.custom";
 		if (!unlink($confFile)) {
 			$returnOk = false;
 		}
@@ -687,7 +687,7 @@ class DaemonDomainCommon {
 	 */
 	protected static function directoriesCreateDisabled($domainData) {
 		$returnOk = true;
-		$disabledDir = DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
+		$disabledDir = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
 			$disabledDir .= '/' . $domainData['mount'];
 		}
@@ -715,7 +715,7 @@ class DaemonDomainCommon {
 		$tpl = NULL;
 		unset($tpl);
 		$htmlFile = $disabledDir . '/index.html';
-		if (!DaemonCommon::systemWriteContentToFile($htmlFile, $config, $sysUser, DaemonConfig::$cfg->APACHE_GROUP, 0644)||
+		if (!DaemonCommon::systemWriteContentToFile($htmlFile, $config, $sysUser, DaemonConfig::$distro->APACHE_GROUP, 0644)||
 				!copy(DaemonConfig::$cfg->ROOT_DIR . '/gui/domain_disable_page/easyscp.css', $disabledDir . '/easyscp.css')||
 				!DaemonCommon::systemSetFolderPermissions($disabledDir . '/easyscp.css', $sysUser, $sysGroup, 0755)){
 			$returnOk = false;
@@ -744,7 +744,7 @@ class DaemonDomainCommon {
 	 */
 	protected static function directoriesCreateError($domainData) {
 		$returnOk = true;
-		$errorDir = DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
+		$errorDir = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
 			$errorDir .= '/' . $domainData['mount'];
 		}
@@ -799,7 +799,7 @@ class DaemonDomainCommon {
 	 * @return boolean
 	 */
 	protected static function directoriesCreateFCGI($domainData) {
-		$fcgiDir = DaemonConfig::$cfg->PHP_STARTER_DIR . "/" . $domainData['domain_name'];
+		$fcgiDir = DaemonConfig::$distro->PHP_STARTER_DIR . "/" . $domainData['domain_name'];
 		$sysGroup = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'];
 		$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
 
@@ -812,10 +812,10 @@ class DaemonDomainCommon {
 		//file
 		if (!file_exists($fcgiDir . "/php-fcgi-starter")) {
 			$tpl_param = array(
-				"DOMAIN_NAME" => $domainData['domain_name'],
-				"WWW_DIR" => DaemonConfig::$cfg->APACHE_WWW_DIR,
-				"PHP_STARTER_DIR" => DaemonConfig::$cfg->PHP_STARTER_DIR,
-				"PHP_FASTCGI_BIN" => DaemonConfig::$cfg->PHP_FASTCGI_BIN
+				'DOMAIN_NAME'		=> $domainData['domain_name'],
+				'WWW_DIR'			=> DaemonConfig::$distro->APACHE_WWW_DIR,
+				'PHP_STARTER_DIR'	=> DaemonConfig::$distro->PHP_STARTER_DIR,
+				'PHP_FASTCGI_BIN'	=> DaemonConfig::$distro->PHP_FASTCGI_BIN
 			);
 
 			$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -829,11 +829,11 @@ class DaemonDomainCommon {
 		}
 		if (!file_exists($fcgiDir . "/php/php.ini")) {
 			$tpl_param = array(
-				"DOMAIN_NAME" => $domainData['domain_name'],
-				"WWW_DIR" => DaemonConfig::$cfg->APACHE_WWW_DIR,
-				"PHP_STARTER_DIR" => DaemonConfig::$cfg->PHP_STARTER_DIR,
-				"PEAR_DIR" => DaemonConfig::$cfg->PEAR_DIR,
-				"PHP_TIMEZONE" => DaemonConfig::$cfg->PHP_TIMEZONE
+				'DOMAIN_NAME'		=> $domainData['domain_name'],
+				'WWW_DIR'			=> DaemonConfig::$distro->APACHE_WWW_DIR,
+				'PHP_STARTER_DIR'	=> DaemonConfig::$distro->PHP_STARTER_DIR,
+				'PEAR_DIR'			=> DaemonConfig::$distro->PEAR_DIR,
+				'PHP_TIMEZONE'		=> DaemonConfig::$cfg->PHP_TIMEZONE
 			);
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 
@@ -854,7 +854,7 @@ class DaemonDomainCommon {
 	 */
 	protected static function directoriesCreateHtdocs($domainData) {
 		$returnOk = true;
-		$htdocsDir = DaemonConfig::$cfg->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
+		$htdocsDir = DaemonConfig::$distro->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
 			$htdocsDir .= "/" . $domainData['mount'];
 		}
@@ -908,7 +908,7 @@ class DaemonDomainCommon {
 	 * @return boolean
 	 */
 	protected static function directoriesCreateHtdocsStructure($domainData) {
-		$homeDir	= DaemonConfig::$cfg->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
+		$homeDir	= DaemonConfig::$distro->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
 			$homeDir .= "/" . $domainData['mount'];
 		}
@@ -1223,7 +1223,7 @@ class DaemonDomainCommon {
 		$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
 		$sysGID = $domainData['domain_gid'];
 		$sysUID = $domainData['domain_uid'];
-		$homeDir = DaemonConfig::$cfg->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
+		$homeDir = DaemonConfig::$distro->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
 
 		// add group and user for BSD has a different format
 		if (strcmp(DaemonConfig::$cfg->ROOT_GROUP, 'wheel') == 0) {
@@ -1284,7 +1284,7 @@ class DaemonDomainCommon {
 		$content .= 'AuthType ' . $row['auth_type'] ."\n";
 		$content .= 'AuthName "' . $row['auth_name'] . '"' ."\n";
 		if ($row['group_id'] == 0) {
-			$content .= 'AuthUserFile ' . DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htpasswd' ."\n";
+			$content .= 'AuthUserFile ' . DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htpasswd' ."\n";
 			$users = '';
 			if(strpos($row['user_id'], ",") === false){
 				$user = DB::query('select uname from htaccess_users where id = '.$row['user_id'], true);
@@ -1298,8 +1298,8 @@ class DaemonDomainCommon {
 			}
 			$content .= 'Require user' . $users ."\n";
 		} else {
-			$content .= 'AuthUserFile ' . DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htpasswd' ."\n";
-			$content .= 'AuthGroupFile ' . DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htgroup' ."\n";
+			$content .= 'AuthUserFile ' . DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htpasswd' ."\n";
+			$content .= 'AuthGroupFile ' . DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htgroup' ."\n";
 			$groups = '';
 			if(strpos($row['group_id'], ",") === false){
 				$group = DB::query('select ugroup from htaccess_groups where id = '.$row['group_id'], true);
@@ -1314,7 +1314,7 @@ class DaemonDomainCommon {
 			$content .= 'Require group ' . $groups ."\n";
 		}
 
-		$fileName = DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . $row['path'] . '/.htaccess';
+		$fileName = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . $row['path'] . '/.htaccess';
 
 		if (!DaemonCommon::systemWriteContentToFile($fileName, $content, 'vu' . $domainData['domain_uid'], 'vu' . $domainData['domain_gid'], 0644)){
 			$msg = 'Failed to write htaccess file for ' . $domainData['domain_name'];
@@ -1348,7 +1348,7 @@ class DaemonDomainCommon {
 	 */
 	protected static function writeHTAccessGroup($domainData){
 		$content = '';
-		$fileName = DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htgroup';
+		$fileName = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htgroup';
 
 		$sql_param = array(
 			':domain_id' => $domainData['domain_id']
@@ -1402,7 +1402,7 @@ class DaemonDomainCommon {
 	 */
 	protected static function writeHTAccessUser($domainData){
 		$content = '';
-		$fileName = DaemonConfig::$cfg->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htpasswd';
+		$fileName = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htpasswd';
 
 		$sql_param = array(
 			':domain_id' => $domainData['domain_id']
@@ -1468,14 +1468,14 @@ class DaemonDomainCommon {
 		}
 
 		$tpl_param = array(
-			"BASE_SERVER_IP"			=> DaemonConfig::$cfg->BASE_SERVER_IP,
-			"SUEXEC_GID"				=> $sysUser,
-			"SUEXEC_UID"				=> $sysGroup,
-			"DEFAULT_ADMIN_ADDRESS"		=> DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS,
-			"GUI_ROOT_DIR"				=> DaemonConfig::$cfg->GUI_ROOT_DIR,
-			"BASE_SERVER_VHOST"			=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
-			'APACHE_LOG_DIR'			=> DaemonConfig::$cfg->APACHE_LOG_DIR,
-			"PHP_STARTER_DIR"			=> DaemonConfig::$cfg->PHP_STARTER_DIR
+			'BASE_SERVER_IP'			=> DaemonConfig::$cfg->BASE_SERVER_IP,
+			'SUEXEC_GID'				=> $sysUser,
+			'SUEXEC_UID'				=> $sysGroup,
+			'DEFAULT_ADMIN_ADDRESS'		=> DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS,
+			'GUI_ROOT_DIR'				=> DaemonConfig::$cfg->GUI_ROOT_DIR,
+			'BASE_SERVER_VHOST'			=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
+			'APACHE_LOG_DIR'			=> DaemonConfig::$distro->APACHE_LOG_DIR,
+			'PHP_STARTER_DIR'			=> DaemonConfig::$distro->PHP_STARTER_DIR
 		);
 
 		if (isset(DaemonConfig::$cfg->BASE_SERVER_IPv6) && DaemonConfig::$cfg->BASE_SERVER_IPv6 != ''){
@@ -1513,8 +1513,8 @@ class DaemonDomainCommon {
 				return $msg.'<br />'.$retVal;
 			}
 			$tpl_param['BASE_PORT']		= 443;
-			$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$cfg->SSL_CERT_DIR;
-			$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$cfg->SSL_KEY_DIR;
+			$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
+			$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
 			$tpl_param['REDIRECT']		= false;
 
 			if (isset($sslData['ssl_cacert']) && $sslData['ssl_cacert'] != ''){
@@ -1536,7 +1536,7 @@ class DaemonDomainCommon {
 			}
 		}
 
-		exec(DaemonConfig::$cmd->CMD_CP.' -pf '.DaemonConfig::$cfg->CONF_DIR.'/apache/working/00_master.conf '.DaemonConfig::$cfg->APACHE_SITES_DIR.'/00_master.conf', $result, $error);
+		exec(DaemonConfig::$cmd->CMD_CP.' -pf '.DaemonConfig::$cfg->CONF_DIR.'/apache/working/00_master.conf '.DaemonConfig::$distro->APACHE_SITES_DIR.'/00_master.conf', $result, $error);
 
 		return true;
 	}
@@ -1547,9 +1547,9 @@ class DaemonDomainCommon {
 	 * @return mixed
 	 */
 	protected static function writeSSLKeys($domainData){
-		$certFile = DaemonConfig::$cfg->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cert.pem';
-		$cacertFile = DaemonConfig::$cfg->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cacert.pem';
-		$keyFile = DaemonConfig::$cfg->SSL_KEY_DIR . '/easyscp_' . $domainData['domain_name'] . '-key.pem';
+		$certFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cert.pem';
+		$cacertFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cacert.pem';
+		$keyFile = DaemonConfig::$distro->SSL_KEY_DIR . '/easyscp_' . $domainData['domain_name'] . '-key.pem';
 		$cert = $domainData['ssl_cert'];
 		$key = $domainData['ssl_key'];
 

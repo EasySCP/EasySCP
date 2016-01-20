@@ -17,6 +17,7 @@
 class DaemonConfig {
 	static $cfg;
 	static $cmd;
+	static $distro;
 
 	public static function Reload(){
 		// unset(self::$cfg);
@@ -78,4 +79,5 @@ class DaemonConfig {
 
 DaemonConfig::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
 DaemonConfig::$cmd = simplexml_load_file(EasyConfig_PATH . '/EasySCP_CMD.xml');
+DaemonConfig::$distro = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Distro.xml');
 ?>

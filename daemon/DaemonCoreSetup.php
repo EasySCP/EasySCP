@@ -249,11 +249,11 @@ function SetupEasySCP_Users(){
 	exec(DaemonConfig::$cmd->{'CMD_ID'}.' -u '.DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}.' 2>&1', $result, $error);
 	if ($error != 0){
 		// echo 'FCGI User existiert nicht';
-		// exec(DaemonConfig::$cmd->{'CMD_USERADD'}.' -d '.DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master -m -c vu-master -g '.DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}.' -s /bin/false -u '.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}.' '.DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}.' >> /dev/null 2>&1', $result, $error);
+		// exec(DaemonConfig::$cmd->{'CMD_USERADD'}.' -d '.DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master -m -c vu-master -g '.DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}.' -s /bin/false -u '.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}.' '.DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}.' >> /dev/null 2>&1', $result, $error);
 		exec(DaemonConfig::$cmd->{'CMD_USERADD'} . ' -c vu-master -d ' . DaemonConfig::$cfg->{'ROOT_DIR'} . '/gui -g ' . DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'} . ' -s /bin/false -u ' . DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'} . ' ' . DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'} . ' >> /dev/null 2>&1', $result, $error);
 	} else {
 		// echo 'FCGI User existiert';
-		DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0755);
+		DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0755);
 	}
 
 	DaemonConfig::Save();
@@ -262,18 +262,18 @@ function SetupEasySCP_Users(){
 }
 
 function EasySCP_Directories(){
-	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'APACHE_WWW_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$cfg->{'APACHE_WWW_DIR'};
+	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'APACHE_WWW_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
+		return 'Error: Failed to create '.DaemonConfig::$distro->{'APACHE_WWW_DIR'};
 	}
-	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'APACHE_TRAFFIC_LOG_DIR'}, DaemonConfig::$cfg->{'APACHE_USER'}, DaemonConfig::$cfg->{'APACHE_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$cfg->{'APACHE_TRAFFIC_LOG_DIR'};
+	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'APACHE_TRAFFIC_LOG_DIR'}, DaemonConfig::$distro->{'APACHE_USER'}, DaemonConfig::$distro->{'APACHE_GROUP'}, 0755)){
+		return 'Error: Failed to create '.DaemonConfig::$distro->{'APACHE_TRAFFIC_LOG_DIR'};
 	}
 
-	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'MTA_VIRTUAL_CONF_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$cfg->{'MTA_VIRTUAL_CONF_DIR'};
+	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'MTA_VIRTUAL_CONF_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
+		return 'Error: Failed to create '.DaemonConfig::$distro->{'MTA_VIRTUAL_CONF_DIR'};
 	}
-	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'}, DaemonConfig::$cfg->{'MTA_MAILBOX_UID_NAME'}, DaemonConfig::$cfg->{'MTA_MAILBOX_GID_NAME'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'};
+	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'}, DaemonConfig::$cfg->{'MTA_MAILBOX_UID_NAME'}, DaemonConfig::$cfg->{'MTA_MAILBOX_GID_NAME'}, 0755)){
+		return 'Error: Failed to create '.DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'};
 	}
 
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'LOG_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
@@ -284,18 +284,18 @@ function EasySCP_Directories(){
 		return 'Error: Failed to create '.DaemonConfig::$cfg->{'SRV_TRAFF_LOG_DIR'};
 	}
 
-	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'BACKUP_FILE_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$cfg->{'BACKUP_FILE_DIR'};
+	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'BACKUP_FILE_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
+		return 'Error: Failed to create '.DaemonConfig::$distro->{'BACKUP_FILE_DIR'};
 	}
 
-	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'PHP_STARTER_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$cfg->{'PHP_STARTER_DIR'};
+	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'PHP_STARTER_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
+		return 'Error: Failed to create '.DaemonConfig::$distro->{'PHP_STARTER_DIR'};
 	}
 
 	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 	if ($xml->{'AWStats'} == '_yes_'){
-		if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'AWSTATS_CACHE_DIR'}, DaemonConfig::$cfg->{'APACHE_USER'}, DaemonConfig::$cfg->{'APACHE_GROUP'}, 0755)){
-			return 'Error: Failed to create '.DaemonConfig::$cfg->{'AWSTATS_CACHE_DIR'};
+		if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'AWSTATS_CACHE_DIR'}, DaemonConfig::$distro->{'APACHE_USER'}, DaemonConfig::$distro->{'APACHE_GROUP'}, 0755)){
+			return 'Error: Failed to create '.DaemonConfig::$distro->{'AWSTATS_CACHE_DIR'};
 		}
 		DaemonConfig::$cfg->{'AWSTATS_ACTIVE'} = 'yes';
 	} else {
@@ -313,6 +313,7 @@ function EasySCP_main_configuration_file(){
 	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
 	DaemonConfig::$cfg->{'BuildDate'} = '20160113';
+	DaemonConfig::$cfg->{'Version'} = '2.1.0';
 	DaemonConfig::$cfg->{'DistName'} = $xml->{'DistName'};
 	DaemonConfig::$cfg->{'DistVersion'} = $xml->{'DistVersion'};
 	DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} = $xml->{'PANEL_MAIL'};
@@ -354,6 +355,17 @@ function EasySCP_main_configuration_file(){
 	unset($xml);
 
 	DaemonConfig::Save();
+
+	switch(DaemonConfig::$cfg->{'DistName'}) {
+		case 'Debian':
+			DaemonConfig::$cfg->{'MTA_SSL_STATUS'} = 1;
+			break;
+		default:
+			DaemonConfig::$cfg->{'MTA_SSL_STATUS'} = 0;
+	}
+
+	DaemonConfig::Save();
+
 	return DaemonConfig::SaveOldConfig();
 	// return 'Ok';
 }
@@ -510,7 +522,7 @@ function EasySCP_crontab_file(){
 		'ROOT_DIR'		=> DaemonConfig::$cfg->{'ROOT_DIR'},
 		'LOG_DIR'		=> DaemonConfig::$cfg->{'LOG_DIR'},
 		'RKHUNTER'		=> DaemonConfig::$cmd->{'CMD_RKHUNTER'},
-		'RKHUNTER_LOG'	=> DaemonConfig::$cfg->{'RKHUNTER_LOG'}
+		'RKHUNTER_LOG'	=> DaemonConfig::$distro->{'RKHUNTER_LOG'}
 	);
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -661,7 +673,7 @@ function EasySCP_Apache_fcgi_modules_configuration(){
 	}
 
 	// Installing the new file
-	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/apache/working/fcgid_easyscp.conf '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/fcgid_easyscp.conf', $result, $error);
+	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/apache/working/fcgid_easyscp.conf '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/fcgid_easyscp.conf', $result, $error);
 
 	switch(DaemonConfig::$cfg->{'DistName'}){
 		case 'CentOS':
@@ -669,7 +681,7 @@ function EasySCP_Apache_fcgi_modules_configuration(){
 		default:
 			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -f '.DaemonConfig::$cfg->{'CONF_DIR'}.'/apache/fcgid_easyscp.load '.DaemonConfig::$cfg->{'CONF_DIR'}.'/apache/working/fcgid_easyscp.load', $result, $error);
 			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/apache/working/fcgid_easyscp.load', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/apache/working/fcgid_easyscp.load '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/fcgid_easyscp.load', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/apache/working/fcgid_easyscp.load '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/fcgid_easyscp.load', $result, $error);
 	}
 
 	return 'Ok';
@@ -758,18 +770,18 @@ function EasySCP_init_scripts(){
 
 function GUI_PHP(){
 	// Create the fcgi directories tree for the GUI if it doesn't exists
-	DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0555);
-	DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master/php', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0555);
+	DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0555);
+	DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0555);
 
 	// PHP5 Starter script
 	// Loading the template from /etc/easyscp/fcgi/parts/master, Building the new file
 	// and Storing the new file in the working directory
 
 	$tpl_param = array(
-		'PHP_STARTER_DIR'	=> DaemonConfig::$cfg->{'PHP_STARTER_DIR'},
+		'PHP_STARTER_DIR'	=> DaemonConfig::$distro->{'PHP_STARTER_DIR'},
 		'DOMAIN_NAME'		=> 'master',
 		'GUI_ROOT_DIR'		=> DaemonConfig::$cfg->{'GUI_ROOT_DIR'},
-		'PHP_FASTCGI_BIN'	=> DaemonConfig::$cfg->{'PHP_FASTCGI_BIN'}
+		'PHP_FASTCGI_BIN'	=> DaemonConfig::$distro->{'PHP_FASTCGI_BIN'}
 	);
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -783,7 +795,7 @@ function GUI_PHP(){
 	}
 
 	// Install the new file
-	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php-fcgi-starter '.DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master/php-fcgi-starter', $result, $error);
+	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php-fcgi-starter '.DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php-fcgi-starter', $result, $error);
 
 
 	// PHP5 php.ini file
@@ -795,13 +807,13 @@ function GUI_PHP(){
 		'DOMAIN_NAME'		=> 'gui',
 		'MAIL_DMN'			=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'}),
 		'CONF_DIR'			=> DaemonConfig::$cfg->{'CONF_DIR'},
-		'PEAR_DIR'			=> DaemonConfig::$cfg->{'PEAR_DIR'},
-		'RKHUNTER_LOG'		=> DaemonConfig::$cfg->{'RKHUNTER_LOG'},
-		'CHKROOTKIT_LOG'	=> DaemonConfig::$cfg->{'CHKROOTKIT_LOG'},
-		'OTHER_ROOTKIT_LOG'	=> (DaemonConfig::$cfg->{'OTHER_ROOTKIT_LOG'} != '') ? DaemonConfig::$cfg->{'OTHER_ROOTKIT_LOG'} : '',
+		'PEAR_DIR'			=> DaemonConfig::$distro->{'PEAR_DIR'},
+		'RKHUNTER_LOG'		=> DaemonConfig::$distro->{'RKHUNTER_LOG'},
+		'CHKROOTKIT_LOG'	=> DaemonConfig::$distro->{'CHKROOTKIT_LOG'},
+		'OTHER_ROOTKIT_LOG'	=> (DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} != '') ? DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} : '',
 		'EASYSCPC_DIR'		=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPC'}),
 		'EASYSCPD_DIR'		=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPD'}),
-		'PHP_STARTER_DIR'	=> DaemonConfig::$cfg->{'PHP_STARTER_DIR'},
+		'PHP_STARTER_DIR'	=> DaemonConfig::$distro->{'PHP_STARTER_DIR'},
 		'PHP_TIMEZONE'		=> DaemonConfig::$cfg->{'PHP_TIMEZONE'}
 	);
 
@@ -816,20 +828,20 @@ function GUI_PHP(){
 	}
 
 	// Install the new file
-	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php.ini '.DaemonConfig::$cfg->{'PHP_STARTER_DIR'}.'/master/php/php.ini', $result, $error);
+	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php.ini '.DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php/php.ini', $result, $error);
 
 	return 'Ok';
 }
 
 function GUI_VHOST(){
 	$tpl_param = array(
-		'APACHE_LOG_DIR'			=> DaemonConfig::$cfg->APACHE_LOG_DIR,
+		'APACHE_LOG_DIR'			=> DaemonConfig::$distro->APACHE_LOG_DIR,
 		'BASE_PORT'					=> 80,
 		'BASE_SERVER_IP'			=> DaemonConfig::$cfg->BASE_SERVER_IP,
 		'BASE_SERVER_VHOST'			=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'}),
 		'DEFAULT_ADMIN_ADDRESS'		=> DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS,
 		'GUI_ROOT_DIR'				=> DaemonConfig::$cfg->GUI_ROOT_DIR,
-		'PHP_STARTER_DIR'			=> DaemonConfig::$cfg->{'PHP_STARTER_DIR'},
+		'PHP_STARTER_DIR'			=> DaemonConfig::$distro->{'PHP_STARTER_DIR'},
 		'SUEXEC_GID'				=> DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'},
 		'SUEXEC_UID'				=> DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}
 	);
@@ -848,7 +860,7 @@ function GUI_VHOST(){
 		return 'Error: Failed to write '.$confFile;
 	}
 
-	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/apache/working/00_master.conf '.DaemonConfig::$cfg->{'APACHE_SITES_DIR'}.'/00_master.conf', $result, $error);
+	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/apache/working/00_master.conf '.DaemonConfig::$distro->{'APACHE_SITES_DIR'}.'/00_master.conf', $result, $error);
 
 	return 'Ok';
 }
@@ -995,25 +1007,25 @@ function System_cleanup(){
 	switch(DaemonConfig::$cfg->{'DistName'}){
 		case 'CentOS':
 			// Remove Setup vhost
-			unlink(DaemonConfig::$cfg->{'APACHE_CUSTOM_SITES_CONFIG_DIR'}.'/easyscp-setup.conf');
+			unlink(DaemonConfig::$distro->{'APACHE_CUSTOM_SITES_CONFIG_DIR'}.'/easyscp-setup.conf');
 
 			// Disable PHP modul
-			if (file_exists(DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/php.conf')){
-				// exec('mv '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/php.conf '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/php.conf.disable >> /dev/null 2>&1');
-				exec('cat /dev/null > '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/php.conf >> /dev/null 2>&1');
+			if (file_exists(DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/php.conf')){
+				// exec('mv '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/php.conf '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/php.conf.disable >> /dev/null 2>&1');
+				exec('cat /dev/null > '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/php.conf >> /dev/null 2>&1');
 			}
 
 			// TODO Pruefen ob danach SSL noch geht, scheinbar wird das SSL Modul nicht immer geladen
 			// Disable SSL modul
-			if (file_exists(DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/ssl.conf')){
-				// exec('mv '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/ssl.conf '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/ssl.conf.disable >> /dev/null 2>&1');
-				exec('cat /dev/null > '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/ssl.conf >> /dev/null 2>&1');
+			if (file_exists(DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/ssl.conf')){
+				// exec('mv '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/ssl.conf '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/ssl.conf.disable >> /dev/null 2>&1');
+				exec('cat /dev/null > '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/ssl.conf >> /dev/null 2>&1');
 			}
 
 			// Disable Welcome page
-			if (file_exists(DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/welcome.conf')){
-				// exec('mv '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/welcome.conf '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/welcome.conf.disable >> /dev/null 2>&1');
-				exec('cat /dev/null > '.DaemonConfig::$cfg->{'APACHE_MODS_DIR'}.'/welcome.conf >> /dev/null 2>&1');
+			if (file_exists(DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/welcome.conf')){
+				// exec('mv '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/welcome.conf '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/welcome.conf.disable >> /dev/null 2>&1');
+				exec('cat /dev/null > '.DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/welcome.conf >> /dev/null 2>&1');
 			}
 
 			break;
@@ -1022,7 +1034,7 @@ function System_cleanup(){
 			exec('a2dissite easyscp-setup.conf');
 
 			// Remove Setup vhost
-			unlink(DaemonConfig::$cfg->{'APACHE_SITES_DIR'}.'/easyscp-setup.conf');
+			unlink(DaemonConfig::$distro->{'APACHE_SITES_DIR'}.'/easyscp-setup.conf');
 
 			// Enable GUI vhost (Debian like distributions)
 			exec('a2ensite 00_master.conf');

@@ -109,13 +109,13 @@ class DaemonConfigFTP {
 		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_FTP.xml');
 
 		// Create config dir if it doesn't exists
-		if (!file_exists(DaemonConfig::$cfg->{'FTPD_CONF_DIR'})){
-			DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'FTPD_CONF_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
+		if (!file_exists(DaemonConfig::$distro->{'FTPD_CONF_DIR'})){
+			DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'FTPD_CONF_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
 		}
 
 		// Backup current proftpd.conf if exists
-		if (file_exists(DaemonConfig::$cfg->{'FTPD_CONF_FILE'})){
-			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'FTPD_CONF_FILE'} . ' ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/backup/proftpd.conf' . '_' . date("Y_m_d_H_i_s"), $result, $error);
+		if (file_exists(DaemonConfig::$distro->{'FTPD_CONF_FILE'})){
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$distro->{'FTPD_CONF_FILE'} . ' ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/backup/proftpd.conf' . '_' . date("Y_m_d_H_i_s"), $result, $error);
 		}
 
 		// Loading the template from /etc/easyscp/proftpd/parts/, Building the new file
@@ -138,7 +138,7 @@ class DaemonConfigFTP {
 		}
 
 		// Installing the new file
-		exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/proftpd.conf '.DaemonConfig::$cfg->{'FTPD_CONF_FILE'}, $result, $error);
+		exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/proftpd.conf '.DaemonConfig::$distro->{'FTPD_CONF_FILE'}, $result, $error);
 
 		$tpl_param = array(
 			'DATABASE_NAME'		=> $xml->{'DB_DATABASE'},
@@ -160,17 +160,17 @@ class DaemonConfigFTP {
 		}
 
 		// Installing the new file
-		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/proftpd/working/sql.conf '.DaemonConfig::$cfg->FTPD_SQL_CONF_FILE, $result, $error);
+		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/proftpd/working/sql.conf '.DaemonConfig::$distro->FTPD_SQL_CONF_FILE, $result, $error);
 
 		if (file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/parts/modules_' . DaemonConfig::$cfg->{'DistVersion'} . '.conf')) {
 			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/parts/modules_' . DaemonConfig::$cfg->{'DistVersion'} . '.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/modules.conf', $result, $error);
 			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/modules.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'}.'/proftpd/working/modules.conf ' . DaemonConfig::$cfg->FTPD_MODULES_CONF_FILE, $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'}.'/proftpd/working/modules.conf ' . DaemonConfig::$distro->FTPD_MODULES_CONF_FILE, $result, $error);
 
 		}
 
 		$tpl_param = array(
-			'APACHE_WWW_DIR'	=> DaemonConfig::$cfg->{'APACHE_WWW_DIR'}
+			'APACHE_WWW_DIR'	=> DaemonConfig::$distro->{'APACHE_WWW_DIR'}
 		);
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -184,7 +184,7 @@ class DaemonConfigFTP {
 		}
 
 		// Installing the new file
-		exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/' . DaemonConfig::$cfg->{'SERVER_HOSTNAME'} . '.conf ' . DaemonConfig::$cfg->{'FTPD_CONF_DIR'} . '/' . DaemonConfig::$cfg->{'SERVER_HOSTNAME'} . '.conf', $result, $error);
+		exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/' . DaemonConfig::$cfg->{'SERVER_HOSTNAME'} . '.conf ' . DaemonConfig::$distro->{'FTPD_CONF_DIR'} . '/' . DaemonConfig::$cfg->{'SERVER_HOSTNAME'} . '.conf', $result, $error);
 
 		System_Daemon::debug('Finished "DaemonConfigFTP::SaveProFTPdConfig" subprocess.');
 

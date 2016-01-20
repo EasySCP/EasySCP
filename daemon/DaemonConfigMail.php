@@ -27,8 +27,8 @@ class DaemonConfigMail {
 		 */
 
 		// Backup current main.cf if exists
-		if (file_exists(DaemonConfig::$cfg->{'POSTFIX_CONF_FILE'})){
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'POSTFIX_CONF_FILE'} .' '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/backup/main.cf'.'_'.date("Y_m_d_H_i_s"), $result, $error);
+		if (file_exists(DaemonConfig::$distro->{'POSTFIX_CONF_FILE'})){
+			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$distro->{'POSTFIX_CONF_FILE'} .' '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/backup/main.cf'.'_'.date("Y_m_d_H_i_s"), $result, $error);
 		}
 
 		// Loading the template from /etc/easyscp/postfix/, Building the file
@@ -37,13 +37,13 @@ class DaemonConfigMail {
 			'MTA_HOSTNAME'			=> idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'}),
 			'MTA_LOCAL_DOMAIN'		=> idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'}).'.local',
 			'MTA_VERSION'			=> DaemonConfig::$cfg->{'Version'},
-			'MTA_TRANSPORT'			=> DaemonConfig::$cfg->{'MTA_TRANSPORT'},
-			'MTA_LOCAL_MAIL_DIR'	=> DaemonConfig::$cfg->{'MTA_LOCAL_MAIL_DIR'},
-			'MTA_LOCAL_ALIAS_HASH'	=> DaemonConfig::$cfg->{'MTA_LOCAL_ALIAS_HASH'},
-			'MTA_VIRTUAL_MAIL_DIR'	=> DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'},
-			'MTA_VIRTUAL_DMN'		=> DaemonConfig::$cfg->{'MTA_VIRTUAL_DMN'},
-			'MTA_VIRTUAL_MAILBOX'	=> DaemonConfig::$cfg->{'MTA_VIRTUAL_MAILBOX'},
-			'MTA_VIRTUAL_ALIAS'		=> DaemonConfig::$cfg->{'MTA_VIRTUAL_ALIAS'},
+			'MTA_TRANSPORT'			=> DaemonConfig::$distro->{'MTA_TRANSPORT'},
+			'MTA_LOCAL_MAIL_DIR'	=> DaemonConfig::$distro->{'MTA_LOCAL_MAIL_DIR'},
+			'MTA_LOCAL_ALIAS_HASH'	=> DaemonConfig::$distro->{'MTA_LOCAL_ALIAS_HASH'},
+			'MTA_VIRTUAL_MAIL_DIR'	=> DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'},
+			'MTA_VIRTUAL_DMN'		=> DaemonConfig::$distro->{'MTA_VIRTUAL_DMN'},
+			'MTA_VIRTUAL_MAILBOX'	=> DaemonConfig::$distro->{'MTA_VIRTUAL_MAILBOX'},
+			'MTA_VIRTUAL_ALIAS'		=> DaemonConfig::$distro->{'MTA_VIRTUAL_ALIAS'},
 			'MTA_MAILBOX_MIN_UID'	=> DaemonConfig::$cfg->{'MTA_MAILBOX_MIN_UID'},
 			'MTA_MAILBOX_UID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_UID'},
 			'MTA_MAILBOX_GID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_GID'},
@@ -63,7 +63,7 @@ class DaemonConfigMail {
 		}
 
 		// Installing the new file in production directory
-		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/working/main.cf '.DaemonConfig::$cfg->{'POSTFIX_CONF_FILE'}, $result, $error);
+		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/working/main.cf '.DaemonConfig::$distro->{'POSTFIX_CONF_FILE'}, $result, $error);
 
 
 		/**
@@ -71,8 +71,8 @@ class DaemonConfigMail {
 		 */
 
 		// Backup current master.cf if exists
-		if (file_exists(DaemonConfig::$cfg->{'POSTFIX_MASTER_CONF_FILE'})){
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'POSTFIX_MASTER_CONF_FILE'} .' '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/backup/master.cf'.'_'.date("Y_m_d_H_i_s"), $result, $error);
+		if (file_exists(DaemonConfig::$distro->{'POSTFIX_MASTER_CONF_FILE'})){
+			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$distro->{'POSTFIX_MASTER_CONF_FILE'} .' '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/backup/master.cf'.'_'.date("Y_m_d_H_i_s"), $result, $error);
 		}
 
 		// Storing the new file in working directory
@@ -80,7 +80,7 @@ class DaemonConfigMail {
 		DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/working/master.cf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 
 		// Installing the new file in production directory
-		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/working/master.cf '.DaemonConfig::$cfg->{'POSTFIX_MASTER_CONF_FILE'}, $result, $error);
+		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/working/master.cf '.DaemonConfig::$distro->{'POSTFIX_MASTER_CONF_FILE'}, $result, $error);
 
 		// Loading the template from /etc/easyscp/postfix/, Building the file
 
@@ -107,7 +107,7 @@ class DaemonConfigMail {
 			}
 
 			// Installing the new file in production directory
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/working/mysql-virtual_'.$FILE.'.cf '.DaemonConfig::$cfg->{'MTA_VIRTUAL_CONF_DIR'}.'/mysql-virtual_'.$FILE.'.cf', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/postfix/working/mysql-virtual_'.$FILE.'.cf '.DaemonConfig::$distro->{'MTA_VIRTUAL_CONF_DIR'}.'/mysql-virtual_'.$FILE.'.cf', $result, $error);
 		}
 
 		# Adding the mail_admin user
@@ -138,20 +138,20 @@ class DaemonConfigMail {
 				 */
 				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/10-auth.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/10-auth.conf', $result, $error);
 				DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-auth.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-auth.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/10-auth.conf', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-auth.conf '.DaemonConfig::$distro->{'DOVECOT_CONF_DIR'}.'/conf.d/10-auth.conf', $result, $error);
 
 				/**
 				 * 10-logging.conf
 				 */
 				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -f ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/10-logging.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/10-logging.conf', $result, $error);
 				DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-logging.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-logging.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/10-logging.conf', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-logging.conf '.DaemonConfig::$distro->{'DOVECOT_CONF_DIR'}.'/conf.d/10-logging.conf', $result, $error);
 
 				/**
 				 * 10-mail.conf
 				 */
 				$tpl_param = array(
-					'MTA_VIRTUAL_MAIL_DIR'	=> DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'},
+					'MTA_VIRTUAL_MAIL_DIR'	=> DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'},
 					'MTA_MAILBOX_UID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_UID'}
 				);
 
@@ -165,14 +165,14 @@ class DaemonConfigMail {
 					return 'Error: Failed to write '.$confFile;
 				}
 
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-mail.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/10-mail.conf', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-mail.conf '.DaemonConfig::$distro->{'DOVECOT_CONF_DIR'}.'/conf.d/10-mail.conf', $result, $error);
 
 				/**
 				 * 10-master.conf
 				 */
 				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/10-master.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/10-master.conf', $result, $error);
 				DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-master.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-master.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/10-master.conf', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-master.conf '.DaemonConfig::$distro->{'DOVECOT_CONF_DIR'}.'/conf.d/10-master.conf', $result, $error);
 
 				/**
 				 * 10-ssl.conf
@@ -180,7 +180,7 @@ class DaemonConfigMail {
 				if(file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/10-ssl.conf')){
 					exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/10-ssl.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/10-ssl.conf', $result, $error);
 					DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-ssl.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-ssl.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/10-ssl.conf', $result, $error);
+					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/10-ssl.conf '.DaemonConfig::$distro->{'DOVECOT_CONF_DIR'}.'/conf.d/10-ssl.conf', $result, $error);
 				}
 
 				/**
@@ -200,7 +200,7 @@ class DaemonConfigMail {
 					return 'Error: Failed to write '.$confFile;
 				}
 
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/15-lda.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/15-lda.conf', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/15-lda.conf '.DaemonConfig::$distro->{'DOVECOT_CONF_DIR'}.'/conf.d/15-lda.conf', $result, $error);
 
 				/**
 				 * 20-lmtp.conf
@@ -209,7 +209,7 @@ class DaemonConfigMail {
 				if(file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/20-lmtp.conf')){
 					exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/20-lmtp.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/20-lmtp.conf', $result, $error);
 					DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/20-lmtp.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/20-lmtp.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/20-lmtp.conf', $result, $error);
+					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/20-lmtp.conf '.DaemonConfig::$distro->{'DOVECOT_CONF_DIR'}.'/conf.d/20-lmtp.conf', $result, $error);
 				}
 
 				/**
@@ -219,7 +219,7 @@ class DaemonConfigMail {
 				if(file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/20-managesieve.conf')){
 					exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/20-managesieve.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/20-managesieve.conf', $result, $error);
 					DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/20-managesieve.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/20-managesieve.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/20-managesieve.conf', $result, $error);
+					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/20-managesieve.conf '.DaemonConfig::$distro->{'DOVECOT_CONF_DIR'}.'/conf.d/20-managesieve.conf', $result, $error);
 				}
 
 				/**
@@ -229,7 +229,7 @@ class DaemonConfigMail {
 				if(file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/' . $configPath . '/90-sieve.conf')){
 
 					$tpl_param = array(
-						'MTA_VIRTUAL_MAIL_DIR'	=> DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'}
+						'MTA_VIRTUAL_MAIL_DIR'	=> DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'}
 					);
 
 					$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -242,7 +242,7 @@ class DaemonConfigMail {
 						return 'Error: Failed to write '.$confFile;
 					}
 
-					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/90-sieve.conf '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/90-sieve.conf', $result, $error);
+					exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/90-sieve.conf '.DaemonConfig::$distro->{'DOVECOT_CONF_DIR'}.'/conf.d/90-sieve.conf', $result, $error);
 
 				}
 
@@ -253,7 +253,7 @@ class DaemonConfigMail {
 				$tpl_param = array(
 					'MTA_MAILBOX_UID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_UID'},
 					'MTA_MAILBOX_GID'		=> DaemonConfig::$cfg->{'MTA_MAILBOX_GID'},
-					'MTA_VIRTUAL_MAIL_DIR'	=> DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'}
+					'MTA_VIRTUAL_MAIL_DIR'	=> DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'}
 				);
 
 				$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -266,7 +266,7 @@ class DaemonConfigMail {
 					return 'Error: Failed to write '.$confFile;
 				}
 
-				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/auth-sql.conf.ext '.DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'}.'/conf.d/auth-sql.conf.ext', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/dovecot/working/auth-sql.conf.ext '.DaemonConfig::$distro->{'DOVECOT_CONF_DIR'}.'/conf.d/auth-sql.conf.ext', $result, $error);
 
 				/**
 				 * dovecot-sql.conf.ext
@@ -290,7 +290,7 @@ class DaemonConfigMail {
 				}
 
 				// Installing the new file in production directory
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/dovecot-sql.conf.ext ' . DaemonConfig::$cfg->{'DOVECOT_CONF_DIR'} . '/dovecot-sql.conf.ext', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/dovecot/working/dovecot-sql.conf.ext ' . DaemonConfig::$distro->{'DOVECOT_CONF_DIR'} . '/dovecot-sql.conf.ext', $result, $error);
 		}
 
 		unset($configPath);

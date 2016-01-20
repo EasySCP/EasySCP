@@ -18,7 +18,7 @@ require_once(dirname(__FILE__).'/DaemonConfig.php');
 
 $daten = array();
 $dateien = array();
-$LOG_DIR = DaemonConfig::$cfg->{'APACHE_TRAFFIC_LOG_DIR'}.'/';
+$LOG_DIR = DaemonConfig::$distro->{'APACHE_TRAFFIC_LOG_DIR'}.'/';
 
 exec(DaemonConfig::$cmd->CMD_LOGROTATE . ' --force ' . dirname(__FILE__) . '/CronDomainTraffic >> /dev/null 2>&1', $result, $error);
 

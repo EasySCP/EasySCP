@@ -16,8 +16,8 @@ require_once(dirname(__FILE__).'/DaemonDummy.php');
 require_once(dirname(__FILE__).'/DaemonCommon.php');
 require_once(dirname(__FILE__).'/DaemonConfig.php');
 
-$DB_BACKUP_FILE = DaemonConfig::$cfg->{'BACKUP_FILE_DIR'}.'/EasySCP_' . date('Ymd') . '.sql';
-$ETC_BACKUP_FILE = DaemonConfig::$cfg->{'BACKUP_FILE_DIR'}.'/EasySCP_' . date('Ymd') . '.tar';
+$DB_BACKUP_FILE = DaemonConfig::$distro->{'BACKUP_FILE_DIR'}.'/EasySCP_' . date('Ymd') . '.sql';
+$ETC_BACKUP_FILE = DaemonConfig::$distro->{'BACKUP_FILE_DIR'}.'/EasySCP_' . date('Ymd') . '.tar';
 
 DB::backupDatabase(DB::$DB_DATABASE, $DB_BACKUP_FILE);
 if (file_exists($DB_BACKUP_FILE)){
@@ -35,5 +35,5 @@ if (file_exists($ETC_BACKUP_FILE . '.bz2')){
 	DaemonCommon::systemSetFilePermissions($ETC_BACKUP_FILE . '.bz2', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640 );
 }
 
-DaemonBackup::CleanUp(DaemonConfig::$cfg->{'BACKUP_FILE_DIR'});
+DaemonBackup::CleanUp(DaemonConfig::$distro->{'BACKUP_FILE_DIR'});
 ?>

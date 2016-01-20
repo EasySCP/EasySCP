@@ -320,9 +320,9 @@ class DaemonMail {
 
 		if ( $mail_ok ){
 			$mail_dir = substr($row['mail_addr'], strpos($row['mail_addr'], '@') + 1);
-			System_Daemon::info('Delete Mail User Directory ' . DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $mail_dir . '/' . $row['mail_acc']);
-			if (file_exists(DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $mail_dir . '/' . $row['mail_acc'])){
-				exec('rm -R ' . DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $mail_dir . '/' . $row['mail_acc']);
+			System_Daemon::info('Delete Mail User Directory ' . DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $mail_dir . '/' . $row['mail_acc']);
+			if (file_exists(DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $mail_dir . '/' . $row['mail_acc'])){
+				exec('rm -R ' . DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $mail_dir . '/' . $row['mail_acc']);
 			}
 
 

@@ -68,7 +68,7 @@ class DaemonBackup {
 		// Einzelne Schreibweise
 		DB::prepare($sql_query);
 		foreach (DB::execute($sql_param) as $row) {
-			$DB_BACKUP_FILE = DaemonConfig::$cfg->{'APACHE_WWW_DIR'} . '/' . $domainData['domain_name'] . '/backups/' . $row['sqld_name'] . '_' . date('Ymd') . '.sql';
+			$DB_BACKUP_FILE = DaemonConfig::$distro->{'APACHE_WWW_DIR'} . '/' . $domainData['domain_name'] . '/backups/' . $row['sqld_name'] . '_' . date('Ymd') . '.sql';
 			DB::backupDatabase($row['sqld_name'], $DB_BACKUP_FILE);
 			if (file_exists($DB_BACKUP_FILE)){
 				DaemonCommon::systemSetFilePermissions($DB_BACKUP_FILE, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . $domainData['domain_uid'], DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . $domainData['domain_gid'], 0644 );
@@ -87,8 +87,8 @@ class DaemonBackup {
 	 * @return void.
 	 */
 	public static function DomainData($domainData){
-		$DATA_BACKUP_FILE = DaemonConfig::$cfg->{'APACHE_WWW_DIR'} . '/' . $domainData['domain_name'] . '/backups/' . $domainData['domain_name'] . '_' . date('Ymd') . '.tar';
-		exec(DaemonConfig::$cmd->{'CMD_TAR'} . " -cf '" . $DATA_BACKUP_FILE . "' -C '" . DaemonConfig::$cfg->{'APACHE_WWW_DIR'} . "/" . $domainData['domain_name'] . "/' . --exclude=backups --exclude=logs --exclude=phptmp");
+		$DATA_BACKUP_FILE = DaemonConfig::$distro->{'APACHE_WWW_DIR'} . '/' . $domainData['domain_name'] . '/backups/' . $domainData['domain_name'] . '_' . date('Ymd') . '.tar';
+		exec(DaemonConfig::$cmd->{'CMD_TAR'} . " -cf '" . $DATA_BACKUP_FILE . "' -C '" . DaemonConfig::$distro->{'APACHE_WWW_DIR'} . "/" . $domainData['domain_name'] . "/' . --exclude=backups --exclude=logs --exclude=phptmp");
 		if (file_exists($DATA_BACKUP_FILE)){
 			DaemonCommon::systemSetFilePermissions($DATA_BACKUP_FILE, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . $domainData['domain_uid'], DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . $domainData['domain_gid'], 0644 );
 			DaemonBackup::Compress($DATA_BACKUP_FILE);

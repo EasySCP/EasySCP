@@ -264,10 +264,10 @@ class DaemonCommon {
 		self::systemSetPermissionsRecursive(DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/update', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, '0750', '0640');
 
 		// Main virtual webhosts directory must be owned by root and readable by all the domain-specific users.
-		self::systemSetFolderPermissions(DaemonConfig::$cfg->{'APACHE_WWW_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0555);
+		self::systemSetFolderPermissions(DaemonConfig::$distro->{'APACHE_WWW_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0555);
 
 		// Main fcgid directory must be world-readable, because all the domain-specific users must be able to access its contents.
-		self::systemSetFolderPermissions(DaemonConfig::$cfg->{'PHP_STARTER_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0555);
+		self::systemSetFolderPermissions(DaemonConfig::$distro->{'PHP_STARTER_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0555);
 
 		return true;
 	}

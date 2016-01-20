@@ -55,7 +55,7 @@ foreach (DB::query($sql_query) as $row) {
 			System_Daemon::debug("Don't know what to do with " . $row['allowbackup']);
 	}
 
-	DaemonBackup::CleanUp(DaemonConfig::$cfg->{'APACHE_WWW_DIR'} . '/' . $row['domain_name'] . '/backups/', 2);
+	DaemonBackup::CleanUp(DaemonConfig::$distro->{'APACHE_WWW_DIR'} . '/' . $row['domain_name'] . '/backups/', 2);
 }
 
 System_Daemon::debug('Finished "CronDomainBackup".');

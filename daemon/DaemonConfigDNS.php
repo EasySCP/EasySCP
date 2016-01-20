@@ -77,8 +77,8 @@ class DaemonConfigDNS {
 	public static function SavePDNSConfig(){
 		System_Daemon::debug('Starting "DaemonConfigDNS::SavePDNSConfig" subprocess.');
 
-		if (!file_exists(DaemonConfig::$cfg->{'PDNS_DB_DIR'}.'/')){
-			DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'PDNS_DB_DIR'}.'/', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640);
+		if (!file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'}.'/')){
+			DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'PDNS_DB_DIR'}.'/', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640);
 		}
 
 		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml');
@@ -116,14 +116,14 @@ class DaemonConfigDNS {
 				}
 
 				// Installing the new file
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf ' . DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.local.gmysql.conf', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf ' . DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.local.gmysql.conf', $result, $error);
 
-				if(file_exists(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
-					unlink(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
+				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
+					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
 				}
 
-				if(file_exists(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf')) {
-					unlink(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf');
+				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf')) {
+					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf');
 				}
 
 				break;
@@ -141,14 +141,14 @@ class DaemonConfigDNS {
 				}
 
 				// Installing the new file
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf ' . DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.local.gmysql.conf', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf ' . DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.local.gmysql.conf', $result, $error);
 
-				if(file_exists(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
-					unlink(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
+				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
+					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
 				}
 
-				if(file_exists(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf')) {
-					unlink(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf');
+				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf')) {
+					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf');
 				}
 				break;
 			default:
@@ -165,24 +165,24 @@ class DaemonConfigDNS {
 				}
 
 				// Installing the new file
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql ' . DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.local.gmysql', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql ' . DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.local.gmysql', $result, $error);
 
-				if(file_exists(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
-					unlink(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
+				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
+					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
 				}
-				if(file_exists(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.simplebind')) {
-					unlink(DaemonConfig::$cfg->{'PDNS_DB_DIR'} . '/pdns.simplebind');
+				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind')) {
+					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind');
 				}
 
 		}
 
 		// Backup current pdns.conf if exists
-		if (file_exists(DaemonConfig::$cfg->{'PDNS_CONF_FILE'})){
-			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'PDNS_CONF_FILE'} . ' ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/backup/pdns.conf' . '_' . date("Y_m_d_H_i_s"), $result, $error);
+		if (file_exists(DaemonConfig::$distro->{'PDNS_CONF_FILE'})){
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$distro->{'PDNS_CONF_FILE'} . ' ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/backup/pdns.conf' . '_' . date("Y_m_d_H_i_s"), $result, $error);
 		}
 
 		DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640);
-		exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf ' . DaemonConfig::$cfg->{'PDNS_CONF_FILE'}, $result, $error);
+		exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf ' . DaemonConfig::$distro->{'PDNS_CONF_FILE'}, $result, $error);
 
 		System_Daemon::debug('Finished "DaemonConfigDNS::SavePDNSConfig" subprocess.');
 

@@ -65,7 +65,7 @@ class DaemonSystemCommon {
 	protected static function handleCronjobForUser($userID, $userName){
 		System_Daemon::debug('Starting "handleCronjobForUser" subprocess.');
 
-		$confFile = DaemonConfig::$cfg->{'CRON_DIR'} . '/EasySCP_' . $userName;
+		$confFile = DaemonConfig::$distro->{'CRON_DIR'} . '/EasySCP_' . $userName;
 		
 		$sql_param = array(
 			':user_id'	=> $userID,

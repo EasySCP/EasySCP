@@ -84,8 +84,8 @@ $sql_query = "
 $domainData = DB::query($sql_query);
 
 while ($row = $domainData->fetch()) {
-	$wwwPath = DaemonConfig::$cfg->{'APACHE_WWW_DIR'} . '/' . $row['domain_name'];
-	$mailPath = DaemonConfig::$cfg->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $row['domain_name'];
+	$wwwPath = DaemonConfig::$distro->{'APACHE_WWW_DIR'} . '/' . $row['domain_name'];
+	$mailPath = DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'} . '/' . $row['domain_name'];
 	
 	if ($row['domain_disk_countbackup']!=='yes'){
 		$webUsage = getDiskUsage($wwwPath, true);
