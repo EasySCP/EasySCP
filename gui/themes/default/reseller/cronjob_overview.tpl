@@ -22,7 +22,7 @@
 {block name=CONTENT_HEADER}{$TR_SSL_TITLE}{/block}
 
 {block name=BREADCRUMP}
-	<li><a href="/admin/system_info.php">{$TR_MENU_SYSTEM_TOOLS}</a></li>
+	<li><a href="/reseller/user_statistics.php">{$TR_MENU_DOMAIN_STATISTICS}</a></li>
 	<li><a>{$TR_CRONJOB_OVERVIEW}</a></li>
 {/block}
 
@@ -39,6 +39,7 @@
 				<th>{$TR_CRONJOB_NAME}</th>
 				<th>{$TR_DESCR}</th>
 				<th>{$TR_USER}</th>
+				<th>{$TR_STATUS}</th>
 				<th>{$TR_ADMIN_OPTIONS}</th>
 			</tr>
 		</thead>
@@ -50,6 +51,7 @@
 				<td>{$CRON_NAME[i]}</td>
 				<td>{$CRON_DESCR[i]}</td>
 				<td>{$CRON_USER[i]}</td>
+				<td>{$CRON_STATUS[i]}</td>
 				<td>
 					<a href="{$CRON_EDIT_ACTION[i]}" title="{$TR_EDIT}" class="icon i_edit"></a>
 					<a href="#" onclick="action_delete('{$CRON_DELETE_ACTION[i]}', '{$CRON_NAME[i]}')" title="{$TR_DELETE}" class="icon i_delete"></a>

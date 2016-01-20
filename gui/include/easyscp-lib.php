@@ -119,6 +119,7 @@ require_once 'debug.php';
 require_once 'emailtpl-functions.php';
 require_once 'functions.order_system.php';
 require_once 'functions.ticket_system.php';
+require_once 'functions.cronjobs.php';
 require_once 'input-checks.php';
 require_once 'layout-functions.php';
 require_once 'lostpassword-functions.php';

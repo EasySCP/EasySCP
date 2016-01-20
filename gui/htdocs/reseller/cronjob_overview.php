@@ -17,12 +17,12 @@ check_login(__FILE__);
 $cfg = EasySCP_Registry::get('Config');
 
 $tpl = EasySCP_TemplateEngine::getInstance();
-$template = 'admin/cronjob_overview.tpl';
+$template = 'reseller/cronjob_overview.tpl';
 
 $tpl->assign(
 	array(
-		'TR_PAGE_TITLE'				=> tr('EasySCP - Admin/Manage cronjobs'),
-		'TR_CLIENT_CRONJOBS_TITLE'	=> tr('EasySCP - Admin/Cronjob Manager'),
+		'TR_PAGE_TITLE'				=> tr('EasySCP - Reseller/Manage cronjobs'),
+		'TR_CLIENT_CRONJOBS_TITLE'	=> tr('EasySCP - Reseller/Cronjob Manager'),
 		'THEME_COLOR_PATH'			=> "../themes/{$cfg->USER_INITIAL_THEME}",
 		'THEME_CHARSET'				=> tr('encoding'),
 		'TR_CRONJOB_OVERVIEW'		=> tr('Cronjob Overview')
@@ -33,46 +33,6 @@ $tpl->assign(
  * functions start
  */
 
-function getCronjobQuery($adminType){
-	$sql_query = "
-		SELECT
-			*
-		FROM
-			cronjobs
-	";
-	switch ($adminType) {
-		case 'admin':
-			break;
-		case 'reseller':
-			$sql_query .= "
-				WHERE
-					user_id IN (SELECT 
-							admin_id
-						FROM
-							admin
-						WHERE
-							created_by = :user_id);
-			";
-			break;
-		default:
-			$sql_query .= "
-				WHERE user_id = :user_id
-			";
-			break;
-	}
-	$sql_query .= "
-		ORDER BY
-			user_id, name";
-	
-	$sql_param = array(
-			':user_id'		=> $_SESSION['user_id'],
-	);
-	
-	DB::prepare($sql_query);
-	$rs = DB::execute($sql_param);
-
-	return $rs;
-}
 /**
  * Generate list of all available cronjobs
  */
@@ -94,6 +54,7 @@ function gen_cron_job_list($tpl) {
 					'CRON_NAME'				=> $row['name'],
 					'CRON_DESCR'			=> $row['description'],
 					'CRON_USER'				=> $row['user'],
+					'CRON_STATUS'			=> translate_dmn_status($row['status']),
 					'CRON_DELETE_ACTION'	=> 'cronjob_manage.php?delete_cron_id=' . $row['id'],
 					'CRON_EDIT_ACTION'		=> 'cronjob_manage.php?edit_cron_id=' . $row['id'],
 					'CRON_STATUS_ACTION'	=> 'cronjob_manage.php?status_cron_id=' . $row['id'],
@@ -116,8 +77,8 @@ function gen_cron_job_list($tpl) {
  *
  */
 
-gen_admin_mainmenu($tpl, 'admin/main_menu_system_tools.tpl');
-gen_admin_menu($tpl, 'admin/menu_system_tools.tpl');
+gen_reseller_mainmenu($tpl, 'reseller/main_menu_users_manage.tpl');
+gen_reseller_menu($tpl, 'reseller/menu_users_manage.tpl');
 
 gen_page_message($tpl);
 
@@ -142,6 +103,7 @@ $tpl->assign(
 		'TR_USER'					=> tr('User'),
 		'TR_DESCR'					=> tr('Description'),
 		'TR_ADMIN_OPTIONS'			=> tr('Admin options'),
+		'TR_STATUS'					=> tr('Status'),
 		'TR_OWNER'					=> tr('Owner'),
 	)
 );

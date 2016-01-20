@@ -118,6 +118,8 @@ function gen_reseller_menu($tpl, $menu_file) {
 			'TR_MENU_ORDER_EMAIL'			=> tr('Order email setup'),
 
 			'TR_MENU_IP_USAGE'				=> tr('IP Usage'),
+			'TR_MENU_CRONJOB_OVERVIEW'		=> tr('Cronjob Overview'),
+			'TR_MENU_CRONJOB_ADD'			=> tr('Add Cronjob'),
 
 			'TR_OPEN_TICKETS'				=> tr('Open tickets'),
 			'TR_CLOSED_TICKETS'				=> tr('Closed tickets'),

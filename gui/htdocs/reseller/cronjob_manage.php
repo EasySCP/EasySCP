@@ -17,12 +17,12 @@ check_login(__FILE__);
 $cfg = EasySCP_Registry::get('Config');
 
 $tpl = EasySCP_TemplateEngine::getInstance();
-$template = 'admin/cronjob_manage.tpl';
+$template = 'reseller/cronjob_manage.tpl';
 
 // static page messages
 $tpl->assign(
 	array(
-		'TR_CLIENT_CRONJOBS_TITLE'	=> tr('EasySCP - Admin/Cronjob Manager'),
+		'TR_CLIENT_CRONJOBS_TITLE'	=> tr('EasySCP - Reseller/Cronjob Manager'),
 	)
 );
 
@@ -39,8 +39,8 @@ if (isset($_GET['status_cron_id']) && is_numeric($_GET['status_cron_id'])) {
  * static page messages.
  *
  */
-gen_admin_mainmenu($tpl, 'admin/main_menu_system_tools.tpl');
-gen_admin_menu($tpl, 'admin/menu_system_tools.tpl');
+gen_reseller_mainmenu($tpl, 'reseller/main_menu_users_manage.tpl');
+gen_reseller_menu($tpl, 'reseller/menu_users_manage.tpl');
 
 gen_logged_from($tpl);
 

@@ -470,6 +470,9 @@ function gen_client_menu($tpl, $menu_file) {
 			'TR_MENU_CATCH_ALL_MAIL'		=> tr('Catch all'),
 			'WEBMAIL_PATH'					=> $cfg->WEBMAIL_PATH,
 			'TR_WEBMAIL'					=> tr('Webmail'),
+			
+			'TR_MENU_CRONJOB_OVERVIEW'		=> tr('Cronjob Overview'),
+			'TR_MENU_CRONJOB_ADD'			=> tr('Add Cronjob'),
 
 			'TR_MENU_ADD_FTP_USER'			=> tr('Add FTP user'),
 			'FILEMANAGER_PATH'				=> $cfg->FILEMANAGER_PATH,
