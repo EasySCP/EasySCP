@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EasySCP a Virtual Hosting Control Panel
+	Copyright (C) 2010-2016 by Easy Server Control Panel - http://www.easyscp.net
+
+	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+
+	@link 		http://www.easyscp.net
+	@author		EasySCP Team
+-->
+<EasySCP_Config>
+	<BuildDate />
+	<Version />
+	<DistName />
+	<DistVersion />
+	<DEFAULT_ADMIN_ADDRESS />
+	<SERVER_HOSTNAME />
+	<BASE_SERVER_IP />
+	<BASE_SERVER_IPv6 />
+	<BASE_SERVER_VHOST />
+	<BASE_SERVER_VHOST_PREFIX>http://</BASE_SERVER_VHOST_PREFIX>
+
+	<!--
+		TODO: Check them when GUI Config has changed to XML
+		SQL backend variables
+	-->
+	<DATABASE_HOST />
+	<DATABASE_NAME />
+	<DATABASE_PASSWORD />
+	<DATABASE_USER />
+	<DATABASE_DEFAULT_CHARACTER_SET>utf8</DATABASE_DEFAULT_CHARACTER_SET>
+	<DATABASE_DEFAULT_COLLATE>utf8_unicode_ci</DATABASE_DEFAULT_COLLATE>
+
+	<!--
+		Main variables
+	-->
+	<CONF_DIR>/etc/easyscp</CONF_DIR>
+	<DAEMON_ROOT_DIR>/var/www/easyscp/daemon</DAEMON_ROOT_DIR>
+	<GUI_ROOT_DIR>/var/www/easyscp/gui</GUI_ROOT_DIR>
+	<LOG_DIR>/var/log/easyscp</LOG_DIR>
+	<ROOT_DIR>/var/www/easyscp</ROOT_DIR>
+	<ROOT_GROUP>root</ROOT_GROUP>
+	<ROOT_USER>root</ROOT_USER>
+	<SOCK_EASYSCPC>/var/run/easyscp_control/easyscp_control.sock</SOCK_EASYSCPC>
+	<SOCK_EASYSCPD>/var/run/easyscp_daemon/easyscp_daemon.sock</SOCK_EASYSCPD>
+	<SRV_TRAFF_LOG_DIR>/var/log/easyscp/srv-traff</SRV_TRAFF_LOG_DIR>
+
+	<!--
+		Apache data
+	-->
+	<APACHE_SUEXEC_MIN_GID>2000</APACHE_SUEXEC_MIN_GID>
+	<APACHE_SUEXEC_MIN_UID>2000</APACHE_SUEXEC_MIN_UID>
+	<APACHE_SUEXEC_USER_PREF>vu</APACHE_SUEXEC_USER_PREF>
+
+	<!--
+		AWStats data
+	-->
+	<AWSTATS_ACTIVE>no</AWSTATS_ACTIVE>
+	<!--
+		could be 'dynamic' = 0 or 'static' = 1
+	-->
+	<AWSTATS_MODE>0</AWSTATS_MODE>
+
+	<!--
+		Debug Mode (e.g. for developers)
+		options: 0 = off, 1 = on
+	-->
+	<DEBUG>0</DEBUG>
+
+	<!--
+		DNS data
+	-->
+	<LOCAL_DNS_RESOLVER />
+	<SECONDARY_DNS />
+
+	<!--
+		PHP data
+	-->
+	<PHP_TIMEZONE />
+
+	<!--
+		Postfix MTA data
+	-->
+	<MTA_MAILBOX_MIN_UID>1004</MTA_MAILBOX_MIN_UID>
+	<MTA_MAILBOX_GID>8</MTA_MAILBOX_GID>
+	<MTA_MAILBOX_GID_NAME>mail</MTA_MAILBOX_GID_NAME>
+	<MTA_MAILBOX_UID>1004</MTA_MAILBOX_UID>
+	<MTA_MAILBOX_UID_NAME>vmail</MTA_MAILBOX_UID_NAME>
+	<MTA_SSL_STATUS />
+
+	<!--
+		Postgrey data
+	-->
+	<PORT_POSTGREY>10023</PORT_POSTGREY>
+
+	<!--
+		SSL data
+	-->
+	<SSL_STATUS>0</SSL_STATUS>
+
+	<!--
+		SQL config
+	-->
+	<MYSQL_PREFIX>no</MYSQL_PREFIX>
+	<!--
+		'' for MYSQL_PREFIX = no,
+		'infront' or 'behind' for MYSQL_PREFIX = yes
+	-->
+	<MYSQL_PREFIX_TYPE />
+</EasySCP_Config>
