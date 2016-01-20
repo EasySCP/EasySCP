@@ -263,39 +263,39 @@ function SetupEasySCP_Users(){
 
 function EasySCP_Directories(){
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'APACHE_WWW_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$distro->{'APACHE_WWW_DIR'};
+		return 'Error: Failed to create "APACHE_WWW_DIR": '.DaemonConfig::$distro->{'APACHE_WWW_DIR'};
 	}
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'APACHE_TRAFFIC_LOG_DIR'}, DaemonConfig::$distro->{'APACHE_USER'}, DaemonConfig::$distro->{'APACHE_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$distro->{'APACHE_TRAFFIC_LOG_DIR'};
+		return 'Error: Failed to create "APACHE_TRAFFIC_LOG_DIR": '.DaemonConfig::$distro->{'APACHE_TRAFFIC_LOG_DIR'};
 	}
 
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'MTA_VIRTUAL_CONF_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$distro->{'MTA_VIRTUAL_CONF_DIR'};
+		return 'Error: Failed to create "MTA_VIRTUAL_CONF_DIR": '.DaemonConfig::$distro->{'MTA_VIRTUAL_CONF_DIR'};
 	}
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'}, DaemonConfig::$cfg->{'MTA_MAILBOX_UID_NAME'}, DaemonConfig::$cfg->{'MTA_MAILBOX_GID_NAME'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'};
+		return 'Error: Failed to create "MTA_VIRTUAL_MAIL_DIR": '.DaemonConfig::$distro->{'MTA_VIRTUAL_MAIL_DIR'};
 	}
 
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'LOG_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$cfg->{'LOG_DIR'};
+		return 'Error: Failed to create "LOG_DIR": '.DaemonConfig::$cfg->{'LOG_DIR'};
 	}
 
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'SRV_TRAFF_LOG_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0700)){
-		return 'Error: Failed to create '.DaemonConfig::$cfg->{'SRV_TRAFF_LOG_DIR'};
+		return 'Error: Failed to create "SRV_TRAFF_LOG_DIR": '.DaemonConfig::$cfg->{'SRV_TRAFF_LOG_DIR'};
 	}
 
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'BACKUP_FILE_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$distro->{'BACKUP_FILE_DIR'};
+		return 'Error: Failed to create "BACKUP_FILE_DIR": '.DaemonConfig::$distro->{'BACKUP_FILE_DIR'};
 	}
 
 	if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'PHP_STARTER_DIR'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755)){
-		return 'Error: Failed to create '.DaemonConfig::$distro->{'PHP_STARTER_DIR'};
+		return 'Error: Failed to create "PHP_STARTER_DIR": '.DaemonConfig::$distro->{'PHP_STARTER_DIR'};
 	}
 
 	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 	if ($xml->{'AWStats'} == '_yes_'){
 		if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'AWSTATS_CACHE_DIR'}, DaemonConfig::$distro->{'APACHE_USER'}, DaemonConfig::$distro->{'APACHE_GROUP'}, 0755)){
-			return 'Error: Failed to create '.DaemonConfig::$distro->{'AWSTATS_CACHE_DIR'};
+			return 'Error: Failed to create "AWSTATS_CACHE_DIR": '.DaemonConfig::$distro->{'AWSTATS_CACHE_DIR'};
 		}
 		DaemonConfig::$cfg->{'AWSTATS_ACTIVE'} = 'yes';
 	} else {
