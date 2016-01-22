@@ -1,9 +1,13 @@
 EasySCP 2.1.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2016-01-13
+2016-01-22
 	- DOCS:
 		* Add: Ubuntu 16.04 LTS package file
+
+	- GUI:
+   		* Update: jQuery to version 1.12.0
+
 	- Setup:
 		* Add: Ubuntu 16.04 LTS support
 
