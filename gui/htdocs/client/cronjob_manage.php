@@ -22,19 +22,18 @@ $template = 'client/cronjob_manage.tpl';
 // static page messages
 $tpl->assign(
 	array(
-		'TR_CLIENT_CRONJOBS_TITLE'	=> tr('EasySCP - Admin/Cronjob Manager'),
+		'TR_CLIENT_CRONJOBS_TITLE' => tr('EasySCP - Client/Cronjob Manager'),
 	)
 );
 
 if (isset($_GET['delete_cron_id']) && is_numeric($_GET['delete_cron_id'])) {
-	deleteCronJob($_GET['delete_cron_id']);
+	EasyCron::deleteCronJob($_GET['delete_cron_id']);
 	user_goto('cronjob_overview.php');
 }
 if (isset($_GET['status_cron_id']) && is_numeric($_GET['status_cron_id'])) {
-	toggleCronStatus($_GET['status_cron_id']);
+	EasyCron::toggleCronStatus($_GET['status_cron_id']);
 	user_goto('cronjob_overview.php');
 }
-/**
 /*
  *
  * static page messages.
@@ -47,7 +46,7 @@ gen_logged_from($tpl);
 
 check_permissions($tpl);
 if (isset($_POST['uaction']) && $_POST['uaction'] === 'add_cronjob') {
-	addCronJob();
+	EasyCron::addCronJob();
 	user_goto('cronjob_overview.php');
 }
 
@@ -75,15 +74,15 @@ $tpl->assign(
 	)
 );
 if (isset($_GET['edit_cron_id']) && is_numeric($_GET['edit_cron_id'])) {
-	
-	$rs = getCronJobByID($_GET['edit_cron_id']);
+
+	$rs = EasyCron::getCronJobByID($_GET['edit_cron_id']);
 
 	if ($rs->rowCount() <= 0) {
 		user_goto('cronjob_overview.php');
 	} else {
-		$row=$rs->fetch();
-		$scheduleSplit=explode(' ',$row['schedule']);
-		if (count($scheduleSplit)==5){
+		$row = $rs->fetch();
+		$scheduleSplit = explode(' ', $row['schedule']);
+		if (count($scheduleSplit) == 5) {
 			$tpl->assign(
 				array(
 					'MINUTE_EXPERT'				=> $scheduleSplit[0],
@@ -93,12 +92,12 @@ if (isset($_GET['edit_cron_id']) && is_numeric($_GET['edit_cron_id'])) {
 					'DOW_EXPERT'				=> $scheduleSplit[4],
 				)
 			);
-			$minutes = explode(',',$scheduleSplit[0]);
-			$days = explode(',',$scheduleSplit[2]);
-			$hours = explode(',',$scheduleSplit[1]);
-			$months = explode(',',$scheduleSplit[3]);
-			$weekdays = explode(',',$scheduleSplit[4]);
-		}else {
+			$minutes = explode(',', $scheduleSplit[0]);
+			$days = explode(',', $scheduleSplit[2]);
+			$hours = explode(',', $scheduleSplit[1]);
+			$months = explode(',', $scheduleSplit[3]);
+			$weekdays = explode(',', $scheduleSplit[4]);
+		} else {
 			$tpl->assign(
 				array(
 					'MINUTE_EXPERT'				=> '*',
@@ -127,9 +126,9 @@ if (isset($_GET['edit_cron_id']) && is_numeric($_GET['edit_cron_id'])) {
 				'SIMPLE_SELECT'				=>'',
 			)
 		);
+		$schedule = $row['schedule'];
+		$user = $row['user'];
 	}
-	$schedule = $row['schedule'];
-	$user=$row['user'];
 } else {
 	$tpl->assign(
 		array(
@@ -155,17 +154,17 @@ if (isset($_GET['edit_cron_id']) && is_numeric($_GET['edit_cron_id'])) {
 	$hours = array('*');
 	$months = array('*');
 	$weekdays = array('*');
-	$user='';
-	$schedule='';
+	$user = '';
+	$schedule = '';
 }
-detectExpertMode($tpl,$schedule);
-genMinuteSelect($tpl,$minutes);
-genHourSelect($tpl,$hours);
-genDayOfMonthSelect($tpl,$days);
-genDayOfWeekSelect($tpl,$weekdays);
-genMonthSelect($tpl,$months);
-genUserSelect($tpl,$user);
-genSimpleSelect($tpl,$schedule);
+EasyCron::detectExpertMode($tpl, $schedule);
+EasyCron::genMinuteSelect($tpl, $minutes);
+EasyCron::genHourSelect($tpl, $hours);
+EasyCron::genDayOfMonthSelect($tpl, $days);
+EasyCron::genDayOfWeekSelect($tpl, $weekdays);
+EasyCron::genMonthSelect($tpl, $months);
+EasyCron::genUserSelect($tpl, $user);
+EasyCron::genSimpleSelect($tpl, $schedule);
 
 gen_page_message($tpl);
 

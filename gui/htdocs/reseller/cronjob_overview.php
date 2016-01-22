@@ -30,48 +30,6 @@ $tpl->assign(
 );
 
 /*
- * functions start
- */
-
-/**
- * Generate list of all available cronjobs
- */
-function gen_cron_job_list($tpl) {
-	$rs = getCronjobs($_SESSION['user_type'], $_SESSION['user_id']);
-	
-	if ($rs->rowCount() == 0) {
-		$tpl->assign(array(
-			'CRON_MSG'		=> tr('Cronjob list is empty!'),
-			'CRON_MSG_TYPE'	=> 'info',
-			'CRON_LIST'		=> '')
-		);
-	} else {
-		while ($row=$rs->fetch()) {
-			$tpl->append(
-				array(
-					'STATUS_ICON'			=> $row['active']=='yes'?'ok':'disabled',
-					'CRON_OWNER'			=> $row['admin_name'],
-					'CRON_NAME'				=> $row['name'],
-					'CRON_DESCR'			=> $row['description'],
-					'CRON_USER'				=> $row['user'],
-					'CRON_STATUS'			=> translate_dmn_status($row['status']),
-					'CRON_DELETE_ACTION'	=> 'cronjob_manage.php?delete_cron_id=' . $row['id'],
-					'CRON_EDIT_ACTION'		=> 'cronjob_manage.php?edit_cron_id=' . $row['id'],
-					'CRON_STATUS_ACTION'	=> 'cronjob_manage.php?status_cron_id=' . $row['id'],
-				)
-			);
-//			$rs->moveNext();
-		}
-
-		$tpl->assign('SUB_MESSAGE', '');
-	}
-} // End of gen_cron_job_list();
-
-/*
- * functions end
- */
-
-/*
  *
  * static page messages.
  *
@@ -86,7 +44,7 @@ gen_logged_from($tpl);
 
 check_permissions($tpl);
 
-gen_cron_job_list($tpl);
+EasyCron::genCronjobLlist($tpl);
 
 $tpl->assign(
 	array(
@@ -103,7 +61,6 @@ $tpl->assign(
 		'TR_USER'					=> tr('User'),
 		'TR_DESCR'					=> tr('Description'),
 		'TR_ADMIN_OPTIONS'			=> tr('Admin options'),
-		'TR_STATUS'					=> tr('Status'),
 		'TR_OWNER'					=> tr('Owner'),
 	)
 );

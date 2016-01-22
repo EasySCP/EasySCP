@@ -63,9 +63,10 @@ class DaemonSystemCommon {
 	 * @return mixed
 	 */
 	protected static function handleCronjobForUser($userID, $userName){
-		System_Daemon::debug('Starting "handleCronjobForUser" subprocess.');
-
-		$confFile = DaemonConfig::$distro->{'CRON_DIR'} . '/EasySCP_' . $userName;
+		// Due to bug https://bugs.launchpad.net/ubuntu/+source/cron/+bug/706565 all . in username must be removed or 
+		// replaced. Otherwise the cronjobs never run.
+		$confUser = str_replace('.','_',$userName);
+		$confFile = DaemonConfig::$distro->{'CRON_DIR'} . '/EasySCP_' . $confUser;
 		
 		$sql_param = array(
 			':user_id'	=> $userID,
@@ -173,7 +174,7 @@ class DaemonSystemCommon {
 		$xml->formatOutput = true;
 		$comment = $xml->createComment("
 			EasySCP a Virtual Hosting Control Panel
-			Copyright (C) 2010-2016 by Easy Server Control Panel - http://www.easyscp.net
+			Copyright (C) 2010-" . date('Y') . " by Easy Server Control Panel - http://www.easyscp.net
 
 			This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 			To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -203,6 +204,22 @@ class DaemonSystemCommon {
 		}
 
 		$fileSize = $xml->save(EasyConfig_PATH . 'Iana_TLD.xml');
+		
+		$sql_query = "
+			INSERT INTO
+				config (name, value)
+			VALUES
+				('IANA_LAST_UPDATE', :time)
+			ON DUPLICATE KEY UPDATE
+			 	value = SYSDATE( )
+			";
+		$sql_param = array ( 
+			':time' => time()
+		);
+		
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+		
 		System_Daemon::debug("Wrote $fileSize to Iana_TLD.xml file");
 		System_Daemon::debug('Finished "updateIanaXML" subprocess.');
 
