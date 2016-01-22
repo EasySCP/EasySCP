@@ -27,6 +27,79 @@ class DaemonDNS {
 	}
 
 	/**
+	 * Get UID and IP address for given domain_id
+	 * @param $dmn_id
+	 * @return mixed
+	 * @throws Exception
+	 */
+	private static function getUidAndIP($dmn_id){
+		$sql_param = array(
+			"domain_id" => $dmn_id,
+		);
+
+		$sql_query = "
+			SELECT
+				d.domain_uid,
+				i.ip_number
+			FROM
+				domain d,
+				server_ips i
+			WHERE
+				d.domain_id = :domain_id
+			AND
+				d.domain_ip_id = i.ip_id;
+		";
+
+		DB::prepare($sql_query);
+		$row = DB::execute($sql_param, true);
+
+		return $row;
+	}
+	/**
+	 * Add server Alias (vuXXXX.myserver.tld) to DNS
+	 * @return bool
+	 */
+	public static function AddServerAlias($dmn_id){
+
+		System_Daemon::debug('Finished "DaemonDNS::AddServerAlias" subprocess.');
+
+		$row = self::getUidAndIP($dmn_id);
+
+		$dmn_uid = $row['domain_uid'];
+		$dmn_ip = $row['ip_number'];
+		$dmn_name = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $dmn_uid . "." . DaemonConfig::$cfg->BASE_SERVER_VHOST;
+
+		$sql_param[] = array(
+			'domain_id'		=> 1,
+			'domain_name'	=> $dmn_name,
+			'domain_type'	=> 'A',
+			'domain_content'=> $dmn_ip,
+			'domain_ttl'	=> '7200',
+			'domain_prio'	=> NULL
+		);
+
+		$sql_query = "
+			INSERT INTO
+				powerdns.records (domain_id, name, type, content, ttl, prio)
+			VALUES
+				(:domain_id, :domain_name, :domain_type, :domain_content, :domain_ttl, :domain_prio)
+			ON DUPLICATE KEY UPDATE
+			 	name = :domain_name;
+		";
+
+		$stmt = DB::prepare($sql_query);
+
+		foreach ($sql_param as $data) {
+			$stmt->execute($data);
+		}
+
+		$stmt = Null;
+
+		System_Daemon::debug('Finished "DaemonDNS::AddDefaultDNSEntries" subprocess.');
+
+		return true;
+	}
+	/**
 	 * Adds default DNS entries when adding a domain
 	 *
 	 * @param int $dmn_id Domain ID
@@ -216,6 +289,8 @@ class DaemonDNS {
 		$stmt = Null;
 		unset($stmt);
 
+		self::AddServerAlias($dmn_id);
+
 		System_Daemon::debug('Finished "DaemonDNS::AddDefaultDNSEntries" subprocess.');
 
 		return true;
@@ -225,12 +300,12 @@ class DaemonDNS {
 	 */
 	public static function UpdateNotifiedSerial($domainData) {
 		System_Daemon::debug('Starting "DaemonDNS::UpdateNotifiedSerial" subprocess.');
-		
+
 		$sql_param = array(
-			'domain_id' => $dmn_id,
-			'domain_name' => $dmn_name,
+			'domain_id' => $domainData['domain_id'],
+			'domain_name' => $domainData['domain_name'],
             'domain_type' => 'SOA',
-            'domain_content' => 'ns1.'.$dmn_name.'. '.DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' '.time().' 12000 1800 604800 86400',
+            'domain_content' => 'ns1.'.$domainData['domain_name'].'. '.DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' '.time().' 12000 1800 604800 86400',
             'domain_ttl' => '3600',
             'domain_prio' => Null
 		);
@@ -243,7 +318,7 @@ class DaemonDNS {
 			ON DUPLICATE KEY UPDATE
 				name = :domain_name, content = :domain_content;
 			";
-		
+
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
 
@@ -327,18 +402,19 @@ class DaemonDNS {
 
 		$sql_query = "
 			DELETE
-				powerdns.domains.*,
-				powerdns.records.*
+				domains.*,
+                records.*
 			FROM
-				powerdns.domains AS domains
+				powerdns.domains domains
 			LEFT JOIN
-				powerdns.records AS records ON domains.id = records.domain_id
+				powerdns.records records ON domains.id = records.domain_id
 			WHERE
-				domains.$id_string = :domain_id;
-			";
-
+				domains.easyscp_domain_id = :domain_id
+		";
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
+
+		self::DeleteServerAlias($dmn_id);
 
 		System_Daemon::debug('Finished "DaemonDNS::DeleteDomainDNSEntries" subprocess.');
 
@@ -372,6 +448,25 @@ class DaemonDNS {
 		System_Daemon::debug('Finished "DaemonDNS::DeleteDNSEntry" subprocess.');
 
 		return true;
+	}
+
+	/**
+	 * Delete server alias (vuXXXX.myserver.tld) from DNS
+	 * @param $dmn_id
+	 * @return bool
+	 */
+	public static function DeleteServerAlias($dmn_id){
+
+		$row = self::getUidAndIP($dmn_id);
+
+		System_Daemon::debug("Domain ID: ".$dmn_id);
+		$domainData = array(
+			'subdomain_name'	=> DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $row['domain_uid'],
+			'domain_name'		=> DaemonConfig::$cfg->BASE_SERVER_VHOST
+		);
+		System_Daemon::debug('Trying to delete name:' .	$domainData['subdomain_name'] . '.' . $domainData['domain_name']);
+
+		return self::DeleteDNSEntry($domainData);
 	}
 }
 ?>

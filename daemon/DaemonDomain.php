@@ -305,22 +305,22 @@ class DaemonDomain extends DaemonDomainCommon {
 					return $msg . '<br />' . $retVal;
 				}
 
-				$retVal = self::deleteDomain($domainData);
-				if ($retVal !== true) {
-					$msg = 'Deleting domain failed';
-					System_Daemon::debug($msg);
-					return $msg . '<br />' . $retVal;
-				}
-
+				// Needs to be before deletedomain because DNS entry for vuXXXX must be deleted as well
 				$retVal = DaemonDNS::DeleteAllDomainDNSEntries($domainData['domain_id']);
 				if ($retVal !== true) {
 					$msg = 'Deleting of domain dns entries failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
+
+				$retVal = self::deleteDomain($domainData);
+				if ($retVal !== true) {
+					$msg = 'Deleting domain failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
 				break;
 			case 'disable':
-				// TODO Nochmal duchgehen, den eigentlich sollte hier die "disable" Page kommen bzw. ins system kopiert werden, und nicht die ganze Domain entfernt bzw. deaktiviert werden
 				$retVal = self::apacheDisableSite($domainData['domain_name']);
 				if ($retVal !== true) {
 					$msg = 'Disabling domain failed';
