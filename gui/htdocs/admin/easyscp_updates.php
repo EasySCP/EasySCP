@@ -30,6 +30,14 @@ $cfg = EasySCP_Registry::get('Config');
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'admin/easyscp_updates.tpl';
 
+if (isset($_POST['execute_iana_update'])){
+	if (send_request('160 SYSTEM updateIana')){
+		set_page_message(tr('Successfully updated IANA TLD list!'), 'success');
+	} else {
+		set_page_message(tr('Update of IANA TLD list failed!'), 'warning');
+	}
+}
+
 $dbUpdate = EasySCP_Update_Database::getInstance();
 
 if(isset($_POST['execute']) && $_POST['execute'] == 'update') {
@@ -90,9 +98,13 @@ $tpl->assign(
 		'TR_DB_AVAILABLE_UPDATES'	=> tr('Available database updates'),
 		'TR_UPDATE'					=> tr('Update'),
 		'TR_INFOS'					=> tr('Update details'),
-		'TR_MIGRATION_TITLE'		=> tr('Data Migration/Import from other Panels')
+		'TR_MIGRATION_TITLE'		=> tr('Data Migration/Import from other Panels'),
+		'TR_IANA_UPDATES_TITLE'		=> tr('Update TLD list from IANA'),
+		'TR_IANA_LAST_UPDATE'		=> tr('The Iana TLD database was last updated on'),
 	)
 );
+
+getIanaLastUpdate($tpl);
 
 gen_admin_mainmenu($tpl, 'admin/main_menu_system_tools.tpl');
 gen_admin_menu($tpl, 'admin/menu_system_tools.tpl');
@@ -106,6 +118,27 @@ if ($cfg->DUMP_GUI_DEBUG) {
 $tpl->display($template);
 
 unset_messages();
+
+function getIanaLastUpdate($tpl){
+	$sql_query = "
+	    SELECT
+			*
+		FROM
+			config
+		WHERE
+			name = 'IANA_LAST_UPDATE'
+	";
+
+	$rs = DB::query($sql_query,true);
+	
+	$date = date( 'd. m. Y H:i:s', $rs['value'] );
+	
+	$tpl->assign(
+		array(
+			'IANA_LAST_UPDATE'	=> $date,
+		)
+	);
+}
 
 /**
  * @param EasySCP_TemplateEngine $tpl

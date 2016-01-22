@@ -106,4 +106,13 @@
 		</form>
 	{/if}
 {/if}
+<br />
+<h2 class="update"><span>{$TR_IANA_UPDATES_TITLE}</span></h2>
+<form action="/admin/easyscp_updates.php" method="post" id="update_iana_tld">
+	{$TR_IANA_LAST_UPDATE} {$IANA_LAST_UPDATE}
+	<div class="buttons">
+		<input type="hidden" name="execute_iana_update" id='execute_iana_update' value="update" />
+		<input type="submit" name="Submit" value="{$TR_EXECUTE_UPDATE}" />
+	</div>
+</form>
 {/block}

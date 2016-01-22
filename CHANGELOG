@@ -7,12 +7,16 @@ EasySCP 2.1.0 ChangeLog
 
 	- GUI:
    		* Update: jQuery to version 1.12.0
+		* Add: Cronjobs for all users
+		* Add: Call Iana update from GUI
 
 	- Setup:
 		* Add: Ubuntu 16.04 LTS support
 
 	- System:
 		* Add: PHP 7 support
+		* Improved: Menu handling
+		* Fix: Creation and deletion of vuXXXX DNS entries (Issue #9)
 
 	- TOOLS:
 		* Update: net2ftp to version 1.0 build 47
