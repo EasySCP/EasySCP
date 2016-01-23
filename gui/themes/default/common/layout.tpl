@@ -33,7 +33,13 @@
 </head>
 <body>
 	<div class="header">
-	{include file="$MAIN_MENU"}
+		<div class="main_menu">
+			<ul class="icons">
+				<li><a href="/pma" class="external" title="phpMyAdmin"><span class="database icon_link">&nbsp;</span></a></li>
+				<li><a href="/ftp" class="external" title="Filemanager"><span class="ftp icon_link">&nbsp;</span></a></li>
+				<li><a href="/webmail" class="external" title="Webmail"><span class="email icon_link">&nbsp;</span></a></li>
+			</ul>
+		</div>
 		<div class="logo">
 			<img src="{$THEME_COLOR_PATH}/images/easyscp_logo.png" alt="EasySCP logo" />
 			<!-- <img src="{$THEME_COLOR_PATH}/images/easyscp_webhosting.png" alt="EasySCP - Easy Server Control Panel" /> -->
