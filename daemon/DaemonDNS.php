@@ -405,11 +405,11 @@ class DaemonDNS {
 				domains.*,
                 records.*
 			FROM
-				powerdns.domains domains
+				powerdns.domains AS domains
 			LEFT JOIN
-				powerdns.records records ON domains.id = records.domain_id
+				powerdns.records AS records ON domains.id = records.domain_id
 			WHERE
-				domains.easyscp_domain_id = :domain_id
+				domains.$id_string = :domain_id
 		";
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
