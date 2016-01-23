@@ -390,27 +390,12 @@ class DaemonDNS {
 	public static function DeleteAllDomainDNSEntries($dmn_id, $dmn_alias = false) {
 		System_Daemon::debug('Starting "DaemonDNS::DeleteDomainDNSEntries" subprocess.');
 
-		if (!$dmn_alias){
-			$id_string = "easyscp_domain_id";
-		}  else {
-			$id_string = "easyscp_domain_alias_id";
-		}
-
 		$sql_param = array(
 			"domain_id"	=>	$dmn_id,
 		);
 
-		$sql_query = "
-			DELETE
-				domains.*,
-                records.*
-			FROM
-				powerdns.domains AS domains
-			LEFT JOIN
-				powerdns.records AS records ON domains.id = records.domain_id
-			WHERE
-				domains.$id_string = :domain_id
-		";
+		$sql_query = self::getDeleteQuery($dmn_alias);
+
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
 
@@ -421,6 +406,48 @@ class DaemonDNS {
 		return true;
 	}
 
+	/**
+	 * Generating query to delete all domains/aliases from DNS.
+	 * @param $dmn_alias
+	 * @return string
+	 */
+	private static function getDeleteQuery($dmn_alias){
+		if (!$dmn_alias){
+			$id_string = "easyscp_domain_id";
+		}  else {
+			$id_string = "easyscp_domain_alias_id";
+		}
+		switch(DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'}){
+			case "CentOS_6":
+				// This query generates error on Debian 8
+				$sql_query = "
+					DELETE
+						powerdns.domains.*,
+						powerdns.records.*
+					FROM
+						powerdns.domains AS domains
+					LEFT JOIN
+						powerdns.records AS records ON domains.id = records.domain_id
+					WHERE
+						domains.$id_string = :domain_id;
+				";
+				break;
+			default:
+				// This query does not work on CentOS 6
+				$sql_query = "
+					DELETE
+						domains.*,
+						records.*
+					FROM
+						powerdns.domains AS domains
+					LEFT JOIN
+						powerdns.records AS records ON domains.id = records.domain_id
+					WHERE
+						domains.$id_string = :domain_id;
+				";
+		}
+		return $sql_query;
+	}
 	/**
 	 * Delete DNS entry when removing a suddomain
 	 *
