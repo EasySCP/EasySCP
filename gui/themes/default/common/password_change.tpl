@@ -7,13 +7,13 @@
 {block name=CONTENT_HEADER}{$TR_CHANGE_PASSWORD}{/block}
 
 {block name=BREADCRUMP}
-<li><a href="/reseller/index.php">{$TR_MENU_GENERAL_INFORMATION}</a></li>
+<li><a href="index.php">{$TR_MENU_GENERAL_INFORMATION}</a></li>
 <li><a>{$TR_CHANGE_PASSWORD}</a></li>
 {/block}
 
 {block name=BODY}
 <h2 class="password"><span>{$TR_CHANGE_PASSWORD}</span></h2>
-<form action="/reseller/password_change.php" method="post" id="reseller_password_change">
+<form action="password_change.php" method="post" id="password_change">
 	<table>
 		<tr>
 			<td><label for="curr_pass">{$TR_CURR_PASSWORD}</label></td>

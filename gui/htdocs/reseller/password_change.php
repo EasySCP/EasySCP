@@ -3,19 +3,8 @@
  * EasySCP a Virtual Hosting Control Panel
  * Copyright (C) 2010-2016 by Easy Server Control Panel - http://www.easyscp.net
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+ * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
  *
  * @link 		http://www.easyscp.net
  * @author 		EasySCP Team
@@ -28,7 +17,7 @@ check_login(__FILE__);
 $cfg = EasySCP_Registry::get('Config');
 
 $tpl = EasySCP_TemplateEngine::getInstance();
-$template = 'reseller/password_change.tpl';
+$template = 'common/password_change.tpl';
 
 if (isset($_POST['uaction']) && $_POST['uaction'] === 'updt_pass') {
 	if (empty($_POST['pass']) || empty($_POST['pass_rep']) || empty($_POST['curr_pass'])) {
@@ -53,7 +42,7 @@ if (isset($_POST['uaction']) && $_POST['uaction'] === 'updt_pass') {
 				'warning'
 			);
 		}
-	} else if (check_udata($_SESSION['user_id'], $_POST['curr_pass']) === false) {
+	} else if (EasyPass::check_udata($_SESSION['user_id'], $_POST['curr_pass']) === false) {
 		set_page_message(tr('The current password is wrong!'), 'error');
 	} else {
 		// Correct input password
@@ -73,7 +62,7 @@ if (isset($_POST['uaction']) && $_POST['uaction'] === 'updt_pass') {
 		";
 
 		$rs = exec_query($sql, $query, array($upass, $user_id));
-
+		write_log($_SESSION['user_logged'] . ": update password!");
 		set_page_message(tr('User password updated successfully!'), 'success');
 	}
 }
@@ -108,23 +97,4 @@ if ($cfg->DUMP_GUI_DEBUG) {
 $tpl->display($template);
 
 unset_messages();
-
-function check_udata($id, $pass) {
-	$sql = EasySCP_Registry::get('Db');
-
-	$query = "
-		SELECT
-			`admin_id`, `admin_pass`
-		FROM
-			`admin`
-		WHERE
-			`admin_id` = ?
-		AND
-			`admin_pass` = ?
-	";
-
-	$rs = exec_query($sql, $query, array($id, md5($pass)));
-
-	return (($rs->recordCount()) != 1) ? false : true;
-}
 ?>

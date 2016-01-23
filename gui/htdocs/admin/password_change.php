@@ -28,7 +28,7 @@ check_login(__FILE__);
 $cfg = EasySCP_Registry::get('Config');
 
 $tpl = EasySCP_TemplateEngine::getInstance();
-$template = 'admin/password_change.tpl';
+$template = 'common/password_change.tpl';
 
 // static page messages
 $tpl->assign(
