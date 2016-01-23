@@ -63,6 +63,8 @@ class DaemonSystemCommon {
 	 * @return mixed
 	 */
 	protected static function handleCronjobForUser($userID, $userName){
+		System_Daemon::debug('Starting "handleCronjobForUser" subprocess.');
+
 		// Due to bug https://bugs.launchpad.net/ubuntu/+source/cron/+bug/706565 all . in username must be removed or 
 		// replaced. Otherwise the cronjobs never run.
 		$confUser = str_replace('.','_',$userName);
@@ -204,22 +206,22 @@ class DaemonSystemCommon {
 		}
 
 		$fileSize = $xml->save(EasyConfig_PATH . 'Iana_TLD.xml');
-		
+
 		$sql_query = "
 			INSERT INTO
 				config (name, value)
 			VALUES
 				('IANA_LAST_UPDATE', :time)
 			ON DUPLICATE KEY UPDATE
-			 	value = SYSDATE( )
-			";
-		$sql_param = array ( 
-			':time' => time()
+				value = SYSDATE()
+		";
+		$sql_param = array (
+			':time'	=>	time()
 		);
-		
+
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
-		
+
 		System_Daemon::debug("Wrote $fileSize to Iana_TLD.xml file");
 		System_Daemon::debug('Finished "updateIanaXML" subprocess.');
 
