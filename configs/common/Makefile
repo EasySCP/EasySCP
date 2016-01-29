@@ -21,8 +21,10 @@ install:
 	cp -pR ./proftpd $(SYSTEM_CONF)
 	cp -pR ./roundcube $(SYSTEM_CONF)
 	cp -pR ./tpl $(SYSTEM_CONF)
+	cp -p ./BUILD $(SYSTEM_CONF)
 	cp -p ./EasySCP_OS.xml $(SYSTEM_CONF)
 	cp -p ./Iana_TLD.xml $(SYSTEM_CONF)
+	cp -p ./VERSION $(SYSTEM_CONF)
 
 uninstall:
 	rm -rf $(SYSTEM_CONF)/apache
@@ -36,7 +38,9 @@ uninstall:
 	rm -rf $(SYSTEM_CONF)/proftpd
 	rm -rf $(SYSTEM_CONF)/roundcube
 	rm -rf $(SYSTEM_CONF)/tpl
+	rm -rf $(SYSTEM_CONF)/BUILD
 	rm -rf $(SYSTEM_CONF)/EasySCP_OS.xml
-	rm -rf $(SYSTEM_CONF)/Iana_TLD.xml 
+	rm -rf $(SYSTEM_CONF)/Iana_TLD.xml
+	rm -rf $(SYSTEM_CONF)/VERSION
 
 .PHONY: install uninstall
