@@ -1144,10 +1144,10 @@ function gen_domain_details($tpl, $sql, $domain_id) {
 	}
 }
 
-function reseller_limits_check($sql, &$err_msg, $reseller_id, $hpid, $newprops = "") {
+function reseller_limits_check($sql, &$err_msg, $reseller_id, $hpid, $props = '') {
 	$error = false;
 
-	if (empty($newprops)) {
+	if (empty($props)) {
 		// this hosting plan exists
 		if (isset($_SESSION["ch_hpprops"])) {
 			$props = unserialize($_SESSION["ch_hpprops"]);
@@ -1165,11 +1165,8 @@ function reseller_limits_check($sql, &$err_msg, $reseller_id, $hpid, $newprops =
 			$data = $res->fetchRow();
 			$props = unserialize($data['props']);
 		}
-	} else {
-		// we want to check _before_ inserting
-		$props = unserialize($newprops);
 	}
-	
+
 	$sub_new = $props['subdomain_cnt'];
 	$als_new = $props['alias_cnt'];
 	$mail_new = $props['mail_cnt'];
