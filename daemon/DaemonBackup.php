@@ -26,7 +26,7 @@ class DaemonBackup {
 	 * @return void.
 	 */
 	public static function CleanUp($pfad, $alter = 14){
-		exec(DaemonConfig::$cmd->{'CMD_FIND'}.' '.$pfad.' -maxdepth 0 -type f -mtime +'.$alter.' -print | xargs -r '.DaemonConfig::$cmd->{'CMD_RM'});
+		exec(DaemonConfig::$cmd->{'CMD_FIND'}.' '.$pfad.' -maxdepth 1 -type f -mtime +'.$alter.' -print | xargs -r '.DaemonConfig::$cmd->{'CMD_RM'});
 	}
 
 	/**
