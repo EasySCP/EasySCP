@@ -16,7 +16,6 @@
 
 class EasyConfig {
 	static $cfg;
-	static $cmd;
 
 	public static function Reload(){
 		self::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
@@ -34,5 +33,4 @@ class EasyConfig {
 }
 
 EasyConfig::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
-EasyConfig::$cmd = simplexml_load_file(EasyConfig_PATH . '/EasySCP_CMD.xml');
 ?>
