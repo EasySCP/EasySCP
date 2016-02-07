@@ -305,7 +305,7 @@ function PMA_warnMissingExtension($extension, $fatal = false, $extra = '')
         PMA_fatalError($message);
     } else {
         $GLOBALS['error_handler']->addError(
-            $message, 
+            $message,
             E_USER_WARNING,
             '',
             '',
@@ -552,7 +552,7 @@ function PMA_sendHeaderLocation($uri, $use_refresh = false)
         echo '<body>' . "\n";
         echo '<script type="text/javascript">' . "\n";
         echo '//<![CDATA[' . "\n";
-        echo 'document.write(\'<p><a href="' . htmlspecialchars($uri) . '">'
+        echo 'document.write(\'<p><a href="' . PMA_escapeJsString(htmlspecialchars($uri)) . '">'
             . __('Go') . '</a></p>\');' . "\n";
         echo '//]]>' . "\n";
         echo '</script></body></html>' . "\n";
@@ -799,4 +799,12 @@ function PMA_addJSVar($key, $value, $escape = true)
     PMA_addJSCode(PMA_getJsValue($key, $value, $escape));
 }
 
+/* Compatibility with PHP < 5.6 */
+if(! function_exists('hash_equals')) {
+    function hash_equals($a, $b) {
+        $ret = strlen($a) ^ strlen($b);
+        $ret |= array_sum(unpack("C*", $a ^ $b));
+        return ! $ret;
+    }
+}
 ?>

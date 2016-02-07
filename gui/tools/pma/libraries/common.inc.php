@@ -143,7 +143,7 @@ require './libraries/Table.class.php';
  */
 require './libraries/Types.class.php';
 
-if (! defined('PMA_MINIMUM_COMMON')) {
+if (! defined('PMA_MINIMUM_COMMON') || defined('PMA_SETUP')) {
     /**
      * common functions
      */
@@ -235,7 +235,7 @@ unset($key, $value, $variables_whitelist);
  * so we now check if a subform is submitted
  */
 $__redirect = null;
-if (isset($_POST['usesubform'])) {
+if (isset($_POST['usesubform']) && ! defined('PMA_MINIMUM_COMMON')) {
     // if a subform is present and should be used
     // the rest of the form is deprecated
     $subform_id = key($_POST['usesubform']);
@@ -346,6 +346,7 @@ if (isset($_COOKIE)
 if ($GLOBALS['PMA_Config']->get('ForceSSL')
     && ! $GLOBALS['PMA_Config']->get('is_https')
 ) {
+    require './libraries/select_lang.lib.php';
     // grab SSL URL
     $url = $GLOBALS['PMA_Config']->getSSLUri();
     // Actually redirect
@@ -482,7 +483,7 @@ if (PMA_checkPageValidity($_REQUEST['back'], $goto_whitelist)) {
  */
 $token_mismatch = true;
 if (PMA_isValid($_REQUEST['token'])) {
-    $token_mismatch = ($_SESSION[' PMA_token '] != $_REQUEST['token']);
+    $token_mismatch = ! hash_equals($_SESSION[' PMA_token '], $_REQUEST['token']);
 }
 
 if ($token_mismatch) {
