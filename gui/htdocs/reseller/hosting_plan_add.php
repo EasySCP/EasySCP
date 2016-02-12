@@ -53,6 +53,7 @@ $tpl->assign(
 		'TR_MAX_TRAFFIC'			=> tr('Traffic limit [MB]<br /><em>(0 unlimited)</em>'),
 		'TR_DISK_LIMIT'				=> tr('Disk limit [MB]<br /><em>(0 unlimited)</em>'),
 		'TR_PHP'					=> tr('PHP'),
+		'TR_PHP_EDIT'				=> tr('PHP editor'),
 		'TR_CGI'					=> tr('CGI / Perl'),
 		'TR_SSL'					=> tr('SSL support'),
 		'TR_DNS'					=> tr('Allow adding records to DNS zone'),
@@ -147,6 +148,8 @@ function gen_empty_ahp_page($tpl) {
 			'HP_DESCRIPTION_VALUE'	=> '',
 			'TR_PHP_YES'			=> '',
 			'TR_PHP_NO'				=> $cfg->HTML_CHECKED,
+			'TR_PHPEY'				=> '',
+			'TR_PHPEN'				=> $cfg->HTML_CHECKED,
 			'TR_CGI_YES'			=> '',
 			'TR_CGI_NO'				=> $cfg->HTML_CHECKED,
 			'TR_SSL_YES'			=> '',
@@ -172,7 +175,7 @@ function gen_empty_ahp_page($tpl) {
  * @param EasySCP_TemplateEngine $tpl
  */
 function gen_data_ahp_page($tpl) {
-	global $hp_name, $description, $hp_php, $hp_cgi, $hp_ssl;
+	global $hp_name, $description, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk, $hp_countbackup;
@@ -206,6 +209,8 @@ function gen_data_ahp_page($tpl) {
 		array(
 			'TR_PHP_YES'	=> ($hp_php == '_yes_') ? $cfg->HTML_CHECKED : '',
 			'TR_PHP_NO'		=> ($hp_php == '_no_') ? $cfg->HTML_CHECKED : '',
+			'TR_PHPEY'		=> ($hp_phpe === '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_PHPEN'		=> ($hp_phpe === '_no_') ? $cfg->HTML_CHECKED : '',
 			'TR_CGI_YES'	=> ($hp_cgi == '_yes_') ? $cfg->HTML_CHECKED : '',
 			'TR_CGI_NO'		=> ($hp_cgi == '_no_') ? $cfg->HTML_CHECKED : '',
 			'TR_SSL_YES'	=> ($hp_ssl == '_yes_') ? $cfg->HTML_CHECKED : '',
@@ -230,7 +235,7 @@ function gen_data_ahp_page($tpl) {
  * @param EasySCP_TemplateEngine $tpl
  */
 function check_data_correction($tpl) {
-	global $hp_name, $description, $hp_php, $hp_cgi, $hp_ssl;
+	global $hp_name, $description, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk,$hp_countbackup;
@@ -269,6 +274,10 @@ function check_data_correction($tpl) {
 
 	if (isset($_POST['php'])) {
 		$hp_php = $_POST['php'];
+	}
+
+	if (isset($_POST['php_edit'])) {
+		$hp_phpe = $_POST['php_edit'];
 	}
 
 	if (isset($_POST['cgi'])) {
@@ -373,7 +382,7 @@ function check_data_correction($tpl) {
  * @param int $admin_id
  */
 function save_data_to_db($tpl, $admin_id) {
-	global $hp_name, $description, $hp_php, $hp_cgi, $hp_ssl;
+	global $hp_name, $description, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk,$hp_countbackup;
@@ -395,20 +404,21 @@ function save_data_to_db($tpl, $admin_id) {
 	} else {
 		//$hp_props = "$hp_php;$hp_cgi;$hp_sub;$hp_als;$hp_mail;$hp_ftp;$hp_sql_db;$hp_sql_user;$hp_traff;$hp_disk;$hp_backup;$hp_dns;$hp_ssl";
 		$newProps = array(
-			'allow_php'	=> $hp_php,
-			'allow_cgi'	=> $hp_cgi,
+			'allow_php'		=> $hp_php,
+			'allow_phpe'	=> $hp_phpe,
+			'allow_cgi'		=> $hp_cgi,
 			'subdomain_cnt'	=> $hp_sub,
-			'alias_cnt'	=>	$hp_als,
-			'mail_cnt'	=> $hp_mail,
-			'ftp_cnt'	=> $hp_ftp,
-			'db_cnt'	=> $hp_sql_db,
+			'alias_cnt'		=>	$hp_als,
+			'mail_cnt'		=> $hp_mail,
+			'ftp_cnt'		=> $hp_ftp,
+			'db_cnt'		=> $hp_sql_db,
 			'sqluser_cnt'	=> $hp_sql_user,
-			'traffic'	=> $hp_traff,
-			'disk'		=> $hp_disk,
-			'disk_countbackup'	=>  $hp_countbackup,
+			'traffic'		=> $hp_traff,
+			'disk'			=> $hp_disk,
+			'disk_countbackup'	=> $hp_countbackup,
 			'allow_backup'	=> $hp_backup,
-			'allow_dns'	=> $hp_dns,
-			'allow_ssl'	=> $hp_ssl,
+			'allow_dns'		=> $hp_dns,
+			'allow_ssl'		=> $hp_ssl,
 		);
 		$hp_props=  serialize($newProps);
 		// this id is just for fake and is not used in reseller_limits_check.

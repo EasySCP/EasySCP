@@ -69,6 +69,7 @@ $tpl->assign(
 		'TR_MAX_TRAFFIC'		=> tr('Traffic limit [MB]<br /><em>(0 unlimited)</em>'),
 		'TR_DISK_LIMIT'			=> tr('Disk limit [MB]<br /><em>(0 unlimited)</em>'),
 		'TR_PHP'				=> tr('PHP'),
+		'TR_PHP_EDIT'			=> tr('PHP editor'),
 		'TR_CGI'				=> tr('CGI / Perl'),
 		'TR_SSL'				=> tr('SSL support'),
 		'TR_DNS'				=> tr('Allow adding records to DNS zone'),
@@ -123,38 +124,40 @@ function restore_form($tpl, $sql) {
 
 	$tpl->assign(
 		array(
-			'HP_NAME_VALUE' => clean_input($_POST['hp_name'], true),
-			'HP_DESCRIPTION_VALUE' => clean_input($_POST['hp_description'], true),
-			'TR_MAX_SUB_LIMITS' => clean_input($_POST['hp_sub'], true),
-			'TR_MAX_ALS_VALUES' => clean_input($_POST['hp_als'], true),
-			'HP_MAIL_VALUE' => clean_input($_POST['hp_mail'], true),
-			'HP_FTP_VALUE' => clean_input($_POST['hp_ftp'], true),
-			'HP_SQL_DB_VALUE' => clean_input($_POST['hp_sql_db'], true),
-			'HP_SQL_USER_VALUE' => clean_input($_POST['hp_sql_user'], true),
-			'HP_TRAFF_VALUE' => clean_input($_POST['hp_traff'], true),
-			'HP_TRAFF' => clean_input($_POST['hp_traff'], true),
-			'HP_DISK_VALUE' => clean_input($_POST['hp_disk'], true),
-			'HP_PRICE' => clean_input($_POST['hp_price'], true),
-			'HP_SETUPFEE' => clean_input($_POST['hp_setupfee'], true),
-			'HP_VALUE' => clean_input($_POST['hp_value'], true),
-			'HP_PAYMENT' => clean_input($_POST['hp_payment'], true),
-			'HP_TOS_VALUE' => clean_input($_POST['hp_tos'], true),
-			'TR_PHP_YES' => ($_POST['php'] == '_yes_') ? $cfg->HTML_CHECKED : '',
-			'TR_PHP_NO' => ($_POST['php'] == '_no_') ? $cfg->HTML_CHECKED : '',
-			'TR_CGI_YES' => ($_POST['cgi'] == '_yes_') ? $cfg->HTML_CHECKED : '',
-			'TR_CGI_NO' => ($_POST['cgi'] == '_no_') ? $cfg->HTML_CHECKED : '',
-			'TR_SSL_YES'	=> ($_POST['ssl'] == '_yes_') ? $cfg->HTML_CHECKED : '',
-			'TR_SSL_NO'		=> ($_POST['ssl'] == '_no_') ? $cfg->HTML_CHECKED : '',
-			'TR_DNS_YES' => ($_POST['dns'] == '_yes_') ? $cfg->HTML_CHECKED : '',
-			'TR_DNS_NO' => ($_POST['dns'] == '_no_') ? $cfg->HTML_CHECKED : '',
-			'VL_BACKUPD' => ($_POST['backup'] == '_dmn_') ? $cfg->HTML_CHECKED : '',
-			'VL_BACKUPS' => ($_POST['backup'] == '_sql_') ? $cfg->HTML_CHECKED : '',
-			'VL_BACKUPF' => ($_POST['backup'] == '_full_') ? $cfg->HTML_CHECKED : '',
-			'VL_BACKUPN' => ($_POST['backup']== '_no_') ? $cfg->HTML_CHECKED : '',
+			'HP_NAME_VALUE' 		=> clean_input($_POST['hp_name'], true),
+			'HP_DESCRIPTION_VALUE' 	=> clean_input($_POST['hp_description'], true),
+			'TR_MAX_SUB_LIMITS' 	=> clean_input($_POST['hp_sub'], true),
+			'TR_MAX_ALS_VALUES' 	=> clean_input($_POST['hp_als'], true),
+			'HP_MAIL_VALUE' 		=> clean_input($_POST['hp_mail'], true),
+			'HP_FTP_VALUE' 			=> clean_input($_POST['hp_ftp'], true),
+			'HP_SQL_DB_VALUE' 		=> clean_input($_POST['hp_sql_db'], true),
+			'HP_SQL_USER_VALUE' 	=> clean_input($_POST['hp_sql_user'], true),
+			'HP_TRAFF_VALUE' 		=> clean_input($_POST['hp_traff'], true),
+			'HP_TRAFF' 				=> clean_input($_POST['hp_traff'], true),
+			'HP_DISK_VALUE' 		=> clean_input($_POST['hp_disk'], true),
+			'HP_PRICE' 				=> clean_input($_POST['hp_price'], true),
+			'HP_SETUPFEE' 			=> clean_input($_POST['hp_setupfee'], true),
+			'HP_VALUE' 				=> clean_input($_POST['hp_value'], true),
+			'HP_PAYMENT' 			=> clean_input($_POST['hp_payment'], true),
+			'HP_TOS_VALUE' 			=> clean_input($_POST['hp_tos'], true),
+			'TR_PHP_YES' 			=> ($_POST['php'] == '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_PHP_NO' 			=> ($_POST['php'] == '_no_') ? $cfg->HTML_CHECKED : '',
+			'TR_PHPEY'				=> ($_POST['php_edit'] == '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_PHPEN'				=> ($_POST['php_edit'] == '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_CGI_YES' 			=> ($_POST['cgi'] == '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_CGI_NO' 			=> ($_POST['cgi'] == '_no_') ? $cfg->HTML_CHECKED : '',
+			'TR_SSL_YES'			=> ($_POST['ssl'] == '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_SSL_NO'				=> ($_POST['ssl'] == '_no_') ? $cfg->HTML_CHECKED : '',
+			'TR_DNS_YES'		 	=> ($_POST['dns'] == '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_DNS_NO' 			=> ($_POST['dns'] == '_no_') ? $cfg->HTML_CHECKED : '',
+			'VL_BACKUPD' 			=> ($_POST['backup'] == '_dmn_') ? $cfg->HTML_CHECKED : '',
+			'VL_BACKUPS' 			=> ($_POST['backup'] == '_sql_') ? $cfg->HTML_CHECKED : '',
+			'VL_BACKUPF' 			=> ($_POST['backup'] == '_full_') ? $cfg->HTML_CHECKED : '',
+			'VL_BACKUPN' 			=> ($_POST['backup']== '_no_') ? $cfg->HTML_CHECKED : '',
 			'TR_BACKUPCOUNT_YES'	=> ($_POST['countbackup']== '_yes_') ? $cfg->HTML_CHECKED : '',
 			'TR_BACKUPCOUNT_NO'		=> ($_POST['countbackup']== '_no_') ? $cfg->HTML_CHECKED : '',
-			'TR_STATUS_YES' => ($_POST['status']) ? $cfg->HTML_CHECKED : '',
-			'TR_STATUS_NO' => (!$_POST['status']) ? $cfg->HTML_CHECKED : ''
+			'TR_STATUS_YES' 		=> ($_POST['status']) ? $cfg->HTML_CHECKED : '',
+			'TR_STATUS_NO' 			=> (!$_POST['status']) ? $cfg->HTML_CHECKED : ''
 		)
 	);
 } // end of function restore_form()
@@ -226,6 +229,7 @@ function gen_load_ehp_page($tpl, $sql, $hpid, $admin_id) {
 	$tos = $data['tos'];
 
 	$hp_php = $props['allow_php'];
+	$hp_phpe = $props['allow_phpe'];
 	$hp_cgi = $props['allow_cgi'];
 	$hp_sub = $props['subdomain_cnt'];
 	$hp_als = $props['alias_cnt'];
@@ -294,22 +298,24 @@ function gen_load_ehp_page($tpl, $sql, $hpid, $admin_id) {
 			'HP_PAYMENT' => tohtml($payment),
 			'HP_TOS_VALUE' => tohtml($tos),
 
-			'TR_PHP_YES' => ($hp_php == '_yes_') ? $cfg->HTML_CHECKED : '',
-			'TR_PHP_NO' => ($hp_php == '_no_')	? $cfg->HTML_CHECKED : '',
-			'TR_CGI_YES' => ($hp_cgi == '_yes_') ? $cfg->HTML_CHECKED : '',
-			'TR_CGI_NO' => ($hp_cgi == '_no_') ? $cfg->HTML_CHECKED : '',
+			'TR_PHP_YES' 	=> ($hp_php == '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_PHP_NO' 	=> ($hp_php == '_no_')	? $cfg->HTML_CHECKED : '',
+			'TR_PHPEY'		=> ($hp_phpe === '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_PHPEN'		=> ($hp_phpe === '_no_') ? $cfg->HTML_CHECKED : '',
+			'TR_CGI_YES' 	=> ($hp_cgi == '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_CGI_NO' 	=> ($hp_cgi == '_no_') ? $cfg->HTML_CHECKED : '',
 			'TR_SSL_YES'	=> ($hp_ssl == '_yes_') ? $cfg->HTML_CHECKED : '',
 			'TR_SSL_NO'		=> ($hp_ssl == '_no_') ? $cfg->HTML_CHECKED : '',
-			'TR_DNS_YES' => ($hp_dns == '_yes_') ? $cfg->HTML_CHECKED : '',
-			'TR_DNS_NO' => ($hp_dns == '_no_') ? $cfg->HTML_CHECKED : '',
-			'VL_BACKUPD' => ($hp_backup == '_dmn_') ? $cfg->HTML_CHECKED : '',
-			'VL_BACKUPS' => ($hp_backup == '_sql_') ? $cfg->HTML_CHECKED : '',
-			'VL_BACKUPF' => ($hp_backup == '_full_') ? $cfg->HTML_CHECKED : '',
-			'VL_BACKUPN' => ($hp_backup == '_no_') ? $cfg->HTML_CHECKED : '',
+			'TR_DNS_YES' 	=> ($hp_dns == '_yes_') ? $cfg->HTML_CHECKED : '',
+			'TR_DNS_NO' 	=> ($hp_dns == '_no_') ? $cfg->HTML_CHECKED : '',
+			'VL_BACKUPD' 	=> ($hp_backup == '_dmn_') ? $cfg->HTML_CHECKED : '',
+			'VL_BACKUPS' 	=> ($hp_backup == '_sql_') ? $cfg->HTML_CHECKED : '',
+			'VL_BACKUPF' 	=> ($hp_backup == '_full_') ? $cfg->HTML_CHECKED : '',
+			'VL_BACKUPN' 	=> ($hp_backup == '_no_') ? $cfg->HTML_CHECKED : '',
 			'TR_BACKUPCOUNT_YES'	=> ($hp_countbackup == '_yes_') ? $cfg->HTML_CHECKED : '',
 			'TR_BACKUPCOUNT_NO'	=> ($hp_countbackup == '_no_') ? $cfg->HTML_CHECKED : '',
 			'TR_STATUS_YES' => ($status) ? $cfg->HTML_CHECKED : '',
-			'TR_STATUS_NO' => (!$status) ? $cfg->HTML_CHECKED : '',
+			'TR_STATUS_NO' 	=> (!$status) ? $cfg->HTML_CHECKED : '',
 		)
 	);
 } // end of gen_load_ehp_page()
@@ -319,7 +325,7 @@ function gen_load_ehp_page($tpl, $sql, $hpid, $admin_id) {
  * @param EasySCP_TemplateEngine $tpl
  */
 function check_data_iscorrect($tpl) {
-	global $hp_name, $hp_php, $hp_cgi, $hp_ssl;
+	global $hp_name, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk, $hp_countbackup;
@@ -352,6 +358,10 @@ function check_data_iscorrect($tpl) {
 	// Get values from previous page and check him correction
 	if (isset($_POST['php'])) {
 		$hp_php = $_POST['php'];
+	}
+
+	if (isset($_POST['php_edit'])) {
+		$hp_phpe = $_POST['php_edit'];
 	}
 
 	if (isset($_POST['cgi'])) {
@@ -452,7 +462,7 @@ function check_data_iscorrect($tpl) {
  */
 function save_data_to_db() {
 	global $tpl;
-	global $hp_name, $hp_php, $hp_cgi, $hp_ssl;
+	global $hp_name, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk, $hp_countbackup;
@@ -476,6 +486,7 @@ function save_data_to_db() {
 	
 	$newProps = array(
 			'allow_php'	=> $hp_php,
+			'allow_phpe'=> $hp_phpe,
 			'allow_cgi'	=> $hp_cgi,
 			'subdomain_cnt'	=> $hp_sub,
 			'alias_cnt'	=>	$hp_als,
@@ -485,8 +496,8 @@ function save_data_to_db() {
 			'sqluser_cnt'	=> $hp_sql_user,
 			'traffic'	=> $hp_traff,
 			'disk'		=> $hp_disk,
-			'allow_backup'	=> $hp_backup,
 			'disk_countbackup'	=> $hp_countbackup,
+			'allow_backup'	=> $hp_backup,
 			'allow_dns'	=> $hp_dns,
 			'allow_ssl'	=> $hp_ssl,
 		);

@@ -90,7 +90,7 @@ if (isset($_POST['uaction'])
 		$_SESSION["step_two_data"] = "$dmn_name;0;";
 		$newProps = array(
 			'allow_php'	=> $hp_php,
-			'allow_php_editor'=> $hp_phpe,
+			'allow_phpe'=> $hp_phpe,
 			'allow_cgi'	=> $hp_cgi,
 			'subdomain_cnt'	=> $hp_sub,
 			'alias_cnt'	=>	$hp_als,
@@ -232,7 +232,7 @@ function get_hp_data($hpid, $admin_id) {
 
 		$props = unserialize($data['props']);
 		$hp_php = $props['allow_php'];
-		$hp_phpe = $props['allow_php_editor'];
+		$hp_phpe = $props['allow_phpe'];
 		$hp_cgi = $props['allow_cgi'];
 		$hp_sub = $props['subdomain_cnt'];
 		$hp_als = $props['alias_cnt'];
