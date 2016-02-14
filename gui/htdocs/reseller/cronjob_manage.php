@@ -145,7 +145,6 @@ if (isset($_GET['edit_cron_id']) && is_numeric($_GET['edit_cron_id'])) {
 			'DOW_EXPERT'		=> '',
 			'ACTIVE_YES_SELECTED'	=> $cfg->HTML_SELECTED,
 			'ACTIVE_NO_SELECTED'	=> '',
-			'SIMPLE_VALUE'			=>'',
 			'SIMPLE_SELECTED'		=>'',
 		)
 	);
