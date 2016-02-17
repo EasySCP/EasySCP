@@ -7,13 +7,13 @@
 {block name=CONTENT_HEADER}{$TR_PERSONAL_DATA}{/block}
 
 {block name=BREADCRUMP}
-<li><a href="/admin/index.php">{$TR_MENU_GENERAL_INFORMATION}</a></li>
+<li><a href="index.php">{$TR_MENU_GENERAL_INFORMATION}</a></li>
 <li><a>{$TR_PERSONAL_DATA}</a></li>
 {/block}
 
 {block name=BODY}
 <h2 class="doc"><span>{$TR_PERSONAL_DATA}</span></h2>
-<form action="/admin/personal_change.php" method="post" id="admin_personal_change">
+<form action="personal_change.php" method="post" id="personal_change">
 	<table>
 		<tr>
 			<td><label for="fname">{$TR_FIRST_NAME}</label></td>

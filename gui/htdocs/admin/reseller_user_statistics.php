@@ -72,8 +72,8 @@ $tpl->assign(
 		'TR_DISK'						=> tr('Disk<br />usage'),
 		'TR_WEB'						=> tr('Web<br />traffic'),
 		'TR_FTP_TRAFF'					=> tr('FTP<br />traffic'),
-		'TR_SMTP'						=> tr('SMTP<br />traffic'),
-		'TR_POP3'						=> tr('POP3/IMAP<br />traffic'),
+		// 'TR_SMTP'						=> tr('SMTP<br />traffic'),
+		// 'TR_POP3'						=> tr('POP3/IMAP<br />traffic'),
 		'TR_SUBDOMAIN'					=> tr('Subdomain'),
 		'TR_ALIAS'						=> tr('Alias'),
 		'TR_MAIL'						=> tr('Mail'),
@@ -288,8 +288,8 @@ function generate_domain_entry($tpl, $user_id, $row) {
 
 			'WEB' => sizeit($web),
 			'FTP' => sizeit($ftp),
-			'SMTP' => sizeit($smtp),
-			'POP3' => sizeit($pop3),
+			// 'SMTP' => sizeit($smtp),
+			// 'POP3' => sizeit($pop3),
 
 			'SUB_MSG' => ($usub_max)
 				? (($usub_max > 0)

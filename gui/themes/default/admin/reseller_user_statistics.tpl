@@ -43,8 +43,8 @@
 			<th>{$TR_DISK}</th>
 			<th>{$TR_WEB}</th>
 			<th>{$TR_FTP_TRAFF}</th>
-			<th>{$TR_SMTP}</th>
-			<th>{$TR_POP3}</th>
+			<!-- <th>{literal}{$TR_SMTP}{/literal}</th> -->
+			<!-- <th>{literal}{$TR_POP3}{/literal}</th> -->
 			<th>{$TR_SUBDOMAIN}</th>
 			<th>{$TR_ALIAS}</th>
 			<th>{$TR_MAIL}</th>
@@ -61,8 +61,8 @@
 			<td><div class="graph"><span style="width: {$DISK_PERCENT[i]}%">&nbsp;</span><strong>{$DISK_SHOW_PERCENT[i]}&nbsp;%</strong></div>{$DISK_MSG[i]}</td>
 			<td>{$WEB[i]}</td>
 			<td>{$FTP[i]}</td>
-			<td>{$SMTP[i]}</td>
-			<td>{$POP3[i]}</td>
+			<!-- <td>{literal}{$SMTP[i]}{/literal}</td> -->
+			<!-- <td>{literal}{$POP3[i]}{/literal}</td> -->
 			<td>{$SUB_MSG[i]}</td>
 			<td>{$ALS_MSG[i]}</td>
 			<td>{$MAIL_MSG[i]}</td>

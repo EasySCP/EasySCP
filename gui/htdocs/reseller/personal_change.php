@@ -28,7 +28,7 @@ check_login(__FILE__);
 $cfg = EasySCP_Registry::get('Config');
 
 $tpl = EasySCP_TemplateEngine::getInstance();
-$template = 'reseller/personal_change.tpl';
+$template = 'common/personal_change.tpl';
 
 if (isset($_POST['uaction']) && $_POST['uaction'] === 'updt_data') {
 	update_reseller_personal_data($_SESSION['user_id']);

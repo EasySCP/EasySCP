@@ -1276,7 +1276,6 @@ function calc_bar_value($value, $value_max, $bar_width) {
 */
 function write_log($msg, $level = E_USER_WARNING) {
 
-	global $send_log_to;
 	$cfg = EasySCP_Registry::get('Config');
 
 	if(isset($_SERVER['REMOTE_ADDR'])) {
@@ -1303,19 +1302,18 @@ function write_log($msg, $level = E_USER_WARNING) {
 	DB::execute($sql_param)->closeCursor();
 
 	$msg = strip_tags(str_replace('<br />', "\n", $msg));
-	$send_log_to = $cfg->DEFAULT_ADMIN_ADDRESS;
 
 	// now send email if DEFAULT_ADMIN_ADDRESS != ''
-	if($send_log_to != '' && $level <= $cfg->LOG_LEVEL) {
+	if(EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} != '' && $level <= $cfg->LOG_LEVEL) {
 		global $default_hostname, $default_base_server_ip, $Version, $BuildDate,
 		$admin_login;
-		$admin_email = $cfg->DEFAULT_ADMIN_ADDRESS;
-		$default_hostname = $cfg->SERVER_HOSTNAME;
-		$default_base_server_ip = $cfg->BASE_SERVER_IP;
-		$Version = $cfg->Version;
-		$BuildDate = $cfg->BuildDate;
+		$admin_email = EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'};
+		$default_hostname = EasyConfig::$cfg->{'SERVER_HOSTNAME'};
+		$default_base_server_ip = EasyConfig::$cfg->{'BASE_SERVER_IP'};
+		$Version = EasyConfig::$cfg->{'Version'};
+		$BuildDate = EasyConfig::$cfg->{'BuildDate'};
 		$subject = "EasySCP $Version on $default_hostname ($default_base_server_ip)";
-		$to = $send_log_to;
+		$to = EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'};
 		$message = <<<AUTO_LOG_MSG
 
 EasySCP Log
