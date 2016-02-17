@@ -179,6 +179,10 @@ CREATE TABLE IF NOT EXISTS `domain_aliasses` (
   `alias_mount` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `alias_ip_id` int(10) unsigned DEFAULT NULL,
   `url_forward` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_key` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_cert` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_cacert` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_status` int(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`alias_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -635,6 +639,10 @@ CREATE TABLE IF NOT EXISTS `subdomain` (
   `subdomain_url_forward` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_key` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_cert` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_cacert` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_status` int(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`subdomain_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -653,6 +661,10 @@ CREATE TABLE IF NOT EXISTS `subdomain_alias` (
   `subdomain_alias_url_forward` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_key` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_cert` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_cacert` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ssl_status` int(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`subdomain_alias_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

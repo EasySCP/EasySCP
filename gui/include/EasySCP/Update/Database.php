@@ -674,6 +674,54 @@ class EasySCP_Update_Database extends EasySCP_Update {
 		return $sqlUpd;
 	}
 
+	/**
+	 * Add missing fields for ssl data of domain_aliasses, subdomain and subdomain_alias
+	 *
+	 * @author Tom Winterhalder <tom.winterhalder@easyscp.net>
+	 * @return array
+	 */
+	protected function _databaseUpdate_64(){
+		$sqlUpd[] = "
+			ALTER TABLE
+				`domain_aliasses`
+			ADD
+				`ssl_key` VARCHAR(5000) NULL DEFAULT NULL,
+			ADD
+				`ssl_cert` VARCHAR(5000) NULL DEFAULT NULL,
+			ADD
+				`ssl_status` INT(1) unsigned NOT NULL DEFAULT '0',
+			ADD
+				`ssl_cacert` varchar(5000) COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER ssl_cert;
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`subdomain`
+			ADD
+				`ssl_key` VARCHAR(5000) NULL DEFAULT NULL,
+			ADD
+				`ssl_cert` VARCHAR(5000) NULL DEFAULT NULL,
+			ADD
+				`ssl_status` INT(1) unsigned NOT NULL DEFAULT '0',
+			ADD
+				`ssl_cacert` varchar(5000) COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER ssl_cert;
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`subdomain_alias`
+			ADD
+				`ssl_key` VARCHAR(5000) NULL DEFAULT NULL,
+			ADD
+				`ssl_cert` VARCHAR(5000) NULL DEFAULT NULL,
+			ADD
+				`ssl_status` INT(1) unsigned NOT NULL DEFAULT '0',
+			ADD
+				`ssl_cacert` varchar(5000) COLLATE utf8_unicode_ci NULL DEFAULT NULL AFTER ssl_cert;
+		";
+
+		return $sqlUpd;
+	}
 	/*
 	 * DO NOT CHANGE ANYTHING BELOW THIS LINE!
 	 */

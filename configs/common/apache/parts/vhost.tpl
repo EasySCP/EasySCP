@@ -28,10 +28,10 @@
 
 {if isset($SSL_CERT_DIR) && isset($SSL_KEY_DIR)}
 	SSLEngine       On
-	SSLCertificateFile {$SSL_CERT_DIR}/easyscp_{$MASTER_DOMAIN}-cert.pem
-	SSLCertificateKeyFile {$SSL_KEY_DIR}/easyscp_{$MASTER_DOMAIN}-key.pem
+	SSLCertificateFile {$SSL_CERT_DIR}/easyscp_{$SERVER_NAME}-cert.pem
+	SSLCertificateKeyFile {$SSL_KEY_DIR}/easyscp_{$SERVER_NAME}-key.pem
 	{if isset($SSL_CACERT) && $SSL_CACERT == true }
-	SSLCACertificateFile {$SSL_CERT_DIR}/easyscp_{$MASTER_DOMAIN}-cacert.pem
+	SSLCACertificateFile {$SSL_CERT_DIR}/easyscp_{$SERVER_NAME}-cacert.pem
 	{/if}
 {/if}
 

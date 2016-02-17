@@ -36,19 +36,51 @@ gen_logged_from($tpl);
 
 check_permissions($tpl);
 
-$sql = EasySCP_Registry::get('Db');
-
-$dmn_props = get_domain_default_props($_SESSION['user_id'], true);
+$dmn_props = get_domain_default_props($_SESSION['user_id']);
 
 if (isset($_SESSION['ssl_configuration_updated']) && $_SESSION['ssl_configuration_updated'] == "_yes_") {
 	unset($_POST);
 	unset($_SESSION['ssl_configuration_updated']);
 }
 
-if (isset($_POST['uaction']) && ($_POST['uaction'] === 'apply')) {
-    update_ssl_data($dmn_props['domain_id']);
-} else {
+if (isset($_POST['Submit']) && isset($_POST['uaction']) && ($_POST['uaction'] === 'apply')) {
+	$sslkey=clean_input(filter_input(INPUT_POST, 'ssl_key'));
+	$sslcert=clean_input(filter_input(INPUT_POST, 'ssl_cert'));
+	$sslcacert=clean_input(filter_input(INPUT_POST, 'ssl_cacert'));
+	$sslstatus=clean_input(filter_input(INPUT_POST, 'ssl_status'));
 
+	$rs = EasySSL::storeSSLData($_POST['ssl_domain'], $sslstatus, $sslkey, $sslcert, $sslcacert);
+	if ($rs ===false){
+		set_page_message(tr("SSL Certificate and key don't match!"), 'error');
+	} else {
+		if ($rs->rowCount() == 0) {
+			set_page_message(tr("SSL configuration unchanged"), 'info');
+		} else {
+			$_SESSION['ssl_configuration_updated'] = "_yes_";
+			set_page_message(tr('SSL configuration updated!'), 'success');
+		}
+		user_goto('domain_manage_ssl.php');
+	}
+}
+if(isset($_POST['ssl_domain'])){
+	genDomainSelect($tpl,$dmn_props['domain_id'],$_POST['ssl_domain']);
+	$dmn_props = EasySSL::getSSLData($_POST['ssl_domain']);
+	$tpl->assign(
+		array(
+			'SSL_KEY'					=> $dmn_props['ssl_key'],
+			'SSL_CERTIFICATE'			=> $dmn_props['ssl_cert'],
+			'SSL_CACERT'				=> $dmn_props['ssl_cacert'],
+			'SSL_STATUS'				=> $dmn_props['ssl_status'],
+		));
+} else {
+	$tpl->assign(
+		array(
+			'SSL_KEY'					=> $dmn_props['ssl_key'],
+			'SSL_CERTIFICATE'			=> $dmn_props['ssl_cert'],
+			'SSL_CACERT'				=> $dmn_props['ssl_cacert'],
+			'SSL_STATUS'				=> $dmn_props['ssl_status'],
+		));
+	genDomainSelect($tpl,$dmn_props['domain_id'],'');
 }
 
 switch ($dmn_props['ssl_status']) {
@@ -82,10 +114,7 @@ $tpl->assign(
 		'TR_SSL_STATUS_SSLONLY'		=> tr('SSL enabled'),
 		'TR_SSL_STATUS_BOTH'		=> tr('both'),
 		'TR_MESSAGE'				=> tr('Message'),
-		'SSL_KEY'					=> $dmn_props['ssl_key'],
-		'SSL_CERTIFICATE'			=> $dmn_props['ssl_cert'],
-		'SSL_CACERT'				=> $dmn_props['ssl_cacert'],
-		'SSL_STATUS'				=> $dmn_props['ssl_status']
+		'TR_SSL_DOMAIN'				=> tr('Domain'),
 	)
 );
 
@@ -102,51 +131,19 @@ $tpl->display($template);
 
 unset_messages();
 
-function update_ssl_data($domain_id){
-	if ((isset($_POST['ssl_key'])) &&
-		 isset($_POST['ssl_cert']) &&
-		 isset($_POST['ssl_status'])) {
-
-		if (openssl_x509_check_private_key(clean_input($_POST['ssl_cert']), clean_input($_POST['ssl_key']))) {
-			$sql_param = array(
-					"ssl_cert"	=> clean_input($_POST['ssl_cert']),
-					"ssl_cacert"=> clean_input($_POST['ssl_cacert']),
-					"ssl_key"	=> clean_input($_POST['ssl_key']),
-					"ssl_status"=> $_POST['ssl_status'],
-					"domain_id"	=> $domain_id
-
+function genDomainSelect($tpl,$domain_id,$value)
+{
+	$cfg = EasySCP_Registry::get('Config');
+	$rs = EasySSL::getDomainNames($domain_id);
+	if ($rs->rowCount() != 0){
+		while ($row = $rs->fetch()) {
+			$tpl->append(
+				array(
+					'DOMAIN_VALUE'			=> $row['id'],
+					'DOMAIN_NAME'			=> $row['domain_name'],
+					'DOMAIN_SELECTED' 		=> $row['id'] === $value ? $cfg->HTML_SELECTED : ''
+				)
 			);
-
-			$sql_query = "
-			UPDATE
-				domain
-			SET
-				ssl_cert	= :ssl_cert,
-				ssl_cacert	= :ssl_cacert,
-				ssl_key		= :ssl_key,
-				ssl_status	= :ssl_status,
-				status		= 'change'
-			WHERE
-				(ssl_cert <> :ssl_cert OR ssl_key <> :ssl_key OR ssl_status <> :ssl_status)
-			AND
-				domain_id	= :domain_id;
-		";
-
-			DB::prepare($sql_query);
-			$rs = DB::execute($sql_param);
-
-			if ($rs->rowCount() == 0) {
-				set_page_message(tr("SSL configuration unchanged"), 'info');
-			} else {
-				$_SESSION['ssl_configuration_updated'] = "_yes_";
-				set_page_message(tr('SSL configuration updated!'), 'success');
-				send_request('110 DOMAIN domain '.$domain_id);
-			}
-		} else{
-			set_page_message(tr("SSL Certificate and key don't match!"), 'error');
 		}
 	}
-
-	user_goto('domain_manage_ssl.php');
 }
-?>

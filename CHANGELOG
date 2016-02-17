@@ -17,6 +17,7 @@ EasySCP 2.1.0 ChangeLog
 		* Add: PHP 7 support
 		* Improved: Menu handling
 		* Fix: Creation and deletion of vuXXXX DNS entries (Issue #9)
+		* Add: Configuring separate SSL certificates for domain, alias and subdomains (Issue #8)
 
 	- TOOLS:
 		* Update: net2ftp to version 1.0 build 47

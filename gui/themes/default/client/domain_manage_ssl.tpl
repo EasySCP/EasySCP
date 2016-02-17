@@ -17,6 +17,16 @@
 	<fieldset>
 	<table>
 		<tr>
+			<td>{$TR_SSL_DOMAIN}</td>
+			<td>
+				<select name="ssl_domain" id="ssldomain" onchange='this.form.submit()'>
+					{section name=i loop=$DOMAIN_NAME}
+						<option value="{$DOMAIN_VALUE[i]}" {$DOMAIN_SELECTED[i]}>{$DOMAIN_NAME[i]}</option>
+					{/section}
+				</select>
+			</td>
+		</tr>
+		<tr>
 			<td>{$TR_SSL_ENABLED}</td>
 			<td>
 				<select name="ssl_status" id="sslstatus">

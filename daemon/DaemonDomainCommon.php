@@ -395,7 +395,7 @@ class DaemonDomainCommon {
 			SET
 				status=:status
 			WHERE
-				alias_id = :alias_id
+				alias_id = :alias_id;
 		';
 
 		DB::prepare($sql_query);
@@ -420,7 +420,7 @@ class DaemonDomainCommon {
 			SET
 				status=:status
 			WHERE
-				subdomain_alias_id = :subdomain_alias_id
+				subdomain_alias_id = :subdomain_alias_id;
 		';
 
 		DB::prepare($sql_query);
@@ -510,6 +510,7 @@ class DaemonDomainCommon {
 		if (!unlink($confFile)) {
 			$returnOk = false;
 		}
+		self::deleteSSLKeys($aliasData['domain_name']);
 		$sql_param = array(
 			':alias_id' => $aliasData['alias_id']
 		);
@@ -517,7 +518,7 @@ class DaemonDomainCommon {
 			DELETE FROM
 				domain_aliasses
 			WHERE
-				alias_id=:alias_id
+				alias_id=:alias_id;
 		';
 		DB::prepare($sql_query);
 		if ($row = DB::execute($sql_param)->closeCursor()) {
@@ -536,6 +537,7 @@ class DaemonDomainCommon {
 			System_Daemon::debug($msg);
 			return $msg . '<br />' . $retVal;
 		}
+		self::deleteSSLKeys($fqdn);
 		$sql_param = array(
 			':subdomain_alias_id' => $aliasSubDomainData['subdomain_alias_id']
 		);
@@ -543,7 +545,7 @@ class DaemonDomainCommon {
 			DELETE FROM
 				subdomain_alias
 			WHERE
-				subdomain_alias_id=:subdomain_alias_id
+				subdomain_alias_id=:subdomain_alias_id;
 		';
 		DB::prepare($sql_query);
 		if ($row = DB::execute($sql_param)->closeCursor()) {
@@ -588,20 +590,10 @@ class DaemonDomainCommon {
 		exec($cmd);
 		System_Daemon::debug('Deleted '.$fcgiDir);
 
-		// delete existing ssl key and certificate
-		$certFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cert.pem';
-		$keyFile = DaemonConfig::$distro->SSL_KEY_DIR . '/easyscp_' . $domainData['domain_name'] . '-key.pem';
-		if (file_exists($certFile)) {
-			$cmdCert = DaemonConfig::$cmd->CMD_RM . $certFile;
-			exec($cmdCert);
-			System_Daemon::debug('Deleted SSL certificate');
+		$rs = self::getDomainNames($domainData['domain_id']);
+		while ($row = $rs->fetch()) {
+			self::deleteSSLKeys($row['domain_name']);
 		}
-		if (file_exists($keyFile)) {
-			$cmdKey = DaemonConfig::$cmd->CMD_RM . $keyFile;
-			exec($cmdKey);
-			System_Daemon::debug('Deleted SSL key');
-		}
-
 		//delete domain from db
 		$sql_param = array(
 			':domain_id' => $domainData['domain_id']
@@ -611,7 +603,7 @@ class DaemonDomainCommon {
 			DELETE FROM
 				domain
 			WHERE
-				domain_id = :domain_id
+				domain_id = :domain_id;
 		';
 
 		DB::prepare($sql_query);
@@ -640,7 +632,7 @@ class DaemonDomainCommon {
 			DELETE FROM
 				htaccess
 			WHERE
-				id = :id
+				id = :id;
 	';
 
 		DB::prepare($sql_query);
@@ -663,6 +655,7 @@ class DaemonDomainCommon {
 		if (!unlink($confFile)) {
 			$returnOk = false;
 		}
+		self::deleteSSLKeys($fqdn);
 		$sql_param = array(
 			':subdomain_id' => $subDomainData['subdomain_id']
 		);
@@ -670,7 +663,7 @@ class DaemonDomainCommon {
 			DELETE FROM
 				subdomain
 			WHERE
-				subdomain_id = :subdomain_id
+				subdomain_id = :subdomain_id;
 		";
 		DB::prepare($sql_query);
 		if ($row = DB::execute($sql_param)->closeCursor()) {
@@ -1026,9 +1019,10 @@ class DaemonDomainCommon {
 				   d.domain_gid,
 				   d.domain_uid,
 				   d.domain_id,
-				   d.ssl_key,
-				   d.ssl_cert,
-				   d.ssl_status,
+				   d.domain_mailacc_limit,
+				   da.ssl_key,
+				   da.ssl_cert,
+				   da.ssl_status,
 				   s.ip_number,
 				   s.ip_number_v6
 			FROM
@@ -1043,7 +1037,7 @@ class DaemonDomainCommon {
 			AND
 				da.alias_id = :alias_id
 			AND
-				da.domain_id = d.domain_id
+				da.domain_id = d.domain_id;
 		";
 
 		DB::prepare($sql_query);
@@ -1076,9 +1070,10 @@ class DaemonDomainCommon {
 				   d.domain_gid,
 				   d.domain_uid,
 				   d.domain_id,
-				   d.ssl_key,
-				   d.ssl_cert,
-				   d.ssl_status,
+				   d.domain_mailacc_limit,
+				   sa.ssl_key,
+				   sa.ssl_cert,
+				   sa.ssl_status,
 				   s.ip_number,
 				   s.ip_number_v6
 				FROM
@@ -1099,7 +1094,7 @@ class DaemonDomainCommon {
 				AND
 					sa.alias_id = da.alias_id
 				AND
-					sd.subdomain_id = sa.subdomain_id
+					sd.subdomain_id = sa.subdomain_id;
 		";
 
 		DB::prepare($sql_query);
@@ -1115,7 +1110,10 @@ class DaemonDomainCommon {
 
 		$sql_query = "
 			SELECT
-				a.email, d.*, s.ip_number, s.ip_number_v6
+				a.email,
+				d.*,
+				s.ip_number,
+				s.ip_number_v6
 			FROM
 				admin a,
 				domain d,
@@ -1140,11 +1138,25 @@ class DaemonDomainCommon {
 		$sql_query = "
 			SELECT
 				a.email,
-				d.*,
-				s.ip_number, s.ip_number_v6,
-				sd.*,
+				d.domain_cgi,
+				d.domain_php,
+				d.domain_gid,
+				d.domain_uid,
+				d.domain_id,
+				d.domain_name,
+				d.domain_mailacc_limit,
+				s.ip_number,
+				s.ip_number_v6,
+				sd.subdomain_name,
 				sd.status as subdomain_status,
-				sd.subdomain_mount as mount
+				sd.subdomain_mount as mount,
+				sd.subdomain_mount,
+				sd.ssl_key,
+				sd.ssl_cert,
+				sd.ssl_status,
+	  		    sd.subdomain_id,
+				sd.subdomain_url_forward,
+				sd.subdomain_id
 			FROM
 				admin a,
 				domain d,
@@ -1171,11 +1183,26 @@ class DaemonDomainCommon {
 		);
 		$sql_query = '
 			SELECT
-				d.*,
-				s.ip_number, s.ip_number_v6,
-				sd.*,
+				a.email,
+				d.domain_cgi,
+				d.domain_php,
+				d.domain_gid,
+				d.domain_uid,
+				d.domain_id,
+				d.domain_name,
+				d.domain_mailacc_limit,
+				s.ip_number,
+				s.ip_number_v6,
+				sd.subdomain_name,
 				sd.status as subdomain_status,
-				sd.subdomain_mount as mount
+				sd.subdomain_mount as mount,
+				sd.subdomain_mount,
+				sd.ssl_key,
+				sd.ssl_cert,
+				sd.ssl_status,
+	  		    sd.subdomain_id,
+				sd.subdomain_url_forward,
+				sd.subdomain_id
 			FROM
 				domain AS d,
 				server_ips AS s,
@@ -1204,7 +1231,7 @@ class DaemonDomainCommon {
 			FROM
 				domain
 			WHERE
-				domain_id = :domain_id
+				domain_id = :domain_id;
 		";
 		DB::prepare($sql_query);
 		$domainData = DB::execute($sql_param, true);
@@ -1236,38 +1263,22 @@ class DaemonDomainCommon {
 					"$sysGroup -s /bin/false -u $sysUID $sysUser";
 		}
 
-		// TODO getent stattdessen probieren z.b.
-		// wenn der Benutzer existiert liefert das Tool Daten zurück
-		/*
-		if getent passwd BENUTZERNAME >/dev/null; then
-			echo BENUTZERNAME vorhanden
-		endif
-		if getent group GRUPPENNAME >/dev/null; then
-  			echo GRUPPENNAME vorhanden
-		endif
-		*/
-
-		// exec(DaemonConfig::$cmd->CMD_ID.' -g '.$sysGroup.' 2>&1', $result, $error);
 		exec('getent group '.$sysGroup.' 2>&1', $result, $error);
-		//if ($error != 0){
 		if ($result == Null){
 			System_Daemon::debug("Group $sysGroup ($sysGID) does not exist");
 			exec($cmdGroup.' >> /dev/null 2>&1', $result, $error);
 			System_Daemon::debug($cmdGroup);
 			System_Daemon::debug($result . $error);
 			unset($result);
-			// exec(DaemonConfig::$cmd->CMD_ID.' -g '.$sysGroup, $result, $error);
 		}
 
 		exec('getent passwd '.$sysUser.' 2>&1', $result, $error);
-		// if ($error != 0){
 		if ($result == Null){
 			System_Daemon::debug("User $sysUser ($sysUID) does not exist");
 			exec($cmdUser.' >> /dev/null 2>&1', $result, $error);
 			System_Daemon::debug($cmdUser);
 			System_Daemon::debug($result . $error);
 			unset($result);
-			// exec(DaemonConfig::$cmd->CMD_ID.' -u '.$sysUser, $result, $error);
 		}
 
 		return $retVal;
@@ -1332,7 +1343,7 @@ class DaemonDomainCommon {
 			SET
 				status = 'ok'
 			WHERE
-				dmn_id = :domain_id
+				dmn_id = :domain_id;
 		";
 
 		DB::prepare($sql_query);
@@ -1360,7 +1371,7 @@ class DaemonDomainCommon {
 			FROM
 				htaccess_groups
 			WHERE
-				dmn_id = :domain_id
+				dmn_id = :domain_id;
 		";
 
 		DB::prepare($sql_query);
@@ -1386,7 +1397,7 @@ class DaemonDomainCommon {
 			SET
 				status = 'ok'
 			WHERE
-				dmn_id = :domain_id
+				dmn_id = :domain_id;
 		";
 
 		DB::prepare($sql_query);
@@ -1414,7 +1425,7 @@ class DaemonDomainCommon {
 			FROM
 				htaccess_users
 			WHERE
-				dmn_id = :domain_id
+				dmn_id = :domain_id;
 		";
 
 		DB::prepare($sql_query);
@@ -1434,7 +1445,7 @@ class DaemonDomainCommon {
 			SET
 				status = 'ok'
 			WHERE
-				dmn_id = :domain_id
+				dmn_id = :domain_id;
 		";
 
 		DB::prepare($sql_query);
@@ -1547,9 +1558,16 @@ class DaemonDomainCommon {
 	 * @return mixed
 	 */
 	protected static function writeSSLKeys($domainData){
-		$certFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cert.pem';
-		$cacertFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainData['domain_name'] . '-cacert.pem';
-		$keyFile = DaemonConfig::$distro->SSL_KEY_DIR . '/easyscp_' . $domainData['domain_name'] . '-key.pem';
+		System_Daemon::debug(print_r($domainData,true));
+		if (isset($domainData['subdomain_name'])) {
+			$fqdn = $domainData['subdomain_name'] . '.' . $domainData['domain_name'];
+		} else {
+			$fqdn =  $domainData['domain_name'];
+		}
+		$certFile   = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $fqdn . '-cert.pem';
+		$cacertFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $fqdn . '-cacert.pem';
+		$keyFile    = DaemonConfig::$distro->SSL_KEY_DIR  . '/easyscp_' . $fqdn . '-key.pem';
+
 		$cert = $domainData['ssl_cert'];
 		$key = $domainData['ssl_key'];
 
@@ -1579,5 +1597,83 @@ class DaemonDomainCommon {
 
 		return true;
 	}
+
+	/**
+	 * Delete all keys and certificates for domain name
+	 * @param $domainName
+	 */
+	protected static function deleteSSLKeys($domainName){
+		$certFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainName . '-cert.pem';
+		$cacertFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainName . '-cacert.pem';
+		$keyFile = DaemonConfig::$distro->SSL_KEY_DIR . '/easyscp_' . $domainName . '-key.pem';
+		if (file_exists($certFile)) {
+			$cmdCert = DaemonConfig::$cmd->CMD_RM . ' ' . $certFile;
+			exec($cmdCert);
+			System_Daemon::debug('Deleted SSL certificate for ' . $domainName);
+		}
+		if (file_exists($cacertFile)) {
+			$cmdCacert = DaemonConfig::$cmd->CMD_RM . ' ' . $cacertFile;
+			exec($cmdCacert);
+			System_Daemon::debug('Deleted SSL CA cert for ' . $domainName);
+		}
+		if (file_exists($keyFile)) {
+			$cmdKey = DaemonConfig::$cmd->CMD_RM . ' ' . $keyFile;
+			exec($cmdKey);
+			System_Daemon::debug('Deleted SSL key for ' . $domainName);
+		}
+	}
+	/**
+	 * Query for domain names from domain, subdomain, alias and subdomain alias tables.
+	 * @param $domain_id
+	 * @return mixed
+	 * @throws Exception
+	 */
+	protected static function getDomainNames($domain_id){
+		$sql_param = array(
+			"domain_id"	=> $domain_id
+		);
+		$sql_query = "
+			SELECT
+				domain_name
+			FROM
+				domain
+			WHERE
+				domain_id = :domain_id
+			UNION SELECT
+				alias_name AS domain_name
+			FROM
+				domain as d,
+				domain_aliasses as da
+			WHERE
+				d.domain_id=da.domain_id
+			AND
+				d.domain_id = :domain_id
+			UNION SELECT
+				CONCAT(`subdomain_name`, '.', `domain_name`)
+			FROM
+				domain AS d,
+				subdomain AS s
+			WHERE
+				d.domain_id = s.domain_id
+			UNION SELECT
+				CONCAT(`subdomain_alias_name`,
+					'.',
+					`alias_name`)
+			FROM
+				domain AS d,
+				domain_aliasses AS da,
+				subdomain_alias AS sa
+			WHERE
+				da.alias_id = sa.alias_id
+			AND
+				d.domain_id = da.domain_id
+			AND
+				da.domain_id = :domain_id;
+		";
+		DB::prepare($sql_query);
+		$rs = DB::execute($sql_param);
+		return $rs;
+	}
+
+
 }
-?>
