@@ -206,7 +206,6 @@ function get_init_au2_page($tpl) {
 				'TR_BACKUPCOUNT_NO'	=> ($hp_countbackup == '_no_') ? $cfg->HTML_CHECKED : '',
 				'VL_DNSY'			=> ($hp_dns === '_yes_') ? $cfg->HTML_CHECKED : '',
 				'VL_DNSN'			=> ($hp_dns === '_no_') ? $cfg->HTML_CHECKED : '',
-				'BACKUPCOUNT' 		=> isset($hp_countbackup) ? $hp_countbackup : 'null'
 			)
 	);
 

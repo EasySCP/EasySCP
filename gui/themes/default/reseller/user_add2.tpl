@@ -100,7 +100,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td>{$TR_BACKUP_COUNT} {$BACKUPCOUNT}</td>
+				<td>{$TR_BACKUP_COUNT}</td>
 				<td>
 					<input type="radio" name="countbackup" id="countbackup_yes" value="_yes_" {$TR_BACKUPCOUNT_YES} />&nbsp;{$TR_YES}
 					<input type="radio" name="countbackup" id="countbackup_no" value="_no_" {$TR_BACKUPCOUNT_NO} />&nbsp;{$TR_NO}
