@@ -492,7 +492,6 @@ class DaemonDomainCommon {
 	}
 
 	protected static function deleteAlias($aliasData) {
-		$returnOk = true;
 		if ($subDomainAliasData = self::queryAliasSubDomainDataByAliasID($aliasData['alias_id'])) {
 			while ($row = $subDomainAliasData->fetch()) {
 				$retVal = self::deleteAliasSubDomain($row);
@@ -508,13 +507,15 @@ class DaemonDomainCommon {
 		$fqdn = $aliasData['domain_name'];
 
 		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $fqdn . '.conf';
-		if (!unlink($confFile)) {
-			$returnOk = false;
+		$retVal = self::deleteFile($confFile);
+		if ($retVal!==true){
+			return $retVal;
 		}
 
 		$confFile = DaemonConfig::$distro->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $fqdn . '.custom';
-		if (!unlink($confFile)) {
-			$returnOk = false;
+		$retVal = self::deleteFile($confFile);
+		if ($retVal!==true){
+			return $retVal;
 		}
 		self::deleteSSLKeys($aliasData['domain_name']);
 		$sql_param = array(
@@ -530,18 +531,16 @@ class DaemonDomainCommon {
 		if ($row = DB::execute($sql_param)->closeCursor()) {
 
 		}
-		return $returnOk;
+		return true;
 	}
 
 	protected static function deleteAliasSubDomain($aliasSubDomainData) {
 
 		$fqdn = $aliasSubDomainData['subdomain_name'] . '.' . $aliasSubDomainData['alias_name'];
 		$confFile = DaemonConfig::$distro->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $fqdn . '.custom';
-		$retVal = unlink($confFile);
+		$retVal = self::deleteFile($confFile);
 		if ($retVal !== true ) {
-			$msg = 'Failed to delete ' .$confFile;
-			System_Daemon::debug($msg);
-			return $msg . '<br />' . $retVal;
+			return $retVal;
 		}
 		self::deleteSSLKeys($fqdn);
 		$sql_param = array(
@@ -583,13 +582,15 @@ class DaemonDomainCommon {
 		System_Daemon::debug('Deleted ' . $homeDir);
 
 		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
-		if (!unlink($confFile)) {
-			$returnOk = false;
+		$retVal = self::deleteFile($confFile);
+		if ($retVal!==true){
+			return $retVal;
 		}
 
 		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '-disabled.conf';
-		if (!unlink($confFile)) {
-			$returnOk = false;
+		$retVal = self::deleteFile($confFile);
+		if ($retVal!==true){
+			return $retVal;
 		}
 
 		$cmd = DaemonConfig::$cmd->CMD_RM . ' -rf ' . $fcgiDir;
@@ -626,8 +627,11 @@ class DaemonDomainCommon {
 	 * @return bool
 	 */
 	protected static function deleteHTAccessFile($domainData, $row) {
-		if (file_exists(DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . $row['path'] . '/.htaccess')) {
-			unlink(DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . $row['path'] . '/.htaccess');
+		$confFile = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . $row['path'] . '/.htaccess';
+
+		$retVal = self::deleteFile($confFile);
+		if ($retVal!==true){
+			return $retVal;
 		}
 
 		$sql_param = array(
@@ -648,7 +652,6 @@ class DaemonDomainCommon {
 	}
 
 	protected static function deleteSubDomain($subDomainData) {
-		$returnOk = true;
 		//delete directories
 		$homeDir = DaemonConfig::$distro->APACHE_WWW_DIR . "/" . $subDomainData['domain_name'] . $subDomainData['mount'];
 		$cmd = DaemonConfig::$cmd->CMD_RM . " -rf $homeDir";
@@ -658,8 +661,9 @@ class DaemonDomainCommon {
 
 		$fqdn = $subDomainData['subdomain_name'] . "." . $subDomainData['domain_name'];
 		$confFile = DaemonConfig::$distro->APACHE_CUSTOM_SITES_CONFIG_DIR . "/$fqdn.custom";
-		if (!unlink($confFile)) {
-			$returnOk = false;
+		$retVal = self::deleteFile($confFile);
+		if ($retVal!==true){
+			return $retVal;
 		}
 		self::deleteSSLKeys($fqdn);
 		$sql_param = array(
@@ -676,7 +680,7 @@ class DaemonDomainCommon {
 
 		}
 
-		return $returnOk;
+		return true;
 	}
 
 	/**
@@ -685,7 +689,6 @@ class DaemonDomainCommon {
 	 * @return boolean
 	 */
 	protected static function directoriesCreateDisabled($domainData) {
-		$returnOk = true;
 		$disabledDir = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
 			$disabledDir .= '/' . $domainData['mount'];
@@ -697,7 +700,7 @@ class DaemonDomainCommon {
 
 		if (!DaemonCommon::systemCreateDirectory($disabledDir, $sysUser, $sysGroup) ||
 				!DaemonCommon::systemCreateDirectory($disabledDir . '/images', $sysUser, $sysGroup)){
-			$returnOk = false;
+			return "Cannot create Directory " . $disabledDir . " or " . $disabledDir . '/images';
 		} else {
 			System_Daemon::debug('Created ' . $disabledDir);
 		}
@@ -717,7 +720,7 @@ class DaemonDomainCommon {
 		if (!DaemonCommon::systemWriteContentToFile($htmlFile, $config, $sysUser, DaemonConfig::$distro->APACHE_GROUP, 0644)||
 				!copy(DaemonConfig::$cfg->ROOT_DIR . '/gui/domain_disable_page/easyscp.css', $disabledDir . '/easyscp.css')||
 				!DaemonCommon::systemSetFolderPermissions($disabledDir . '/easyscp.css', $sysUser, $sysGroup, 0755)){
-			$returnOk = false;
+			return "Cannot write disabled content in " . $disabledDir;
 		}
 
 		//copy images
@@ -730,11 +733,11 @@ class DaemonDomainCommon {
 			if ($disabledDir . '/images/' . $entry !== DaemonConfig::$cfg->ROOT_DIR . '/gui/domain_disable_page/images/' . $entry) {
 				if(!copy(DaemonConfig::$cfg->ROOT_DIR . '/gui/domain_disable_page/images/' . $entry, $disabledDir . '/images/' . $entry)){
 					System_Daemon::debug(DaemonConfig::$cfg->ROOT_DIR . '/gui/domain_disable_page/images/' . $entry . ' to ' . $disabledDir . '/images/' . $entry);
-					$returnOk = false;
+					return "Cannot write images content in " . $disabledDir . '/images/';
 				}
 			}
 		}
-		return $returnOk;
+		return true;
 	}
 
 	/**
@@ -742,7 +745,6 @@ class DaemonDomainCommon {
 	 * @return boolean
 	 */
 	protected static function directoriesCreateError($domainData) {
-		$returnOk = true;
 		$errorDir = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
 			$errorDir .= '/' . $domainData['mount'];
@@ -754,11 +756,11 @@ class DaemonDomainCommon {
 
 		if(!DaemonCommon::systemCreateDirectory($errorDir, $sysUser, $sysGroup, 0775)){
 			System_Daemon::warning('Creating directory ' . $errorDir . 'failed!');
-			$returnOk = false;
+			return "Cannot create " . $errorDir;
 		}
 		if(!DaemonCommon::systemCreateDirectory($errorDir . '/inc', $sysUser, $sysGroup, 0775)){
 			System_Daemon::warning('Creating directory ' . $errorDir . '/inc failed!');
-			$returnOk = false;
+			return "Cannot create " . $errorDir . '/inc';
 		}
 
 		// copy errorfiles
@@ -769,7 +771,7 @@ class DaemonDomainCommon {
 				System_Daemon::debug('Copying file ' . $errorDir . '/' . $file . '.html');
 				if (!copy(DaemonConfig::$cfg->ROOT_DIR . '/gui/errordocs/' . $file . '.html', $errorDir . '/' . $file . '.html')){
 					System_Daemon::warning('Copying file ' . $file . '.html failed!');
-					$returnOk = false;
+					return "Cannot write to " . $errorDir;
 				}
 			}
 		}
@@ -784,11 +786,11 @@ class DaemonDomainCommon {
 			if (DaemonConfig::$cfg->ROOT_DIR . '/gui/errordocs/inc/' . $entry !== $errorDir . '/inc/' . $entry) {
 				if (!copy(DaemonConfig::$cfg->ROOT_DIR . '/gui/errordocs/inc/' . $entry, $errorDir . '/inc/' . $entry)){
 					System_Daemon::warning('Copying file ' . $entry . ' failed!');
-					$returnOk = false;
+					return "Cannot write to " . $errorDir . '/inc/';
 				}
 			}
 		}
-		return $returnOk;
+		return true;
 	}
 
 	/**
@@ -852,7 +854,6 @@ class DaemonDomainCommon {
 	 * @return boolean
 	 */
 	protected static function directoriesCreateHtdocs($domainData) {
-		$returnOk = true;
 		$htdocsDir = DaemonConfig::$distro->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
 			$htdocsDir .= "/" . $domainData['mount'];
@@ -864,7 +865,7 @@ class DaemonDomainCommon {
 
 		if	(!DaemonCommon::systemCreateDirectory($htdocsDir, $sysUser, $sysGroup)||
 				!DaemonCommon::systemCreateDirectory($htdocsDir . "/images", $sysUser, $sysGroup)){
-			$returnOk = false;
+			return "Cannot create " . $htdocsDir . ' or ' . $htdocsDir . "/images";
 		}
 
 		$tpl_param = array(
@@ -883,7 +884,7 @@ class DaemonDomainCommon {
 		if (!DaemonCommon::systemWriteContentToFile($htmlFile,$config,$sysUser,$sysGroup,0644)||
 				!copy(DaemonConfig::$cfg->ROOT_DIR . "/gui/domain_default_page/easyscp.css", $htdocsDir . "/easyscp.css")||
 				!DaemonCommon::systemSetFolderPermissions($htdocsDir . "/easyscp.css", $sysUser, $sysGroup, 0775)){
-			$returnOk = false;
+			return "Cannot write to " . $htdocsDir;
 		}
 
 		//copy images
@@ -895,11 +896,11 @@ class DaemonDomainCommon {
 			}
 			if ("$htdocsDir/images/$entry" !== DaemonConfig::$cfg->ROOT_DIR . "/gui/domain_default_page/images/$entry") {
 				if (!copy(DaemonConfig::$cfg->ROOT_DIR . "/gui/domain_default_page/images/$entry", "$htdocsDir/images/$entry")){
-					$returnOk = false;
+					return "Cannot copy to " . $htdocsDir . '/images/';
 				}
 			}
 		}
-		return $returnOk;
+		return true;
 	}
 
 	/**
@@ -1212,11 +1213,14 @@ class DaemonDomainCommon {
 			FROM
 				domain AS d,
 				server_ips AS s,
-				subdomain sd
+				subdomain AS sd,
+				admin AS a
 			WHERE
 				d.domain_ip_id = s.ip_id
 			AND
 				sd.domain_id = d.domain_id
+			AND
+				d.domain_admin_id = a.admin_id
 			AND
 				sd.subdomain_id = :subdomain_id;
 		';
@@ -1681,5 +1685,22 @@ class DaemonDomainCommon {
 		return $rs;
 	}
 
-
+	/**
+	 * Delete a given fileName
+	 *
+	 * returns true on success or error message otherwise
+	 *
+	 * @param $fileName
+	 * @return bool|string
+	 */
+	protected static function deleteFile($fileName){
+		if (file_exists($fileName)){
+			if(!unlink($fileName)){
+				$msg = 'Cannot delete ' .$fileName;
+				System_Daemon::debug($msg);
+				return $msg . '<br />';
+			}
+		}
+		return true;
+	}
 }

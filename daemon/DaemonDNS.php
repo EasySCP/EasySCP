@@ -61,7 +61,7 @@ class DaemonDNS {
 	 */
 	public static function AddServerAlias($dmn_id){
 
-		System_Daemon::debug('Finished "DaemonDNS::AddServerAlias" subprocess.');
+		System_Daemon::debug('Started "DaemonDNS::AddServerAlias" subprocess.');
 
 		$row = self::getUidAndIP($dmn_id);
 
@@ -125,7 +125,7 @@ class DaemonDNS {
 				WHERE
 					d.domain_id = :domain_id
 				AND
-					d.domain_ip_id = i.ip_id
+					d.domain_ip_id = i.ip_id;
 			";
 		}  else {
 			$easyscp_domain_id_string = "easyscp_domain_alias_id";
@@ -139,7 +139,7 @@ class DaemonDNS {
 				WHERE
 					d.domain_id = :domain_id
 				AND
-					d.alias_ip_id = i.ip_id
+					d.alias_ip_id = i.ip_id;
 			";
 		}
 
