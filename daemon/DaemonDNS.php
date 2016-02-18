@@ -95,7 +95,7 @@ class DaemonDNS {
 
 		$stmt = Null;
 
-		System_Daemon::debug('Finished "DaemonDNS::AddDefaultDNSEntries" subprocess.');
+		System_Daemon::debug('Finished "DaemonDNS::AddServerAlias" subprocess.');
 
 		return true;
 	}
@@ -289,7 +289,9 @@ class DaemonDNS {
 		$stmt = Null;
 		unset($stmt);
 
-		self::AddServerAlias($dmn_id);
+		if (!$dmn_alias) {
+			self::AddServerAlias($dmn_id);
+		}
 
 		System_Daemon::debug('Finished "DaemonDNS::AddDefaultDNSEntries" subprocess.');
 
@@ -399,7 +401,9 @@ class DaemonDNS {
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
 
-		self::DeleteServerAlias($dmn_id);
+		if (!$dmn_alias) {
+			self::DeleteServerAlias($dmn_id);
+		}
 
 		System_Daemon::debug('Finished "DaemonDNS::DeleteDomainDNSEntries" subprocess.');
 

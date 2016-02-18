@@ -506,7 +506,13 @@ class DaemonDomainCommon {
 		}
 
 		$fqdn = $aliasData['domain_name'];
-		$confFile = DaemonConfig::$distro->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $fqdn . '.conf';
+
+		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $fqdn . '.conf';
+		if (!unlink($confFile)) {
+			$returnOk = false;
+		}
+
+		$confFile = DaemonConfig::$distro->APACHE_CUSTOM_SITES_CONFIG_DIR . '/' . $fqdn . '.custom';
 		if (!unlink($confFile)) {
 			$returnOk = false;
 		}

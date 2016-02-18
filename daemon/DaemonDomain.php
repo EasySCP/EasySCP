@@ -168,6 +168,12 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
+				$retVal = DaemonDNS::DeleteAllDomainDNSEntries($aliasData['alias_id'], true);
+				if ($retVal !== true) {
+					$msg = 'Deleting alias DNS entries failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
 				break;
 			case 'disable':
 				$retVal = self::apacheDisableSite($aliasData['alias_name']);
