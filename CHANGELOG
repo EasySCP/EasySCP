@@ -1,12 +1,12 @@
 EasySCP 2.1.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2016-02-07
+2016-02-28
 	- DOCS:
 		* Add: Ubuntu 16.04 LTS package file
 
 	- GUI:
-   		* Update: jQuery to version 1.12.0
+   		* Update: jQuery to version 1.12.1
 		* Add: Cronjobs for all users
 		* Add: Call Iana update from GUI
 
