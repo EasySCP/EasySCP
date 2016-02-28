@@ -32,7 +32,7 @@ if (isset($_POST['uaction']) && $_POST['uaction'] === 'save_lang') {
 $cfg = EasySCP_Registry::get('Config');
 
 $tpl = EasySCP_TemplateEngine::getInstance();
-$template = 'reseller/language.tpl';
+$template = 'common/language.tpl';
 
 if (isset($_POST['uaction']) && $_POST['uaction'] === 'save_lang') {
 	set_page_message(

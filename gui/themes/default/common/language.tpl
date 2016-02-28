@@ -7,13 +7,13 @@
 {block name=CONTENT_HEADER}{$TR_CHOOSE_DEFAULT_LANGUAGE}{/block}
 
 {block name=BREADCRUMP}
-<li><a href="/admin/index.php">{$TR_MENU_GENERAL_INFORMATION}</a></li>
+<li><a href="index.php">{$TR_MENU_GENERAL_INFORMATION}</a></li>
 <li><a>{$TR_CHOOSE_DEFAULT_LANGUAGE}</a></li>
 {/block}
 
 {block name=BODY}
 <h2 class="multilanguage"><span>{$TR_CHOOSE_DEFAULT_LANGUAGE}</span></h2>
-<form action="/admin/language.php" method="post" id="admin_language">
+<form action="language.php" method="post" id="language">
 	<table>
 		<tr>
 			<td><label for="def_language">{$TR_CHOOSE_DEFAULT_LANGUAGE}</label></td>
