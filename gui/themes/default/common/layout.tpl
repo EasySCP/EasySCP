@@ -14,7 +14,7 @@
 	<link href="{$THEME_COLOR_PATH}/css/easyscp.css" rel="stylesheet" type="text/css" />
 	<link href="{$THEME_COLOR_PATH}/css/jquery.ui.css" rel="stylesheet" type="text/css" />
 	<link href="{$THEME_COLOR_PATH}/css/jquery.easyscp.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="{$THEME_SCRIPT_PATH}/jquery-1.12.1.min.js"></script>
+	<script type="text/javascript" src="{$THEME_SCRIPT_PATH}/jquery-1.12.3.min.js"></script>
 	<script type="text/javascript" src="{$THEME_SCRIPT_PATH}/jquery.ui.js"></script>
 	<script type="text/javascript" src="{$THEME_SCRIPT_PATH}/jquery.easyscp.js"></script>
 	<script type="text/javascript" src="{$THEME_SCRIPT_PATH}/easyscp.js"></script>
