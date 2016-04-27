@@ -24,22 +24,32 @@ class additional_message_headers extends rcube_plugin
     {
         $this->load_config();
 
-        $headers = $args['message']->headers();
-        $rcube   = rcube::get_instance();
+        $rcube = rcube::get_instance();
 
         // additional email headers
         $additional_headers = $rcube->config->get('additional_message_headers', array());
-        foreach ((array)$additional_headers as $header => $value) {
-            if (null === $value) {
-                unset($headers[$header]);
+
+        if (!empty($additional_headers)) {
+            // Mail_mime >= 1.9.0
+            if (method_exists($message, 'isMultipart')) {
+                $args['message']->headers($additional_headers, true);
             }
             else {
-                $headers[$header] = $value;
+                $headers = $args['message']->headers();
+
+                foreach ((array) $additional_headers as $header => $value) {
+                    if ($value === null) {
+                        unset($headers[$header]);
+                    }
+                    else {
+                        $headers[$header] = $value;
+                    }
+                }
+
+                $args['message']->_headers = array();
+                $args['message']->headers($headers);
             }
         }
-
-        $args['message']->_headers = array();
-        $args['message']->headers($headers);
 
         return $args;
     }
