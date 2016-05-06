@@ -3,6 +3,7 @@
 # EasySCP a Virtual Hosting Control Panel
 # Copyright (C) 2010-2016 by Easy Server Control Panel - http://www.easyscp.net
 #
+# Sponsored by Tecflare Corporation
 # This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
 #
@@ -13,6 +14,14 @@ Auswahl=""
 OS=""
 
 clear
+# Looks Better
+echo "___________                      ____________________________";
+echo "\_   _____/____    _________.__./   _____/\_   ___ \______   \";
+echo " |    __)_\__  \  /  ___<   |  |\_____  \ /    \  \/|     ___/";
+echo " |        \/ __ \_\___ \ \___  |/        \\     \___|    |    ";
+echo "/_______  (____  /____  >/ ____/_______  / \______  /____|    ";
+echo "        \/     \/     \/ \/            \/         \/          ";
+
 
 echo ""
 echo "1 = CentOS"
