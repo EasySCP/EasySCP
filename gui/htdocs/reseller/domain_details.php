@@ -95,7 +95,6 @@ unset_messages();
  */
 function gen_detaildom_page($tpl, $user_id, $domain_id) {
 	$sql = EasySCP_Registry::get('Db');
-	$cfg = EasySCP_Registry::get('Config');
 
 	// Get domain data
 	$query = "
