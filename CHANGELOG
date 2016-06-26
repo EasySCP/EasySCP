@@ -1,7 +1,7 @@
 EasySCP 2.1.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2016-06-12
+2016-06-25
 	- DOCS:
 		* Add: Ubuntu 16.04 LTS package file
 
@@ -22,5 +22,5 @@ EasySCP 2.1.0 ChangeLog
 
 	- TOOLS:
 		* Update: net2ftp to version 1.0 build 47
-		* Update: phpMyAdmin to version 4.0.10.15
+		* Update: phpMyAdmin to version 4.0.10.16
 		* Update: Roundcube to version 1.0.9
