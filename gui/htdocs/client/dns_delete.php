@@ -35,7 +35,46 @@ if (isset($_GET['edit_id']) && !empty($_GET['edit_id'])) {
 	if (!check_dns_record_owned($_SESSION['user_id'], $_GET['edit_id'])) {
 		user_goto('dns_overview.php');
 	}
+
+	$sql_param = array(
+		'domain_id' => $dmn_id,
+	);
+
+	$sql_query = "
+		SELECT
+			id, name
+		FROM
+			powerdns.domains
+		WHERE
+			easyscp_domain_id = :domain_id
+	";
+
+	DB::prepare($sql_query);
+	$data = DB::execute($sql_param, true);
+
+	$sql_param = array(
+		'domain_content'	=> 'ns1.' . $data['domain_name'] . '. ' . EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
+		'domain_id'			=> $data['id'],
+		'domain_name'		=> $data['name'],
+		'domain_type'		=> 'SOA'
+	);
 	
+	$sql_query = "
+		UPDATE
+			powerdns.records
+		SET
+			content = :domain_content
+		WHERE
+			domain_id = :domain_id
+		AND
+			name = :domain_name
+		AND
+			type = :domain_type;
+		";
+
+	DB::prepare($sql_query);
+	DB::execute($sql_param);
+
 	$sql_param = array(
 		'record_id' => $_GET['edit_id'],
 	);

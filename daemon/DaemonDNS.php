@@ -304,21 +304,41 @@ class DaemonDNS {
 		System_Daemon::debug('Starting "DaemonDNS::UpdateNotifiedSerial" subprocess.');
 
 		$sql_param = array(
-			'domain_id' => $domainData['domain_id'],
-			'domain_name' => $domainData['domain_name'],
-            'domain_type' => 'SOA',
-            'domain_content' => 'ns1.'.$domainData['domain_name'].'. '.DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' '.time().' 12000 1800 604800 86400',
-            'domain_ttl' => '3600',
-            'domain_prio' => Null
+			':name' => $domainData['domain_name']
+		);
+
+		$sql_query = "
+			SELECT
+				id
+			FROM
+				powerdns.domains
+			WHERE
+				name = :name;
+		";
+
+		DB::prepare($sql_query);
+		$row = DB::execute($sql_param, true);
+
+		$dmn_dns_id = $row['id'];
+
+		$sql_param = array(
+            'domain_content'	=> 'ns1.' . $domainData['domain_name'] . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
+			'domain_id'			=> $dmn_dns_id,
+			'domain_name'		=> $domainData['domain_name'],
+            'domain_type'		=> 'SOA'
 		);
 		
 		$sql_query = "
-			INSERT INTO
-				powerdns.records (domain_id, name, type, content, ttl, prio) 
-			VALUES
-				(:domain_id, :domain_name, :domain_type, :domain_content, :domain_ttl, :domain_prio) 
-			ON DUPLICATE KEY UPDATE
-				name = :domain_name, content = :domain_content;
+			UPDATE
+				powerdns.records
+			SET
+				content = :domain_content
+			WHERE
+				domain_id = :domain_id
+			AND
+				name = :domain_name
+			AND
+				type = :domain_type;
 			";
 
 		DB::prepare($sql_query);
@@ -377,6 +397,9 @@ class DaemonDNS {
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
 
+		// Update the DNS serial
+		self::UpdateNotifiedSerial($domainData);
+		
 		System_Daemon::debug('Finished "DaemonDNS::AddDNSEntry" subprocess.');
 
 		return true;
@@ -476,6 +499,9 @@ class DaemonDNS {
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
 
+		// Update the DNS serial
+		self::UpdateNotifiedSerial($domainData);
+		
 		System_Daemon::debug('Finished "DaemonDNS::DeleteDNSEntry" subprocess.');
 
 		return true;
