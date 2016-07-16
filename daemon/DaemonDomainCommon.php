@@ -1368,6 +1368,8 @@ class DaemonDomainCommon {
 	 * @return bool
 	 */
 	protected static function writeHTAccessGroup($domainData){
+		System_Daemon::debug('Starting "DaemonDomainCommon::writeHTAccessGroup = ' . $domainData['domain_name'] . '" subprocess.');
+
 		$content = '';
 		$fileName = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htgroup';
 
@@ -1412,6 +1414,8 @@ class DaemonDomainCommon {
 
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
+
+		System_Daemon::debug('Finished "DaemonDomainCommon::writeHTAccessGroup = ' . $domainData['domain_name'] . '" subprocess.');
 
 		return true;
 	}
