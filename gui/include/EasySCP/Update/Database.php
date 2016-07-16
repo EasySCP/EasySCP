@@ -212,7 +212,7 @@ class EasySCP_Update_Database extends EasySCP_Update {
 			ALTER TABLE
 				`domain`
 			ADD
-				`domain_ssl` VARCHAR(15) NOT NULL DEFAULT 'No',
+				`domain_ssl` VARCHAR(15) NOT NULL DEFAULT 'no',
 			ADD
 				`ssl_key` VARCHAR(5000) NULL DEFAULT NULL,
 			ADD

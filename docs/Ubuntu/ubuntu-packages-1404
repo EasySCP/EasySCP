@@ -73,6 +73,4 @@ proftpd-basic
 proftpd-mod-mysql
 rkhunter
 sasl2-bin
-ssh
 tar
-wget
