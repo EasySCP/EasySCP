@@ -305,13 +305,16 @@ class DaemonCommon {
 		// TODO: Remove them when GUI Config has changed to XML
 		// Außerdem wird die Datei beim Schreiben der OldConfig bereits mit den richtigen Rechten versehen, das hier wäre nur für den Notfall falls die Rechte durcheinander geraten sind
 		// easyscp.conf must be world readable because user "vmail" needs to access it.
-		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/easyscp.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/BUILD', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_CMD.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_Config.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_Config_DB.php', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_Distro.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_OS.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/easyscp-keys.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/Iana_TLD.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/VERSION', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/easyscp-keys.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/easyscp.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 
 		self::systemSetFilePermissions('/etc/logrotate.d/easyscp', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 
