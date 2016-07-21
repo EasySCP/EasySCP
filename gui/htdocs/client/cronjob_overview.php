@@ -44,7 +44,7 @@ gen_logged_from($tpl);
 
 check_permissions($tpl);
 
-EasyCron::genCronjobLlist($tpl);
+EasyCron::genCronjobList($tpl);
 
 $tpl->assign(
 	array(

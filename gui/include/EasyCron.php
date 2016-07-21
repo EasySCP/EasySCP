@@ -739,7 +739,7 @@ class EasyCron
 	 * Generate list of all available cronjobs
 	 * @param $tpl
 	 */
-	public static function genCronjobLlist($tpl)
+	public static function genCronjobList($tpl)
 	{
 		$rs = EasyCron::getCronjobs($_SESSION['user_type'], $_SESSION['user_id']);
 
