@@ -170,7 +170,7 @@ function gen_detaildom_page($tpl, $user_id, $domain_id) {
 	$domain_traffic_limit = $data['domain_traffic_limit'];
 	$domain_all_traffic = $sumtraff;
 
-	$traffic_percent = ($domain_all_traffic != 0) ? sprintf("%.2f", 100 * $domain_all_traffic / ($domain_traffic_limit * 1024 * 1024)) : 0;
+	$traffic_percent = ($domain_traffic_limit != 0) ? sprintf("%.2f", 100 * $domain_all_traffic / ($domain_traffic_limit * 1024 * 1024)) : 0;
 
 	// Get disk status
 	$domdu = $data['domain_disk_usage'];
@@ -178,8 +178,8 @@ function gen_detaildom_page($tpl, $user_id, $domain_id) {
 
 	$domduh = sizeit($domdu);
 
-	$disk_percent = sprintf("%.2f", 100 * $domdu / ($domdl * 1024 * 1024));
-
+	$disk_percent = ($domdl != 0) ? sprintf("%.2f", 100 * $domdu / ($domdl * 1024 * 1024)) : 0;
+		
 	// Get current mail count
 	$query = "SELECT COUNT(`mail_id`) AS mcnt "
 			. "FROM `mail_users` "
@@ -256,10 +256,10 @@ function gen_detaildom_page($tpl, $user_id, $domain_id) {
 			'VL_MYSQL_SUPP'				=> ($data['domain_sqld_limit'] >= 0) ? tr('Enabled') : tr('Disabled'),
 			'VL_TRAFFIC_PERCENT'		=> $traffic_percent,
 			'VL_TRAFFIC_USED'			=> sizeit($domain_all_traffic),
-			'VL_TRAFFIC_LIMIT'			=> sizeit($domain_traffic_limit, 'MB'),
+			'VL_TRAFFIC_LIMIT'			=> ($data['domain_traffic_limit'] > 0) ? tr(sizeit($domain_traffic_limit, 'MB')) : tr('unlimited MB'),
 			'VL_DISK_PERCENT'			=> $disk_percent,
 			'VL_DISK_USED'				=> $domduh,
-			'VL_DISK_LIMIT'				=> sizeit($data['domain_disk_limit'], 'MB'),
+			'VL_DISK_LIMIT'				=> ($data['domain_disk_limit'] > 0) ? tr(sizeit($data['domain_disk_limit'], 'MB')) : tr('unlimited MB'),
 			'VL_MAIL_ACCOUNTS_USED'		=> $dat3['mcnt'],
 			'VL_MAIL_ACCOUNTS_LIIT'		=> $mail_limit,
 			'VL_FTP_ACCOUNTS_USED'		=> $used_ftp_acc,
