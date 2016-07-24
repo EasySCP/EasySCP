@@ -23,7 +23,7 @@
 // 1. Define the constants NET2FTP_APPLICATION_ROOTDIR and NET2FTP_APPLICATION_ROOTDIR_URL
 // ------------------------------------------------------------------------
 $server_protocol = "http://";
-if (isset($_SERVER["SERVER_PROTOCOL"]) == true && stripos($_SERVER["SERVER_PROTOCOL"], "https") !== false) { $server_protocol = "https://"; } 
+if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') { $server_protocol = "https://"; }
 $http_host = "";
 if (isset($_SERVER["HTTP_HOST"]) == true) { $http_host = $_SERVER["HTTP_HOST"]; }
 $script_name = "/index.php";

@@ -28,6 +28,10 @@ function getLanguageArray() {
 
 	$languageArray["en"]["name"] = "English";
 	$languageArray["en"]["file"] = "en.inc.php";
+	$languageArray["en-utf"]["name"] = "English UTF-8";
+	$languageArray["en-utf"]["file"] = "en-utf.inc.php";
+	$languageArray["de"]["name"] = "German";
+	$languageArray["de"]["file"] = "de.inc.php";
 
 	return $languageArray;
 

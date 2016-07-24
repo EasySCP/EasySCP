@@ -131,7 +131,7 @@ $net2ftp_settings["check_homedirectory"] = "yes";
 // ----------------------------------------------------------------------------------
 
 $net2ftp_settings["application_version"] = "1.0";
-$net2ftp_settings["application_build_nr"] = "47";
+$net2ftp_settings["application_build_nr"] = "50";
 
 // Is this net2ftp.com, or a net2ftp installation elsewhere
 $net2ftp_settings["net2ftpdotcom"] = "no";

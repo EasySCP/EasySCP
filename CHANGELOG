@@ -1,7 +1,7 @@
 EasySCP 2.1.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2016-06-25
+2016-07-24
 	- DOCS:
 		* Add: Ubuntu 16.04 LTS package file
 
@@ -21,6 +21,6 @@ EasySCP 2.1.0 ChangeLog
 		* Add: Configuring separate SSL certificates for domain, alias and subdomains (Issue #8)
 
 	- TOOLS:
-		* Update: net2ftp to version 1.0 build 47
+		* Update: net2ftp to version 1.0 build 50
 		* Update: phpMyAdmin to version 4.0.10.16
 		* Update: Roundcube to version 1.0.9
