@@ -325,8 +325,6 @@ function add_user_data($reseller_id) {
 		)
 	);
 
-	print $sql->errorMsg();
-
 	$record_id = $sql->insertId();
 	
 	$query = "
