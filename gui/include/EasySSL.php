@@ -213,7 +213,7 @@ class EasySSL
 					ssl_status	= :ssl_status,
 					status		= 'change'
 				WHERE
-					(ssl_cert <> :ssl_cert OR ssl_key <> :ssl_key OR ssl_status <> :ssl_status)
+					(ssl_cert <> :ssl_cert OR ssl_cacert <> :ssl_cacert OR ssl_key <> :ssl_key OR ssl_status <> :ssl_status)
 				AND
 					$idColumn	= :domain_id;
 			";
