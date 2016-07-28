@@ -213,7 +213,7 @@ class DaemonSystemCommon {
 			VALUES
 				('IANA_LAST_UPDATE', :time)
 			ON DUPLICATE KEY UPDATE
-				value = SYSDATE()
+				value = :time
 		";
 		$sql_param = array (
 			':time'	=>	time()
