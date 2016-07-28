@@ -1673,6 +1673,8 @@ class DaemonDomainCommon {
 				subdomain AS s
 			WHERE
 				d.domain_id = s.domain_id
+			AND
+				d.domain_id = :domain_id
 			UNION SELECT
 				CONCAT(`subdomain_alias_name`,
 					'.',
