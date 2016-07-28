@@ -651,7 +651,7 @@ function check_ruser_data($tpl, $noPass) {
 		}
 	}
 
-	if (is_null($user_email)) {
+	if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
 		$user_add_error = tr('Incorrect email length or syntax!');
 	}
 
