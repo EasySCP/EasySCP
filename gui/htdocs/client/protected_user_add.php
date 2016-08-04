@@ -30,7 +30,7 @@ $cfg = EasySCP_Registry::get('Config');
 $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'client/protected_user_add.tpl';
 
-padd_user($tpl, $sql, get_user_domain_id($_SESSION['user_id']));
+padd_user(get_user_domain_id($_SESSION['user_id']));
 
 // static page messages
 gen_logged_from($tpl);
@@ -71,9 +71,10 @@ $tpl->display($template);
 
 unset_messages();
 
-function padd_user($tpl, $sql, $dmn_id) {
+function padd_user($dmn_id) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	if (isset($_POST['uaction']) && $_POST['uaction'] == 'add_user') {
 		// we have to add the user

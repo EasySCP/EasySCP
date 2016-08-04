@@ -97,7 +97,7 @@ if (isset($_GET['uname'])
 				'UID'	=> $uuser_id,
 			)
 		);
-		pedit_user($tpl, $sql, $dmn_id, $uuser_id);
+		pedit_user($dmn_id, $uuser_id);
 	}
 } else {
 	user_goto('protected_user_manage.php');
@@ -142,9 +142,10 @@ $tpl->display($template);
 
 unset_messages();
 
-function pedit_user($tpl, $sql, &$dmn_id, &$uuser_id) {
+function pedit_user(&$dmn_id, &$uuser_id) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	if (isset($_POST['uaction']) && $_POST['uaction'] == 'modify_user') {
 		// we have to add the user
@@ -191,7 +192,7 @@ function pedit_user($tpl, $sql, &$dmn_id, &$uuser_id) {
 			";
 			exec_query($sql, $query, array($nadmin_password, $change_status, $dmn_id, $uuser_id,));
 
-			send_request();
+			send_request('110 DOMAIN htaccess ' . $dmn_id);
 
 			$query = "
 				SELECT
