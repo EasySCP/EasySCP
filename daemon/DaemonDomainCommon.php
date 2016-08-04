@@ -800,6 +800,8 @@ class DaemonDomainCommon {
 	 * @return boolean
 	 */
 	protected static function directoriesCreateFCGI($domainData) {
+		System_Daemon::debug('Starting "directoriesCreateFCGI" subprocess.');
+
 		$fcgiDir = DaemonConfig::$distro->PHP_STARTER_DIR . "/" . $domainData['domain_name'];
 		$sysGroup = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'];
 		$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
@@ -821,13 +823,14 @@ class DaemonDomainCommon {
 
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 
-			$config = $tpl->fetch("fcgi/parts/php-fcgi-starter.tpl");
+			$config = $tpl->fetch("php/parts/php-fcgi-starter.tpl");
 			$tpl = NULL;
 			unset($tpl);
 			if (!DaemonCommon::systemWriteContentToFile($fcgiDir . '/php-fcgi-starter', $config, $sysUser, $sysGroup, 0550)) {
 				return false;
 			}
 		}
+
 		if (!file_exists($fcgiDir . "/php/php.ini")) {
 			$tpl_param = array(
 				'DOMAIN_NAME'		=> $domainData['domain_name'],
@@ -838,13 +841,16 @@ class DaemonDomainCommon {
 			);
 			$tpl = DaemonCommon::getTemplate($tpl_param);
 
-			$config = $tpl->fetch('fcgi/parts/php/php_'.DaemonConfig::$cfg->DistVersion.'.ini');
+			$config = $tpl->fetch('php/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/php.ini');
 			$tpl = NULL;
 			unset($tpl);
 			if (!DaemonCommon::systemWriteContentToFile($fcgiDir . '/php/php.ini', $config, $sysUser, $sysGroup, 0440)) {
 				return false;
 			}
 		}
+
+		System_Daemon::debug('Finished "directoriesCreateFCGI" subprocess.');
+
 		return true;
 	}
 

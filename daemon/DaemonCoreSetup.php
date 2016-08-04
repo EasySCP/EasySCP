@@ -818,7 +818,7 @@ function GUI_PHP(){
 	);
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
-	$config = $tpl->fetch('php/parts/php/master.php_'.DaemonConfig::$cfg->{'DistVersion'}.'.ini');
+	$config = $tpl->fetch('php/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/master.php.ini');
 	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.php.ini';
 	$tpl = NULL;
 	unset($tpl);
