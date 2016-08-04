@@ -25,26 +25,31 @@ require '../../include/easyscp-lib.php';
 
 check_login(__FILE__);
 
+$cfg = EasySCP_Registry::get('Config');
+
 if (isset($_GET['del_id']) && !empty($_GET['del_id'])) {
-	$del_id = $_GET['del_id'];
+	$sql_param = array(
+			'alias_id'		=> $_GET['del_id'],
+			'domain_id'		=> get_user_domain_id($_SESSION['user_id']),
+			'status'		=> $cfg->ITEM_ORDERED_STATUS
+	);
+
+	$sql_query = "
+		DELETE FROM
+			`domain_aliasses`
+		WHERE
+			`alias_id` = :alias_id
+		AND
+			`domain_id` = :domain_id
+		AND
+			`status` = :status;
+	";
+
+	DB::prepare($sql_query);
+	DB::execute($sql_param);
 } else {
 	$_SESSION['orderaldel'] = '_no_';
-	user_goto('domains_manage.php');
 }
-
-$domainId = get_user_domain_id($_SESSION['user_id']);
-
-$query = "
-	DELETE FROM
-		`domain_aliasses`
-	WHERE
-		`alias_id` = ?
-	AND
-		`domain_id` = ?
-	AND
-		`status` = ?
-	";
-$rs = exec_query($sql, $query, array($domainAliasId, $domainId, $cfg->ITEM_ORDERED_STATUS));
 
 user_goto('domains_manage.php');
 ?>

@@ -11,6 +11,8 @@ EasySCP 2.1.0 ChangeLog
 		* Add: Call Iana update from GUI
 		* Improved: Template files and remove duplicate content/functions
 
+		* Fix: Delete alias order
+
 	- Setup:
 		* Add: Ubuntu 16.04 LTS support
 
