@@ -226,23 +226,6 @@
 					</select>
 				</td>
 			</tr>
-			<!--
-			<tr>
-				<td><label for="coid">{$TR_CUSTOM_ORDERPANEL_ID}</label></td>
-				<td><input type="text" name="coid" id="coid" value="{$CUSTOM_ORDERPANEL_ID}" /></td>
-			</tr>
-			-->
-			<!--
-			<tr>
-				<td><label for="migration_enabled">{$TR_MIGRATION_ENABLED}</label></td>
-				<td>
-					<select name="migration_enabled" id="migration_enabled">
-						<option value="0" {$MIGRATION_ENABLED_SELECTED_OFF}>{$TR_DISABLED}</option>
-						<option value="1" {$MIGRATION_ENABLED_SELECTED_ON}>{$TR_ENABLED}</option>
-					</select>
-				</td>
-			</tr>
-			-->
 		</table>
 	</fieldset>
 	<div class="buttons">

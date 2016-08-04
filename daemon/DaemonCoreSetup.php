@@ -63,8 +63,8 @@ function Setup($Input){
 		case 'EasySCP_Powerdns_main_configuration_file':
 			return EasySCP_Powerdns_main_configuration_file();
 			break;
-		case 'EasySCP_Apache_fcgi_modules_configuration':
-			return EasySCP_Apache_fcgi_modules_configuration();
+		case 'EasySCP_Apache_php_configuration':
+			return EasySCP_Apache_php_configuration();
 			break;
 		case 'EasySCP_Apache_main_vhost_file':
 			return EasySCP_Apache_main_vhost_file();
@@ -653,7 +653,7 @@ function EasySCP_Powerdns_main_configuration_file(){
 	return 'Ok';
 }
 
-function EasySCP_Apache_fcgi_modules_configuration(){
+function EasySCP_Apache_php_configuration(){
 	// Loading the template from the /etc/easyscp/apache directory, Building the new configuration file
 	// and Storing the new file
 
@@ -774,7 +774,7 @@ function GUI_PHP(){
 	DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php', DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0555);
 
 	// PHP5 Starter script
-	// Loading the template from /etc/easyscp/fcgi/parts/master, Building the new file
+	// Loading the template from /etc/easyscp/php/parts/master, Building the new file
 	// and Storing the new file in the working directory
 
 	$tpl_param = array(
@@ -785,8 +785,8 @@ function GUI_PHP(){
 	);
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
-	$config = $tpl->fetch('fcgi/parts/master.php-fcgi-starter.tpl');
-	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php-fcgi-starter';
+	$config = $tpl->fetch('php/parts/master.php-fcgi-starter.tpl');
+	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.php-fcgi-starter';
 	$tpl = NULL;
 	unset($tpl);
 
@@ -795,11 +795,11 @@ function GUI_PHP(){
 	}
 
 	// Install the new file
-	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php-fcgi-starter '.DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php-fcgi-starter', $result, $error);
+	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.php-fcgi-starter '.DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php-fcgi-starter', $result, $error);
 
 
 	// PHP5 php.ini file
-	// Loading the template from /etc/easyscp/fcgi/parts/master/php, Building the new file
+	// Loading the template from /etc/easyscp/php/parts/master/php, Building the new file
 	// and Store the new file in working directory
 
 	$tpl_param = array(
@@ -818,8 +818,8 @@ function GUI_PHP(){
 	);
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
-	$config = $tpl->fetch('fcgi/parts/php/master.php_'.DaemonConfig::$cfg->{'DistVersion'}.'.ini');
-	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php.ini';
+	$config = $tpl->fetch('php/parts/php/master.php_'.DaemonConfig::$cfg->{'DistVersion'}.'.ini');
+	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.php.ini';
 	$tpl = NULL;
 	unset($tpl);
 
@@ -828,7 +828,7 @@ function GUI_PHP(){
 	}
 
 	// Install the new file
-	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/fcgi/working/master.php.ini '.DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php/php.ini', $result, $error);
+	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.php.ini '.DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php/php.ini', $result, $error);
 
 	return 'Ok';
 }

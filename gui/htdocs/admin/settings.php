@@ -99,12 +99,10 @@ if (isset($_POST['uaction']) && $_POST['uaction'] == 'apply') {
 		$db_cfg->DOMAIN_ROWS_PER_PAGE = $domain_rows_per_page;
 		$db_cfg->LOG_LEVEL = $log_level;
 		$db_cfg->CHECK_FOR_UPDATES = $checkforupdate;
-		// $db_cfg->CUSTOM_ORDERPANEL_ID = $custom_orderpanel_id;
 		$db_cfg->TLD_STRICT_VALIDATION = $tld_strict_validation;
 		$db_cfg->SLD_STRICT_VALIDATION = $sld_strict_validation;
 		$db_cfg->MAX_DNAMES_LABELS = $max_dnames_labels;
 		$db_cfg->MAX_SUBDNAMES_LABELS = $max_subdnames_labels;
-		// $db_cfg->MIGRATION_ENABLED = $migration_enabled;
 
 		$cfg->replaceWith($db_cfg);
 
@@ -141,10 +139,6 @@ if (isset($_POST['uaction']) && $_POST['uaction'] == 'apply') {
 	user_goto('settings.php');
 }
 
-$coid = isset($cfg->CUSTOM_ORDERPANEL_ID)
-	? $cfg->CUSTOM_ORDERPANEL_ID
-	: '';
-
 $tpl->assign(
 	array(
 		'LOSTPASSWORD_TIMEOUT_VALUE'	=> $cfg->LOSTPASSWORD_TIMEOUT,
@@ -154,7 +148,6 @@ $tpl->assign(
 		'BRUTEFORCE_BETWEEN_TIME_VALUE'	=> $cfg->BRUTEFORCE_BETWEEN_TIME,
 		'BRUTEFORCE_MAX_CAPTCHA'		=> $cfg->BRUTEFORCE_MAX_CAPTCHA,
 		'DOMAIN_ROWS_PER_PAGE'			=> $cfg->DOMAIN_ROWS_PER_PAGE,
-		'CUSTOM_ORDERPANEL_ID'			=> tohtml($coid),
 		'MAX_DNAMES_LABELS_VALUE'		=> $cfg->MAX_DNAMES_LABELS,
 		'MAX_SUBDNAMES_LABELS_VALUE'	=> $cfg->MAX_SUBDNAMES_LABELS
 	)
@@ -329,15 +322,13 @@ $tpl->assign(
 		'TR_E_USER_WARNING'					=> tr('Warnings and Errors'),
 		'TR_E_USER_ERROR'					=> tr('Errors'),
 		'TR_CHECK_FOR_UPDATES'				=> tr('Check for update'),
-		'TR_CUSTOM_ORDERPANEL_ID'			=> tr('Custom orderpanel ID'),
 		'TR_DNAMES_VALIDATION_SETTINGS'		=> tr('Domain names validation'),
 		'TR_TLD_STRICT_VALIDATION'			=> tr('Top Level Domain name strict validation'),
 		'TR_TLD_STRICT_VALIDATION_HELP'		=> tr('Only Top Level Domains (TLD) listed in IANA root zone database can be used.'),
 		'TR_SLD_STRICT_VALIDATION'			=> tr('Second Level Domain name strict validation'),
 		'TR_SLD_STRICT_VALIDATION_HELP'		=> tr('Single letter Second Level Domains (SLD) are not allowed under the most Top Level Domains (TLD). There is a small list of exceptions, e.g. the TLD .de.'),
 		'TR_MAX_DNAMES_LABELS'				=> tr('Maximal number of labels for domain names<br />(<em>Excluding SLD & TLD</em>)'),
-		'TR_MAX_SUBDNAMES_LABELS'			=> tr('Maximal number of labels for subdomains'),
-		'TR_MIGRATION_ENABLED'				=> tr('Allow Migration/Import from other Panels')
+		'TR_MAX_SUBDNAMES_LABELS'			=> tr('Maximal number of labels for subdomains')
 	)
 );
 
