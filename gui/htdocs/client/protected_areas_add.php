@@ -32,9 +32,9 @@ $template = 'client/protected_areas_add.tpl';
 
 $dmn_id = get_user_domain_id($_SESSION['user_id']);
 
-protect_area($tpl, $sql, $dmn_id);
+protect_area($dmn_id);
 
-gen_protect_it($tpl, $sql, $dmn_id);
+gen_protect_it($dmn_id);
 
 // static page messages
 gen_logged_from($tpl);
@@ -76,11 +76,12 @@ $tpl->display($template);
 unset_messages();
 
 /**
- * @todo use db prepared statements
+ * @param int $dmn_id
  */
-function protect_area($tpl, $sql, $dmn_id) {
+function protect_area($dmn_id) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$sql = EasySCP_Registry::get('Db');
 
 	if (!isset($_POST['uaction']) || $_POST['uaction'] != 'protect_it') {
 		return;
@@ -193,49 +194,82 @@ function protect_area($tpl, $sql, $dmn_id) {
 	}
 	// let's check if we have to update or to make new enrie
 	$alt_path = $path . "/";
-	$query = "
+
+	$sql_param = array(
+		'domain_id'	=> $dmn_id,
+		'path'		=> $path,
+		'alt_path'	=> $alt_path
+	);
+
+	$sql_query = "
 		SELECT
 			`id`
 		FROM
 			`htaccess`
 		WHERE
-			`dmn_id` = ?
+			`dmn_id` = :domain_id
 		AND
-			(`path` = ? OR `path` = ?)
-	;";
+			(`path` = :path OR `path` = :alt_path);
+	";
 
-	$rs = exec_query($sql, $query, array($dmn_id, $path, $alt_path));
+	DB::prepare($sql_query);
+	$stmt = DB::execute($sql_param);
+
 	$toadd_status = $cfg->ITEM_ADD_STATUS;
 	$tochange_status = $cfg->ITEM_CHANGE_STATUS;
 
-	if ($rs->recordCount() !== 0) {
-		$update_id = $rs->fields['id'];
+	if ($stmt->rowCount() !== 0) {
+		$data = $stmt->fetch();
+		$update_id = $data['id'];
 		// @todo Can we move $update_id to the prepared statement variables?
-		$query = "
+
+		$sql_param = array(
+		'user_id'	=> $user_id,
+		'group_id'	=> $group_id,
+		'auth_name'	=> $area_name,
+		'path'		=> $path,
+		'status'	=> $tochange_status,
+		'id'		=> $update_id
+		);
+
+		$sql_query = "
 			UPDATE
 				`htaccess`
 			SET
-				`user_id` = ?,
-				`group_id` = ?,
-				`auth_name` = ?,
-				`path` = ?,
-				`status` = ?
+				`user_id` 	= :user_id,
+				`group_id` 	= :group_id,
+				`auth_name` = :auth_name,
+				`path` 		= :path,
+				`status` 	= :status
 			WHERE
-				`id` = '$update_id';
+				`id`		= :id;
 		";
+		DB::prepare($sql_query);
+		DB::execute($sql_param);
 
-		exec_query($sql, $query, array($user_id, $group_id, $area_name, $path, $tochange_status));
 		send_request('110 DOMAIN htaccess ' . $dmn_id);
 		set_page_message(tr('Protected area updated successfully!'), 'success');
 	} else {
-		$query = "
+
+		$sql_param = array(
+			'dmn_id'	=> $dmn_id,
+			'user_id'	=> $user_id,
+			'group_id'	=> $group_id,
+			'auth_type'	=> 'Basic',
+			'auth_name'	=> $area_name,
+			'path'		=> $path,
+			'status'	=> $toadd_status
+		);
+
+		$sql_query = "
 			INSERT INTO `htaccess`
 				(`dmn_id`, `user_id`, `group_id`, `auth_type`, `auth_name`, `path`, `status`)
 			VALUES
-				(?, ?, ?, ?, ?, ?, ?);
+				(:dmn_id, :user_id, :group_id, :auth_type, :auth_name, :path, :status);
 		";
+		DB::prepare($sql_query);
+		DB::execute($sql_param);
 
-		exec_query($sql, $query, array($dmn_id, $user_id, $group_id, 'Basic' , $area_name, $path, $toadd_status));
 		send_request('110 DOMAIN htaccess ' . $dmn_id);
 		set_page_message(tr('Protected area created successfully!'), 'success');
 	}
@@ -244,13 +278,12 @@ function protect_area($tpl, $sql, $dmn_id) {
 }
 
 /**
- * @param EasySCP_TemplateEngine $tpl
- * @param EasySCP_Database $sql
  * @param int $dmn_id
  */
-function gen_protect_it($tpl, $sql, &$dmn_id) {
+function gen_protect_it(&$dmn_id) {
 
 	$cfg = EasySCP_Registry::get('Config');
+	$tpl = EasySCP_TemplateEngine::getInstance();
 
 	if (!isset($_GET['id'])) {
 		$edit = 'no';
@@ -276,28 +309,35 @@ function gen_protect_it($tpl, $sql, &$dmn_id) {
 			)
 		);
 
-		$query = "
+		$sql_param = array(
+			'dmn_id'	=> $dmn_id,
+			'ht_id'		=> $ht_id
+		);
+
+		$sql_query = "
 			SELECT
 				*
 			FROM
 				`htaccess`
 			WHERE
-				`dmn_id` = ?
+				`dmn_id` = :dmn_id
 			AND
-				`id` = ?;
+				`id` = :ht_id;
 		";
+		
+		DB::prepare($sql_query);
+		$stmt = DB::execute($sql_param);
 
-		$rs = exec_query($sql, $query, array($dmn_id, $ht_id));
-
-		if ($rs->recordCount() == 0) {
+		if ($stmt->rowCount() == 0) {
 			user_goto('protected_areas_add.php');
 		}
-
-		$user_id = $rs->fields['user_id'];
-		$group_id = $rs->fields['group_id'];
-		$status = $rs->fields['status'];
-		$path = $rs->fields['path'];
-		$auth_name = $rs->fields['auth_name'];
+		$row = $stmt->fetch();
+		
+		$user_id = $row['user_id'];
+		$group_id = $row['group_id'];
+		$status = $row['status'];
+		$path = $row['path'];
+		$auth_name = $row['auth_name'];
 		$ok_status = $cfg->ITEM_OK_STATUS;
 		if ($status !== $ok_status) {
 			set_page_message(
@@ -326,7 +366,7 @@ function gen_protect_it($tpl, $sql, &$dmn_id) {
 		}
 	}
 	// this area is not secured by htaccess
-	if ($edit == 'no' || $rs->recordCount() == 0 || $type == 'user') {
+	if ($edit == 'no' || $stmt->rowCount() == 0 || $type == 'user') {
 		$tpl->assign(
 			array(
 				'USER_CHECKED' => $cfg->HTML_CHECKED,
@@ -348,18 +388,23 @@ function gen_protect_it($tpl, $sql, &$dmn_id) {
 		);
 	}
 
-	$query = "
+	$sql_param = array(
+		'dmn_id' => $dmn_id
+	);
+
+	$sql_query = "
 		SELECT
 			*
 		FROM
 			`htaccess_users`
 		WHERE
-			`dmn_id` = ?;
+			`dmn_id` = :dmn_id;
 	";
+	
+	DB::prepare($sql_query);
+	$stmt = DB::execute($sql_param);
 
-	$rs = exec_query($sql, $query, $dmn_id);
-
-	if ($rs->recordCount() == 0) {
+	if ($stmt->rowCount() == 0) {
 		$tpl->assign(
 			array(
 				'USER_VALUE'	=> "-1",
@@ -368,10 +413,10 @@ function gen_protect_it($tpl, $sql, &$dmn_id) {
 			)
 		);
 	} else {
-		while (!$rs->EOF) {
+		foreach ($stmt as $row) {
 			$usr_id = explode(',', $user_id);
 			for ($i = 0, $cnt_usr_id = count($usr_id); $i < $cnt_usr_id; $i++) {
-				if ($edit == 'yes' && $usr_id[$i] == $rs->fields['id']) {
+				if ($edit == 'yes' && $usr_id[$i] == $row['id']) {
 					$i = $cnt_usr_id + 1;
 					$usr_selected = $cfg->HTML_SELECTED;
 				} else {
@@ -381,28 +426,32 @@ function gen_protect_it($tpl, $sql, &$dmn_id) {
 
 			$tpl->append(
 				array(
-					'USER_VALUE'	=> $rs->fields['id'],
-					'USER_LABEL'	=> tohtml($rs->fields['uname']),
+					'USER_VALUE'	=> $row['id'],
+					'USER_LABEL'	=> tohtml($row['uname']),
 					'USER_SELECTED'	=> $usr_selected
 				)
 			);
 
-			$rs->moveNext();
 		}
 	}
 
-	$query = "
+	$sql_param = array(
+		'dmn_id' => $dmn_id
+	);
+
+	$sql_query = "
 		SELECT
 			*
 		FROM
 			`htaccess_groups`
 		WHERE
-			`dmn_id` = ?
-	;";
+			`dmn_id` = :dmn_id;
+	";
+	
+	DB::prepare($sql_query);
+	$stmt = DB::execute($sql_param);
 
-	$rs = exec_query($sql, $query, $dmn_id);
-
-	if ($rs->recordCount() == 0) {
+	if ($stmt->rowCount() == 0) {
 		$tpl->assign(
 			array(
 				'GROUP_VALUE'	=> "-1",
@@ -411,10 +460,10 @@ function gen_protect_it($tpl, $sql, &$dmn_id) {
 			)
 		);
 	} else {
-		while (!$rs->EOF) {
+		foreach ($stmt as $row) {
 			$grp_id = explode(',', $group_id);
 			for ($i = 0, $cnt_grp_id = count($grp_id); $i < $cnt_grp_id; $i++) {
-				if ($edit == 'yes' && $grp_id[$i] == $rs->fields['id']) {
+				if ($edit == 'yes' && $grp_id[$i] == $row['id']) {
 					$i = $cnt_grp_id + 1;
 					$grp_selected = $cfg->HTML_SELECTED;
 				} else {
@@ -424,12 +473,11 @@ function gen_protect_it($tpl, $sql, &$dmn_id) {
 
 			$tpl->append(
 				array(
-					'GROUP_VALUE'	=> $rs->fields['id'],
-					'GROUP_LABEL'	=> tohtml($rs->fields['ugroup']),
+					'GROUP_VALUE'	=> $row['id'],
+					'GROUP_LABEL'	=> tohtml($row['ugroup']),
 					'GROUP_SELECTED'=> $grp_selected
 				)
 			);
-			$rs->moveNext();
 		}
 	}
 }

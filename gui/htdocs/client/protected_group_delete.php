@@ -41,37 +41,49 @@ if (isset($_GET['gname'])
 $change_status = $cfg->ITEM_DELETE_STATUS;
 $awstats_auth = $cfg->AWSTATS_GROUP_AUTH;
 
-$query = "
+$sql_param = array(
+	'change_status'	=> $change_status,
+	'group_id'		=> $group_id,
+	'dmn_id'		=> $dmn_id,
+	'awstats_auth'	=> $awstats_auth
+);
+
+$sql_query = "
 	UPDATE
 		`htaccess_groups`
 	SET
-		`status` = ?
+		`status` = :change_status
 	WHERE
-		`id` = ?
+		`id` = :group_id
 	AND
-		`dmn_id` = ?
+		`dmn_id` = :dmn_id
 	AND
-		`ugroup` != ?
+		`ugroup` != :awstats_auth;
 ";
 
-$rs = exec_query($sql, $query, array($change_status, $group_id, $dmn_id, $awstats_auth));
+DB::prepare($sql_query);
+DB::execute($sql_param);
 
+$sql_param = array(
+	'dmn_id' => $dmn_id
+);
 
-$query = "
+$sql_query = "
 	SELECT
 		*
 	FROM
 		`htaccess`
 	WHERE
-		`dmn_id` = ?
+		`dmn_id` = :dmn_id;
 ";
 
-$rs = exec_query($sql, $query, $dmn_id);
+DB::prepare($sql_query);
+$stmt = DB::execute($sql_param);
 
-while (!$rs->EOF) {
+foreach ($stmt as $row) {
 
-	$ht_id = $rs->fields['id'];
-	$grp_id = $rs->fields['group_id'];
+	$ht_id = $row['id'];
+	$grp_id = $row['group_id'];
 
 	$grp_id_splited = explode(',', $grp_id);
 
@@ -84,22 +96,31 @@ while (!$rs->EOF) {
 			$grp_id = implode(",", $grp_id_splited);
 			$status = $cfg->ITEM_CHANGE_STATUS;
 		}
-		$update_query = "
+		
+		$sql_param = array(
+			'grp_id'	=> $grp_id,
+			'status'	=> $status,
+			'ht_id'		=> $ht_id
+		);
+		
+		$sql_query = "
 			UPDATE
 				`htaccess`
 			SET
-				`group_id` = ?,
-				`status` = ?
+				`group_id` = :grp_id,
+				`status` = :status
 			WHERE
-				`id` = ?
+				`id` = :ht_id;
 		";
-		$rs_update = exec_query($sql, $update_query, array($grp_id, $status, $ht_id));
+		
+		DB::prepare($sql_query);
+		DB::execute($sql_param);
+		
 	}
 
-	$rs->moveNext();
 }
 
-send_request();
+send_request('110 DOMAIN htaccess ' . $dmn_id);
 
 write_log($_SESSION['user_logged'].": deletes group ID (protected areas): $group_id");
 user_goto('protected_user_manage.php');

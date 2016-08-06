@@ -80,34 +80,40 @@ unset_messages();
  * @param int $dmn_id
  */
 function gen_htaccess_entries($tpl, $sql, &$dmn_id) {
-	$query = "
+
+	$sql_param = array(
+		'domain_id' => $dmn_id
+	);
+
+	$sql_query = "
 		SELECT
 			*
 		FROM
 			`htaccess`
 		WHERE
-			`dmn_id` = ?
+			`dmn_id` = :domain_id;
 	";
 
-	$rs = exec_query($sql, $query, $dmn_id);
-
-	if ($rs->recordCount() == 0) {
+	DB::prepare($sql_query);
+	$stmt = DB::execute($sql_param);
+	
+	if ($stmt->rowCount() == 0) {
 		set_page_message(tr('You do not have protected areas'), 'info');
 	} else {
-		while (!$rs->EOF) {
-			$auth_name = $rs->fields['auth_name'];
+		foreach ($stmt as $row) {
+			$auth_name = $row['auth_name'];
 
 			$tpl->append(
 				array(
 					'AREA_NAME'		=> tohtml($auth_name),
 					'JS_AREA_NAME'	=> addslashes($auth_name),
-					'AREA_PATH'		=> tohtml($rs->fields['path']),
-					'PID'			=> $rs->fields['id'],
-					'STATUS'		=> translate_dmn_status($rs->fields['status'])
+					'AREA_PATH'		=> tohtml($row['path']),
+					'PID'			=> $row['id'],
+					'STATUS'		=> translate_dmn_status($row['status'])
 				)
 			);
-			$rs->moveNext();
 		}
 	}
+
 }
 ?>

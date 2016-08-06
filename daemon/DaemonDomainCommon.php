@@ -1378,6 +1378,24 @@ class DaemonDomainCommon {
 	protected static function writeHTAccessGroup($domainData){
 		System_Daemon::debug('Starting "DaemonDomainCommon::writeHTAccessGroup = ' . $domainData['domain_name'] . '" subprocess.');
 
+		//delete groups marked as 'delete'
+		$sql_param = array(
+			':domain_id' 	=> $domainData['domain_id'],
+			':status'		=> 'delete'
+		);
+
+		$sql_query = "
+			DELETE FROM
+				htaccess_groups
+			WHERE
+				dmn_id = :domain_id
+			AND
+				status = :status;
+		";
+
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+
 		$content = '';
 		$fileName = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htgroup';
 
@@ -1397,12 +1415,14 @@ class DaemonDomainCommon {
 		DB::prepare($sql_query);
 		foreach (DB::execute($sql_param) as $row) {
 			$users = '';
-			$temp = explode(',', $row['members']);
-			foreach($temp as $id){
-				$user = DB::query('select uname from htaccess_users where id = '.$id, true);
-				$users .= ' ' .$user['uname'];
+			if (!is_null($row['members'])) {
+				$temp = explode(',', $row['members']);
+				foreach($temp as $id){
+					$user = DB::query('select uname from htaccess_users where id = '.$id, true);
+					$users .= ' ' .$user['uname'];
+				}
+				$content .= $row['ugroup'].':'.$users."\n";
 			}
-			$content .= $row['ugroup'].':'.$users."\n";
 		}
 
 		if (!DaemonCommon::systemWriteContentToFile($fileName, $content, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644)){
@@ -1436,6 +1456,24 @@ class DaemonDomainCommon {
 	protected static function writeHTAccessUser($domainData){
 		System_Daemon::debug('Starting "DaemonDomainCommon::writeHTAccessUser = ' . $domainData['domain_name'] . '" subprocess.');
 
+		//delete users marked as 'delete'
+		$sql_param = array(
+			':domain_id' 	=> $domainData['domain_id'],
+			':status'		=> 'delete'
+		);
+
+		$sql_query = "
+			DELETE FROM
+				htaccess_users
+			WHERE
+				dmn_id = :domain_id
+			AND
+				status = :status;
+		";
+
+		DB::prepare($sql_query);
+		DB::execute($sql_param)->closeCursor();
+		
 		$content = '';
 		$fileName = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . '/.htpasswd';
 

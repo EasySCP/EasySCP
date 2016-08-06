@@ -86,32 +86,45 @@ function padd_group($tpl, $sql, $dmn_id) {
 
 			$groupname = $_POST['groupname'];
 
-			$query = "
+			$sql_param = array(
+				'groupname'	=> $groupname,
+				'dmn_id'	=> $dmn_id
+			);
+		
+			$sql_query = "
 				SELECT
 					`id`
 				FROM
 					`htaccess_groups`
 				WHERE
-					`ugroup` = ?
+					`ugroup` = :groupname
 				AND
-					`dmn_id` = ?
+					`dmn_id` = :dmn_id;
 			";
+		
+			DB::prepare($sql_query);
+			$stmt = DB::execute($sql_param);
 
-			$rs = exec_query($sql, $query, array($groupname, $dmn_id));
-
-			if ($rs->recordCount() == 0) {
+			if ($stmt->rowCount() == 0) {
 				$change_status = $cfg->ITEM_ADD_STATUS;
 
-				$query = "
+				$sql_param = array(
+					'dmn_id'	=> $dmn_id,
+					'ugroup'	=> $groupname,
+					'status'	=> $change_status
+				);
+			
+				$sql_query = "
 					INSERT INTO `htaccess_groups`
 						(`dmn_id`, `ugroup`, `status`)
 					VALUES
-						(?, ?, ?)
+						(:dmn_id, :ugroup, :status);
 				";
+			
+				DB::prepare($sql_query);
+				DB::execute($sql_param);
 
-				exec_query($sql, $query, array($dmn_id, $groupname, $change_status));
-
-				send_request();
+				send_request('110 DOMAIN htaccess ' . $dmn_id);
 
 				$admin_login = $_SESSION['user_logged'];
 				write_log("$admin_login: add group (protected areas): $groupname");
