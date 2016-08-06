@@ -1853,10 +1853,6 @@ function AddDefaultDNSEntries($dmn_id, $dmn_alias_id=0, $dmn_name, $domain_ip) {
 			)
 	";
 	
-	echo "<pre>";
-	print_r($sql_param);
-	echo "</pre>";
-
 	foreach ($sql_param as $data) {
 		print_r($data);
 		DB::prepare($sql_query);

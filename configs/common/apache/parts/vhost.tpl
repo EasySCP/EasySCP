@@ -121,9 +121,9 @@
 			Allow from all
 		</IfModule>
 		# Apache 2.4
-        <IfModule mod_authz_core.c>
-        	Require all granted
-        </IfModule>
+		<IfModule mod_authz_core.c>
+			Require all granted
+		</IfModule>
 	</Directory>
 
 {if isset($DOMAIN_PHP) && $DOMAIN_PHP == true}

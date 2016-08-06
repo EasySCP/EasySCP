@@ -494,7 +494,6 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				break;
 			case 'ok':
 				// Configuration has to be rewritten every time to ensure that
@@ -542,7 +541,6 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				break;
 			case 'change':
 				$retVal = self::apacheWriteDomainConfig($subDomainAliasData);

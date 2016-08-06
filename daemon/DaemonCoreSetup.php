@@ -312,8 +312,8 @@ function EasySCP_Directories(){
 function EasySCP_main_configuration_file(){
 	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
-	DaemonConfig::$cfg->{'BuildDate'} = '20160122';
-	DaemonConfig::$cfg->{'Version'} = '2.1.0';
+	DaemonConfig::$cfg->{'BuildDate'} = file_get_contents(DaemonConfig::$cfg->{'CONF_DIR'} . '/BUILD');
+	DaemonConfig::$cfg->{'Version'} = file_get_contents(DaemonConfig::$cfg->{'CONF_DIR'} . '/VERSION');
 	DaemonConfig::$cfg->{'DistName'} = $xml->{'DistName'};
 	DaemonConfig::$cfg->{'DistVersion'} = $xml->{'DistVersion'};
 	DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} = $xml->{'PANEL_MAIL'};
@@ -353,8 +353,6 @@ function EasySCP_main_configuration_file(){
 	}
 
 	unset($xml);
-
-	DaemonConfig::Save();
 
 	switch(DaemonConfig::$cfg->{'DistName'}) {
 		case 'Debian':
