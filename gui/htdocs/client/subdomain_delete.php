@@ -104,11 +104,7 @@ if (isset($_GET['id']) && $_GET['id'] !== '') {
 
 	update_reseller_c_props(get_reseller_id($dmn_id));
 	
-	if ($_POST['dmn_type'] == 'als') {
-		send_request('110 DOMAIN alias '. $dmn_id);
-	} else {
-		send_request('110 DOMAIN domain '. $dmn_id);
-	}
+	send_request('110 DOMAIN domain '. $dmn_id);
 
 	write_log($_SESSION['user_logged'].": deletes subdomain: ".$sub_name);
 	set_page_message(tr('Subdomain scheduled for deletion!'), 'info');

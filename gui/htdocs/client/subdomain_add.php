@@ -662,8 +662,8 @@ function check_subdomain_data(&$err_sub, $user_id, $dmn_name) {
 		if ('_off_' !== $err_sub) {
 			return;
 		}
-		$subdomain_id=$_POST['subdmn_id'];
-		subdomain_schedule($user_id, $domain_id, $sub_name, $sub_mnt_pt, $forward,$subdomain_id);
+		$subdomain_id = (isset($_POST['subdmn_id'])) ? $_POST['subdmn_id'] : NULL;
+		subdomain_schedule($user_id, $domain_id, $sub_name, $sub_mnt_pt, $forward, $subdomain_id);
 		set_page_message(tr('Subdomain scheduled for addition!'), 'success');
 		user_goto('domains_manage.php');
 	}
