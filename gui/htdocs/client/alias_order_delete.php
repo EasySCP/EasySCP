@@ -27,11 +27,11 @@ check_login(__FILE__);
 
 $cfg = EasySCP_Registry::get('Config');
 
-if (isset($_GET['del_id']) && !empty($_GET['del_id'])) {
+if (isset($_GET['del_id']) && !empty($_GET['del_id']) && is_numeric($_GET['del_id'])) {
 	$sql_param = array(
-			'alias_id'		=> $_GET['del_id'],
-			'domain_id'		=> get_user_domain_id($_SESSION['user_id']),
-			'status'		=> $cfg->ITEM_ORDERED_STATUS
+		'alias_id'		=> $_GET['del_id'],
+		'domain_id'		=> get_user_domain_id($_SESSION['user_id']),
+		'status'		=> $cfg->ITEM_ORDERED_STATUS
 	);
 
 	$sql_query = "
