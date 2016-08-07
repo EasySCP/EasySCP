@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -221,7 +221,7 @@ $labels['restoremessage'] = '¿Restaurar mensaxe?';
 $labels['responses'] = 'Rempuestes';
 $labels['insertresponse'] = 'Inxertar una rempuesta';
 $labels['manageresponses'] = 'Alministrar rempuestes';
-$labels['savenewresponse'] = 'Crear resmpuesta nueva';
+$labels['newresponse'] = 'Crear resmpuesta nueva';
 $labels['addresponse'] = 'Amestar rempuesta';
 $labels['editresponse'] = 'Editar rempuesta';
 $labels['editresponses'] = 'Editar rempuestes';
@@ -230,7 +230,6 @@ $labels['responsetext'] = 'Testu de la rempuesta';
 $labels['attach'] = 'Axuntar';
 $labels['attachments'] = 'Axuntos';
 $labels['upload'] = 'Xubir';
-$labels['uploadprogress'] = '$percent ($current de $total)';
 $labels['close']  = 'Zarrar';
 $labels['messageoptions']  = 'Opciones de mensaxe...';
 $labels['togglecomposeoptions'] = 'Camudar opciones de composición';
@@ -332,7 +331,7 @@ $labels['export']         = 'Esportar';
 $labels['exportall']      = 'Esportar too';
 $labels['exportsel']      = 'Esportar lo esbillao';
 $labels['exportvcards']   = 'Esportar contautos en formatu vCard';
-$labels['newcontactgroup']       = 'Crear grupu nuevu';
+$labels['newgroup']       = 'Crear grupu nuevu';
 $labels['grouprename']    = 'Renomar grupu';
 $labels['groupdelete']    = 'Desaniciar grupu';
 $labels['groupremoveselected'] = 'Desaniciar los contautos esbillaos del grupu';
@@ -366,7 +365,7 @@ $labels['identities'] = 'Identidaes';
 $labels['manageidentities'] = 'Almisnitrar identidaes';
 $labels['newidentity'] = 'Crear identidá nueva';
 $labels['addidentity'] = 'Amestar identidça';
-$labels['edititem'] = 'Editar identidá';
+$labels['editidentity'] = 'Editar identidá';
 $labels['preferhtml'] = 'Amosar HTML';
 $labels['defaultcharset'] = 'Xuegu de caráuteres predetermináu';
 $labels['htmlmessage'] = 'Mensaxe HTML';
@@ -401,7 +400,6 @@ $labels['askuser'] = 'entrúgame';
 $labels['autosend'] = 'unviar recibu';
 $labels['autosendknown'] = 'unviar recibu a los mios contautos, d\'otramiente entrúgame';
 $labels['autosendknownignore'] = 'unviar recibu a los mios contautos, d\'otramiente inorar';
-$labels['ignore'] = 'inorar';
 $labels['readwhendeleted'] = 'Conseñar el mensaxe como lleíu al desanicialu';
 $labels['flagfordeletion'] = 'Conseñar el mensaxe pal desaniu en cuantes de desanicialu';
 $labels['skipdeleted'] = 'Nun amosar los mensaxes desaniciaos';

@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -224,7 +224,7 @@ $labels['restoremessage'] = 'Recupera el missatge?';
 $labels['responses'] = 'Respostes';
 $labels['insertresponse'] = 'Introduïu una resposta';
 $labels['manageresponses'] = 'Gestiona respostes';
-$labels['savenewresponse'] = 'Crea una nova resposta';
+$labels['newresponse'] = 'Crea una nova resposta';
 $labels['addresponse'] = 'Afegeix una resposta';
 $labels['editresponse'] = 'Edita la resposta';
 $labels['editresponses'] = 'Edita respostes';
@@ -336,7 +336,7 @@ $labels['export']         = 'Exporta';
 $labels['exportall']      = 'Exporta\'ls tots';
 $labels['exportsel']      = 'Exporta els seleccionats';
 $labels['exportvcards']   = 'Exporta contactes en format vCard';
-$labels['newcontactgroup']       = 'Crea un grup nou';
+$labels['newgroup']       = 'Crea un grup nou';
 $labels['addgroup']       = 'Afegeix un grup';
 $labels['grouprename']    = 'Reanomena el grup';
 $labels['groupdelete']    = 'Suprimeix el grup';
@@ -371,7 +371,7 @@ $labels['identities'] = 'Identitats';
 $labels['manageidentities'] = 'Gestiona les identitats';
 $labels['newidentity'] = 'Crea una nova identitat';
 $labels['addidentity'] = 'Afegeix una identitat';
-$labels['edititem'] = 'Edita la identitat';
+$labels['editidentity'] = 'Edita la identitat';
 $labels['preferhtml'] = 'Mostra HTML';
 $labels['defaultcharset'] = 'Joc de caràcters per defecte';
 $labels['htmlmessage'] = 'Missatge HTML';
@@ -406,7 +406,6 @@ $labels['askuser'] = 'demana\'m què vull fer';
 $labels['autosend'] = 'envia la confirmació de recepció';
 $labels['autosendknown'] = 'envia la confirmació de recepció als meus contactes, pels demés demana-m\'ho';
 $labels['autosendknownignore'] = 'envia la confirmació als meus contactes, pels demés ignora-ho';
-$labels['ignore'] = 'ignora';
 $labels['readwhendeleted'] = 'Marca el missatge com a llegit quan se suprimeixi';
 $labels['flagfordeletion'] = 'Marca el missatge com a suprimit en comptes de suprimir-lo';
 $labels['skipdeleted'] = 'No mostris els missatges suprimits';

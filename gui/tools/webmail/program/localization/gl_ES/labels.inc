@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -224,7 +224,7 @@ $labels['restoremessage'] = 'Restaurar mensaxe?';
 $labels['responses'] = 'Respostas';
 $labels['insertresponse'] = 'Inserir unha resposta';
 $labels['manageresponses'] = 'Xestionar respostas';
-$labels['savenewresponse'] = 'Crear nova resposta';
+$labels['newresponse'] = 'Crear nova resposta';
 $labels['addresponse'] = 'Engadir resposta';
 $labels['editresponse'] = 'Editar resposta ';
 $labels['editresponses'] = 'Editar respostas';
@@ -233,7 +233,6 @@ $labels['responsetext'] = 'Texto de resposta';
 $labels['attach'] = 'Anexar';
 $labels['attachments'] = 'Ficheiros anexos';
 $labels['upload'] = 'Cargar';
-$labels['uploadprogress'] = '$percent ($current de $total)';
 $labels['close']  = 'Pechar';
 $labels['messageoptions']  = 'Opcións da mensaxe...';
 $labels['togglecomposeoptions'] = 'Conmutar opcións de redacción';
@@ -335,7 +334,7 @@ $labels['export']         = 'Exportar';
 $labels['exportall']      = 'Exportar todas';
 $labels['exportsel']      = 'Exportar as seleccionadas';
 $labels['exportvcards']   = 'Exportar os contactos en formato vCard';
-$labels['newcontactgroup']       = 'Crear novo grupo';
+$labels['newgroup']       = 'Crear novo grupo';
 $labels['grouprename']    = 'Mudar o nome do grupo';
 $labels['groupdelete']    = 'Borrar o grupo';
 $labels['groupremoveselected'] = 'Eliminar do grupo os contactos seleccionados';
@@ -369,7 +368,7 @@ $labels['identities'] = 'Identidades';
 $labels['manageidentities'] = 'Administrar identidades';
 $labels['newidentity'] = 'Crear identidade nova';
 $labels['addidentity'] = 'Engadir identidad';
-$labels['edititem'] = 'Editar identidade';
+$labels['editidentity'] = 'Editar identidade';
 $labels['preferhtml'] = 'Prefiro HTML';
 $labels['defaultcharset'] = 'Xogo de caracteres por omisión';
 $labels['htmlmessage'] = 'Mensaxe HTML';
@@ -404,7 +403,6 @@ $labels['askuser'] = 'preguntarme que facer';
 $labels['autosend'] = 'enviar automáticamente';
 $labels['autosendknown'] = 'enviar aos meus contactos, noutros casos preguntar';
 $labels['autosendknownignore'] = 'enviar aos meus contactos, noutros casos ignorar';
-$labels['ignore'] = 'ignorar';
 $labels['readwhendeleted'] = 'Marcar a mensaxe como lida ao eliminar';
 $labels['flagfordeletion'] = 'Marcar a mensaxe para eliminar en vez de eliminar';
 $labels['skipdeleted'] = 'Non amosar as mensaxes marcadas como eliminadas';

@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -224,7 +224,7 @@ $labels['restoremessage'] = '是否恢复信息？';
 $labels['responses'] = '回复';
 $labels['insertresponse'] = '插入回复';
 $labels['manageresponses'] = '管理回复';
-$labels['savenewresponse'] = '创建新回复';
+$labels['newresponse'] = '创建新回复';
 $labels['addresponse'] = '添加回复';
 $labels['editresponse'] = '编辑回复';
 $labels['editresponses'] = '编辑回复';
@@ -233,7 +233,6 @@ $labels['responsetext'] = '以文本形式回复';
 $labels['attach'] = '附加';
 $labels['attachments'] = '附件';
 $labels['upload'] = '上传';
-$labels['uploadprogress'] = '$percent ($current / $total)';
 $labels['close']  = '关闭';
 $labels['messageoptions']  = '邮件选项...';
 $labels['togglecomposeoptions'] = '切换布局选项';
@@ -335,7 +334,7 @@ $labels['export']         = '导出';
 $labels['exportall']      = '导出全部';
 $labels['exportsel']      = '导出选中';
 $labels['exportvcards']   = '导出联系人为 vCard 格式';
-$labels['newcontactgroup']       = '创建新组';
+$labels['newgroup']       = '创建新组';
 $labels['grouprename']    = '重命名群组';
 $labels['groupdelete']    = '删除群组';
 $labels['groupremoveselected'] = '删除选中';
@@ -369,7 +368,7 @@ $labels['identities'] = '发件人身份';
 $labels['manageidentities'] = '管理身份';
 $labels['newidentity'] = '创建新身份';
 $labels['addidentity'] = '添加身份';
-$labels['edititem'] = '编辑身份';
+$labels['editidentity'] = '编辑身份';
 $labels['preferhtml'] = '以 HTML 格式显示';
 $labels['defaultcharset'] = '默认字符集';
 $labels['htmlmessage'] = 'HTML 邮件';
@@ -404,7 +403,6 @@ $labels['askuser'] = '询问用户';
 $labels['autosend'] = '自动发送';
 $labels['autosendknown'] = '对我的联系人发送回执，否则询问';
 $labels['autosendknownignore'] = '对我的联系人发送回执，否则忽略';
-$labels['ignore'] = '忽略';
 $labels['readwhendeleted'] = '删除后标记为已读';
 $labels['flagfordeletion'] = '标记邮件为已删除而不是实际删除';
 $labels['skipdeleted'] = '不显示标记为已删除的邮件';

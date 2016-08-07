@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -220,7 +220,7 @@ $labels['restoremessage'] = 'Gendan besked';
 $labels['responses'] = 'Svar';
 $labels['insertresponse'] = 'Indsæt et svar';
 $labels['manageresponses'] = 'Administrer svar';
-$labels['savenewresponse'] = 'Opret ny svar';
+$labels['newresponse'] = 'Opret ny svar';
 $labels['addresponse'] = 'Tilføj svar';
 $labels['editresponse'] = 'Rediger svar';
 $labels['editresponses'] = 'Rediger svar';
@@ -229,7 +229,6 @@ $labels['responsetext'] = 'Svartekst';
 $labels['attach'] = 'Vedhæft';
 $labels['attachments'] = 'Vedhæftninger';
 $labels['upload'] = 'Overfør';
-$labels['uploadprogress'] = '$percent ($current af $total)';
 $labels['close']  = 'Luk';
 $labels['messageoptions']  = 'Beskedmuligheder...';
 $labels['low']     = 'Lav';
@@ -331,7 +330,7 @@ $labels['export']         = 'Eksportér';
 $labels['exportall']      = 'Eksporter alt';
 $labels['exportsel']      = 'Eksporter udvalgte';
 $labels['exportvcards']   = 'Eksportér kontakter i vCard format';
-$labels['newcontactgroup']       = 'Opret gruppe';
+$labels['newgroup']       = 'Opret gruppe';
 $labels['addgroup']       = 'Tilføj gruppe';
 $labels['grouprename']    = 'Omdøb gruppe';
 $labels['groupdelete']    = 'Slet gruppe';
@@ -366,7 +365,7 @@ $labels['identities'] = 'Identiteter';
 $labels['manageidentities'] = 'Administrer identiteter ';
 $labels['newidentity'] = 'Opret ny identitet ';
 $labels['addidentity'] = 'Tilføj identitet';
-$labels['edititem'] = 'Rediger identitet';
+$labels['editidentity'] = 'Rediger identitet';
 $labels['preferhtml'] = 'Vis HTML';
 $labels['defaultcharset'] = 'Standard tegnkodning';
 $labels['htmlmessage'] = 'HTML-besked';
@@ -401,7 +400,6 @@ $labels['askuser'] = 'spørg mig';
 $labels['autosend'] = 'send automatisk';
 $labels['autosendknown'] = 'send automatisk til mine kontakter, ellers spørg mig';
 $labels['autosendknownignore'] = 'send automatisk til mine kontakter, ellers ignorér';
-$labels['ignore'] = 'ignorér';
 $labels['readwhendeleted'] = 'Markér beskeden som læst ved sletning';
 $labels['flagfordeletion'] = 'Markér beskeden til sletning istedet for at slette';
 $labels['skipdeleted'] = 'Skjul slettede beskeder';

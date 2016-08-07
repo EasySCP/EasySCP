@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -221,10 +221,11 @@ $labels['resumeediting'] = 'Ail-ddechrau golygu';
 $labels['revertto']      = 'Dychwelyd i';
 $labels['restore'] = 'Adfer';
 $labels['restoremessage'] = 'Adfer neges?';
+$labels['ignore'] = 'Anwybyddu';
 $labels['responses'] = 'Ymatebion';
 $labels['insertresponse'] = 'Mewnosod ymateb';
 $labels['manageresponses'] = 'Rheoli ymatebion';
-$labels['savenewresponse'] = 'Cadw ymateb newydd';
+$labels['newresponse'] = 'Cadw ymateb newydd';
 $labels['addresponse'] = 'Ychwanegu ymateb';
 $labels['editresponse'] = 'Golygu ymateb';
 $labels['editresponses'] = 'Golygu ymatebion';
@@ -297,6 +298,7 @@ $labels['searchresult'] = 'Canlyniadau chwilio';
 $labels['advsearch'] = 'Chwilio Uwch';
 $labels['advanced'] = 'Uwch';
 $labels['other'] = 'Arall';
+$labels['printcontact'] = 'Cyswllt argraffu';
 $labels['typehome']   = 'Cartref';
 $labels['typework']   = 'Gwaith';
 $labels['typeother']  = 'Arall';
@@ -336,7 +338,7 @@ $labels['export']         = 'Allforio';
 $labels['exportall']      = 'Allforio popeth';
 $labels['exportsel']      = 'Allforio dewiswyd';
 $labels['exportvcards']   = 'Allforio cysylltiadau mewn fformat vCard';
-$labels['newcontactgroup']       = 'Creu grŵp newydd';
+$labels['newgroup']       = 'Creu grŵp newydd';
 $labels['addgroup']       = 'Ychwanegu grŵp';
 $labels['grouprename']    = 'Ail-enwi grŵp';
 $labels['groupdelete']    = 'Dileu grŵp';
@@ -371,7 +373,7 @@ $labels['identities'] = 'Personoliaethau';
 $labels['manageidentities'] = 'Rheoli personoliaethau';
 $labels['newidentity'] = 'Creu personoliaeth newydd';
 $labels['addidentity'] = 'Ychwanegu personoliaeth';
-$labels['edititem'] = 'Golygu personoliaeth';
+$labels['editidentity'] = 'Golygu personoliaeth';
 $labels['preferhtml'] = 'Dangos HTML';
 $labels['defaultcharset'] = 'Set Nodau Diofyn';
 $labels['htmlmessage'] = 'Neges HTML';
@@ -406,7 +408,7 @@ $labels['askuser'] = 'gofyn i\'r defnyddiwr';
 $labels['autosend'] = 'danfon yn awtomatig';
 $labels['autosendknown'] = 'danfon y derbynneb i fy nghsylltiadau yn unig';
 $labels['autosendknownignore'] = 'danfon derbynneb i fy nghysylltiadau, anwybyddu fel arall';
-$labels['ignore'] = 'anwybyddu';
+$labels['ignorerequest'] = 'anwybyddu\'r cais';
 $labels['readwhendeleted'] = 'Nodi\'r neges fel darllenwyd wrth ddileu';
 $labels['flagfordeletion'] = 'Fflagio\'r neges i\'w ddileu yn hytrach na dileu yn syth';
 $labels['skipdeleted'] = 'Peidio dangos negesuon wedi ei dileu';

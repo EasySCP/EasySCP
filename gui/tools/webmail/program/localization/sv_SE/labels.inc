@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -221,10 +221,11 @@ $labels['resumeediting'] = 'Återuppta redigering';
 $labels['revertto']      = 'Återgå till';
 $labels['restore'] = 'Återskapa';
 $labels['restoremessage'] = 'Återskapa meddelande?';
+$labels['ignore'] = 'Ignorera';
 $labels['responses'] = 'Responser';
 $labels['insertresponse'] = 'Infoga respons';
 $labels['manageresponses'] = 'Hantera responser';
-$labels['savenewresponse'] = 'Ny respons';
+$labels['newresponse'] = 'Ny respons';
 $labels['addresponse'] = 'Lägg till respons';
 $labels['editresponse'] = 'Ändra respons';
 $labels['editresponses'] = 'Ändra responser';
@@ -297,6 +298,7 @@ $labels['searchresult'] = 'Sökresultat';
 $labels['advsearch'] = 'Avancerad sökning';
 $labels['advanced'] = 'Avancerad';
 $labels['other'] = 'Annat';
+$labels['printcontact'] = 'Skriv ut kontakt';
 $labels['typehome']   = 'Hem';
 $labels['typework']   = 'Arbete';
 $labels['typeother']  = 'Annat';
@@ -336,7 +338,7 @@ $labels['export']         = 'Exportera';
 $labels['exportall']      = 'Exportera alla';
 $labels['exportsel']      = 'Exportera markerade';
 $labels['exportvcards']   = 'Exportera kontakter';
-$labels['newcontactgroup']       = 'Ny grupp';
+$labels['newgroup']       = 'Ny grupp';
 $labels['addgroup']       = 'Lägg till grupp';
 $labels['grouprename']    = 'Ändra gruppnamn';
 $labels['groupdelete']    = 'Ta bort grupp';
@@ -371,7 +373,7 @@ $labels['identities'] = 'Identiteter';
 $labels['manageidentities'] = 'Hantera identiteter';
 $labels['newidentity'] = 'Ny identitet';
 $labels['addidentity'] = 'Lägg till identitet';
-$labels['edititem'] = 'Ändra identitet';
+$labels['editidentity'] = 'Ändra identitet';
 $labels['preferhtml'] = 'Visa meddelanden i HTML-format';
 $labels['defaultcharset'] = 'Förvald teckenkodning';
 $labels['htmlmessage'] = 'HTML-meddelande';
@@ -406,7 +408,7 @@ $labels['askuser'] = 'Fråga';
 $labels['autosend'] = 'Automatiskt';
 $labels['autosendknown'] = 'Skicka kvitto till mina kontakter, fråga för övriga';
 $labels['autosendknownignore'] = 'Skicka kvitto till mina kontakter, ignorera övriga';
-$labels['ignore'] = 'Ignorera';
+$labels['ignorerequest'] = 'ignorera begäran';
 $labels['readwhendeleted'] = 'Märk meddelande som läst vid borttagning';
 $labels['flagfordeletion'] = 'Flagga meddelande för borttagning istället för att ta bort direkt';
 $labels['skipdeleted'] = 'Visa inte borttagna meddelanden';

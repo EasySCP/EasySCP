@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -221,10 +221,11 @@ $labels['resumeediting'] = 'Pokračovať v úpravách';
 $labels['revertto']      = 'Vrátiť sa na';
 $labels['restore'] = 'Obnoviť';
 $labels['restoremessage'] = 'Obnoviť správu?';
+$labels['ignore'] = 'Ignorovať';
 $labels['responses'] = 'Odpovede';
 $labels['insertresponse'] = 'Vložiť odpoveď';
 $labels['manageresponses'] = 'Spravovať odpovede';
-$labels['savenewresponse'] = 'Vytvoriť novú odpoveď';
+$labels['newresponse'] = 'Vytvoriť novú odpoveď';
 $labels['addresponse'] = 'Pridať odpoveď';
 $labels['editresponse'] = 'Upraviť odpoveď';
 $labels['editresponses'] = 'Upraviť odpovede';
@@ -297,6 +298,7 @@ $labels['searchresult'] = 'Výsledok vyhľadávania';
 $labels['advsearch'] = 'Rozšírené vyhľadávanie';
 $labels['advanced'] = 'Rozšírené';
 $labels['other'] = 'Ostatné';
+$labels['printcontact'] = 'Vytlačiť kontakt';
 $labels['typehome']   = 'Domov';
 $labels['typework']   = 'Práca';
 $labels['typeother']  = 'Iné';
@@ -336,7 +338,7 @@ $labels['export']         = 'Exportovať';
 $labels['exportall']      = 'Exportovať všetko';
 $labels['exportsel']      = 'Exportovať vybrané';
 $labels['exportvcards']   = 'Exportovať kontakty vo formáte vCard';
-$labels['newcontactgroup']       = 'Vytvoriť novú skupinu';
+$labels['newgroup']       = 'Vytvoriť novú skupinu';
 $labels['addgroup']       = 'Pridať skupinu';
 $labels['grouprename']    = 'Premenovať skupinu';
 $labels['groupdelete']    = 'Vymazať skupinu';
@@ -371,7 +373,7 @@ $labels['identities'] = 'Identity';
 $labels['manageidentities'] = 'Spravovať identity';
 $labels['newidentity'] = 'Vytvoriť novú identitu';
 $labels['addidentity'] = 'Pridať identitu';
-$labels['edititem'] = 'Upraviť identitu';
+$labels['editidentity'] = 'Upraviť identitu';
 $labels['preferhtml'] = 'Zobraziť HTML';
 $labels['defaultcharset'] = 'Predvolené kódovanie';
 $labels['htmlmessage'] = 'HTML správa';
@@ -406,7 +408,7 @@ $labels['askuser'] = 'opýtať sa používateľa';
 $labels['autosend'] = 'odoslať potvrdenie';
 $labels['autosendknown'] = 'odoslať potvrdenie iba mojim kontaktom';
 $labels['autosendknownignore'] = 'odoslať potvrdenie známym odosielateľom, inak ignorovať';
-$labels['ignore'] = 'ignorovať';
+$labels['ignorerequest'] = 'ignorovať požiadavku';
 $labels['readwhendeleted'] = 'Označiť správu ako prečítanú pri jej vymazávaní';
 $labels['flagfordeletion'] = 'Namiesto vymazania správy ju iba označiť ako vymazanú';
 $labels['skipdeleted'] = 'Nezobrazovať vymazané správy';

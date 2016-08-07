@@ -26,6 +26,8 @@
  */
 class rcube_result_thread
 {
+    public $incomplete = false;
+
     protected $raw_data;
     protected $mailbox;
     protected $meta = array();
@@ -250,22 +252,11 @@ class rcube_result_thread
             return;
         }
 
+        $data = explode(self::SEPARATOR_ELEMENT, $this->raw_data);
+        $data = array_reverse($data);
+        $this->raw_data = implode(self::SEPARATOR_ELEMENT, $data);
+
         $this->meta['pos'] = array();
-        $datalen = strlen($this->raw_data);
-        $result  = '';
-        $start   = 0;
-
-        while (($pos = @strpos($this->raw_data, self::SEPARATOR_ELEMENT, $start))
-            || ($start < $datalen && ($pos = $datalen))
-        ) {
-            $len   = $pos - $start;
-            $elem  = substr($this->raw_data, $start, $len);
-            $start = $pos + 1;
-
-            $result = $elem . self::SEPARATOR_ELEMENT . $result;
-        }
-
-        $this->raw_data = rtrim($result, self::SEPARATOR_ELEMENT);
     }
 
 

@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -219,7 +219,7 @@ $labels['restoremessage'] = 'Аднавіць паведамленне?';
 $labels['responses'] = 'Адказы';
 $labels['insertresponse'] = 'Уставіць адказ';
 $labels['manageresponses'] = 'Кіраваць адказамі';
-$labels['savenewresponse'] = 'Стварыць новы адказ';
+$labels['newresponse'] = 'Стварыць новы адказ';
 $labels['addresponse'] = 'Дадаць адказ';
 $labels['editresponse'] = 'Рэдагаваць адказ';
 $labels['editresponses'] = 'Рэдагаваць адказы';
@@ -228,7 +228,6 @@ $labels['responsetext'] = 'Тэкст адказу';
 $labels['attach'] = 'Далучыць';
 $labels['attachments'] = 'Далучэнні';
 $labels['upload'] = 'Апублікаваць';
-$labels['uploadprogress'] = '$percent ($current з $total)';
 $labels['close']  = 'Закрыць';
 $labels['messageoptions']  = 'Параметры паведамлення...';
 $labels['togglecomposeoptions'] = 'Пераключыць параметры складання';
@@ -330,7 +329,7 @@ $labels['export']         = 'Экспарт';
 $labels['exportall']      = 'Экспартаваць усё';
 $labels['exportsel']      = 'Экспартаваць абранае';
 $labels['exportvcards']   = 'Экспартаваць кантакты ў фармаце vCard';
-$labels['newcontactgroup']       = 'Стварыць новую групу';
+$labels['newgroup']       = 'Стварыць новую групу';
 $labels['grouprename']    = 'Пераназваць групу';
 $labels['groupdelete']    = 'Выдаліць групу';
 $labels['groupremoveselected'] = 'Выдаліць абраных кантакаў з групы';
@@ -395,7 +394,6 @@ $labels['askuser'] = 'спытаць мяне';
 $labels['autosend'] = 'адправіць пацверджанне';
 $labels['autosendknown'] = 'адпраўляць пацверджанне маім кантактам, іначай спытаць';
 $labels['autosendknownignore'] = 'адпраўляць пацверджанне маім кантактам, іначай ігнараваць';
-$labels['ignore'] = 'ігнараваць';
 $labels['readwhendeleted'] = 'Пазначаць паведамленне як прачытанае па выдаленні';
 $labels['flagfordeletion'] = 'Толькі пазначаць паведамленне на выдаленне, не выдаляць';
 $labels['skipdeleted'] = 'Не паказваць выдаленыя паведамленні';

@@ -30,10 +30,11 @@ class rcube_string_replacer
     public $linkref_index;
     public $linkref_pattern;
 
-    private $values = array();
-    private $options = array();
-    private $linkrefs = array();
-    private $urls = array();
+    protected $values   = array();
+    protected $options  = array();
+    protected $linkrefs = array();
+    protected $urls     = array();
+    protected $noword   = '[^\w@.#-]';
 
 
     function __construct($options = array())
@@ -44,16 +45,18 @@ class rcube_string_replacer
         $url1       = '.:;,';
         $url2       = 'a-zA-Z0-9%=#$@+?|!&\\/_~\\[\\]\\(\\){}\*\x80-\xFE-';
 
-        $this->link_pattern = "/([\w]+:\/\/|\W[Ww][Ww][Ww]\.|^[Ww][Ww][Ww]\.)($utf_domain([$url1]*[$url2]+)*)/";
-        $this->mailto_pattern = "/("
+        // Supported link prefixes
+        $link_prefix = "([\w]+:\/\/|{$this->noword}[Ww][Ww][Ww]\.|^[Ww][Ww][Ww]\.)";
+
+        $this->options         = $options;
+        $this->linkref_index   = '/\[([^\]#]+)\](:?\s*##str_replacement_(\d+)##)/';
+        $this->linkref_pattern = '/\[([^\]#]+)\]/';
+        $this->link_pattern    = "/$link_prefix($utf_domain([$url1]*[$url2]+)*)/";
+        $this->mailto_pattern  = "/("
             ."[-\w!\#\$%&\'*+~\/^`|{}=]+(?:\.[-\w!\#\$%&\'*+~\/^`|{}=]+)*"  // local-part
             ."@$utf_domain"                                                 // domain-part
             ."(\?[$url1$url2]+)?"                                           // e.g. ?subject=test...
             .")/";
-        $this->linkref_index = '/\[([^\]#]+)\](:?\s*##str_replacement_(\d+)##)/';
-        $this->linkref_pattern = '/\[([^\]#]+)\]/';
-
-        $this->options = $options;
     }
 
     /**
@@ -91,7 +94,7 @@ class rcube_string_replacer
         if (preg_match('!^(http|ftp|file)s?://!i', $scheme)) {
             $url = $matches[1] . $matches[2];
         }
-        else if (preg_match('/^(\W*)(www\.)$/i', $matches[1], $m)) {
+        else if (preg_match("/^({$this->noword}*)(www\.)$/i", $matches[1], $m)) {
             $url        = $m[2] . $matches[2];
             $url_prefix = 'http://';
             $prefix     = $m[1];

@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -221,10 +221,11 @@ $labels['resumeediting'] = 'Doorgaan met opstellen';
 $labels['revertto']      = 'Terugwijzigen in';
 $labels['restore'] = 'Herstellen';
 $labels['restoremessage'] = 'Bericht herstellen?';
+$labels['ignore'] = 'Negeren';
 $labels['responses'] = 'Reacties';
 $labels['insertresponse'] = 'Reactie invoegen';
 $labels['manageresponses'] = 'Reacties beheren';
-$labels['savenewresponse'] = 'Nieuw antwoord aanmaken';
+$labels['newresponse'] = 'Nieuw antwoord aanmaken';
 $labels['addresponse'] = 'Antwoord toevoegen';
 $labels['editresponse'] = 'Bewerk reactie';
 $labels['editresponses'] = 'Bewerk reactie';
@@ -297,6 +298,7 @@ $labels['searchresult'] = 'Zoekresultaat';
 $labels['advsearch'] = 'Geavanceerd zoeken';
 $labels['advanced'] = 'Geavanceerd';
 $labels['other'] = 'Anders';
+$labels['printcontact'] = 'Contactpersoon printen';
 $labels['typehome']   = 'Thuis';
 $labels['typework']   = 'Werk';
 $labels['typeother']  = 'Anders';
@@ -336,7 +338,7 @@ $labels['export']         = 'Exporteren';
 $labels['exportall']      = 'Alles exporteren';
 $labels['exportsel']      = 'Selectie exporteren';
 $labels['exportvcards']   = 'Exporteer contactpersonen in vCard-formaat';
-$labels['newcontactgroup']       = 'Nieuwe groep maken';
+$labels['newgroup']       = 'Nieuwe groep maken';
 $labels['addgroup']       = 'Groep toevoegen';
 $labels['grouprename']    = 'Groep hernoemen';
 $labels['groupdelete']    = 'Groep verwijderen';
@@ -371,7 +373,7 @@ $labels['identities'] = 'Identiteiten';
 $labels['manageidentities'] = 'Identiteiten beheren';
 $labels['newidentity'] = 'Nieuwe identiteit';
 $labels['addidentity'] = 'Identiteit toevoegen';
-$labels['edititem'] = 'Identiteit bewerken';
+$labels['editidentity'] = 'Identiteit bewerken';
 $labels['preferhtml'] = 'Toon berichten in HTML-opmaak';
 $labels['defaultcharset'] = 'Standaard tekenset';
 $labels['htmlmessage'] = 'HTML-bericht';
@@ -406,7 +408,7 @@ $labels['askuser'] = 'altijd aan mij vragen';
 $labels['autosend'] = 'stuur automatisch';
 $labels['autosendknown'] = 'stuur automatisch naar mijn contactpersonen,  anders vragen';
 $labels['autosendknownignore'] = 'stuur automatisch naar mijn contactpersonen,  anders negeren';
-$labels['ignore'] = 'negeren';
+$labels['ignorerequest'] = 'negeer verzoek';
 $labels['readwhendeleted'] = 'Bericht na verwijderen als gelezen markeren';
 $labels['flagfordeletion'] = 'Bericht niet verwijderen maar als \'te verwijderen\' markeren';
 $labels['skipdeleted'] = 'Verwijderde berichten niet tonen';

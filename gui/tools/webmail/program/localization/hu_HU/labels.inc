@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -180,6 +180,7 @@ $labels['quota'] = 'Helyfoglalás';
 $labels['unknown']  = 'ismeretlen';
 $labels['unlimited']  = 'korlátlan';
 $labels['quotatype'] = 'Kvóta típus';
+$labels['quotatotal'] = 'Limit';
 $labels['quotaused'] = 'Használt';
 $labels['quotastorage'] = 'Lemez méret';
 $labels['quotamessage'] = 'Üzenet darab';
@@ -220,10 +221,11 @@ $labels['resumeediting'] = 'Helyesírás-ellenőrzés vége';
 $labels['revertto']      = 'Visszaállítás erre';
 $labels['restore'] = 'Visszaállítás';
 $labels['restoremessage'] = 'Üzenet visszaállítás';
+$labels['ignore'] = 'figyelmen kivül hagy';
 $labels['responses'] = 'Válaszok';
 $labels['insertresponse'] = 'Egy válasz beillesztése';
 $labels['manageresponses'] = 'Válaszok kezelése';
-$labels['savenewresponse'] = 'Új válasz létrehozása';
+$labels['newresponse'] = 'Új válasz létrehozása';
 $labels['addresponse'] = 'Válasz hozzáadása';
 $labels['editresponse'] = 'Válasz szerkesztése';
 $labels['editresponses'] = 'Válaszok szerkesztése';
@@ -291,9 +293,11 @@ $labels['assistant'] = 'Asszisztens';
 $labels['spouse'] = 'Házastárs';
 $labels['allfields'] = 'Összes mező';
 $labels['search'] = 'Keresés';
+$labels['searchresult'] = 'Keresés eredménye';
 $labels['advsearch'] = 'Részletes keresés';
 $labels['advanced'] = 'Haladó';
 $labels['other'] = 'Egyéb';
+$labels['printcontact'] = 'A kapcsolat nyomtatása';
 $labels['typehome']   = 'Otthon';
 $labels['typework']   = 'Munkahely';
 $labels['typeother']  = 'Egyéb';
@@ -333,6 +337,8 @@ $labels['export']         = 'Exportálás';
 $labels['exportall']      = 'Összes exportálása';
 $labels['exportsel']      = 'Kijelöltek exportálása';
 $labels['exportvcards']   = 'Kapcsolatok exportálása vCard formátumban';
+$labels['newgroup']       = 'Új csoport létrehozása';
+$labels['addgroup']       = 'Csoport hozzáadása';
 $labels['grouprename']    = 'Csoport átnevezése';
 $labels['groupdelete']    = 'Csoport törlése';
 $labels['groupremoveselected'] = 'A kijelölt partnerek törlése a csopotból';
@@ -365,6 +371,8 @@ $labels['editpreferences'] = 'Felhasználói beállítások szerkesztése';
 $labels['identities'] = 'Azonosítók';
 $labels['manageidentities'] = 'Azonosítók kezelése';
 $labels['newidentity'] = 'Új azonosító létrehozása';
+$labels['addidentity'] = 'Azonosító hozzáadása';
+$labels['editidentity'] = 'Azonosító szerkesztése';
 $labels['preferhtml'] = 'HTML megjelenítés';
 $labels['defaultcharset'] = 'Alapértelmezett karakterkódolás';
 $labels['htmlmessage'] = 'HTML üzenet';
@@ -399,7 +407,7 @@ $labels['askuser'] = 'kérdezzen rá';
 $labels['autosend'] = 'automatikus küldés';
 $labels['autosendknown'] = 'küldés csak a címjegyzékben lévő kapcsolataimnak, egyéb esetben kérdezzen rá';
 $labels['autosendknownignore'] = 'küldés csak a címjegyzékben lévő kapcsolataimnak, egyéb esetben nem';
-$labels['ignore'] = 'hagyja figyelmen kívül';
+$labels['ignorerequest'] = 'a kérés figyelmen kivül hagyása';
 $labels['readwhendeleted'] = 'Üzenet olvasottként jelölése törléskor';
 $labels['flagfordeletion'] = 'Üzenet törlendőnek jelölése törlés helyett';
 $labels['skipdeleted'] = 'Törölt üzenetek ne legyenek megjelenítve';
@@ -421,6 +429,7 @@ $labels['2231folding'] = 'Teljes RFC 2231 ( pl. Thunderbird)';
 $labels['miscfolding'] = 'RFC 2047/2231 (MS Outlook)';
 $labels['2047folding'] = 'Full RFC 2047 (egyéb)';
 $labels['force7bit'] = 'MIME kódolás használata 8 bites karakterekhez';
+$labels['savelocalstorage'] = "Mentse a böngésző helyi adattárolóba (ideiglenes)";
 $labels['advancedoptions'] = 'Haladó beállítások';
 $labels['toggleadvancedoptions'] = 'Haladó beállítások kapcsolása';
 $labels['focusonnewmessage'] = 'Beérkező új üzenet ablakának fókuszba hozása';
@@ -484,6 +493,10 @@ $labels['foldertype'] = 'Mappa típusa';
 $labels['personalfolder'] = 'Privát mappa';
 $labels['otherfolder'] = 'Más felhasználó(k) mappája';
 $labels['sharedfolder'] = 'Megosztott mappa';
+$labels['findfolders'] = 'Mappa kerésése';
+$labels['namespace.personal'] = 'Személyes';
+$labels['namespace.other'] = 'Más felhasználók';
+$labels['namespace.shared'] = 'Megosztva';
 $labels['sortby'] = 'Rendezés';
 $labels['sortasc']  = 'növekvő';
 $labels['sortdesc'] = 'csökkenő';
@@ -516,4 +529,12 @@ $labels['vietnamese'] = 'Vietnámi';
 $labels['japanese'] = 'Japán';
 $labels['korean'] = 'Koreai';
 $labels['chinese'] = 'Kínai';
+$labels['arialabeltoolbar'] = 'Alkamazás eszközsor';
+$labels['arialabelactivetask'] = 'Aktiv feladat';
+$labels['arialabelmessagessearchfilter'] = 'Email lista szűrő';
+$labels['arialabelmailsearchform'] = 'Email üzenet kereső űrlap';
+$labels['arialabelcontactsearchform'] = 'Kapcsolat kereső űrlap';
+$labels['arialabelforwardingoptions'] = 'Továbbítási beállítások';
+$labels['arialabelreplyalloptions'] = 'Válasz mindenkinek beállítások';
+$labels['arialabelattachmentpreview'] = 'Csatolmány előnézet';
 ?>

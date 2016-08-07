@@ -26,6 +26,8 @@
  */
 class rcube_result_index
 {
+    public $incomplete = false;
+
     protected $raw_data;
     protected $mailbox;
     protected $meta = array();
@@ -257,7 +259,6 @@ class rcube_result_index
             return;
         }
 
-        // @TODO: maybe do this in chunks
         $data = $this->get();
         $data = array_reverse($data);
         $this->raw_data = implode(self::SEPARATOR_ELEMENT, $data);

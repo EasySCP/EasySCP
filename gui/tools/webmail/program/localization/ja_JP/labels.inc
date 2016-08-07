@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -101,7 +101,7 @@ $labels['longdec']	= '12月';
 $labels['today'] = '今日';
 $labels['refresh']          = '再読込み';
 $labels['checkmail']        = '新しく届いたメッセージを確認';
-$labels['compose']          = 'メッセージの作成';
+$labels['compose']          = '新規作成';
 $labels['writenewmessage']  = '新しいメッセージを作成';
 $labels['reply']            = '返信';
 $labels['replytomessage']   = '送信者に返信';
@@ -221,10 +221,11 @@ $labels['resumeediting'] = '編集を再開';
 $labels['revertto']      = '元に戻す';
 $labels['restore'] = '回復';
 $labels['restoremessage'] = 'メッセージを回復しますか?';
+$labels['ignore'] = '無視';
 $labels['responses'] = '回答';
 $labels['insertresponse'] = '回答を挿入';
 $labels['manageresponses'] = '回答を管理';
-$labels['savenewresponse'] = '新しい回答を作成';
+$labels['newresponse'] = '新しい回答を作成';
 $labels['addresponse'] = '回答を追加';
 $labels['editresponse'] = '回答を編集';
 $labels['editresponses'] = '回答を編集';
@@ -233,7 +234,7 @@ $labels['responsetext'] = '回答の文章';
 $labels['attach'] = '添付';
 $labels['attachments'] = '添付ファイル';
 $labels['upload'] = 'アップロード';
-$labels['uploadprogress'] = '$percent ($current / $total)';
+$labels['uploadprogress'] = '$percent ($totalの$current)';
 $labels['close']  = '閉じる';
 $labels['messageoptions']  = 'メッセージのオプション...';
 $labels['togglecomposeoptions'] = '作成のオプションを切り替え';
@@ -297,6 +298,7 @@ $labels['searchresult'] = '検索の結果';
 $labels['advsearch'] = '高度な検索';
 $labels['advanced'] = '高度';
 $labels['other'] = 'その他';
+$labels['printcontact'] = '連絡先を印刷';
 $labels['typehome']   = '自宅';
 $labels['typework']   = '職場';
 $labels['typeother']  = 'その他';
@@ -320,7 +322,7 @@ $labels['contactnameandorg'] = '名前と組織';
 $labels['personalinfo'] = '個人情報';
 $labels['contactphoto'] = '連絡先の写真';
 $labels['edit']   = '編集';
-$labels['cancel'] = '取り消し';
+$labels['cancel'] = '取り止め';
 $labels['save']   = '保存';
 $labels['delete'] = '削除';
 $labels['rename'] = '名前を変更';
@@ -336,7 +338,7 @@ $labels['export']         = 'エクスポート';
 $labels['exportall']      = 'すべてエクスポート';
 $labels['exportsel']      = '選択した連絡先をエクスポート';
 $labels['exportvcards']   = 'vCard形式でエクスポート';
-$labels['newcontactgroup']       = '新しいグループを作成';
+$labels['newgroup']       = '新しいグループを作成';
 $labels['addgroup']       = 'グループを追加';
 $labels['grouprename']    = 'グループ名を変更';
 $labels['groupdelete']    = 'グループを削除';
@@ -371,7 +373,7 @@ $labels['identities'] = '識別情報';
 $labels['manageidentities'] = '識別情報を管理';
 $labels['newidentity'] = '新しい識別情報を作成';
 $labels['addidentity'] = '識別情報を追加';
-$labels['edititem'] = '識別情報を編集';
+$labels['editidentity'] = '識別情報を編集';
 $labels['preferhtml'] = 'HTMLを表示';
 $labels['defaultcharset'] = '初期設定の文字セット';
 $labels['htmlmessage'] = 'HTMLメッセージ';
@@ -406,7 +408,7 @@ $labels['askuser'] = '開封確認の送信を確認';
 $labels['autosend'] = '開封確認を送信';
 $labels['autosendknown'] = '送信者が連絡先に登録されていれば送信、それ以外は確認';
 $labels['autosendknownignore'] = '送信者が連絡先に登録されていれば送信、それ以外は無視';
-$labels['ignore'] = '無視';
+$labels['ignorerequest'] = '要求を無視';
 $labels['readwhendeleted'] = '削除したメッセージを既読に設定';
 $labels['flagfordeletion'] = '削除する代わりに削除済みフラグを設定';
 $labels['skipdeleted'] = '削除済みのメッセージを表示しない';
@@ -558,4 +560,23 @@ $labels['arialabelreplyalloptions'] = '全員に返信のオプション';
 $labels['arialabelmoremessageactions'] = 'さらにメッセージを操作';
 $labels['arialabelmarkmessagesas'] = '選択したメッセージに次のマーク...';
 $labels['arialabelcomposeoptions'] = '作成のオプション';
+$labels['arialabelresponsesmenu'] = '回答テンプレートメニュー';
+$labels['arialabelattachmentuploadform'] = '添付アップロードフォーム';
+$labels['arialabelattachmentpreview'] = '添付プレビュー';
+$labels['ariasummarycomposecontacts'] = '宛先として選択する連絡先とグループの一覧';
+$labels['arialabelcontactexportoptions'] = '連絡先のエクスポートのオプション';
+$labels['arialabelabookgroupoptions'] = 'アドレス帳・グループのオプション';
+$labels['arialabelpreferencesform'] = '設定のフォーム';
+$labels['arialabelidentityeditfrom'] = '識別情報のフォーム';
+$labels['arialabelresonseeditfrom'] = '回答のフォーム';
+$labels['arialabelsearchterms'] = '検索語';
+$labels['helplistnavigation'] = 'キーボードのナビゲーションの一覧';
+$labels['helplistkeyboardnavigation'] = "上矢印・下矢印: 選択する行を移動します。
+スペース: 現在の行を選択します。
+シフトキーを押しながら上矢印・下矢印: 上・下の行を選択に追加します。
+コントロールきーを押しながらスペース: 現在の行を選択に追加または削除します。";
+$labels['helplistkeyboardnavmessages'] = "右矢印・左矢印: メッセージのスレッドを展開・折り畳みします。(スレッドモードだけ)
+改行: 現在・選択しているメッセージを開きます。
+削除: 選択しているメッセージをゴミ箱に移動します。";
+$labels['helplistkeyboardnavcontacts'] = "改行: 現在・選択中の連絡先を開きます。";
 ?>

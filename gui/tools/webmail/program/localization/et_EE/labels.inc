@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -224,7 +224,7 @@ $labels['restoremessage'] = 'Taasta kiri?';
 $labels['responses'] = 'Vastused';
 $labels['insertresponse'] = 'Lisa vastus';
 $labels['manageresponses'] = 'Halda vastuseid';
-$labels['savenewresponse'] = 'Loo uus vastus';
+$labels['newresponse'] = 'Loo uus vastus';
 $labels['addresponse'] = 'Lisa vastus';
 $labels['editresponse'] = 'Muuda vastust';
 $labels['editresponses'] = 'Muuda vastuseid';
@@ -233,7 +233,6 @@ $labels['responsetext'] = 'Vastuse sisu';
 $labels['attach'] = 'Manusta';
 $labels['attachments'] = 'Manused';
 $labels['upload'] = 'Kinnita manus';
-$labels['uploadprogress'] = '$percent ($current, kokku $total)';
 $labels['close']  = 'Sulge';
 $labels['messageoptions']  = 'Kirja valikud...';
 $labels['low']     = 'Madal';
@@ -334,7 +333,7 @@ $labels['export']         = 'Ekspordi';
 $labels['exportall']      = 'Ekspordi kõik';
 $labels['exportsel']      = 'Ekspordi valitud';
 $labels['exportvcards']   = 'Ekspordi kontaktid vCardi formaadis';
-$labels['newcontactgroup']       = 'Loo uus grupp';
+$labels['newgroup']       = 'Loo uus grupp';
 $labels['grouprename']    = 'Nimeta grupp ümber';
 $labels['groupdelete']    = 'Kustuta grupp';
 $labels['groupremoveselected'] = 'Eemalda valitud kontaktid grupist';
@@ -368,7 +367,7 @@ $labels['identities'] = 'Identiteedid';
 $labels['manageidentities'] = 'Halda identiteete';
 $labels['newidentity'] = 'Loo uus identiteet';
 $labels['addidentity'] = 'Lisa identiteet';
-$labels['edititem'] = 'Muuda identiteeti';
+$labels['editidentity'] = 'Muuda identiteeti';
 $labels['preferhtml'] = 'Eelista HTMLi';
 $labels['defaultcharset'] = 'Vaikimisi märgistik';
 $labels['htmlmessage'] = 'HTML kirjad';
@@ -403,7 +402,6 @@ $labels['askuser'] = 'küsi kasutajalt';
 $labels['autosend'] = 'saada automaatselt';
 $labels['autosendknown'] = 'saada automaatselt minu kontaktidele, teised küsi üle';
 $labels['autosendknownignore'] = 'saada automaatselt minu kontaktidele, teisi ignoreeri';
-$labels['ignore'] = 'ignoreeri';
 $labels['readwhendeleted'] = 'Märgi kiri kustutamisel loetuks';
 $labels['flagfordeletion'] = 'Kustutamise asemel märgi kiri kustutatavaks';
 $labels['skipdeleted'] = 'Ära näita kustutatud kirju';

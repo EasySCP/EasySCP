@@ -5,7 +5,7 @@
  | localization/<lang>/messages.inc                                      |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2014, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -98,7 +98,7 @@ $messages['stillsearching'] = 'Stále vyhledávám...';
 $messages['nospellerrors'] = 'Nebyly nalezeny žádné chyby';
 $messages['folderdeleted'] = 'Složka byla úspěšně vymazána';
 $messages['foldersubscribed'] = 'Složka byla úspěšně připojena';
-$messages['folderunsubscribed'] = 'Slažka byla úspěšně odpojena';
+$messages['folderunsubscribed'] = 'Složka byla úspěšně odpojena';
 $messages['folderpurged'] = 'Složka byla úspěšně vyprázdněna';
 $messages['folderexpunged'] = 'Složka byla úspěšně zkomprimována';
 $messages['deletedsuccessfully'] = 'Úspěšně smazáno';
@@ -177,4 +177,5 @@ $messages['parentnotwritable'] = 'Nelze vytvořit/přesunout složku do vybrané
 $messages['messagetoobig'] = 'Část zprávy je příliš velká pro zpracování.';
 $messages['attachmentvalidationerror'] = 'Varování: Tato příloha je podezřelá, protože její typ se neshoduje s typem uvedeným ve zprávě. Pokud nedůvěřujete odesílateli, neměli byste přílohu otevírat v prohlížeči, protože může obsahovat škodlivý obsah.<br/><br/><em>Očekáváno: $expected; nalezeno: $detected</em>';
 $messages['noscriptwarning'] = 'Upozornění: Tato emailová aplikace vyžaduje Javascript! Prosím, zapněte Javascript v nastavení prohlížeče.';
+$messages['messageissent'] = 'Zpráva již byla odeslána, ovšem ještě nebyla uložena. Přejete si ji uložit nyní?';
 ?>

@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -221,10 +221,11 @@ $labels['resumeediting'] = 'Bearbeitung fortsetzen';
 $labels['revertto']      = 'Zurück zu';
 $labels['restore'] = 'Wiederherstellen';
 $labels['restoremessage'] = 'Nachricht wiederherstellen?';
+$labels['ignore'] = 'Ignorieren';
 $labels['responses'] = 'Antworten';
 $labels['insertresponse'] = 'Antwort einfügen';
 $labels['manageresponses'] = 'Antworten verwalten';
-$labels['savenewresponse'] = 'Neue Antwort erstellen';
+$labels['newresponse'] = 'Neue Antwort erstellen';
 $labels['addresponse'] = 'Antwort hinzufügen';
 $labels['editresponse'] = 'Antwort bearbeiten';
 $labels['editresponses'] = 'Antworten bearbeiten';
@@ -297,6 +298,7 @@ $labels['searchresult'] = 'Suchresultat';
 $labels['advsearch'] = 'Erweiterte Suche';
 $labels['advanced'] = 'Erweitert';
 $labels['other'] = 'Andere';
+$labels['printcontact'] = 'Kontakt drucken';
 $labels['typehome']   = 'Zuhause';
 $labels['typework']   = 'Arbeit';
 $labels['typeother']  = 'Andere';
@@ -336,7 +338,7 @@ $labels['export']         = 'Exportieren';
 $labels['exportall']      = 'Alle exportieren';
 $labels['exportsel']      = 'Ausgewählte exportieren';
 $labels['exportvcards']   = 'Kontakte im vCard-Format exportieren';
-$labels['newcontactgroup']       = 'Neue Addressgruppe erstellen';
+$labels['newgroup']       = 'Neue Addressgruppe erstellen';
 $labels['addgroup']       = 'Gruppe hinzufügen';
 $labels['grouprename']    = 'Gruppe umbenennen';
 $labels['groupdelete']    = 'Gruppe löschen';
@@ -371,7 +373,7 @@ $labels['identities'] = 'Absender';
 $labels['manageidentities'] = 'Absender verwalten';
 $labels['newidentity'] = 'Neuen Absender erfassen';
 $labels['addidentity'] = 'Absender hinzufügen';
-$labels['edititem'] = 'Absender bearbeiten';
+$labels['editidentity'] = 'Absender bearbeiten';
 $labels['preferhtml'] = 'HTML bevorzugen';
 $labels['defaultcharset'] = 'Standard-Zeichensatz';
 $labels['htmlmessage'] = 'HTML Nachricht';
@@ -406,7 +408,7 @@ $labels['askuser'] = 'immer fragen';
 $labels['autosend'] = 'automatisch senden';
 $labels['autosendknown'] = 'für bekannte Absender, sonst fragen';
 $labels['autosendknownignore'] = 'für bekannte Absender, sonst ignorieren';
-$labels['ignore'] = 'ignorieren';
+$labels['ignorerequest'] = 'Anfrage ignorieren';
 $labels['readwhendeleted'] = 'Beim Löschen als gelesen markieren';
 $labels['flagfordeletion'] = 'Als gelöscht markieren anstatt in den Papierkorb verschieben';
 $labels['skipdeleted'] = 'Zeige keine gelöschten Nachrichten an';

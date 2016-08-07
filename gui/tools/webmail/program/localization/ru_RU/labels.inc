@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -147,6 +147,7 @@ $labels['unanswered'] = 'Неотвеченные';
 $labels['withattachment'] = 'С вложением';
 $labels['deleted'] = 'Удаленные';
 $labels['undeleted'] = 'Не удаленные';
+$labels['replied'] = 'Отвечено';
 $labels['forwarded'] = 'Пересланные';
 $labels['invert'] = 'Инвертировать';
 $labels['filter'] = 'Фильтр';
@@ -220,10 +221,11 @@ $labels['resumeediting'] = 'Продолжить редактирование';
 $labels['revertto']      = 'Отменить правки';
 $labels['restore'] = 'Восстановить';
 $labels['restoremessage'] = 'Восстановить сообщение?';
+$labels['ignore'] = 'Пропустить';
 $labels['responses'] = 'Ответы';
 $labels['insertresponse'] = 'Вставить ответ';
 $labels['manageresponses'] = 'Управление ответами';
-$labels['savenewresponse'] = 'Создать новый ответ';
+$labels['newresponse'] = 'Создать новый ответ';
 $labels['addresponse'] = 'Добавить ответ';
 $labels['editresponse'] = 'Редактировать ответ';
 $labels['editresponses'] = 'Редактировать ответы';
@@ -235,6 +237,7 @@ $labels['upload'] = 'Загрузить';
 $labels['uploadprogress'] = '$percent ($current из $total)';
 $labels['close']  = 'Закрыть';
 $labels['messageoptions']  = 'Настройки сообщений...';
+$labels['togglecomposeoptions'] = 'Параметры создания';
 $labels['low']     = 'Низкий';
 $labels['lowest']  = 'Низший';
 $labels['normal']  = 'Норм.';
@@ -295,6 +298,7 @@ $labels['searchresult'] = 'Результаты поиска';
 $labels['advsearch'] = 'Расширенный поиск';
 $labels['advanced'] = 'Дополнительно';
 $labels['other'] = 'Другое';
+$labels['printcontact'] = 'Печатать контакт';
 $labels['typehome']   = 'Дом';
 $labels['typework']   = 'Работа';
 $labels['typeother']  = 'Другое';
@@ -334,7 +338,7 @@ $labels['export']         = 'Экспорт';
 $labels['exportall']      = 'Экспортировать все';
 $labels['exportsel']      = 'Экспортировать выделенные';
 $labels['exportvcards']   = 'Экспортировать контакты в формате vCard';
-$labels['newcontactgroup']       = 'Создать новую группу';
+$labels['newgroup']       = 'Создать новую группу';
 $labels['addgroup']       = 'Добавить группу';
 $labels['grouprename']    = 'Переименовать группу';
 $labels['groupdelete']    = 'Удалить группу';
@@ -369,7 +373,7 @@ $labels['identities'] = 'Профили';
 $labels['manageidentities'] = 'Управление профилями';
 $labels['newidentity'] = 'Создать новый профиль';
 $labels['addidentity'] = 'Добавить профиль';
-$labels['edititem'] = 'Изменить профиль';
+$labels['editidentity'] = 'Изменить профиль';
 $labels['preferhtml'] = 'Предпочитать HTML';
 $labels['defaultcharset'] = 'Набор символов по-умолчанию';
 $labels['htmlmessage'] = 'Сообщение HTML';
@@ -404,7 +408,7 @@ $labels['askuser'] = 'спросить перед отправкой';
 $labels['autosend'] = 'отправлять автоматически';
 $labels['autosendknown'] = 'отправлять уведомления контактам из адресной книги, в противном случае спросить';
 $labels['autosendknownignore'] = 'отправлять уведомления только контактам из адресной книги, остальных игнорировать';
-$labels['ignore'] = 'игнорировать';
+$labels['ignorerequest'] = 'пропустить запрос';
 $labels['readwhendeleted'] = 'Помечать как прочитанное при удалении';
 $labels['flagfordeletion'] = 'Помечать для удаления вместо удаления';
 $labels['skipdeleted'] = 'Не показывать удаленные сообщения';
@@ -426,7 +430,9 @@ $labels['2231folding'] = 'RFC 2231 (только для новейших про�
 $labels['miscfolding'] = 'RFC 2047/2231  (наибольшая совместимость)';
 $labels['2047folding'] = 'RFC 2047  (для старых программ)';
 $labels['force7bit'] = 'Использовать MIME для 8-битных символов';
+$labels['savelocalstorage'] = "Сохранить в локальном хранилище веб-обозревателя (временно)";
 $labels['advancedoptions'] = 'Дополнительные настройки';
+$labels['toggleadvancedoptions'] = 'Дополнительные параметры';
 $labels['focusonnewmessage'] = 'Фокусировать окно браузера при новом сообщении';
 $labels['checkallfolders'] = 'Проверять новые сообщения во всех папках';
 $labels['displaynext'] = 'Показать следующее сообщение, после удаления или перемещения данного';
@@ -491,6 +497,7 @@ $labels['sharedfolder'] = 'Совместный каталог';
 $labels['findfolders'] = 'Найти папки';
 $labels['namespace.personal'] = 'Персональные';
 $labels['namespace.other'] = 'Других пользователей';
+$labels['namespace.shared'] = 'Общие';
 $labels['sortby'] = 'Сортировать по';
 $labels['sortasc']  = 'Возрастанию';
 $labels['sortdesc'] = 'Убыванию';
@@ -524,16 +531,52 @@ $labels['japanese'] = 'Японский';
 $labels['korean'] = 'Корейский';
 $labels['chinese'] = 'Китайский';
 $labels['arialabeltopnav'] = 'Управление окном';
+$labels['arialabeltasknav'] = 'Задачи приложения';
+$labels['arialabeltoolbar'] = 'Панель инструментов приложения';
 $labels['arialabelactivetask'] = 'Активная задача';
+$labels['arialabelmessagessearchfilter'] = 'Фильтр перечня сообщений';
+$labels['arialabelmailsearchform'] = 'Форма поиска в сообщении';
 $labels['arialabelcontactsearchform'] = 'Форма поиска контактов';
+$labels['arialabelmailquicksearchbox'] = 'Ввод поискового запроса адресов эл.почты';
+$labels['arialabelquicksearchbox'] = 'Поисковый запрос';
+$labels['arialabelfoldersearchfilter'] = 'Фильтр перечня папок';
+$labels['arialabelfoldersearchform'] = 'Форма поиска папок';
+$labels['arialabelfolderlist'] = 'Выбор папки эл.почты';
+$labels['arialabelmessagelist'] = 'Перечень сообщений эл.почты';
 $labels['arialabelmailpreviewframe'] = 'Предпросмотр сообщений';
+$labels['arialabelmailboxmenu'] = 'Меню действий над папкой';
+$labels['arialabellistselectmenu'] = 'Меню выделения списка';
+$labels['arialabelthreadselectmenu'] = 'Меню списка обсуждений';
+$labels['arialabelmessagelistoptions'] = 'Параметры отображение списка сообщений и упорядочивания';
 $labels['arialabelmailimportdialog'] = 'Диалог импорта сообщения';
+$labels['arialabelmessagenav'] = 'Навигация по сообщениям';
 $labels['arialabelmessagebody'] = 'Тело сообщения';
+$labels['arialabelmessageactions'] = 'Действия над сообщением';
 $labels['arialabelcontactquicksearch'] = 'Форма поиска контактов';
+$labels['arialabelcontactsearchbox'] = 'Ввод поискового запроса контакта';
 $labels['arialabelmessageheaders'] = 'Заголовки сообщений';
 $labels['arialabelforwardingoptions'] = 'Опции пересылки';
+$labels['arialabelreplyalloptions'] = 'Параметры ответа всем';
 $labels['arialabelmoremessageactions'] = 'Дополнительные действия с сообщением';
 $labels['arialabelmarkmessagesas'] = 'Отметить выделенные сообщения как...';
+$labels['arialabelcomposeoptions'] = 'Параметры создания';
+$labels['arialabelresponsesmenu'] = 'Меню заранее подготовленных ответов';
+$labels['arialabelattachmentuploadform'] = 'Форма выгрузки вложения';
 $labels['arialabelattachmentpreview'] = 'Предпросмотр вложений';
+$labels['ariasummarycomposecontacts'] = 'Список контактов и групп для выбора в качестве получателей';
 $labels['arialabelcontactexportoptions'] = 'Параметры экспорта контактов';
+$labels['arialabelabookgroupoptions'] = 'Параметры адресной книги/группы';
+$labels['arialabelpreferencesform'] = 'Форма настроек';
+$labels['arialabelidentityeditfrom'] = 'Форма редактирования личных данных';
+$labels['arialabelresonseeditfrom'] = 'Форма редактирования ответа';
+$labels['arialabelsearchterms'] = 'Поисковый запросы';
+$labels['helplistnavigation'] = 'Клавиши навигации по списку';
+$labels['helplistkeyboardnavigation'] = "Стрелки вверх/вниз: Перемещает фокус по строкам/выделение.
+Пробел: Выделяет строку на которой находится фокус.
+Shift + вверх/вниз: Выделяет дополнительную строку выше/ниже.
+Ctrl + пробел: Добавляет/удаляет строку на которой находится фокус в/из выделения.";
+$labels['helplistkeyboardnavmessages'] = "Стрелки вправо/влево: раскрыть/свернуть сообщения обсуждения (только в режиме просмотра обсуждений).
+Enter: Открыть выделенное сообщение.
+Delete: Переместить выбранные сообщения в Корзину.";
+$labels['helplistkeyboardnavcontacts'] = "Enter: Открыть выбранный контакт.";
 ?>

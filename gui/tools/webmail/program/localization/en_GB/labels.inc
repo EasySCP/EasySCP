@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -224,7 +224,7 @@ $labels['restoremessage'] = 'Restore message?';
 $labels['responses'] = 'Responses';
 $labels['insertresponse'] = 'Insert a response';
 $labels['manageresponses'] = 'Manage responses';
-$labels['savenewresponse'] = 'Create new response';
+$labels['newresponse'] = 'Create new response';
 $labels['addresponse'] = 'Add response';
 $labels['editresponse'] = 'Edit response';
 $labels['editresponses'] = 'Edit responses';
@@ -233,7 +233,6 @@ $labels['responsetext'] = 'Response Text';
 $labels['attach'] = 'Attach';
 $labels['attachments'] = 'Attachments';
 $labels['upload'] = 'Upload';
-$labels['uploadprogress'] = '$percent ($current from $total)';
 $labels['close']  = 'Close';
 $labels['messageoptions']  = 'Message options...';
 $labels['togglecomposeoptions'] = 'Toggle composition options';
@@ -336,7 +335,7 @@ $labels['export']         = 'Export';
 $labels['exportall']      = 'Export all';
 $labels['exportsel']      = 'Export selected';
 $labels['exportvcards']   = 'Export contacts in vCard format';
-$labels['newcontactgroup']       = 'Create new group';
+$labels['newgroup']       = 'Create new group';
 $labels['addgroup']       = 'Add group';
 $labels['grouprename']    = 'Rename group';
 $labels['groupdelete']    = 'Delete group';
@@ -371,7 +370,7 @@ $labels['identities'] = 'Identities';
 $labels['manageidentities'] = 'Manage identities';
 $labels['newidentity'] = 'Create new identity';
 $labels['addidentity'] = 'Add identity';
-$labels['edititem'] = 'Edit identity';
+$labels['editidentity'] = 'Edit identity';
 $labels['preferhtml'] = 'Display HTML';
 $labels['defaultcharset'] = 'Default Character Set';
 $labels['htmlmessage'] = 'HTML Message';
@@ -406,7 +405,6 @@ $labels['askuser'] = 'ask each time';
 $labels['autosend'] = 'send automatically';
 $labels['autosendknown'] = 'send receipt to my contacts, otherwise ask';
 $labels['autosendknownignore'] = 'send receipt to my contacts, otherwise ignore';
-$labels['ignore'] = 'ignore';
 $labels['readwhendeleted'] = 'Mark the message as read on delete';
 $labels['flagfordeletion'] = 'Flag the message for deletion instead of delete';
 $labels['skipdeleted'] = 'Do not show deleted messages';

@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -131,12 +131,18 @@ $labels['moreactions']      = 'Περισσότερες ενέργειες...';
 $labels['more']             = 'Περισσότερα';
 $labels['back']             = 'Επιστροφή';
 $labels['options']          = 'Επιλογές';
+$labels['first'] = 'Πρώτο';
+$labels['last'] = 'Τελευταίο';
+$labels['previous'] = 'Προηγούμενο';
+$labels['next'] = 'Επόμενο';
 $labels['select'] = 'Επιλέξτε';
 $labels['all'] = 'Όλα';
 $labels['none'] = 'Κανένα';
 $labels['currpage'] = 'Τρέχουσα σελίδα';
+$labels['isread'] = 'Αναγνωσμένο';
 $labels['unread'] = 'Μη αναγνωσμένο';
 $labels['flagged'] = 'Σημειωμένο';
+$labels['unflagged'] = 'Μη σημειωμένο';
 $labels['unanswered'] = 'Αναπάντητο';
 $labels['withattachment'] = 'Με επισύναψη';
 $labels['deleted'] = 'Διεγραμμένο';
@@ -214,10 +220,11 @@ $labels['resumeediting'] = 'Συνέχεια επεξεργασίας';
 $labels['revertto']      = 'Επαναφορά στο';
 $labels['restore'] = 'Επαναφορά';
 $labels['restoremessage'] = 'Επαναφορά μηνύματος;';
+$labels['ignore'] = 'Παράβλεψη';
 $labels['responses'] = 'Απαντήσεις';
 $labels['insertresponse'] = 'Εισάγετε μια απάντηση';
 $labels['manageresponses'] = 'Διαχείριση απαντήσεων';
-$labels['savenewresponse'] = 'Δημιουργία νέας απάντησης';
+$labels['newresponse'] = 'Δημιουργία νέας απάντησης';
 $labels['addresponse'] = 'Προσθήκη απάντησης';
 $labels['editresponse'] = 'Μεταβολή απάντησης';
 $labels['editresponses'] = 'Μεταβολή απαντήσεων';
@@ -329,7 +336,7 @@ $labels['export']         = 'Εξαγωγή';
 $labels['exportall']      = 'Εξαγωγή όλων';
 $labels['exportsel']      = 'Εξαγωγή επιλεγμένων';
 $labels['exportvcards']   = 'Εξαγωγή επαφών σε vCard';
-$labels['newcontactgroup']       = 'Δημιουργία νέας ομάδας';
+$labels['newgroup']       = 'Δημιουργία νέας ομάδας';
 $labels['addgroup']       = 'Προσθήκη ομάδας';
 $labels['grouprename']    = 'Μετονομασία ομάδας';
 $labels['groupdelete']    = 'Διαγραφή ομάδας';
@@ -364,7 +371,7 @@ $labels['identities'] = 'Ταυτότητες';
 $labels['manageidentities'] = 'Διαχείριση ταυτοτήτων';
 $labels['newidentity'] = 'Δημιουργία νέας ταυτότητας';
 $labels['addidentity'] = 'Προσθήκη ταυτότητας';
-$labels['edititem'] = 'Επεξεργασία ταυτότητας';
+$labels['editidentity'] = 'Επεξεργασία ταυτότητας';
 $labels['preferhtml'] = 'Προβολή σε HTML';
 $labels['defaultcharset'] = 'Προεπιλεγμένη κωδικοποίηση χαρακτήρων';
 $labels['htmlmessage'] = 'Μήνυμα σε μορφή HTML';
@@ -399,7 +406,7 @@ $labels['askuser'] = 'ρώτησέ με';
 $labels['autosend'] = 'στείλε αυτόματα την απόδειξη παραλαβής';
 $labels['autosendknown'] = 'στείλε αυτόματα αποδείξεις παραλαβής σε όσους έχω στις επαφές, για τους άλλους ρώτα με';
 $labels['autosendknownignore'] = 'στείλε αυτόματα αποδείξεις παραλαβής σε όσους έχω στις επαφές, για τους άλλους καμιά ενέργεια';
-$labels['ignore'] = 'αγνόησε';
+$labels['ignorerequest'] = 'παράβλεψη αιτήματος';
 $labels['readwhendeleted'] = 'Κατά τη διαγραφή του μηνύματος, μαρκάρισέ το σαν αναγνωσμένο';
 $labels['flagfordeletion'] = 'Αντί να το διαγράψεις, απλά και μόνο σημείωσέ το';
 $labels['skipdeleted'] = 'Να μην εμφανίζονται τα διαγραμμένα μηνύματα';
@@ -529,6 +536,7 @@ $labels['arialabelmessagessearchfilter'] = 'Φίλτρο λίστας αλληλ
 $labels['arialabelmailsearchform'] = 'Φόρμα αναζήτησης μηνύματος e-mail';
 $labels['arialabelcontactsearchform'] = 'Φόρμα αναζήτησης επαφών';
 $labels['arialabelmailquicksearchbox'] = 'Πεδίο αναζήτησης e-mail';
+$labels['arialabelquicksearchbox'] = 'Αναζήτηση εισόδου';
 $labels['arialabelfoldersearchfilter'] = 'Φίλτρο λίστας φακέλων';
 $labels['arialabelfoldersearchform'] = 'Φόρμα αναζήτησης φακέλων';
 $labels['arialabelfolderlist'] = 'Επιλογή καταλόγου e-mail';

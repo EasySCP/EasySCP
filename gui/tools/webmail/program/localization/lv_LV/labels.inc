@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -217,7 +217,7 @@ $labels['restoremessage'] = 'Atjaunot vēstuli?';
 $labels['responses'] = 'Atbildes';
 $labels['insertresponse'] = 'Ievietot atbildi';
 $labels['manageresponses'] = 'Pārvaldīt atbildes';
-$labels['savenewresponse'] = 'Izveidot jaunu atbildi';
+$labels['newresponse'] = 'Izveidot jaunu atbildi';
 $labels['addresponse'] = 'Pievienot atbildi';
 $labels['editresponse'] = 'Rediģēt atbildi';
 $labels['editresponses'] = 'Rediģēt atbildes';
@@ -226,7 +226,6 @@ $labels['responsetext'] = 'Atbildes teksts';
 $labels['attach'] = 'Pievienot';
 $labels['attachments'] = 'Pielikumi';
 $labels['upload'] = 'Augšupielādēt';
-$labels['uploadprogress'] = '$percent ($current no $total)';
 $labels['close']  = 'Aizvērt';
 $labels['messageoptions']  = 'Vēstuļu iestatījumi...';
 $labels['low']     = 'Zema';
@@ -327,7 +326,7 @@ $labels['export']         = 'Eksportēt';
 $labels['exportall']      = 'Eksportēt visu';
 $labels['exportsel']      = 'Eksportēt atzīmēto';
 $labels['exportvcards']   = 'Eksportēt kontaktus vCard formātā';
-$labels['newcontactgroup']       = 'Izveidot jaunu grupu';
+$labels['newgroup']       = 'Izveidot jaunu grupu';
 $labels['grouprename']    = 'Pārdēvēt grupu';
 $labels['groupdelete']    = 'Izdzēst grupu';
 $labels['groupremoveselected'] = 'Dzēst atzīmētos kontaktus no grupas';
@@ -360,7 +359,7 @@ $labels['identities'] = 'Identitātes';
 $labels['manageidentities'] = 'Rediģēt identitātes';
 $labels['newidentity'] = 'Izveidot jaunu identitāti';
 $labels['addidentity'] = 'Pievienot identitāti';
-$labels['edititem'] = 'Rediģēt identitāti';
+$labels['editidentity'] = 'Rediģēt identitāti';
 $labels['preferhtml'] = 'Rādīt HTML formatētās vēstules';
 $labels['defaultcharset'] = 'Noklusētā rakstzīmju kopa';
 $labels['htmlmessage'] = 'HTML formatēta vēstule';
@@ -395,7 +394,6 @@ $labels['askuser'] = 'jautāt man vai sūtīt';
 $labels['autosend'] = 'sūtīt automātiski';
 $labels['autosendknown'] = 'automātiski sūtīt ja pieprasītājs ir manos kontaktos, par citiem jautāt';
 $labels['autosendknownignore'] = 'automātiski sūtīt ja pieprasītājs ir manos kontaktos, citiem ignorēt un nesūtīt';
-$labels['ignore'] = 'ignorēt un nesūtīt';
 $labels['readwhendeleted'] = 'Dzēšot vēstules tās atzīmēt kā izlasītas';
 $labels['flagfordeletion'] = 'Dzēšot vēstules tās nedzēst, bet marķēt kā dzēšamas';
 $labels['skipdeleted'] = 'Nerādīt dzēstās vēstules';

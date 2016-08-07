@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  +-----------------------------------------------------------------------+
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2008-2012, The Roundcube Dev Team                       |
@@ -136,13 +136,16 @@ class rcube_html2text
      * @see $replace
      */
     protected $search = array(
-        "/\r/",                                  // Non-legal carriage return
-        "/[\n\t]+/",                             // Newlines and tabs
+        '/\r/',                                  // Non-legal carriage return
+        '/^.*<body[^>]*>\n*/i',                  // Anything before <body>
         '/<head[^>]*>.*?<\/head>/i',             // <head>
-        '/<script[^>]*>.*?<\/script>/i',         // <script>s -- which strip_tags supposedly has problems with
-        '/<style[^>]*>.*?<\/style>/i',           // <style>s -- which strip_tags supposedly has problems with
-        '/<p[^>]*>/i',                           // <P>
-        '/<br[^>]*>/i',                          // <br>
+        '/<script[^>]*>.*?<\/script>/i',         // <script>
+        '/<style[^>]*>.*?<\/style>/i',           // <style>
+        '/[\n\t]+/',                             // Newlines and tabs
+        '/<p[^>]*>/i',                           // <p>
+        '/<\/p>[\s\n\t]*<div[^>]*>/i',           // </p> before <div>
+        '/<br[^>]*>[\s\n\t]*<div[^>]*>/i',       // <br> before <div>
+        '/<br[^>]*>\s*/i',                       // <br>
         '/<i[^>]*>(.*?)<\/i>/i',                 // <i>
         '/<em[^>]*>(.*?)<\/em>/i',               // <em>
         '/(<ul[^>]*>|<\/ul>)/i',                 // <ul> and </ul>
@@ -164,11 +167,14 @@ class rcube_html2text
      */
     protected $replace = array(
         '',                                     // Non-legal carriage return
-        ' ',                                    // Newlines and tabs
+        '',                                     // Anything before <body>
         '',                                     // <head>
-        '',                                     // <script>s -- which strip_tags supposedly has problems with
-        '',                                     // <style>s -- which strip_tags supposedly has problems with
-        "\n\n",                                 // <P>
+        '',                                     // <script>
+        '',                                     // <style>
+        ' ',                                    // Newlines and tabs
+        "\n\n",                                 // <p>
+        "\n<div>",                              // </p> before <div>
+        '<div>',                                // <br> before <div>
         "\n",                                   // <br>
         '_\\1_',                                // <i>
         '_\\1_',                                // <em>
@@ -216,7 +222,7 @@ class rcube_html2text
      * @see $ent_search
      */
     protected $ent_replace = array(
-        ' ',                                    // Non-breaking space
+        "\xC2\xA0",                             // Non-breaking space
         '"',                                    // Double quotes
         "'",                                    // Single quotes
         '>',
@@ -423,7 +429,7 @@ class rcube_html2text
         // Variables used for building the link list
         $this->_link_list = array();
 
-        $text = trim(stripslashes($this->html));
+        $text = $this->html;
 
         // Convert HTML to TXT
         $this->_converter($text);
@@ -509,7 +515,7 @@ class rcube_html2text
      * @param string $link URL of the link
      * @param string $display Part of the text to associate number with
      */
-    protected function _build_link_list( $link, $display )
+    protected function _build_link_list($link, $display)
     {
         if (!$this->_do_links || empty($link)) {
             return $display;
@@ -517,6 +523,11 @@ class rcube_html2text
 
         // Ignored link types
         if (preg_match('!^(javascript:|mailto:|#)!i', $link)) {
+            return $display;
+        }
+
+        // skip links with href == content (#1490434)
+        if ($link === $display) {
             return $display;
         }
 

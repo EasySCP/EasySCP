@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -221,10 +221,11 @@ $labels['resumeediting'] = 'Nastavi uređivanje';
 $labels['revertto']      = 'Vrati na';
 $labels['restore'] = 'Vrati';
 $labels['restoremessage'] = 'Vratiti poruku?';
+$labels['ignore'] = 'Zanemari';
 $labels['responses'] = 'Odgovori';
 $labels['insertresponse'] = 'Umetni odgovor';
 $labels['manageresponses'] = 'Upravljaj odgovorima';
-$labels['savenewresponse'] = 'Kreiraj novi odgovor';
+$labels['newresponse'] = 'Kreiraj novi odgovor';
 $labels['addresponse'] = 'Dodaj odgovor';
 $labels['editresponse'] = 'Uredi odgovor';
 $labels['editresponses'] = 'Uredi odgovore';
@@ -336,7 +337,7 @@ $labels['export']         = 'Izvoz';
 $labels['exportall']      = 'Izvezi sve';
 $labels['exportsel']      = 'Izvezi označeno';
 $labels['exportvcards']   = 'Izvezi kontakte u vCard formatu';
-$labels['newcontactgroup']       = 'Kreiraj novu grupu';
+$labels['newgroup']       = 'Kreiraj novu grupu';
 $labels['addgroup']       = 'Dodaj grupu';
 $labels['grouprename']    = 'Preimenuj grupu';
 $labels['groupdelete']    = 'Obriši grupu';
@@ -371,7 +372,7 @@ $labels['identities'] = 'Identiteti';
 $labels['manageidentities'] = 'Upravljanje identitetima';
 $labels['newidentity'] = 'Kreiraj novi identitet';
 $labels['addidentity'] = 'Dodaj identitet';
-$labels['edititem'] = 'Uredi identitet';
+$labels['editidentity'] = 'Uredi identitet';
 $labels['preferhtml'] = 'Prikaži HTML';
 $labels['defaultcharset'] = 'Glavni skup znakova';
 $labels['htmlmessage'] = 'HTML poruke';
@@ -406,7 +407,7 @@ $labels['askuser'] = 'pitaj korisnika';
 $labels['autosend'] = 'pošalji povratnicu';
 $labels['autosendknown'] = 'pošalji povratnicu mojim kontaktima, u suprotnom me pitaj';
 $labels['autosendknownignore'] = 'pošalji povratnicu mojim kontaktima, u suprotnom zanemari';
-$labels['ignore'] = 'zanemari';
+$labels['ignorerequest'] = 'Zanemari zahtjev';
 $labels['readwhendeleted'] = 'Označi poruku kao pročitanu pri brisanju';
 $labels['flagfordeletion'] = 'Označi poruku za brisanje umjesto brisanja';
 $labels['skipdeleted'] = 'Ne prikazuj obrisane poruke';

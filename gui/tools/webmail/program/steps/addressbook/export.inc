@@ -21,6 +21,8 @@
  +-----------------------------------------------------------------------+
 */
 
+$RCMAIL->request_security_check(rcube_utils::INPUT_GET);
+
 // Use search result
 if (!empty($_REQUEST['_search']) && isset($_SESSION['search'][$_REQUEST['_search']])) {
     $sort_col = $RCMAIL->config->get('addressbook_sort_col', 'name');
@@ -98,12 +100,22 @@ else {
     $result = $CONTACTS->list_records(null, 0, true);
 }
 
+// Give plugins a possibility to implement other output formats or modify the result
+$plugin = $RCMAIL->plugins->exec_hook('addressbook_export', array('result' => $result));
+$result = $plugin['result'];
+
+if ($plugin['abort']) {
+    exit;
+}
+
 // send downlaod headers
 header('Content-Type: text/x-vcard; charset='.RCUBE_CHARSET);
 header('Content-Disposition: attachment; filename="contacts.vcf"');
 
 while ($result && ($row = $result->next())) {
-    prepare_for_export($row, $CONTACTS);
+    if ($CONTACTS) {
+        prepare_for_export($row, $CONTACTS);
+    }
 
     // fix folding and end-of-line chars
     $row['vcard'] = preg_replace('/\r|\n\s+/', '', $row['vcard']);

@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -221,10 +221,11 @@ $labels['resumeediting'] = 'המשך עריכה';
 $labels['revertto']      = 'חזור למצב קודם';
 $labels['restore'] = 'שיחזור';
 $labels['restoremessage'] = 'לשחזר הודעה?';
+$labels['ignore'] = 'להתעלם';
 $labels['responses'] = 'תגובות';
 $labels['insertresponse'] = 'הכנסת תגובה';
 $labels['manageresponses'] = 'ניהול תגובות';
-$labels['savenewresponse'] = 'צור מענה חדש';
+$labels['newresponse'] = 'צור מענה חדש';
 $labels['addresponse'] = 'הוסף מענה';
 $labels['editresponse'] = 'עריכת תגובה';
 $labels['editresponses'] = 'עריכת תגובות';
@@ -233,7 +234,7 @@ $labels['responsetext'] = 'גוף התגובה';
 $labels['attach'] = 'צירוף';
 $labels['attachments'] = 'צרופות';
 $labels['upload'] = 'העלאה';
-$labels['uploadprogress'] = '( $total  מתוך  $current )  $percent';
+$labels['uploadprogress'] = '$percent ($current מתוך $total)';
 $labels['close']  = 'סגירה';
 $labels['messageoptions']  = 'אפשרויות הודעה...';
 $labels['togglecomposeoptions'] = 'בחירה בין הגדרות בסיסיות או מתקדמות של יצירת הודעה';
@@ -297,6 +298,7 @@ $labels['searchresult'] = 'תוצאת חיפוש';
 $labels['advsearch'] = 'חיםוש מתקדם';
 $labels['advanced'] = 'מתקדם';
 $labels['other'] = 'אחר';
+$labels['printcontact'] = 'הדפסת נתונים של איש קשר';
 $labels['typehome']   = 'בית';
 $labels['typework']   = 'עבודה';
 $labels['typeother']  = 'אחר';
@@ -336,7 +338,7 @@ $labels['export']         = 'ייצוא';
 $labels['exportall']      = 'יצוא של כל הרשומות';
 $labels['exportsel']      = 'צוא של רשומות נבחרות';
 $labels['exportvcards']   = 'ייצוא אנשי קשר בפורמט  vCard';
-$labels['newcontactgroup']       = 'הוסף קבוצה חדשה';
+$labels['newgroup']       = 'הוסף קבוצה חדשה';
 $labels['addgroup']       = 'הוספת קבוצה';
 $labels['grouprename']    = 'שינוי שם קבוצה';
 $labels['groupdelete']    = 'מחיקת קבוצה';
@@ -373,7 +375,7 @@ $labels['identities'] = 'זהויות';
 $labels['manageidentities'] = 'נהל זהויות';
 $labels['newidentity'] = 'צור זהות חדשה';
 $labels['addidentity'] = 'הוסף זהות';
-$labels['edititem'] = 'ערוך זהות';
+$labels['editidentity'] = 'ערוך זהות';
 $labels['preferhtml'] = 'הצגת HTML';
 $labels['defaultcharset'] = 'ברירת מחדל של תווים';
 $labels['htmlmessage'] = 'תוכן HTML';
@@ -408,7 +410,7 @@ $labels['askuser'] = 'שאל את המשתמש';
 $labels['autosend'] = 'שליחה אוטומטית';
 $labels['autosendknown'] = 'משלוח אישור קבלה רק לאנשי הקשר שלי';
 $labels['autosendknownignore'] = 'משלוח אישור קבלה לאנשי הקשר שלי בלבד ולהתעלם מאחרים';
-$labels['ignore'] = 'התעלם';
+$labels['ignorerequest'] = 'להתעלם מהבקשה';
 $labels['readwhendeleted'] = 'סימון הודעה כנקראה לאחר מחיקה';
 $labels['flagfordeletion'] = 'סימון הודעה כמחוקה במקום מחיקה';
 $labels['skipdeleted'] = 'הסתרת הודעות שנמחקו';

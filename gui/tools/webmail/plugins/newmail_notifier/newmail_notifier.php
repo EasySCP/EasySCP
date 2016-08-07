@@ -4,16 +4,14 @@
  * New Mail Notifier plugin
  *
  * Supports three methods of notification:
- * 1. Basic - focus browser window and change favicon
- * 2. Sound - play wav file
- * 3. Desktop - display desktop notification (using webkitNotifications feature,
- *              supported by Chrome and Firefox with 'HTML5 Notifications' plugin)
+ * 1. Basic   - focus browser window and change favicon
+ * 2. Sound   - play wav file
+ * 3. Desktop - display desktop notification (using window.Notification API)
  *
  * @version @package_version@
  * @author Aleksander Machniak <alec@alec.pl>
  *
- *
- * Copyright (C) 2011, Kolab Systems AG
+ * Copyright (C) 2011-2016, Kolab Systems AG
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,8 +50,8 @@ class newmail_notifier extends rcube_plugin
             $this->add_hook('preferences_save', array($this, 'prefs_save'));
         }
         else { // if ($this->rc->task == 'mail') {
-            // add script when not in ajax and not in frame
-            if ($this->rc->output->type == 'html' && empty($_REQUEST['_framed'])) {
+            // add script when not in ajax and not in frame and only in main window
+            if ($this->rc->output->type == 'html' && empty($_REQUEST['_framed']) && $this->rc->action == '') {
                 $this->add_texts('localization/');
                 $this->rc->output->add_label('newmail_notifier.title', 'newmail_notifier.body');
                 $this->include_script('newmail_notifier.js');

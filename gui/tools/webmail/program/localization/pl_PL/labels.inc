@@ -5,7 +5,7 @@
  | localization/<lang>/labels.inc                                        |
  |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2013, The Roundcube Dev Team                       |
+ | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -221,10 +221,11 @@ $labels['resumeediting'] = 'Zakończ sprawdzanie pisowni';
 $labels['revertto']      = 'Powróć do';
 $labels['restore'] = 'Przywróć';
 $labels['restoremessage'] = 'Przyrócić wiadomość?';
+$labels['ignore'] = 'Ignoruj';
 $labels['responses'] = 'Odpowiedzi';
 $labels['insertresponse'] = 'Wstaw odpowiedź';
 $labels['manageresponses'] = 'Zarządzaj odpowiedziami';
-$labels['savenewresponse'] = 'Utwórz nową odpowiedź';
+$labels['newresponse'] = 'Utwórz nową odpowiedź';
 $labels['addresponse'] = 'Dodaj odpowiedź';
 $labels['editresponse'] = 'Edytuj odpowiedź';
 $labels['editresponses'] = 'Edytuj odpowiedzi';
@@ -336,7 +337,7 @@ $labels['export']         = 'Eksportuj';
 $labels['exportall']      = 'Eksportuj wszystkie';
 $labels['exportsel']      = 'Eksportuj zaznaczone';
 $labels['exportvcards']   = 'Eksport kontaktów w formacie vCard';
-$labels['newcontactgroup']       = 'Utwórz nową grupę';
+$labels['newgroup']       = 'Utwórz nową grupę';
 $labels['addgroup']       = 'Dodaj grupę';
 $labels['grouprename']    = 'Zmień nazwę grupy';
 $labels['groupdelete']    = 'Usuń grupę';
@@ -371,7 +372,7 @@ $labels['identities'] = 'Tożsamości';
 $labels['manageidentities'] = 'Zarządzaj tożsamościami';
 $labels['newidentity'] = 'Utwórz nową tożsamość';
 $labels['addidentity'] = 'Dodaj tożsamość';
-$labels['edititem'] = 'Edytuj tożsamości';
+$labels['editidentity'] = 'Edytuj tożsamości';
 $labels['preferhtml'] = 'Domyślny HTML';
 $labels['defaultcharset'] = 'Domyślny zestaw znaków';
 $labels['htmlmessage'] = 'Wiadomość HTML';
@@ -406,7 +407,7 @@ $labels['askuser'] = 'pytaj mnie';
 $labels['autosend'] = 'wyślij potwierdzenie';
 $labels['autosendknown'] = 'wyślij potwierdzenie tylko do moich kontaktów, pytaj o pozostałe';
 $labels['autosendknownignore'] = 'wyślij potwierdzenie tylko do moich kontaktów, pozostałe ignoruj';
-$labels['ignore'] = 'Ignoruj';
+$labels['ignorerequest'] = 'ignoruj żądanie';
 $labels['readwhendeleted'] = 'Podczas usuwania oznacz wiadomość jako przeczytaną';
 $labels['flagfordeletion'] = 'Oznacz wiadomość do usunięcia zamiast ją usuwać';
 $labels['skipdeleted'] = 'Ukryj wiadomości oznaczone do usunięcia';
