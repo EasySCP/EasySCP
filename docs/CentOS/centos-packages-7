@@ -13,8 +13,6 @@ mariadb-server
 mc
 mod_fcgid
 mod_ssl
-openssh
-openssh-server
 pdns-backend-mysql
 php
 php-bcmath
@@ -38,5 +36,3 @@ procmail
 proftpd-mysql
 rkhunter
 tar
-unzip
-wget

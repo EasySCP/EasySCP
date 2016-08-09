@@ -97,12 +97,8 @@ do
 
 			echo "Prepare system config"
 
-			if [ -d /etc/sysconfig/clock ]; then
-				TIMEZONE=`cat /etc/sysconfig/clock | sed "s/^[^\"]*\"//" | sed  "s/\".*//"`
-			fi
-			if [ ! -d /etc/sysconfig/clock ]; then
-				TIMEZONE=`timedatectl | gawk -F'[: ]+' ' $2 ~ /Timezone/ {print $3}'`
-			fi
+			TIMEZONE=`timedatectl | gawk -F'[: ]+' ' $2 ~ /Time/ {print $4}'`
+
 			echo $TIMEZONE > /etc/timezone
 			TIMEZONE=$(cat /etc/timezone | sed "s/\//\\\\\//g")
 			sed -i".bak" "s/^\;date\.timezone.*$/date\.timezone = \"${TIMEZONE}\" /g" /etc/php.ini
@@ -125,7 +121,7 @@ do
 
 			while :
 			do
-				read -p "Configure iptables [Y/N]? (if unsure, select yes)" IPTables
+				read -p "Configure iptables [y/n]? (if unsure, select yes)" IPTables
 				case "$IPTables" in
 					[JjYy])
 						#echo "ja"

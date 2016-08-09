@@ -92,9 +92,11 @@ while (!System_Daemon::isDying() && $runningOkay) {
 
 			switch (DaemonConfig::$cfg->DistName) {
 				case 'CentOS':
+					System_Daemon::info('CentOS');
 					exec('service httpd reload 1>&1 2>&1', $result, $error);
 					break;
 				default:
+					System_Daemon::info('default');
 					exec('service apache2 reload 1>&1 2>&1', $result, $error);
 			}
 

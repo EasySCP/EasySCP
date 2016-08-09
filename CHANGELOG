@@ -3,6 +3,7 @@ EasySCP 2.1.0 ChangeLog
 
 2016-08-08
 	- DOCS:
+		* Add: CentOS 7 package file
 		* Add: Ubuntu 16.04 LTS package file
 
 	- GUI:
@@ -14,6 +15,7 @@ EasySCP 2.1.0 ChangeLog
 		* Fix: Delete alias order
 
 	- Setup:
+		* Add: CentOS 7 support
 		* Add: Ubuntu 16.04 LTS support
 
 	- System:

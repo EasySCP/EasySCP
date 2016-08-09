@@ -90,7 +90,7 @@ class DaemonConfigDNS {
 		);
 
 		switch(DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'}){
-			case 'CentOS_6':
+			case 'CentOS_7':
 				$tpl = DaemonCommon::getTemplate($tpl_param);
 				$config = $tpl->fetch('pdns/parts/pdns.conf');
 				$confFile = DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf';

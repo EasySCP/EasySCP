@@ -24,13 +24,13 @@ Table of Content
 ================================================================================
 1) Version info
 ---------------
-EasySCP Version:	2.0.0
+EasySCP Version:	2.1.0
 INSTALL Script:		1.0.0
 Maintainer:			Markus Szywon
 Homepage:			http://www.easyscp.net
-Linux Distros:		CentOS 7.0
+Linux Distros:		CentOS 7
 
-This documentation was written for CentOS 7.0. While you might
+This documentation was written for CentOS 7. While you might
 be able to install on earlier versions, you may encounter difficulties or
 differences. In addition, this guide uses the YUM tool to install packages. If
 you normally use a different tool, you will need to modify the instructions to
@@ -52,9 +52,9 @@ There are no real requirements. The following just resembles an advice:
 Pentium III or K6-4 with 500 MHz
 512 MB RAM (768 MB and higher recommended)
 100 MB Space for the EasySCP Setup data
-Basic CentOS 7.0 (do not install any additional software on the server as it will conflict with EasySCP)
+Minimal CentOS 7 (do not install any additional software on the server as it will conflict with EasySCP)
 
-All required packages for "CentOS 7.0" are listed in /docs/CentOS/centos-packages7
+All required packages for "CentOS 7" are listed in /docs/CentOS/centos-packages-7
 
 ================================================================================
 3) Introduction
@@ -92,7 +92,7 @@ For the following steps, you will need to be logged in as root.
 		http://fedoraproject.org/wiki/EPEL/FAQ#howtouse
 
 	Example:
-		# rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+		# rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-7.noarch.rpm
 
 
 3. Disabling SELinux
@@ -110,16 +110,16 @@ Be sure you are logged in as root.
 
 1.	Untar or unzip the distribution files to a secure directory:
 		# cd /usr/local/src
-		# tar xjvf easyscp-2.0.0.tar.bz2
+		# tar xjvf easyscp-2.1.0.tar.bz2
 
 2.	Change to the newly created directory:
-		# cd ./easyscp-2.0.0
+		# cd ./easyscp-2.1.0
 
 3.	Install the required modules
 	A list of packages required by this software is located in
 	/docs/CentOS/centos-packages and can be used to easily install the packages
 	you need by running the following commands:
-		# yum install $(cat ./docs/CentOS/centos-packages7)
+		# yum install $(cat ./docs/CentOS/centos-packages-7)
 
 	NOTE: Running this command will install both x86_64 and i3/5/686 packages on
 	x86_64 installs for all packages that have both architectures in the

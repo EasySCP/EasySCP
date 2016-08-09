@@ -12,11 +12,6 @@
 <EasySCP_OS>
 	<Dist Name="CentOS">
 		<OS>
-			<Name>CentOS 6</Name>
-			<DistName>CentOS</DistName>
-			<DistVersion>6</DistVersion>
-		</OS>
-		<OS>
 			<Name>CentOS 7</Name>
 			<DistName>CentOS</DistName>
 			<DistVersion>7</DistVersion>
