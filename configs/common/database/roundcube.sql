@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `identities` (
  `email` varchar(128) NOT NULL,
  `reply-to` varchar(128) NOT NULL DEFAULT '',
  `bcc` varchar(128) NOT NULL DEFAULT '',
- `signature` text,
+ `signature` longtext,
  `html_signature` tinyint(1) NOT NULL DEFAULT '0',
  PRIMARY KEY(`identity_id`),
  CONSTRAINT `user_id_fk_identities` FOREIGN KEY (`user_id`)
@@ -225,4 +225,4 @@ CREATE TABLE IF NOT EXISTS `system` (
 
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 
-INSERT INTO system (name, value) VALUES ('roundcube-version', '2014042900');
+INSERT INTO system (name, value) VALUES ('roundcube-version', '2015030800');
