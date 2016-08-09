@@ -128,7 +128,7 @@ class DaemonConfigFTP {
 		$tpl_param['UseIPv6'] = (isset(DaemonConfig::$cfg->{'BASE_SERVER_IPv6'}) && DaemonConfig::$cfg->{'BASE_SERVER_IPv6'} != '') ? 'on' : 'off';
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);
-		$config = $tpl->fetch('proftpd/parts/proftpd_' . DaemonConfig::$cfg->{'DistVersion'} . '.conf');
+		$config = $tpl->fetch('proftpd/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/proftpd.conf');
 		$confFile = DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/proftpd.conf';
 		$tpl = NULL;
 		unset($tpl);
@@ -150,7 +150,7 @@ class DaemonConfigFTP {
 		);
 
 		$tpl = DaemonCommon::getTemplate($tpl_param);
-		$config = $tpl->fetch('proftpd/parts/sql.conf');
+		$config = $tpl->fetch('proftpd/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/sql.conf');
 		$confFile = DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/sql.conf';
 		$tpl = NULL;
 		unset($tpl);
@@ -162,8 +162,8 @@ class DaemonConfigFTP {
 		// Installing the new file
 		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/proftpd/working/sql.conf '.DaemonConfig::$distro->FTPD_SQL_CONF_FILE, $result, $error);
 
-		if (file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/parts/modules_' . DaemonConfig::$cfg->{'DistVersion'} . '.conf')) {
-			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/parts/modules_' . DaemonConfig::$cfg->{'DistVersion'} . '.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/modules.conf', $result, $error);
+		if (file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/modules.conf')) {
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/modules.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/modules.conf', $result, $error);
 			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'} . '/proftpd/working/modules.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'}.'/proftpd/working/modules.conf ' . DaemonConfig::$distro->FTPD_MODULES_CONF_FILE, $result, $error);
 
