@@ -6,8 +6,9 @@
  * @package PhpMyAdmin
  */
 
+$_GET['ajax_request'] = 'true';
+
 // Sets up the session
-define('PMA_MINIMUM_COMMON', true);
 require_once 'libraries/common.inc.php';
 require_once 'libraries/Util.class.php';
 
@@ -20,15 +21,20 @@ if (isset($_SESSION['cache']['version_check'])
     $response = $_SESSION['cache']['version_check']['response'];
 } else {
     $save = true;
-    $file = 'http://www.phpmyadmin.net/home_page/version.json';
-    if (ini_get('allow_url_fopen')) {
-        $response = file_get_contents($file);
-    } else if (function_exists('curl_init')) {
+    $file = 'https://www.phpmyadmin.net/home_page/version.json';
+    if (function_exists('curl_init')) {
         $curl_handle = curl_init($file);
         curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
         $response = curl_exec($curl_handle);
+    } else if (ini_get('allow_url_fopen')) {
+        $response = file_get_contents($file);
     }
 }
+
+require_once 'libraries/common.inc.php';
+
+// Disabling standard response.
+PMA_Response::getInstance()->disable();
 
 // Always send the correct headers
 header('Content-type: application/json; charset=UTF-8');

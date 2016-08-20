@@ -233,7 +233,7 @@ function PMA_replication_slave_change_master($user, $password, $host, $port,
 function PMA_replication_connect_to_master($user, $password, $host = null, $port = null, $socket = null)
 {
     $server = array();
-    $server["host"] = $host;
+    $server["host"] = PMA_sanitizeMySQLHost($host);
     $server["port"] = $port;
     $server["socket"] = $socket;
 

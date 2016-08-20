@@ -112,6 +112,9 @@ function PMA_setChangePasswordMsg()
         } elseif ($_REQUEST['pma_pw'] != $_REQUEST['pma_pw2']) {
             $message = PMA_Message::error(__('The passwords aren\'t the same!'));
             $error = true;
+        } elseif (strlen($_REQUEST['pma_pw']) > 256) {
+            $message = PMA_Message::error(__('Password is too long!'));
+            $error = true;
         }
     }
     return array('error' => $error, 'msg' => $message);
@@ -201,13 +204,7 @@ function PMA_changePassAuthType($_url_params, $password)
     global $auth_plugin;
 
     if ($GLOBALS['cfg']['Server']['auth_type'] == 'cookie') {
-        $GLOBALS['PMA_Config']->setCookie(
-            'pmaPass-' . $GLOBALS['server'],
-            $auth_plugin->blowfishEncrypt(
-                $password,
-                $GLOBALS['cfg']['blowfish_secret']
-            )
-        );
+        $auth_plugin->storePasswordCookie($password);
     }
     /**
      * For http auth. mode, the "back" link will also enforce new

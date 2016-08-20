@@ -5,14 +5,14 @@
  * manual configuration. For easier setup you can use setup/
  *
  * All directives are explained in documentation in the doc/ folder
- * or at <http://docs.phpmyadmin.net/>.
+ * or at <https://docs.phpmyadmin.net/>.
  *
  * @package PhpMyAdmin
  */
 
 /*
  * This is needed for cookie based authentication to encrypt password in
- * cookie
+ * cookie. Needs to be 32 chars long.
  */
 $cfg['blowfish_secret'] = 'a8b7c6d'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 
@@ -58,8 +58,6 @@ $cfg['Servers'][$i]['AllowNoPassword'] = false;
 // $cfg['Servers'][$i]['designer_coords'] = 'pma__designer_coords';
 // $cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';
 // $cfg['Servers'][$i]['recent'] = 'pma__recent';
-/* Contrib / Swekey authentication */
-// $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
 
 /*
  * End of servers configuration
@@ -136,6 +134,6 @@ $cfg['SaveDir'] = '';
 
 /*
  * You can find more configuration options in the documentation
- * in the doc/ folder or at <http://docs.phpmyadmin.net/>.
+ * in the doc/ folder or at <https://docs.phpmyadmin.net/>.
  */
 ?>

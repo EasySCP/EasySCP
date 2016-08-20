@@ -80,7 +80,7 @@ $replaces = array(
 
     // FAQ entries
     '/FAQ ([0-9]+)\.([0-9a-z]+)/i'
-    => '<a href="./url.php?url=http://docs.phpmyadmin.net/en/latest/faq.html#faq\\1-\\2">FAQ \\1.\\2</a>',
+    => '<a href="./url.php?url=https://docs.phpmyadmin.net/en/latest/faq.html#faq\\1-\\2">FAQ \\1.\\2</a>',
 
     // linking bugs
     '/bug\s*#?([0-9]{6,})/i'
@@ -146,6 +146,7 @@ echo '</pre>';
 var links = document.getElementsByTagName("a");
 for(var i = 0; i < links.length; i++) {
     links[i].target = "_blank";
+    links[i].rel = "noopener noreferrer";
 }
 </script>
 </body>

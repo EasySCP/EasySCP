@@ -519,7 +519,16 @@ class ExportSql extends ExportPlugin
             && $GLOBALS['sql_include_comments']
         ) {
             // see http://dev.mysql.com/doc/refman/5.0/en/ansi-diff-comments.html
-            return '--' . (empty($text) ? '' : ' ') . $text . $GLOBALS['crlf'];
+            if (empty($text)) {
+                return '--' . $GLOBALS['crlf'];
+            } else {
+                $lines = preg_split("/\\r\\n|\\r|\\n/", $text);
+                $result = array();
+                foreach ($lines as $line) {
+                    $result[] = '-- ' . $line . $GLOBALS['crlf'];
+                }
+                return implode('', $result);
+            }
         } else {
             return '';
         }
@@ -605,7 +614,7 @@ class ExportSql extends ExportPlugin
         }
         $head  =  $this->_exportComment('phpMyAdmin SQL Dump')
                .  $this->_exportComment('version ' . PMA_VERSION)
-               .  $this->_exportComment('http://www.phpmyadmin.net')
+               .  $this->_exportComment('https://www.phpmyadmin.net')
                .  $this->_exportComment();
         $host_string = __('Host') . ': ' .  $cfg['Server']['host'];
         if (! empty($cfg['Server']['port'])) {

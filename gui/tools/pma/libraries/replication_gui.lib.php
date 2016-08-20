@@ -130,7 +130,7 @@ function PMA_replication_print_status_table($type, $hidden = false, $title = tru
     foreach (${"{$type}_variables"} as $variable) {
         echo '   <tr class="' . ($odd_row ? 'odd' : 'even') . '">';
         echo '     <td class="name">';
-        echo        $variable;
+        echo htmlspecialchars($variable);
         echo '     </td>';
         echo '     <td class="value">';
 
@@ -154,9 +154,9 @@ function PMA_replication_print_status_table($type, $hidden = false, $title = tru
             'Replicate_Do_Table', 'Replicate_Ignore_Table',
             'Replicate_Wild_Do_Table', 'Replicate_Wild_Ignore_Table');
         if (in_array($variable, $variables_wrap)) {
-            echo str_replace(',', ', ', ${"server_{$type}_replication"}[0][$variable]);
+            echo htmlspecialchars(str_replace(',', ', ', ${"server_{$type}_replication"}[0][$variable]));
         } else {
-            echo ${"server_{$type}_replication"}[0][$variable];
+            echo htmlspecialchars(${"server_{$type}_replication"}[0][$variable]);
         }
         echo '</span>';
 
@@ -285,7 +285,7 @@ function PMA_replication_gui_master_addslaveuser()
         ? ''
         : ' value="' . (isset($GLOBALS['new_username'])
         ? $GLOBALS['new_username']
-        : $GLOBALS['username']) . '"')
+        : htmlspecialchars($GLOBALS['username'])) . '"')
         . ' onchange="pred_username.value = \'userdefined\';" />'
         . '</div>'
         . '<div class="item">'
@@ -349,7 +349,7 @@ function PMA_replication_gui_master_addslaveuser()
         . '</span>'
         . '<input type="text" name="hostname" maxlength="'
         . $hostname_length . '" value="'
-        . (isset($GLOBALS['hostname']) ? $GLOBALS['hostname'] : '')
+        . (isset($GLOBALS['hostname']) ? htmlspecialchars($GLOBALS['hostname']) : '')
         . '" title="' . __('Host')
         . '" onchange="pred_hostname.value = \'userdefined\';" />'
         . PMA_Util::showHint(

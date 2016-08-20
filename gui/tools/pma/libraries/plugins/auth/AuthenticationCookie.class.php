@@ -24,11 +24,6 @@ if (! empty($_REQUEST['target'])) {
 }
 
 /**
- * Swekey authentication functions.
- */
-require './libraries/plugins/auth/swekey/swekey.auth.lib.php';
-
-/**
  * Initialization
  * Store the initialization vector because it will be needed for
  * further decryption. I don't think necessary to have one iv
@@ -77,8 +72,8 @@ class AuthenticationCookie extends AuthenticationPlugin
 
             $login_link = '<br /><br />[ ' .
                 sprintf(
-                    '<a href="%s" class="ajax login-link">%s</a>', 
-                    $GLOBALS['cfg']['PmaAbsoluteUri'], 
+                    '<a href="%s" class="ajax login-link">%s</a>',
+                    $GLOBALS['cfg']['PmaAbsoluteUri'],
                     __('Log in')
                 )
                 . ' ]';
@@ -143,7 +138,7 @@ class AuthenticationCookie extends AuthenticationPlugin
         echo '
     <div class="container">
     <a href="';
-        echo PMA_linkURL('http://www.phpmyadmin.net/');
+        echo PMA_linkURL('https://www.phpmyadmin.net/');
         echo '" target="_blank" class="logo">';
         $logo_image = $GLOBALS['pmaThemeImage'] . 'logo_right.png';
         if (@file_exists($logo_image)) {
@@ -258,10 +253,6 @@ class AuthenticationCookie extends AuthenticationPlugin
         echo '</fieldset>
     </form>';
 
-        // BEGIN Swekey Integration
-        Swekey_login('input_username', 'input_go');
-        // END Swekey Integration
-
         if ($GLOBALS['error_handler']->hasDisplayErrors()) {
             echo '<div>';
             $GLOBALS['error_handler']->dispErrors();
@@ -306,16 +297,9 @@ class AuthenticationCookie extends AuthenticationPlugin
         $GLOBALS['PHP_AUTH_USER'] = $GLOBALS['PHP_AUTH_PW'] = '';
         $GLOBALS['from_cookie'] = false;
 
-        // BEGIN Swekey Integration
-        if (! Swekey_auth_check()) {
-            return false;
-        }
-        // END Swekey Integration
-
         if (defined('PMA_CLEAR_COOKIES')) {
             foreach ($GLOBALS['cfg']['Servers'] as $key => $val) {
-                $GLOBALS['PMA_Config']->removeCookie('pmaPass-' . $key);
-                $GLOBALS['PMA_Config']->removeCookie('pmaServer-' . $key);
+                $GLOBALS['PMA_Config']->removeCookie('pmaAuth-' . $key);
                 $GLOBALS['PMA_Config']->removeCookie('pmaUser-' . $key);
             }
             return false;
@@ -332,17 +316,17 @@ class AuthenticationCookie extends AuthenticationPlugin
             // -> delete password cookie(s)
             if ($GLOBALS['cfg']['LoginCookieDeleteAll']) {
                 foreach ($GLOBALS['cfg']['Servers'] as $key => $val) {
-                    $GLOBALS['PMA_Config']->removeCookie('pmaPass-' . $key);
-                    if (isset($_COOKIE['pmaPass-' . $key])) {
-                        unset($_COOKIE['pmaPass-' . $key]);
+                    $GLOBALS['PMA_Config']->removeCookie('pmaAuth-' . $key);
+                    if (isset($_COOKIE['pmaAuth-' . $key])) {
+                        unset($_COOKIE['pmaAuth-' . $key]);
                     }
                 }
             } else {
                 $GLOBALS['PMA_Config']->removeCookie(
-                    'pmaPass-' . $GLOBALS['server']
+                    'pmaAuth-' . $GLOBALS['server']
                 );
-                if (isset($_COOKIE['pmaPass-' . $GLOBALS['server']])) {
-                    unset($_COOKIE['pmaPass-' . $GLOBALS['server']]);
+                if (isset($_COOKIE['pmaAuth-' . $GLOBALS['server']])) {
+                    unset($_COOKIE['pmaAuth-' . $GLOBALS['server']]);
                 }
             }
         }
@@ -356,7 +340,7 @@ class AuthenticationCookie extends AuthenticationPlugin
             if ($GLOBALS['cfg']['AllowArbitraryServer']
                 && isset($_REQUEST['pma_servername'])
             ) {
-                $GLOBALS['pma_auth_server'] = $_REQUEST['pma_servername'];
+                $GLOBALS['pma_auth_server'] = PMA_sanitizeMySQLHost($_REQUEST['pma_servername']);
             }
             return true;
         }
@@ -364,22 +348,14 @@ class AuthenticationCookie extends AuthenticationPlugin
         // At the end, try to set the $GLOBALS['PHP_AUTH_USER']
         // and $GLOBALS['PHP_AUTH_PW'] variables from cookies
 
-        // servername
-        if ($GLOBALS['cfg']['AllowArbitraryServer']
-            && ! empty($_COOKIE['pmaServer-' . $GLOBALS['server']])
-        ) {
-            $GLOBALS['pma_auth_server']
-                = $_COOKIE['pmaServer-' . $GLOBALS['server']];
-        }
-
-        // username
+        // check cookies
         if (empty($_COOKIE['pmaUser-' . $GLOBALS['server']])) {
             return false;
         }
 
-        $GLOBALS['PHP_AUTH_USER'] = $this->blowfishDecrypt(
+        $GLOBALS['PHP_AUTH_USER'] = $this->cookieDecrypt(
             $_COOKIE['pmaUser-' . $GLOBALS['server']],
-            $this->_getBlowfishSecret()
+            $this->_getEncryptionSecret()
         );
 
         // user was never logged in since session start
@@ -401,18 +377,24 @@ class AuthenticationCookie extends AuthenticationPlugin
             exit;
         }
 
-        // password
-        if (empty($_COOKIE['pmaPass-' . $GLOBALS['server']])) {
+        // check password cookie
+        if (empty($_COOKIE['pmaAuth-' . $GLOBALS['server']])) {
             return false;
         }
 
-        $GLOBALS['PHP_AUTH_PW'] = $this->blowfishDecrypt(
-            $_COOKIE['pmaPass-' . $GLOBALS['server']],
-            $this->_getBlowfishSecret()
+        $auth_data = json_decode(
+            $this->cookieDecrypt(
+                $_COOKIE['pmaAuth-' . $GLOBALS['server']],
+                $this->_getSessionEncryptionSecret()
+            ),
+            true
         );
-
-        if ($GLOBALS['PHP_AUTH_PW'] == "\xff(blank)") {
-            $GLOBALS['PHP_AUTH_PW'] = '';
+        if (! is_array($auth_data) || ! isset($auth_data['password'])) {
+            return false;
+        }
+        $GLOBALS['PHP_AUTH_PW'] = $auth_data['password'];
+        if ($GLOBALS['cfg']['AllowArbitraryServer'] && ! empty($auth_data['server'])) {
+            $GLOBALS['pma_auth_server'] = $auth_data['server'];
         }
 
         $GLOBALS['from_cookie'] = true;
@@ -488,44 +470,13 @@ class AuthenticationCookie extends AuthenticationPlugin
 
         // Name and password cookies need to be refreshed each time
         // Duration = one month for username
-        $GLOBALS['PMA_Config']->setCookie(
-            'pmaUser-' . $GLOBALS['server'],
-            $this->blowfishEncrypt(
-                $cfg['Server']['user'],
-                $this->_getBlowfishSecret()
-            )
-        );
-
+        $this->storeUsernameCookie($cfg['Server']['user']);
         // Duration = as configured
-        $GLOBALS['PMA_Config']->setCookie(
-            'pmaPass-' . $GLOBALS['server'],
-            $this->blowfishEncrypt(
-                ! empty($cfg['Server']['password'])
-                ? $cfg['Server']['password'] : "\xff(blank)",
-                $this->_getBlowfishSecret()
-            ),
-            null,
-            $GLOBALS['cfg']['LoginCookieStore']
-        );
+        $this->storePasswordCookie($cfg['Server']['password']);
 
         // Set server cookies if required (once per session) and, in this case,
         // force reload to ensure the client accepts cookies
         if (! $GLOBALS['from_cookie']) {
-            if ($GLOBALS['cfg']['AllowArbitraryServer']) {
-                if (! empty($GLOBALS['pma_auth_server'])) {
-                    // Duration = one month for servername
-                    $GLOBALS['PMA_Config']->setCookie(
-                        'pmaServer-' . $GLOBALS['server'],
-                        $cfg['Server']['host']
-                    );
-                } else {
-                    // Delete servername cookie
-                    $GLOBALS['PMA_Config']->removeCookie(
-                        'pmaServer-' . $GLOBALS['server']
-                    );
-                }
-            }
-
             // URL where to go:
             $redirect_url = $cfg['PmaAbsoluteUri'] . 'index.php';
 
@@ -559,7 +510,51 @@ class AuthenticationCookie extends AuthenticationPlugin
         } // end if
 
         return true;
+    }
 
+    /**
+     * Stores username in a cookie.
+     *
+     * @param string $username User name
+     *
+     * @return void
+     */
+    public function storeUsernameCookie($username)
+    {
+        // Name and password cookies need to be refreshed each time
+        // Duration = one month for username
+        $GLOBALS['PMA_Config']->setCookie(
+            'pmaUser-' . $GLOBALS['server'],
+            $this->cookieEncrypt(
+                $username,
+                $this->_getEncryptionSecret()
+            )
+        );
+    }
+
+    /**
+     * Stores password in a cookie.
+     *
+     * @param string $password Password
+     *
+     * @return void
+     */
+    public function storePasswordCookie($password)
+    {
+        $payload = array('password' => $password);
+        if ($GLOBALS['cfg']['AllowArbitraryServer'] && ! empty($GLOBALS['pma_auth_server'])) {
+            $payload['server'] = $GLOBALS['pma_auth_server'];
+        }
+        // Duration = as configured
+        $GLOBALS['PMA_Config']->setCookie(
+            'pmaAuth-' . $GLOBALS['server'],
+            $this->cookieEncrypt(
+                json_encode($payload),
+                $this->_getSessionEncryptionSecret()
+            ),
+            null,
+            $GLOBALS['cfg']['LoginCookieStore']
+        );
     }
 
     /**
@@ -578,7 +573,7 @@ class AuthenticationCookie extends AuthenticationPlugin
         global $conn_error;
 
         // Deletes password cookie and displays the login form
-        $GLOBALS['PMA_Config']->removeCookie('pmaPass-' . $GLOBALS['server']);
+        $GLOBALS['PMA_Config']->removeCookie('pmaAuth-' . $GLOBALS['server']);
 
         if (! empty($GLOBALS['login_without_password_is_forbidden'])) {
             $conn_error = __(
@@ -611,32 +606,120 @@ class AuthenticationCookie extends AuthenticationPlugin
      *
      * @return string
      */
-    private function _getBlowfishSecret()
+    private function _getEncryptionSecret()
     {
         if (empty($GLOBALS['cfg']['blowfish_secret'])) {
-            if (empty($_SESSION['auto_blowfish_secret'])) {
-                // this returns 23 characters
-                $_SESSION['auto_blowfish_secret'] = uniqid('', true);
-            }
-            return $_SESSION['auto_blowfish_secret'];
+            return $this->_getSessionEncryptionSecret();
         } else {
-            // apply md5() to work around too long secrets (returns 32 characters)
-            return md5($GLOBALS['cfg']['blowfish_secret']);
+            return $GLOBALS['cfg']['blowfish_secret'];
         }
     }
 
     /**
-     * Encryption using blowfish algorithm (mcrypt)
-     * or phpseclib's AES if mcrypt not available
+     * Returns blowfish secret or generates one if needed.
+     *
+     * @return string
+     */
+    private function _getSessionEncryptionSecret()
+    {
+        if (empty($_SESSION['encryption_key'])) {
+            if ($this->_useOpenSSL()) {
+                $_SESSION['encryption_key'] = openssl_random_pseudo_bytes(32);
+            } else {
+                include_once "./libraries/phpseclib/Crypt/Random.php";
+                $_SESSION['encryption_key'] = crypt_random_string(32);
+            }
+        }
+        return $_SESSION['encryption_key'];
+    }
+
+    /**
+     * Checks whether we should use openssl for encryption.
+     *
+     * @return boolean
+     */
+    private function _useOpenSSL()
+    {
+        return (
+            function_exists('openssl_encrypt')
+            && function_exists('openssl_decrypt')
+            && function_exists('openssl_random_pseudo_bytes')
+            && PHP_VERSION_ID >= 50304
+        );
+    }
+
+    /**
+     * Concatenates secret in order to make it 16 bytes log
+     *
+     * This doesn't add any security, just ensures the secret
+     * is long enough by copying it.
+     *
+     * @param string $secret Original secret
+     *
+     * @return string
+     */
+    public function enlargeSecret($secret)
+    {
+        while (strlen($secret) < 16) {
+            $secret .= $secret;
+        }
+        return substr($secret, 0, 16);
+    }
+
+    /**
+     * Derives MAC secret from encryption secret.
+     *
+     * @param string $secret the secret
+     *
+     * @return string the MAC secret
+     */
+    public function getMACSecret($secret)
+    {
+        // Grab first part, up to 16 chars
+        // The MAC and AES secrets can overlap if original secret is short
+        $length = strlen($secret);
+        if ($length > 16) {
+            return substr($secret, 0, 16);
+        }
+        return $this->enlargeSecret(
+            $length == 1 ? $secret : substr($secret, 0, -1)
+        );
+    }
+
+    /**
+     * Derives AES secret from encryption secret.
+     *
+     * @param string $secret the secret
+     *
+     * @return string the AES secret
+     */
+    public function getAESSecret($secret)
+    {
+        // Grab second part, up to 16 chars
+        // The MAC and AES secrets can overlap if original secret is short
+        $length = strlen($secret);
+        if ($length > 16) {
+            return substr($secret, -16);
+        }
+        return $this->enlargeSecret(
+            $length == 1 ? $secret : substr($secret, 1)
+        );
+    }
+
+    /**
+     * Encryption using openssl's AES or phpseclib's AES
+     * (phpseclib uses mcrypt when it is available)
      *
      * @param string $data   original data
      * @param string $secret the secret
      *
      * @return string the encrypted result
      */
-    public function blowfishEncrypt($data, $secret)
+    public function cookieEncrypt($data, $secret)
     {
-        global $iv;
+        $mac_secret = $this->getMACSecret($secret);
+        $aes_secret = $this->getAESSecret($secret);
+        $iv = $this->createIV();
         if (! function_exists('mcrypt_encrypt')) {
             /**
              * This library uses mcrypt when available, so
@@ -646,10 +729,11 @@ class AuthenticationCookie extends AuthenticationPlugin
              */
             include_once "./libraries/phpseclib/Crypt/AES.php";
             $cipher = new Crypt_AES(CRYPT_AES_MODE_ECB);
-            $cipher->setKey($secret);
-            return base64_encode($cipher->encrypt($data));
+            $cipher->setIV($iv);
+            $cipher->setKey($aes_secret);
+            $result = base64_encode($cipher->encrypt($data));
         } else {
-            return base64_encode(
+            $result = base64_encode(
                 mcrypt_encrypt(
                     MCRYPT_BLOWFISH,
                     $secret,
@@ -659,6 +743,14 @@ class AuthenticationCookie extends AuthenticationPlugin
                 )
             );
         }
+        $iv = base64_encode($iv);
+        return json_encode(
+            array(
+                'iv' => $iv,
+                'mac' => hash_hmac('sha1', $iv . $result, $mac_secret),
+                'payload' => $result,
+            )
+        );
     }
 
     /**
@@ -668,26 +760,78 @@ class AuthenticationCookie extends AuthenticationPlugin
      * @param string $encdata encrypted data
      * @param string $secret  the secret
      *
-     * @return string original data
+     * @return string|bool original data, false on error
      */
-    public function blowfishDecrypt($encdata, $secret)
+    public function cookieDecrypt($encdata, $secret)
     {
-        global $iv;
+        $data = json_decode($encdata, true);
+
+        if (! is_array($data) || ! isset($data['mac']) || ! isset($data['iv']) || ! isset($data['payload'])
+            || ! is_string($data['mac']) || ! is_string($data['iv']) || ! is_string($data['payload'])
+            ) {
+            return false;
+        }
+
+        $mac_secret = $this->getMACSecret($secret);
+        $aes_secret = $this->getAESSecret($secret);
+        $newmac = hash_hmac('sha1', $data['iv'] . $data['payload'], $mac_secret);
+
+        if (! hash_equals($data['mac'], $newmac)) {
+            return false;
+        }
+
         if (! function_exists('mcrypt_encrypt')) {
             include_once "./libraries/phpseclib/Crypt/AES.php";
             $cipher = new Crypt_AES(CRYPT_AES_MODE_ECB);
-            $cipher->setKey($secret);
-            return $cipher->decrypt(base64_decode($encdata));
+            $cipher->setIV(base64_decode($data['iv']));
+            $cipher->setKey($aes_secret);
+            return $cipher->decrypt(base64_decode($data['payload']));
         } else {
-            $data = base64_decode($encdata);
             $decrypted = mcrypt_decrypt(
                 MCRYPT_BLOWFISH,
                 $secret,
-                $data,
+                base64_decode($data['payload']),
                 MCRYPT_MODE_CBC,
-                $iv
+                base64_decode($data['iv'])
             );
             return trim($decrypted);
+        }
+    }
+
+    /**
+     * Returns size of IV for encryption.
+     *
+     * @return int
+     */
+    public function getIVSize()
+    {
+        include_once "./libraries/phpseclib/Crypt/AES.php";
+        $cipher = new Crypt_AES(CRYPT_AES_MODE_ECB);
+        return $cipher->block_size;
+    }
+
+    /**
+     * Initialization
+     * Store the initialization vector because it will be needed for
+     * further decryption. I don't think necessary to have one iv
+     * per server so I don't put the server number in the cookie name.
+     *
+     * @return void
+     */
+    public function createIV()
+    {
+        if (function_exists('mcrypt_create_iv')) {
+            srand((double) microtime() * 1000000);
+            $td = mcrypt_module_open(MCRYPT_BLOWFISH, '', MCRYPT_MODE_CBC, '');
+            if ($td === false) {
+                PMA_fatalError(__('Failed to use Blowfish from mcrypt!'));
+            }
+            return mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
+        } else {
+            include_once "./libraries/phpseclib/Crypt/Random.php";
+            return crypt_random_string(
+                $this->getIVSize()
+            );
         }
     }
 
