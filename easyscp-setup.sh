@@ -29,7 +29,7 @@ if [ "$(id -u)" != "0" ]; then
    if [ -f easyscp-setup.sh ]; then
     sudo sh easyscp-setup.sh
     else
-    echo "Cannot find ieasyscp-setup.sh exiting"
+    echo "Cannot find easyscp-setup.sh exiting"
     fi
    exit 1
    
@@ -44,12 +44,13 @@ if [ $_OSTYPE -eq 0 ]; then
       Auswahl="CentOS"
       else
       echo "Your operating system is unsupported!"
-      exit1
+      exit 1
 fi
 fi
+echo "We will be installing easySCP $VERSION on $Auswahl"
 	case "$Auswahl" in
 		CentOS)
-			echo "Using CentOS. Please wait."
+			
 
 			echo "Build the Software"
 			cd $(dirname $0)"/"
@@ -146,7 +147,7 @@ fi
 			break
 			;;
 		Debian|Ubuntu)
-			echo "Using $Auswahl. Please wait."
+			
 
 			echo "Build the Software"
 			cd $(dirname $0)"/"
@@ -222,11 +223,6 @@ fi
 			echo "To finish Setup, please enter 'http://YOUR_DOMAIN/setup' into your Browser"
 
 			break
-			;;
-		OpenSuse)
-			# echo "Using OpenSuse. Please wait."
-			echo "Easy Setup currently does not support OpenSuse."
-			# break
 			;;
 		Oracle)
 			echo "Using Oracle Linux. Please wait."
