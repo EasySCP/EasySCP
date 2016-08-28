@@ -325,6 +325,6 @@ echo "We will be installing easySCP $VERSION on $Auswahl"
 			#Wenn vorher nichts passte
 			;;
 	esac
-done
+
 
 exit 0
