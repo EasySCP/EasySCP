@@ -9,9 +9,10 @@
 # @link 		http://www.easyscp.net
 # @author 		EasySCP Team
 
+# File Completely Rewrote by Thomas Wilbur
 Auswahl=""
 OS=""
-
+VERSION=""
 clear
 # Looks Better
 echo '___________                      ____________________________';
@@ -20,43 +21,32 @@ echo ' |    __)_\__  \  /  ___<   |  |\_____  \ /    \  \/|     ___/';
 echo ' |        \/ __ \_\___ \ \___  |/        \\     \___|    |    ';
 echo '/_______  (____  /____  >/ ____/_______  / \______  /____|    ';
 echo '        \/     \/     \/ \/            \/         \/          ';
+echo "You will be installing EasySCP $VERSION on your computer"
+echo "Checking if you are root..."
 
-echo ""
-echo "1 = CentOS"
-echo ""
-echo "2 = Debian"
-echo ""
-echo "3 = OpenSuse"
-echo ""
-echo "4 = Oracle Linux"
-echo ""
-echo "5 = Ubuntu"
-echo ""
-
-while :
-do
-    read -p "Please select your distribution: " Name
-
-    if [ "$Name" = "1" ] || [ "$Name" = "CentOS" ]; then
-        Auswahl="CentOS"
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root trying to run as root" 1>&2
+   if [ -f easyscp-setup.sh ]; then
+    sudo sh easyscp-setup.sh
+    else
+    echo "Cannot find ieasyscp-setup.sh exiting"
     fi
-
-    if [ "$Name" = "2" ] || [ "$Name" = "Debian" ]; then
-        Auswahl="Debian"
-    fi
-
-    if [ "$Name" = "3" ] || [ "$Name" = "OpenSuse" ]; then
-        Auswahl="OpenSuse"
-    fi
-
-    if [ "$Name" = "4" ] || [ "$Name" = "Oracle Linux" ]; then
-        Auswahl="Oracle"
-    fi
-
-    if [ "$Name" = "5" ] || [ "$Name" = "Ubuntu" ]; then
-        Auswahl="Ubuntu"
-    fi
-
+   exit 1
+   
+fi
+echo "Detecting Distro..."
+[ -x "/usr/bin/apt-get" ]          && _OSTYPE=1
+[ -x "/usr/bin/yum" ]          && _OSTYPE=0
+if [ $_OSTYPE -eq 1 ]; then
+      Auswahl="Ubuntu"
+else
+if [ $_OSTYPE -eq 0 ]; then
+      Auswahl="CentOS"
+      else
+      echo "Your operating system is unsupported!"
+      exit1
+fi
+fi
 	case "$Auswahl" in
 		CentOS)
 			echo "Using CentOS. Please wait."
