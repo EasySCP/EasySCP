@@ -12,7 +12,7 @@
 # File Completely Rewrote by Thomas Wilbur
 Auswahl=""
 OS=""
-VERSION=""
+VERSION="1.0.0 Alpha"
 clear
 # Looks Better
 echo '___________                      ____________________________';
