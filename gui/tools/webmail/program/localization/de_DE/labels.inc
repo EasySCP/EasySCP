@@ -54,7 +54,7 @@ $labels['move']     = 'Verschieben';
 $labels['moveto']   = 'Verschieben nach …';
 $labels['copyto']   = 'Kopieren nach …';
 $labels['download'] = 'Herunterladen';
-$labels['open']     = 'Offen';
+$labels['open']     = 'Öffnen';
 $labels['showattachment'] = 'Anzeigen';
 $labels['showanyway'] = 'Trotzdem anzeigen';
 $labels['filename'] = 'Dateiname';
@@ -303,7 +303,7 @@ $labels['typehome']   = 'Privat';
 $labels['typework']   = 'Dienstlich';
 $labels['typeother']  = 'Andere';
 $labels['typemobile']  = 'Mobil';
-$labels['typemain']  = 'Hauptnummer';
+$labels['typemain']  = 'Primär';
 $labels['typehomefax']  = 'Fax Privat';
 $labels['typeworkfax']  = 'Fax Dienst';
 $labels['typecar']  = 'Auto';
@@ -579,4 +579,5 @@ $labels['helplistkeyboardnavmessages'] = "Pfeil rechts/links: Nachricht im Threa
 Enter: Öffne die ausgewählte/fokussierte Nachricht
 Rücktaste: Verschiebe gewählte Nachricht in den Mülleimer";
 $labels['helplistkeyboardnavcontacts'] = "Enter: Ausgewählten Kontakt öffnen.";
+$labels['sigbelow'] = 'Unterschrift unter der zitierten Nachricht platzieren';
 ?>

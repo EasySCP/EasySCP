@@ -1,17 +1,17 @@
 [
     {
         "name": "roundcube/plugin-installer",
-        "version": "0.1.7",
-        "version_normalized": "0.1.7.0",
+        "version": "0.1.8",
+        "version_normalized": "0.1.8.0",
         "source": {
             "type": "git",
             "url": "https://github.com/roundcube/plugin-installer.git",
-            "reference": "0.1.7"
+            "reference": "43f0938f2c4ce6885c5cb7c5c43d13e8fdc8b8a8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/roundcube/plugin-installer/zipball/0.1.7",
-            "reference": "0.1.7",
+            "url": "https://api.github.com/repos/roundcube/plugin-installer/zipball/43f0938f2c4ce6885c5cb7c5c43d13e8fdc8b8a8",
+            "reference": "43f0938f2c4ce6885c5cb7c5c43d13e8fdc8b8a8",
             "shasum": ""
         },
         "require": {
@@ -20,7 +20,7 @@
         "require-dev": {
             "composer/composer": "*"
         },
-        "time": "2015-08-27 16:08:26",
+        "time": "2015-12-22 11:29:24",
         "bin": [
             "src/bin/rcubeinitdb.sh"
         ],
@@ -34,7 +34,7 @@
                 "Roundcube\\Composer": "src/"
             }
         },
-        "notification-url": "https://plugins.roundcube.net/downloads/%package%",
+        "notification-url": "https://plugins.roundcube.net/downloads/",
         "license": [
             "GPL-3.0+"
         ],
@@ -45,8 +45,7 @@
             },
             {
                 "name": "Thomas Bruederli",
-                "email": "thomas@roundcube.net",
-                "role": "Lead"
+                "email": "thomas@roundcube.net"
             }
         ],
         "description": "A composer-installer for Roundcube plugins."
@@ -344,38 +343,6 @@
         "description": "This package provides an API to talk to servers implementing the managesieve protocol. It can be used to install and remove sieve scripts, mark them active etc."
     },
     {
-        "name": "pear-pear.php.net/Net_SMTP",
-        "version": "1.7.1",
-        "version_normalized": "1.7.1.0",
-        "dist": {
-            "type": "file",
-            "url": "https://pear.php.net/get/Net_SMTP-1.7.1.tgz",
-            "reference": null,
-            "shasum": null
-        },
-        "require": {
-            "pear-pear.php.net/net_socket": ">=1.0.7.0",
-            "php": ">=5.4.0.0"
-        },
-        "replace": {
-            "pear-pear/net_smtp": "== 1.7.1.0"
-        },
-        "type": "pear-library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                ""
-            ]
-        },
-        "include-path": [
-            "/"
-        ],
-        "license": [
-            "PHP License"
-        ],
-        "description": "Provides an implementation of the SMTP protocol using PEAR's Net_Socket class."
-    },
-    {
         "name": "pear-pear.php.net/Mail_Mime",
         "version": "1.9.0",
         "version_normalized": "1.9.0.0",
@@ -405,6 +372,38 @@
             "BSD Style"
         ],
         "description": "Mail_Mime provides classes to deal with the creation and manipulation of MIME messages.\nIt allows people to create e-mail messages consisting of:\n* Text Parts\n* HTML Parts\n* Inline HTML Images\n* Attachments\n* Attached messages\n\nIt supports big messages, base64 and quoted-printable encodings and\nnon-ASCII characters in filenames, subjects, recipients, etc. encoded\nusing RFC2047 and/or RFC2231."
+    },
+    {
+        "name": "pear-pear.php.net/Net_SMTP",
+        "version": "1.7.2",
+        "version_normalized": "1.7.2.0",
+        "dist": {
+            "type": "file",
+            "url": "https://pear.php.net/get/Net_SMTP-1.7.2.tgz",
+            "reference": null,
+            "shasum": null
+        },
+        "require": {
+            "pear-pear.php.net/net_socket": ">=1.0.7.0",
+            "php": ">=5.4.0.0"
+        },
+        "replace": {
+            "pear-pear/net_smtp": "== 1.7.2.0"
+        },
+        "type": "pear-library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                ""
+            ]
+        },
+        "include-path": [
+            "/"
+        ],
+        "license": [
+            "PHP License"
+        ],
+        "description": "Provides an implementation of the SMTP protocol using PEAR's Net_Socket class."
     },
     {
         "name": "pear-pear.php.net/Net_LDAP2",
