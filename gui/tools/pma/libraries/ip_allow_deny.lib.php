@@ -192,7 +192,7 @@ function PMA_ipv6MaskTest($test_range, $ip_to_test)
 
     if ($is_single) {
         $range_hex = bin2hex(inet_pton($test_range));
-        $result = $ip_hex === $range_hex;
+        $result = hash_equals($ip_hex, $range_hex);
     } elseif ($is_range) {
         // what range do we operate on?
         $range_match = array();
@@ -306,7 +306,7 @@ function PMA_allowDeny($type)
 
         // check for username
         if (($rule_data[1] != '%') //wildcarded first
-            && ($rule_data[1] != $username)
+            && (! hash_equals($rule_data[1], $username))
         ) {
             continue;
         }

@@ -343,7 +343,7 @@ PMA_printListItem(
 PMA_printListItem(
     __('Official Homepage'),
     'li_pma_homepage',
-    PMA_linkURL('http://www.phpMyAdmin.net/'),
+    PMA_linkURL('http://www.phpmyadmin.net/'),
     null,
     '_blank'
 );
@@ -446,8 +446,7 @@ if (! empty($_SESSION['encryption_key'])) {
             ),
             E_USER_WARNING
         );
-    }
-    if (strlen($GLOBALS['cfg']['blowfish_secret']) < 32) {
+    } elseif (strlen($GLOBALS['cfg']['blowfish_secret']) < 32) {
         trigger_error(
             __(
                 'The secret passphrase in configuration (blowfish_secret) is too short.'

@@ -818,9 +818,16 @@ if(! function_exists('hash_equals')) {
 function PMA_isAllowedDomain($url)
 {
     $arr = parse_url($url);
-    // Avoid URLs without hostname or with credentials
-    if (empty($arr['host']) || ! empty($arr['user']) || ! empty($arr['pass'])) {
+    // We need host to be set
+    if (! isset($arr['host']) || strlen($arr['host']) == 0) {
         return false;
+    }
+    // We do not want these to be present
+    $blocked = array('user', 'pass', 'port');
+    foreach ($blocked as $part) {
+        if (isset($arr[$part]) && strlen($arr[$part]) != 0) {
+            return false;
+        }
     }
     $domain = $arr["host"];
     $domainWhiteList = array(
@@ -848,7 +855,7 @@ function PMA_isAllowedDomain($url)
         /* CVE */
         'cve.mitre.org',
     );
-    if (in_array(strtolower($domain), $domainWhiteList)) {
+    if (in_array($domain, $domainWhiteList)) {
         return true;
     }
 
@@ -884,7 +891,7 @@ if (! function_exists('hash_hmac')) {
 /**
  * Sanitizes MySQL hostname
  *
- * * strips p: prefix
+ * * strips p: prefix(es)
  *
  * @param string $name User given hostname
  *
@@ -892,10 +899,28 @@ if (! function_exists('hash_hmac')) {
  */
 function PMA_sanitizeMySQLHost($name)
 {
-    if (strtolower(substr($name, 0, 2)) == 'p:') {
-        return substr($name, 2);
+    while (strtolower(substr($name, 0, 2)) == 'p:') {
+        $name = substr($name, 2);
     }
 
+    return $name;
+}
+
+/**
+ * Sanitizes MySQL username
+ *
+ * * strips part behind null byte
+ *
+ * @param string $name User given username
+ *
+ * @return string
+ */
+function PMA_sanitizeMySQLUser($name)
+{
+    $position = strpos($name, chr(0));
+    if ($position !== false) {
+        return substr($name, 0, $position);
+    }
     return $name;
 }
 
@@ -932,7 +957,7 @@ function PMA_safeUnserialize($data)
             case 's':
                 /* string */
                 // parse sting length
-                $strlen = intval($data[$i + 2]);
+                $strlen = intval(substr($data, $i + 2));
                 // string start
                 $i = strpos($data, ':', $i + 2);
                 if ($i === false) {
