@@ -283,7 +283,7 @@ function checkData($xml){
 		$xml->{'PMA_PASSWORD'} = generatePassword(18);
 	}
 	if ($xml->{'PMA_BLOWFISH'} == 'AUTO'){
-		$xml->{'PMA_BLOWFISH'} = generatePassword(31);
+		$xml->{'PMA_BLOWFISH'} = generatePassword(32);
 	}
 
 	$xml->{'PANEL_ADMIN'} = trim($_POST['PANEL_ADMIN']);
