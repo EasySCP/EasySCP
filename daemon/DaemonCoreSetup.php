@@ -801,18 +801,19 @@ function GUI_PHP(){
 	// and Store the new file in working directory
 
 	$tpl_param = array(
-		'WWW_DIR'			=> DaemonConfig::$cfg->{'ROOT_DIR'},
-		'DOMAIN_NAME'		=> 'gui',
-		'MAIL_DMN'			=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'}),
-		'CONF_DIR'			=> DaemonConfig::$cfg->{'CONF_DIR'},
-		'PEAR_DIR'			=> DaemonConfig::$distro->{'PEAR_DIR'},
-		'RKHUNTER_LOG'		=> DaemonConfig::$distro->{'RKHUNTER_LOG'},
-		'CHKROOTKIT_LOG'	=> DaemonConfig::$distro->{'CHKROOTKIT_LOG'},
-		'OTHER_ROOTKIT_LOG'	=> (DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} != '') ? DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} : '',
-		'EASYSCPC_DIR'		=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPC'}),
-		'EASYSCPD_DIR'		=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPD'}),
-		'PHP_STARTER_DIR'	=> DaemonConfig::$distro->{'PHP_STARTER_DIR'},
-		'PHP_TIMEZONE'		=> DaemonConfig::$cfg->{'PHP_TIMEZONE'}
+		'CHKROOTKIT_LOG'		=> DaemonConfig::$distro->{'CHKROOTKIT_LOG'},
+		'CONF_DIR'				=> DaemonConfig::$cfg->{'CONF_DIR'},
+		'DEFAULT_ADMIN_ADDRESS'	=> DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'},
+		'DOMAIN_NAME'			=> 'gui',
+		'EASYSCPC_DIR'			=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPC'}),
+		'EASYSCPD_DIR'			=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPD'}),
+		'MAIL_DMN'				=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'}),
+		'OTHER_ROOTKIT_LOG'		=> (DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} != '') ? DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} : '',
+		'PEAR_DIR'				=> DaemonConfig::$distro->{'PEAR_DIR'},
+		'PHP_STARTER_DIR'		=> DaemonConfig::$distro->{'PHP_STARTER_DIR'},
+		'PHP_TIMEZONE'			=> DaemonConfig::$cfg->{'PHP_TIMEZONE'},
+		'RKHUNTER_LOG'			=> DaemonConfig::$distro->{'RKHUNTER_LOG'},
+		'WWW_DIR'				=> DaemonConfig::$cfg->{'ROOT_DIR'}
 	);
 
 	$tpl = DaemonCommon::getTemplate($tpl_param);
