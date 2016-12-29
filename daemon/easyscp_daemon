@@ -108,6 +108,7 @@ while (!System_Daemon::isDying() && $runningOkay) {
 					case 'Stop':
 						$runningOkay = false;
 						$retVal = 'Daemon is stopping';
+						System_Daemon::info('EasySCP Daemon is stopping.');
 						break;
 
 					default:

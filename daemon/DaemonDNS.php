@@ -475,6 +475,7 @@ class DaemonDNS {
 		}
 		return $sql_query;
 	}
+
 	/**
 	 * Delete DNS entry when removing a suddomain
 	 *
