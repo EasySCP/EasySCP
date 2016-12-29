@@ -92,7 +92,7 @@ For the following steps, you will need to be logged in as root.
 		http://fedoraproject.org/wiki/EPEL/FAQ#howtouse
 
 	Example:
-		# rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-7.noarch.rpm
+		# rpm -Uvh http://download.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm
 
 
 3. Disabling SELinux
@@ -132,7 +132,7 @@ Be sure you are logged in as root.
 		# service mariadb start
 
 5.	Start the basic setup:
-		# ./easyscp-setup.sh
+		# sh easyscp-setup.sh
 
 	Setup will now Build the Software and copy all the directories into your system.
 	After that, Setup will then secure your MariaDB installation.

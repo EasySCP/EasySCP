@@ -93,7 +93,7 @@ provides graphic user interfaces for the administrators, resellers and users.
 	# php5enmod mcrypt
 
 5. Start the basic setup:
-	# ./easyscp-setup.sh
+	# sh easyscp-setup.sh
 
 	Setup will now Build the Software and copy all the directories into your system.
 	After that, Setup will then secure your MySQL installation.

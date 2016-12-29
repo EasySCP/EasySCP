@@ -19,6 +19,7 @@ php-bcmath
 php-cli
 php-curl
 php-dba
+php-fpm
 php-gd
 php-idn
 php-ldap
