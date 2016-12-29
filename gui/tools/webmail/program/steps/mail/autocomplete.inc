@@ -65,8 +65,8 @@ if (!empty($book_types) && strlen($search)) {
     $search_lc = mb_strtolower($search);
     $mode     |= rcube_addressbook::SEARCH_GROUPS;
 
-    foreach ($book_types as $id) {
-        $abook = $RCMAIL->get_address_book($id);
+    foreach ($book_types as $abook_id) {
+        $abook = $RCMAIL->get_address_book($abook_id);
         $abook->set_pagesize($MAXNUM);
 
         if ($result = $abook->search($RCMAIL->config->get('contactlist_fields'), $search, $mode, true, true, 'email')) {
@@ -93,7 +93,12 @@ if (!empty($book_types) && strlen($search)) {
 
                     // skip duplicates
                     if (empty($contacts[$index])) {
-                        $contact = array('name' => $contact, 'type' => $sql_arr['_type']);
+                        $contact = array(
+                            'name'   => $contact,
+                            'type'   => $sql_arr['_type'],
+                            'id'     => $sql_arr['ID'],
+                            'source' => $abook_id,
+                        );
 
                         if (($display = rcube_addressbook::compose_search_name($sql_arr, $email, $name)) && $display != $contact['name']) {
                             $contact['display'] = $display;
@@ -136,7 +141,7 @@ if (!empty($book_types) && strlen($search)) {
                                 'email'  => $email,
                                 'type'   => 'group',
                                 'id'     => $group['ID'],
-                                'source' => $id,
+                                'source' => $abook_id,
                             );
 
                             if (count($contacts) >= $MAXNUM) {
@@ -153,7 +158,7 @@ if (!empty($book_types) && strlen($search)) {
                             'name'   => $group['name'] . ' (' . intval($result->count) . ')',
                             'type'   => 'group',
                             'id'     => $group['ID'],
-                            'source' => $id
+                            'source' => $abook_id,
                         );
 
                         if (count($contacts) >= $MAXNUM) {
