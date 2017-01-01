@@ -3,7 +3,7 @@
  * EasySCP a Virtual Hosting Control Panel
  *
  * @copyright 	2006-2010 by ispCP | http://isp-control.net
- * @copyright 	2010-2016 by Easy Server Control Panel - http://www.easyscp.net
+ * @copyright 	2010-2017 by Easy Server Control Panel - http://www.easyscp.net
  * @version 	SVN: $Id$
  * @link 		http://www.easyscp.net
  * @author 		EasySCP Team

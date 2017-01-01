@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2016 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2017 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,23 +31,6 @@ $tpl = EasySCP_TemplateEngine::getInstance();
 $template = 'client/index.tpl';
 
 $theme_color = $cfg->USER_INITIAL_THEME;
-
-if (isset($_POST['uaction']) && $_POST['uaction'] === 'save_layout') {
-	$user_id = $_SESSION['user_id'];
-
-	$user_layout = $_POST['def_layout'];
-
-	$query = "
-		UPDATE
-			`user_gui_props`
-		SET
-			`layout` = ?
-		WHERE
-			`user_id` = ?
-	";
-	$rs = exec_query($sql, $query, array($user_layout, $user_id));
-	$theme_color = $user_layout;
-}
 
 $dmn_props = get_domain_default_props($_SESSION['user_id']);
 
