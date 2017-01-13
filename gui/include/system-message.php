@@ -84,10 +84,7 @@ function system_message($msg, $type = 'error', $backButtonDestination = '') {
 				'TR_LOGIN' => tr('Login'),
 				'TR_USERNAME' => tr('Username'),
 				'TR_PASSWORD' => tr('Password'),
-				'TR_LOSTPW' => tr('Lost password'),
-				'TR_WEBMAIL_SSL_LINK' => 'webmail',
-				'TR_FTP_SSL_LINK' => 'ftp',
-				'TR_PMA_SSL_LINK' => 'pma'
+				'TR_LOSTPW' => tr('Lost password')
 			)
 		);
 	} else {
@@ -102,10 +99,7 @@ function system_message($msg, $type = 'error', $backButtonDestination = '') {
 				'TR_LOGIN' => 'Login',
 				'TR_USERNAME' => 'Username',
 				'TR_PASSWORD' => 'Password',
-				'TR_LOSTPW' => 'Lost password',
-				'TR_WEBMAIL_SSL_LINK' => 'webmail',
-				'TR_FTP_SSL_LINK' => 'ftp',
-				'TR_PMA_SSL_LINK' => 'pma'
+				'TR_LOSTPW' => 'Lost password'
 			)
 		);
 	}

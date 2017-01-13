@@ -53,10 +53,7 @@ if (isset($_SESSION['user_theme'])) {
 $tpl = EasySCP_TemplateEngine::getInstance();
 $tpl->assign(
 	array(
-		'TR_PAGE_TITLE'			=> tr('EasySCP - Virtual Hosting Control System'),
-		'TR_WEBMAIL_SSL_LINK'	=> 'webmail',
-		'TR_FTP_SSL_LINK'		=> 'ftp',
-		'TR_PMA_SSL_LINK'		=> 'pma'
+		'TR_PAGE_TITLE'			=> tr('EasySCP - Virtual Hosting Control System')
 	)
 );
 
