@@ -3,7 +3,7 @@
  *
  * @copyright 	2001-2006 by moleSoftware GmbH
  * @copyright 	2006-2010 by ispCP | http://isp-control.net
- * @copyright 	2010-2012 by Easy Server Control Panel - http://www.easyscp.net
+ * @copyright 	2010-2017 by Easy Server Control Panel - http://www.easyscp.net
  * @version 	SVN: $Id$
  * @link 		http://www.easyscp.net
  * @author 		EasySCP Team
@@ -338,6 +338,21 @@ function showHideBlocks(id) {
 	}
 }
 
+/**
+ * @link ../admin/tools_config_ssl.tpl
+ * @link ../client/domain_manage_ssl.tpl
+ */
+function showHideSSL(obj) {
+	if (obj.selectedIndex==0 || obj.selectedIndex==3 || obj.selectedIndex==4) {
+		document.getElementById("sslcertificate").disabled = true;
+		document.getElementById("sslkey").disabled = true;
+		document.getElementById("ssl_cacert").disabled = true;
+		} else { 
+		document.getElementById("sslcertificate").disabled = false;
+		document.getElementById("sslkey").disabled = false;
+		document.getElementById("ssl_cacert").disabled = false;
+	}
+}
 
 /**
  * show/open file tree dialog pageY

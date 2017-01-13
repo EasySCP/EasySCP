@@ -15,7 +15,7 @@
  *
  * @category	EasySCP
  * @package		EasySCP_Exception
- * @copyright 	2010-2015 by EasySCP | http://www.easyscp.net
+ * @copyright 	2010-2017 by EasySCP | http://www.easyscp.net
  * @author 		EasySCP Team
  */
 class EasySCP_Exception extends Exception {

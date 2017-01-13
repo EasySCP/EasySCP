@@ -27,7 +27,7 @@
  *
  * @category	EasySCP
  * @package		EasySCP_Update
- * @copyright 	2010-2012 by EasySCP | http://www.easyscp.net
+ * @copyright 	2010-2017 by EasySCP | http://www.easyscp.net
  * @author 		EasySCP Team
  */
 class EasySCP_Update_Version extends EasySCP_Update {
