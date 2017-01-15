@@ -216,7 +216,7 @@ class DaemonDNS {
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'NS',
 			'domain_content'=> 'ns1.' . $dmn_name,
-			'domain_ttl'	=> '86400',
+			'domain_ttl'	=> '28800',
 			'domain_prio'	=> NULL
 		);
 
