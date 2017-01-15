@@ -198,7 +198,7 @@ class DaemonDNS {
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'SOA',
 			'domain_content'=> 'ns1.' . $dmn_name . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
-			'domain_ttl'	=> '3600',
+			'domain_ttl'	=> '86400',
 			'domain_prio'	=> Null
 		);
 
@@ -216,7 +216,7 @@ class DaemonDNS {
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'NS',
 			'domain_content'=> 'ns1.' . $dmn_name,
-			'domain_ttl'	=> '28800',
+			'domain_ttl'	=> '86400',
 			'domain_prio'	=> NULL
 		);
 
