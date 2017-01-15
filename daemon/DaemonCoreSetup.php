@@ -581,7 +581,7 @@ function EasySCP_Powerdns_main_configuration_file(){
 		'domain_name'	=> $dmn_name,
 		'domain_type'	=> 'SOA',
 		'domain_content'=> 'ns1.'.$dmn_name.'. '.DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' '.time().' 12000 1800 604800 86400',
-		'domain_ttl'	=> '3600',
+		'domain_ttl'	=> '86400',
 		'domain_prio'	=> Null
 	);
 
@@ -590,7 +590,7 @@ function EasySCP_Powerdns_main_configuration_file(){
 		'domain_name'	=> 'ns1.'.$dmn_name,
 		'domain_type'	=> 'A',
 		'domain_content'=> $dmn_ip,
-		'domain_ttl'	=> '7200',
+		'domain_ttl'	=> '28800',
 		'domain_prio'	=> NULL
 	);
 
