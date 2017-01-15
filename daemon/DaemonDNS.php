@@ -197,35 +197,17 @@ class DaemonDNS {
 			'domain_id'		=> $dmn_dns_id,
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'SOA',
-			'domain_content'=> 'ns1.' . $dmn_name . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
+			'domain_content'=> 'ns1.' . DaemonConfig::$cfg->{'SERVER_HOSTNAME'} . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
 			'domain_ttl'	=> '86400',
 			'domain_prio'	=> Null
 		);
 
 		$sql_param[] = array(
 			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> 'ns1.' . $dmn_name,
-			'domain_type'	=> 'A',
-			'domain_content'=> $dmn_ip,
-			'domain_ttl'	=> '7200',
-			'domain_prio'	=> NULL
-		);
-
-		$sql_param[] = array(
-			'domain_id'		=> $dmn_dns_id,
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'NS',
-			'domain_content'=> 'ns1.' . $dmn_name,
+			'domain_content'=> 'ns1.' . DaemonConfig::$cfg->{'SERVER_HOSTNAME'},
 			'domain_ttl'	=> '28800',
-			'domain_prio'	=> NULL
-		);
-
-		$sql_param[] = array(
-			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> 'ns.' . $dmn_name,
-			'domain_type'	=> 'CNAME',
-			'domain_content'=> 'ns1.' . $dmn_name,
-			'domain_ttl'	=> '7200',
 			'domain_prio'	=> NULL
 		);
 
@@ -284,14 +266,6 @@ class DaemonDNS {
 		);
 
 		if ($dmn_ipv6){
-			$sql_param[] = array(
-				'domain_id'		=> $dmn_dns_id,
-				'domain_name'	=> 'ns1.' . $dmn_name,
-				'domain_type'	=> 'AAAA',
-				'domain_content'=> $dmn_ipv6,
-				'domain_ttl'	=> '7200',
-				'domain_prio'	=> NULL
-			);
 			$sql_param[] = array(
 				'domain_id'		=> $dmn_dns_id,
 				'domain_name'	=> 'mail.' . $dmn_name,
