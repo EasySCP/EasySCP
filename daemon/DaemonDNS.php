@@ -336,7 +336,7 @@ class DaemonDNS {
 		$dmn_dns_id = $row['id'];
 
 		$sql_param = array(
-            'domain_content'	=> 'ns1.' . $domainData['domain_name'] . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
+            'domain_content'	=> 'ns1.' . DaemonConfig::$cfg->{'SERVER_HOSTNAME'} . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
 			'domain_id'			=> $dmn_dns_id,
 			'domain_name'		=> $domainData['domain_name'],
             'domain_type'		=> 'SOA'
