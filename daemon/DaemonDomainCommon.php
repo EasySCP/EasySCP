@@ -531,6 +531,10 @@ class DaemonDomainCommon {
 		if ($row = DB::execute($sql_param)->closeCursor()) {
 
 		}
+
+		// Delete Mail Domain from db
+		DaemonMail::DaemonMailDeleteDomain($aliasData['domain_name']);
+
 		return true;
 	}
 
@@ -615,6 +619,9 @@ class DaemonDomainCommon {
 
 		DB::prepare($sql_query);
 		DB::execute($sql_param)->closeCursor();
+
+		// Delete Mail Domain from db
+		DaemonMail::DaemonMailDeleteDomain($domainData['domain_name']);
 
 		return true;
 	}
