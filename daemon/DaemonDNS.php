@@ -390,26 +390,6 @@ class DaemonDNS {
 
 		$dmn_dns_id = $row['id'];
 
-		$sql_param = array(
-			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> $domainData['subdomain_name'] . '.' . $domainData['domain_name'],
-			'domain_type'	=> 'A',
-			'domain_content'=> $domainData['ip_number'],
-			'domain_ttl'	=> '7200',
-			'domain_prio'	=> NULL
-		);
-
-		if ($domainData['ip_number_v6']){
-			$sql_param = array(
-				'domain_id'		=> $dmn_dns_id,
-				'domain_name'	=> $domainData['subdomain_name'] . '.' . $domainData['domain_name'],
-				'domain_type'	=> 'AAAA',
-				'domain_content'=> $domainData['ip_number_v6'],
-				'domain_ttl'	=> '7200',
-				'domain_prio'	=> NULL
-			);		
-		}
-
 		$sql_query = "
 			INSERT INTO
 				powerdns.records (domain_id, name, type, content, ttl, prio)
@@ -419,8 +399,34 @@ class DaemonDNS {
 			 	name = :domain_name;
 			";
 
-		DB::prepare($sql_query);
-		DB::execute($sql_param)->closeCursor();
+		$stmt = DB::prepare($sql_query);
+
+		$sql_param = array(
+			'domain_id'		=> $dmn_dns_id,
+			'domain_name'	=> $domainData['subdomain_name'] . '.' . $domainData['domain_name'],
+			'domain_type'	=> 'A',
+			'domain_content'=> $domainData['ip_number'],
+			'domain_ttl'	=> '7200',
+			'domain_prio'	=> NULL
+		);
+
+		$stmt->execute($sql_param);
+
+		if ($domainData['ip_number_v6']){
+			$sql_param = array(
+				'domain_id'		=> $dmn_dns_id,
+				'domain_name'	=> $domainData['subdomain_name'] . '.' . $domainData['domain_name'],
+				'domain_type'	=> 'AAAA',
+				'domain_content'=> $domainData['ip_number_v6'],
+				'domain_ttl'	=> '7200',
+				'domain_prio'	=> NULL
+			);
+
+			$stmt->execute($sql_param);
+		}
+
+		$stmt = Null;
+		unset($stmt);
 
 		// Update the DNS serial
 		self::UpdateNotifiedSerial($domainData);
