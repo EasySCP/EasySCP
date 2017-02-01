@@ -722,6 +722,36 @@ class EasySCP_Update_Database extends EasySCP_Update {
 
 		return $sqlUpd;
 	}
+
+	/**
+	 * Add database field for external ip´s/nat support
+	 *
+	 * @author Markus Szywon <markus.szywon@easyscp.net>
+	 * @return array
+	 */
+	protected function _databaseUpdate_65(){
+		$sqlUpd = array();
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`server_ips`
+			ADD
+				`ip_number_ext` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL
+			AFTER
+				`ip_number`;
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`server_ips`
+			ADD
+				`ip_number_v6_ext` varchar(39) COLLATE utf8_unicode_ci DEFAULT NULL
+			AFTER
+				`ip_number_v6`;
+		";
+
+		return $sqlUpd;
+	}
 	/*
 	 * DO NOT CHANGE ANYTHING BELOW THIS LINE!
 	 */

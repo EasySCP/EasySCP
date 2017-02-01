@@ -29,7 +29,7 @@
  * Portions created by the ispCP Team are Copyright (C) 2006-2010 by
  * isp Control Panel. All Rights Reserved.
  *
- * Portions created by the EasySCP Team are Copyright (C) 2010-2012 by
+ * Portions created by the EasySCP Team are Copyright (C) 2010-2017 by
  * Easy Server Control Panel. All Rights Reserved.
  */
 
@@ -943,21 +943,27 @@ function mount_point_exists($dmn_id, $mnt_point) {
 
 function get_user_domain_ip($dmn_ip_id) {
 
-	$sql = EasySCP_Registry::get('Db');
-
-	$query = "
+	$sql_query = "
 		SELECT
-			ip_number, ip_number_v6
+			`ip_number`, `ip_number_ext`, `ip_number_v6`, `ip_number_v6_ext`
 		FROM
-			server_ips
+			`server_ips`
 		WHERE
-			ip_id = ?
+			`ip_id` = :ip_id
 		;
 	";
 
-	$rs = exec_query($sql, $query, $dmn_ip_id);
+	$sql_param = array(
+		'ip_id'	=> $dmn_ip_id
+	);
 
-	return ($rs->fields['ip_number_v6'] != '') ? $rs->fields['ip_number'] .' / '. $rs->fields['ip_number_v6'] : $rs->fields['ip_number'];
+	DB::prepare($sql_query);
+	$row = DB::execute($sql_param, true);
+
+	$IPv4 = ($row['ip_number_ext'] !== Null) ? $row['ip_number_ext'] : $row['ip_number'];
+	$IPv6 = ($row['ip_number_v6_ext'] !== Null) ? $row['ip_number_v6_ext'] : $row['ip_number_v6'];
+
+	return ($IPv6 != '') ? $IPv4 .' / '. $IPv6 : $IPv4;
 }
 
 function get_user_domains($user_id) {
@@ -1079,7 +1085,7 @@ function get_dns_zone($alias=0, $domain_id) {
 				`powerdns`.`records` `r`
 			ON
 				(`r`.`domain_id`=`ns`.`id`)
-			INNERJOIN
+			INNER JOIN
 				`domain_aliasses` `da`
 			ON
 				(`da`.`alias_id`=`ns`.`easyscp_domain_alias_id`)

@@ -547,7 +547,9 @@ CREATE TABLE IF NOT EXISTS `reseller_props` (
 CREATE TABLE IF NOT EXISTS `server_ips` (
   `ip_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ip_number` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ip_number_ext` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ip_number_v6` varchar(39) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ip_number_v6_ext` varchar(39) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ip_domain` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ip_alias` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ip_card` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
