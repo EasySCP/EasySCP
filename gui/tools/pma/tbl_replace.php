@@ -245,6 +245,10 @@ if ($is_insert && count($value_sets) > 0) {
     //
     // Note: logic passes here for inline edit
     $message = PMA_Message::success(__('No change'));
+    // Avoid infinite recursion
+    if ($goto_include == 'tbl_replace.php') {
+        $goto_include = 'tbl_change.php';
+    }
     $active_page = $goto_include;
     include '' . PMA_securePath($goto_include);
     exit;
@@ -345,15 +349,15 @@ if ($response->isAjax() && ! isset($_POST['ajax_page_request'])) {
             }
         }   // end of loop for each $mime_map
     }
-    
+
     // Need to check the inline edited value can be truncated by MySQL
     // without informing while saving
     $column_name = $_REQUEST['fields_name']['multi_edit'][0][0];
-    
+
     PMA_verifyWhetherValueCanBeTruncatedAndAppendExtraData(
         $db, $table, $column_name, $extra_data
     );
-    
+
     /**Get the total row count of the table*/
     $extra_data['row_count'] = PMA_Table::countRecords(
         $_REQUEST['db'], $_REQUEST['table']
