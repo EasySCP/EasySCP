@@ -25,7 +25,7 @@
  * Portions created by Initial Developer are Copyright (C) 2006-2011 by
  * isp Control Panel. All Rights Reserved.
  *
- * Portions created by the EasySCP Team are Copyright (C) 2010-2012 by
+ * Portions created by the EasySCP Team are Copyright (C) 2010-2017 by
  * Easy Server Control Panel. All Rights Reserved.
  */
 
