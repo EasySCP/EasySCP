@@ -193,20 +193,6 @@ function SetupMysqlTest(){
 			return 'Error: Failed to write '.$confFile;
 		}
 
-		$tpl_param = array(
-			'DB_KEY'		=> $sql->{'DB_KEY'},
-			'DB_IV'			=> $sql->{'DB_IV'}
-		);
-		$tpl = DaemonCommon::getTemplate($tpl_param);
-		$config = $tpl->fetch('tpl/easyscp-keys.conf');
-		$confFile = DaemonConfig::$cfg->{'CONF_DIR'} . '/easyscp-keys.conf';
-		$tpl = NULL;
-		unset($tpl);
-
-		if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644 )){
-			return 'Error: Failed to write '.$confFile;
-		}
-
 		$handle = fopen(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml', "wb");
 		fwrite($handle, $sql->asXML());
 		fclose($handle);

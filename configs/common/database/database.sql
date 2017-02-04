@@ -86,7 +86,7 @@ INSERT INTO `config` (`name`, `value`) VALUES
 ('MTA_SSL_CACERT', ''),
 ('MTA_SSL_STATUS',0),
 ('MIGRATION_ENABLED',0),
-('DATABASE_REVISION', '64');
+('DATABASE_REVISION', '65');
 
 -- --------------------------------------------------------
 

@@ -286,7 +286,7 @@ function update_email_pass() {
 		}
 		return false;
 	} else {
-		$pass = encrypt_db_password($pass);
+		$pass = DB::encrypt_data($pass);
 		$status = $cfg->ITEM_CHANGE_STATUS;
 		$query = "UPDATE `mail_users` SET `mail_pass` = ?, `status` = ? WHERE `mail_id` = ?";
 		exec_query($sql, $query, array($pass, $status, $mail_id));

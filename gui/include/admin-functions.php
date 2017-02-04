@@ -1535,9 +1535,9 @@ function change_domain_status($domain_id, $domain_name, $action, $location) {
 					|| preg_match('/^' . MT_SUBDOM_MAIL . '/', $mail_type)
 					|| preg_match('/^' . MT_ALSSUB_MAIL . '/', $mail_type)) {
 
-					$mail_pass = decrypt_db_password($mail_pass);
+					$mail_pass = DB::decrypt_data($mail_pass);
 					$mail_pass = $pass_prefix . $mail_pass;
-					$mail_pass = encrypt_db_password($mail_pass);
+					$mail_pass = DB::encrypt_data($mail_pass);
 				}
 			} else if($action == 'enable') {
 				if(preg_match('/^' . MT_NORMAL_MAIL . '/', $mail_type)
@@ -1545,9 +1545,9 @@ function change_domain_status($domain_id, $domain_name, $action, $location) {
 					|| preg_match('/^' . MT_SUBDOM_MAIL . '/', $mail_type)
 					|| preg_match('/^' . MT_ALSSUB_MAIL . '/', $mail_type)) {
 
-					$mail_pass = decrypt_db_password($mail_pass);
+					$mail_pass = DB::decrypt_data($mail_pass);
 					$mail_pass = substr($mail_pass, 4, 50);
-					$mail_pass = encrypt_db_password($mail_pass);
+					$mail_pass = DB::encrypt_data($mail_pass);
 				}
 			} else {
 				return;

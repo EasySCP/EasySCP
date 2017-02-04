@@ -313,7 +313,6 @@ class DaemonCommon {
 		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_OS.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/Iana_TLD.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/VERSION', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
-		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/easyscp-keys.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 		self::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'}.'/easyscp.conf', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
 
 		self::systemSetFilePermissions('/etc/logrotate.d/easyscp', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);

@@ -442,7 +442,7 @@ function schedule_mail_account($sql, $domain_id, $dmn_name, $mail_acc) {
 		|| preg_match("/^alias_mail/", $mail_type)
 		|| preg_match("/^subdom_mail/", $mail_type)
 		|| preg_match("/^alssub_mail/", $mail_type)) {
-		$mail_pass = encrypt_db_password($mail_pass);
+		$mail_pass = DB::encrypt_data($mail_pass);
 	}
 
 	$query = "

@@ -30,23 +30,15 @@
  */
 
 /**
- * Get ftp login credentials
+ * Get FTP login credentials
  *
- * @author William Lightning <kassah@gmail.com>
- * @since  1.1.0
  * @access private
- * @param  string $userid FTP User
- * @return array Array that contains login credentials or FALSE on failure
+ * @param  string $userId FTP User
+ * @return mixed Array that contains login credentials or FALSE on failure
  */
 function _getLoginCredentials($userId) {
 
-	/**
-	 * @var $db EasySCP_Database_ResultSet
-	 */
-	$db = EasySCP_Registry::get('Db');
-
-	// @todo Should be optimized
-	$query = "
+	$sql_query = "
 		SELECT
 			`userid`, `net2ftppasswd`
 		FROM
@@ -54,17 +46,23 @@ function _getLoginCredentials($userId) {
 		WHERE
 				`ftp_users`.`uid` = `domain`.`domain_uid`
 			AND
-				`ftp_users`.`userid` = ?
+				`ftp_users`.`userid` = :userid
 			AND
-				`domain`.`domain_admin_id` = ?;
+				`domain`.`domain_admin_id` = :domain_admin_id;
 	";
 
-	$stmt = exec_query($db, $query, array($userId, $_SESSION['user_id']));
+	$sql_param = array(
+		'userid'			=> $userId,
+		'domain_admin_id'	=> $_SESSION['user_id']
+	);
 
-	if($stmt->rowCount() == 1) {
+	DB::prepare($sql_query);
+	$row = DB::execute($sql_param, true);
+
+	if(isset($row['userid'])) {
 		return array(
-			$stmt->fields['userid'],
-			decrypt_db_password($stmt->fields['net2ftppasswd'])
+			$row['userid'],
+			DB::decrypt_data($row['net2ftppasswd'])
 		);
 	} else {
 		return false;

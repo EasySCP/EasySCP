@@ -58,17 +58,11 @@ if(isset($_GET['id'])) {
  * @since  1.0.7
  * @access private
  * @param  int $dbUserId Database user unique identifier
- * @return array Array that contains login credentials or FALSE on failure
+ * @return mixed Array that contains login credentials or FALSE on failure
  */
 function _getLoginCredentials($dbUserId) {
 
-	/**
-	 * @var $db EasySCP_Database_ResultSet
-	 */
-	$db = EasySCP_Registry::get('Db');
-
-	// @todo Should be optimized
-	$query = "
+	$sql_query = "
 		SELECT
 			`sqlu_name`, `sqlu_pass`
 		FROM
@@ -76,20 +70,25 @@ function _getLoginCredentials($dbUserId) {
 		WHERE
 			`sql_user`.`sqld_id` = `sql_database`.`sqld_id`
 		AND
-			`sql_user`.`sqlu_id` = ?
+			`sql_user`.`sqlu_id` = :sqlu_id
 		AND
 			`sql_database`.`domain_id` = `domain`.`domain_id`
 		AND
-			`domain`.`domain_admin_id` = ?
-		;
+			`domain`.`domain_admin_id` = :domain_admin_id;
 	";
 
-	$stmt = exec_query($db, $query, array($dbUserId, $_SESSION['user_id']));
+	$sql_param = array(
+		'sqlu_id'			=> $dbUserId,
+		'domain_admin_id'	=> $_SESSION['user_id']
+	);
 
-	if($stmt->rowCount() == 1) {
+	DB::prepare($sql_query);
+	$row = DB::execute($sql_param, true);
+
+	if(isset($row['sqlu_name'])) {
 		return array(
-			$stmt->fields['sqlu_name'],
-			decrypt_db_password($stmt->fields['sqlu_pass'])
+			$row['sqlu_name'],
+			DB::decrypt_data($row['sqlu_pass'])
 		);
 	} else {
 		return false;

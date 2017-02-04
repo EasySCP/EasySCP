@@ -316,7 +316,7 @@ function add_sql_user($sql, $user_id, $db_id) {
 			);
 			return;
 		}
-		$user_pass = decrypt_db_password($rs->fields['sqlu_pass']);
+		$user_pass = DB::decrypt_data($rs->fields['sqlu_pass']);
 	} else {
 		$user_pass = $_POST['pass'];
 	}
@@ -378,7 +378,7 @@ function add_sql_user($sql, $user_id, $db_id) {
 			(?, ?, ?)
 	";
 
-	exec_query($sql, $query, array($db_id, $db_user, encrypt_db_password($user_pass)));
+	exec_query($sql, $query, array($db_id, $db_user, DB::encrypt_data($user_pass)));
 
 	update_reseller_c_props(get_reseller_id($dmn_id));
 

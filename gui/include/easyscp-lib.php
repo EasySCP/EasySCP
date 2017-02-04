@@ -51,21 +51,6 @@ spl_autoload_register('AutoLoader::loadClass');
 EasySCP_Exception::setHandler();
 
 /**
- * Encryption data
- */
-require_once INCLUDEPATH . '/easyscp-load-db-keys.php';
-
-if($easyscp_db_pass_key != '{KEY}' && $easyscp_db_pass_iv != '{IV}') {
-	EasySCP_Registry::set('MCRYPT_KEY', $easyscp_db_pass_key);
-	EasySCP_Registry::set('MCRYPT_IV', $easyscp_db_pass_iv);
-	unset($easyscp_db_pass_key, $easyscp_db_pass_iv);
-} else {
-	throw new EasySCP_Exception(
-		'Error: Database key and/or initialization vector was not generated!'
-	);
-}
-
-/**
  * Include EasySCP common functions
  */
 require_once 'Net/IDNA2.php';
