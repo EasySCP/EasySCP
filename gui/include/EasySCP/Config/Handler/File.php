@@ -162,7 +162,7 @@ class EasySCP_Config_Handler_File extends EasySCP_Config_Handler {
 					$pathFile = '/usr/local/etc/easyscp/easyscp.conf';
 					break;
 				default:
-					$pathFile = '/etc/easyscp/easyscp.conf';
+					$pathFile = EasyConfig_PATH . '/easyscp.conf';
 			}
 		}
 

@@ -21,6 +21,9 @@
  * @author 		EasySCP Team
  */
 
+// Standard EasyConfig path
+define('EasyConfig_PATH', '/etc/easyscp');
+
 // Boot EasySCP
 EasySCP_Bootstrap::boot();
 
@@ -28,9 +31,6 @@ EasySCP_Bootstrap::boot();
 $config = new EasySCP_Config_Handler_File();
 
 // Set some configuration parameters
-
-// Standard EasyConfig path
-define('EasyConfig_PATH', '/etc/easyscp');
 
 // Standard Theme (if not set)
 $config->USER_INITIAL_THEME = 'default';

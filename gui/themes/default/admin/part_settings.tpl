@@ -6,5 +6,4 @@
 	<li><a href="settings_welcome_mail.php">{$TR_MENU_EMAIL_SETUP}</a></li>
 	<li><a href="settings_lostpassword.php">{$TR_MENU_LOSTPW_EMAIL}</a></li>
 	<li><a href="settings_ports.php">{$TR_SERVERPORTS}</a></li>
-	<li><a href="settings_services.php">{$TR_SERVERPORTS}</a></li>
 </ul>

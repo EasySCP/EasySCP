@@ -520,13 +520,8 @@ function _validates_dname_label($label) {
  * See {@link http://www.iana.org/domains/root/db/# Iana Root Zone Database}
  * for more information about the Iana TLD's list.
  *
- * @author Laurent Declercq <l.declercq@nuxwin.com>
- * @version 1.1
- * @since r2228
- * @access private
  * @param string $tld
  * @return boolean TRUE if successfull, FALSE otherwise
- * @todo build the Iana TLD list via xml
  */
 function _validates_tld($tld) {
 
@@ -537,7 +532,7 @@ function _validates_tld($tld) {
 	$matches = array();
 
 	if ($cfg->TLD_STRICT_VALIDATION) {
-		$ianaTLDXML = simplexml_load_file($cfg->CONF_DIR.'/Iana_TLD.xml');
+		$ianaTLDXML = simplexml_load_file(EasyConfig_PATH . '/Iana_TLD.xml');
 		
 		$idnTld = idn_to_ascii($tld);
 		$search = "//domain[tld='".$idnTld."']";
