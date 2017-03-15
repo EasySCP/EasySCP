@@ -11,9 +11,11 @@
  */
 
 class DaemonDomainCommon {
+
 	protected static function apacheDisableDisabledSite($siteName) {
 		return self::apacheDisableSite($siteName."-disabled");
 	}
+
 	/**
 	 * Disable a site in Apache web-server
 	 *
@@ -52,6 +54,7 @@ class DaemonDomainCommon {
 	protected static function apacheEnableDisabledSite($siteName) {
 		return self::apacheEnableSite($siteName."-disabled");
 	}
+
 	/**
 	 * Enable a site in Apache web-server
 	 *
@@ -1040,6 +1043,7 @@ class DaemonDomainCommon {
 				   d.domain_uid,
 				   d.domain_id,
 				   d.domain_mailacc_limit,
+				   d.domain_ssl,
 				   da.ssl_key,
 				   da.ssl_cert,
 				   da.ssl_status,
@@ -1091,6 +1095,7 @@ class DaemonDomainCommon {
 				   d.domain_uid,
 				   d.domain_id,
 				   d.domain_mailacc_limit,
+				   d.domain_ssl,
 				   sa.ssl_key,
 				   sa.ssl_cert,
 				   sa.ssl_status,
@@ -1165,6 +1170,7 @@ class DaemonDomainCommon {
 				d.domain_id,
 				d.domain_name,
 				d.domain_mailacc_limit,
+				d.domain_ssl,
 				s.ip_number,
 				s.ip_number_v6,
 				sd.subdomain_name,
@@ -1212,6 +1218,7 @@ class DaemonDomainCommon {
 				d.domain_id,
 				d.domain_name,
 				d.domain_mailacc_limit,
+				d.domain_ssl,
 				s.ip_number,
 				s.ip_number_v6,
 				sd.subdomain_name,
@@ -1635,8 +1642,9 @@ class DaemonDomainCommon {
 		} else {
 			$fqdn =  $domainData['domain_name'];
 		}
-		$certFile   = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $fqdn . '-cert.pem';
+
 		$cacertFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $fqdn . '-cacert.pem';
+		$certFile   = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $fqdn . '-cert.pem';
 		$keyFile    = DaemonConfig::$distro->SSL_KEY_DIR  . '/easyscp_' . $fqdn . '-key.pem';
 
 		$cert = $domainData['ssl_cert'];
@@ -1653,17 +1661,18 @@ class DaemonDomainCommon {
 				System_Daemon::debug($msg);
 				return $msg.'<br />';
 			}
-			if (isset($domainData['ssl_cacert']) && $domainData['ssl_cacert'] != ''){
-				if(!DaemonCommon::systemWriteContentToFile($cacertFile, $domainData['ssl_cacert'], DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644)){
-					$msg = 'Failed to write certificate of certification authorities (CA) '.$cacertFile;
-					System_Daemon::debug($msg);
-					return $msg.'<br />';
-				}
-			}
 		} else{
 			$msg = 'Certificate and key don\'t match';
 			System_Daemon::debug($msg);
 			return $msg.'<br />';
+		}
+
+		if (isset($domainData['ssl_cacert']) && $domainData['ssl_cacert'] != ''){
+			if(!DaemonCommon::systemWriteContentToFile($cacertFile, $domainData['ssl_cacert'], DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644)){
+				$msg = 'Failed to write certificate of certification authorities (CA) '.$cacertFile;
+				System_Daemon::debug($msg);
+				return $msg.'<br />';
+			}
 		}
 
 		return true;
@@ -1674,25 +1683,29 @@ class DaemonDomainCommon {
 	 * @param $domainName
 	 */
 	protected static function deleteSSLKeys($domainName){
-		$certFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainName . '-cert.pem';
 		$cacertFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainName . '-cacert.pem';
+		$certFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainName . '-cert.pem';
 		$keyFile = DaemonConfig::$distro->SSL_KEY_DIR . '/easyscp_' . $domainName . '-key.pem';
-		if (file_exists($certFile)) {
-			$cmdCert = DaemonConfig::$cmd->CMD_RM . ' ' . $certFile;
-			exec($cmdCert);
-			System_Daemon::debug('Deleted SSL certificate for ' . $domainName);
-		}
+
 		if (file_exists($cacertFile)) {
 			$cmdCacert = DaemonConfig::$cmd->CMD_RM . ' ' . $cacertFile;
 			exec($cmdCacert);
 			System_Daemon::debug('Deleted SSL CA cert for ' . $domainName);
 		}
+
+		if (file_exists($certFile)) {
+			$cmdCert = DaemonConfig::$cmd->CMD_RM . ' ' . $certFile;
+			exec($cmdCert);
+			System_Daemon::debug('Deleted SSL certificate for ' . $domainName);
+		}
+
 		if (file_exists($keyFile)) {
 			$cmdKey = DaemonConfig::$cmd->CMD_RM . ' ' . $keyFile;
 			exec($cmdKey);
 			System_Daemon::debug('Deleted SSL key for ' . $domainName);
 		}
 	}
+
 	/**
 	 * Query for domain names from domain, subdomain, alias and subdomain alias tables.
 	 * @param $domain_id
@@ -1743,8 +1756,10 @@ class DaemonDomainCommon {
 			AND
 				da.domain_id = :domain_id;
 		";
+
 		DB::prepare($sql_query);
 		$rs = DB::execute($sql_param);
+
 		return $rs;
 	}
 
@@ -1764,6 +1779,7 @@ class DaemonDomainCommon {
 				return $msg . '<br />';
 			}
 		}
+
 		return true;
 	}
 }

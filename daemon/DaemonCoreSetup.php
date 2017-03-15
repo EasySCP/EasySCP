@@ -987,8 +987,7 @@ function Rkhunter(){
 
 function System_cleanup(){
 
-	exec(DaemonConfig::$cmd->{'CMD_RM'}.' -f '.DaemonConfig::$cfg->{'CONF_DIR'}.'/*/*/empty-file', $result, $error);
-	exec(DaemonConfig::$cmd->{'CMD_RM'}.' -f '.DaemonConfig::$cfg->{'CONF_DIR'}.'/*/*/*/empty-file', $result, $error);
+	exec(DaemonConfig::$cmd->{'CMD_FIND'} . ' ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/ -name empty-file -delete', $result, $error);
 
 	switch(DaemonConfig::$cfg->{'DistName'}){
 		case 'CentOS':

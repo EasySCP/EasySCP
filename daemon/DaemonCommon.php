@@ -17,7 +17,9 @@
 /**
  * Standard EasyConfig path
  */
-define('EasyConfig_PATH', '/etc/easyscp');
+if (!defined('EasyConfig_PATH')){
+	define('EasyConfig_PATH', '/etc/easyscp');
+}
 
 /**
  * Autoloader für Klassen
@@ -107,7 +109,7 @@ class DaemonCommon {
 	 * @return Smarty
 	 */
 	public static function getTemplate($tpl_param) {
-		require_once('../gui/include/Smarty/Smarty.class.php');
+		require_once(dirname(__FILE__) . '/../gui/include/Smarty/Smarty.class.php');
 		$tpl = new Smarty();
 		$tpl->caching = false;
 		$tpl->setTemplateDir(
@@ -346,6 +348,8 @@ class DaemonCommon {
 	 */
 	public static function systemWriteContentToFile($fileName, $content, $user, $group, $perm, $append = false){
 		$flags = ($append == true) ? FILE_APPEND : 0;
+		// Fix für ^M in Linux Dateien
+		$content = str_replace(chr(13), '', $content);
 		if (file_put_contents($fileName, $content, $flags)){
 			return DaemonCommon::systemSetFilePermissions($fileName, $user, $group, $perm);
 		} else {
