@@ -118,17 +118,30 @@ function Setup($Input){
 }
 
 function SetupStopServices(){
-	$services = array('SRV_DNS', 'SRV_FTPD', 'SRV_CLAMD', 'SRV_POSTGREY', 'SRV_POLICYD_WEIGHT', 'SRV_AMAVIS', 'SRV_MTA', 'SRV_DOVECOT');
+	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
+
+	switch($xml->{'DistName'}) {
+		case 'CentOS':
+			$services = array('pdns.service', 'proftpd.service', 'postfix.service', 'dovecot.service');
+			break;
+		default:
+			$services = array('/etc/init.d/pdns', '/etc/init.d/proftpd', '/etc/init.d/postgrey', '/etc/init.d/policyd-weight', '/etc/init.d/postfix', '/etc/init.d/dovecot');
+	}
 
 	foreach($services as $service){
-		if ( DaemonConfig::$cmd->$service != 'no' && file_exists(DaemonConfig::$cmd->$service)){
-			System_Daemon::debug('Found Service ' . DaemonConfig::$cmd->$service);
-			System_Daemon::debug('Stopping Service ' . DaemonConfig::$cmd->$service);
-			exec(DaemonConfig::$cmd->$service . ' stop >> /dev/null 2>&1', $result, $error);
-		} else {
-			if(DaemonConfig::$cmd->$service != 'no'){
-				System_Daemon::debug('Service ' . $service . ': ' . DaemonConfig::$cmd->$service . ' does not exist');
-			}
+		switch($xml->{'DistName'}) {
+			case 'CentOS':
+				System_Daemon::debug('Stopping Service ' . $service);
+				exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' stop ' . $service, $result, $error);
+				break;
+			default:
+				if ( file_exists($service) ){
+					System_Daemon::debug('Found Service ' . $service);
+					System_Daemon::debug('Stopping Service ' . $service);
+					exec($service . ' stop >> /dev/null 2>&1', $result, $error);
+				} else {
+					System_Daemon::debug('Service "' . $service . '" does not exist');
+				}
 		}
 	}
 
@@ -724,22 +737,19 @@ function EasySCP_ProFTPd_configuration_file(){
 
 function EasySCP_init_scripts(){
 
+	DaemonCommon::systemSetFilePermissions('/etc/init.d/easyscp_control', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
+	DaemonCommon::systemSetFilePermissions('/etc/init.d/easyscp_daemon', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
+
 	switch(DaemonConfig::$cfg->{'DistName'}){
 		case 'CentOS':
-			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cmd->{'SRV_EASYSCPC'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
-			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cmd->{'SRV_EASYSCPD'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
-
 			exec('/sbin/chkconfig easyscp_control on', $result, $error);
 			exec('/sbin/chkconfig easyscp_daemon on', $result, $error);
 
 			break;
 		default:
-			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cmd->{'SRV_EASYSCPC'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
-			DaemonCommon::systemSetFilePermissions(DaemonConfig::$cmd->{'SRV_EASYSCPD'}, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
-
 			if (DaemonConfig::$cfg->{'DistName'} == 'Debian' && DaemonConfig::$cfg->{'DistVersion'} == '8' ){
-				exec('/bin/systemctl enable easyscp_control', $result, $error);
-				exec('/bin/systemctl enable easyscp_daemon', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' enable easyscp_control', $result, $error);
+				exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' enable easyscp_daemon', $result, $error);
 			} else {
 				exec('/usr/sbin/update-rc.d -f easyscp_control remove', $result, $error);
 				exec('/usr/sbin/update-rc.d -f easyscp_daemon remove', $result, $error);
@@ -940,23 +950,33 @@ function Set_daemon_permissions(){
 function Set_gui_permissions(){
 	DaemonCommon::systemSetGUIPermissions();
 
-	switch(DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'}){
-		case 'CentOS_6':
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/iptables/iptables /etc/sysconfig/iptables', $result, $error);
+	$iptables_path = DaemonConfig::$cfg->{'CONF_DIR'} . '/iptables/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'};
 
-			exec(DaemonConfig::$cmd->SRV_IPTABLES . ' restart >> /dev/null 2>&1', $result, $error);
+	switch(DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'}){
+		case 'CentOS_7':
+			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' stop firewalld', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' mask firewalld', $result, $error);
+
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . $iptables_path . '/iptables /etc/sysconfig/iptables', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . $iptables_path . '/ip6tables /etc/sysconfig/ip6tables', $result, $error);
+
+			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' enable iptables', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' restart iptables', $result, $error);
+
+			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' enable ip6tables', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' restart ip6tables', $result, $error);
 			break;
 		case 'Debian_8':
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/iptables/rules.v4 /etc/iptables/rules.v4', $result, $error);
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/iptables/rules.v6 /etc/iptables/rules.v6', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . $iptables_path . '/rules.v4 /etc/iptables/rules.v4', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . $iptables_path . '/rules.v6 /etc/iptables/rules.v6', $result, $error);
 
 			exec('service netfilter-persistent restart >> /dev/null 2>&1', $result, $error);
 			break;
 		default:
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/iptables/rules.v4 /etc/iptables/rules.v4', $result, $error);
-			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/iptables/rules.v6 /etc/iptables/rules.v6', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . $iptables_path . '/rules.v4 /etc/iptables/rules.v4', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . $iptables_path . '/rules.v6 /etc/iptables/rules.v6', $result, $error);
 
-			exec(DaemonConfig::$cmd->SRV_IPTABLES . ' restart >> /dev/null 2>&1', $result, $error);
+			exec('/etc/init.d/iptables-persistent restart >> /dev/null 2>&1', $result, $error);
 
 	}
 
@@ -964,17 +984,28 @@ function Set_gui_permissions(){
 }
 
 function Starting_all_services(){
-	$services = array('SRV_DNS', 'SRV_FTPD', 'SRV_CLAMD', 'SRV_POSTGREY', 'SRV_POLICYD_WEIGHT', 'SRV_AMAVIS', 'SRV_DOVECOT', 'SRV_MTA');
+	switch(DaemonConfig::$cfg->{'DistName'}) {
+		case 'CentOS':
+			$services = array('pdns.service', 'proftpd.service', 'dovecot.service', 'postfix.service');
+			break;
+		default:
+			$services = array('/etc/init.d/pdns', '/etc/init.d/proftpd', '/etc/init.d/postgrey', '/etc/init.d/policyd-weight', '/etc/init.d/dovecot', '/etc/init.d/postfix');
+	}
 
 	foreach($services as $service){
-		if ( DaemonConfig::$cmd->$service != 'no' && file_exists(DaemonConfig::$cmd->$service)){
-			System_Daemon::debug('Found Service ' . DaemonConfig::$cmd->$service);
-			System_Daemon::debug('Starting Service ' . DaemonConfig::$cmd->$service);
-			exec(DaemonConfig::$cmd->$service . ' start >> /dev/null 2>&1', $result, $error);
-		} else {
-			if(DaemonConfig::$cmd->$service != 'no'){
-				System_Daemon::debug('Service ' . $service . ': ' . DaemonConfig::$cmd->$service . ' does not exist');
-			}
+		switch(DaemonConfig::$cfg->{'DistName'}) {
+			case 'CentOS':
+				System_Daemon::debug('Starting Service ' . $service);
+				exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' start ' . $service, $result, $error);
+				break;
+			default:
+				if ( file_exists($service)){
+					System_Daemon::debug('Found Service ' . $service);
+					System_Daemon::debug('Starting Service ' . $service);
+					exec($service . ' start >> /dev/null 2>&1', $result, $error);
+				} else {
+					System_Daemon::debug('Service "' . $service . '" does not exist');
+				}
 		}
 	}
 
@@ -992,7 +1023,7 @@ function System_cleanup(){
 	switch(DaemonConfig::$cfg->{'DistName'}){
 		case 'CentOS':
 			// Remove Setup vhost
-			unlink(DaemonConfig::$distro->{'APACHE_CUSTOM_SITES_CONFIG_DIR'}.'/easyscp-setup.conf');
+			unlink(DaemonConfig::$distro->{'APACHE_SITES_DIR'}.'/easyscp-setup.conf');
 
 			// Disable PHP modul
 			if (file_exists(DaemonConfig::$distro->{'APACHE_MODS_DIR'}.'/php.conf')){
@@ -1068,7 +1099,15 @@ function System_cleanup(){
 }
 
 function Setup_Finishing(){
-	//exec(DaemonConfig::$cmd->{'SRV_HTTPD'} . ' restart');
+	System_Daemon::info('Reload EasySCP Controller Config.');
+
+	$ControlConnect = DaemonCommon::ControlConnect('DaemonConfigReload');
+	if ($ControlConnect !== true){
+		return $ControlConnect . ' System is unable to reload EasySCP Controller config.<br />';
+	}
+
+	System_Daemon::info('Restart Web Server.');
+
 	$ControlConnect = DaemonCommon::ControlConnect('ApacheRestart');
 	if ($ControlConnect !== true){
 		return $ControlConnect . ' System is unable to reload Apache config.<br />';

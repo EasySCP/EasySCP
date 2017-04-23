@@ -112,7 +112,13 @@ class DaemonMail {
 			DB::prepare($sql_query);
 			DB::execute($sql_param)->closeCursor();
 
-			exec(DaemonConfig::$cmd->{'SRV_MTA'} . ' reload');
+			switch(DaemonConfig::$cfg->{'DistName'}){
+				case 'CentOS':
+					exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' reload postfix.service', $result, $error);
+					break;
+				default:
+					exec('/etc/init.d/postfix reload', $result, $error);
+			}
 
 			//mail($row['mail_addr'], 'Welcome to EasySCP!', "\nA new EasySCP Mail account has been created for you.\n\nBest wishes with EasySCP!\nThe EasySCP Team.");
 		} else {

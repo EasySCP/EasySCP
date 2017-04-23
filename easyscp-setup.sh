@@ -141,14 +141,14 @@ do
 				esac
 			done
 
-			service httpd restart
-			# /etc/init.d/httpd restart
+			echo "Restarting Web Server"
+			/bin/systemctl restart httpd.service
 
 			echo "Starting EasySCP Controller"
-			/etc/init.d/easyscp_control start > /dev/null
+			/bin/systemctl start easyscp_control.service
 
 			echo "Starting EasySCP Daemon"
-			/etc/init.d/easyscp_daemon start > /dev/null
+			/bin/systemctl start easyscp_daemon.service
 
 			echo ""
 			echo "To finish Setup, please enter 'http://YOUR_DOMAIN/setup' into your Browser"

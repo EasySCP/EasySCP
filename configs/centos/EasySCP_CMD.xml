@@ -53,38 +53,14 @@
 
 	<CMD_SETQUOTA>/usr/sbin/setquota</CMD_SETQUOTA>
 
+	<CMD_SYSTEMCTL>/bin/systemctl</CMD_SYSTEMCTL>
+
 	<CMD_TAR>/bin/tar</CMD_TAR>
 
 	<CMD_USERADD>/usr/sbin/useradd</CMD_USERADD>
 
 	<CMD_USERDEL>/usr/sbin/userdel</CMD_USERDEL>
 
-	<!--
-		System Services
-	-->
-	<SRV_AMAVIS>/etc/init.d/amavisd</SRV_AMAVIS>
-
-	<SRV_CLAMD>/etc/init.d/clamd</SRV_CLAMD>
-
-	<SRV_DNS>/etc/init.d/pdns</SRV_DNS>
-
-	<SRV_DOVECOT>/etc/init.d/dovecot</SRV_DOVECOT>
-
-	<SRV_EASYSCPC>/etc/init.d/easyscp_control</SRV_EASYSCPC>
-
-	<SRV_EASYSCPD>/etc/init.d/easyscp_daemon</SRV_EASYSCPD>
-
-	<SRV_FTPD>/etc/init.d/proftpd</SRV_FTPD>
-
-	<SRV_IPTABLES>service iptables</SRV_IPTABLES>
-
-	<SRV_HTTPD>/etc/init.d/httpd</SRV_HTTPD>
-
-	<SRV_POSTGREY>/etc/init.d/postgrey</SRV_POSTGREY>
-
-	<SRV_POLICYD_WEIGHT>/etc/init.d/policyd-weight</SRV_POLICYD_WEIGHT>
-
-	<SRV_MTA>/etc/init.d/postfix</SRV_MTA>
-
 	<SHELL_INTERNAL_CMDS>alias,umask,unalias</SHELL_INTERNAL_CMDS>
+
 </EasySCP_CMD>

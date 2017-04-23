@@ -251,13 +251,6 @@ class DaemonDomain extends DaemonDomainCommon {
 					return $msg . '<br />' . $retVal;
 				}
 
-				$retVal = self::apacheWriteDisabledSiteConfig($domainData);
-				if ($retVal !== true) {
-					$msg = 'Writing domain configuration failed';
-					System_Daemon::debug($msg);
-					return $msg . '<br />' . $retVal;
-				}
-
 				$retVal = DaemonDNS::AddDefaultDNSEntries($domainData['domain_id']);
 				if ($retVal !== true) {
 					$msg = 'Creating of default domain dns entries failed';
@@ -282,13 +275,6 @@ class DaemonDomain extends DaemonDomainCommon {
 				break;
 			case 'change':
 				$retVal = self::apacheWriteDomainConfig($domainData);
-				if ($retVal !== true) {
-					$msg = 'Writing domain configuration failed';
-					System_Daemon::debug($msg);
-					return $msg . '<br />' . $retVal;
-				}
-
-				$retVal = self::apacheWriteDisabledSiteConfig($domainData);
 				if ($retVal !== true) {
 					$msg = 'Writing domain configuration failed';
 					System_Daemon::debug($msg);
@@ -327,6 +313,14 @@ class DaemonDomain extends DaemonDomainCommon {
 				}
 				break;
 			case 'disable':
+				/**
+				$retVal = self::apacheWriteDisabledSiteConfig($domainData);
+				if ($retVal !== true) {
+				$msg = 'Writing domain configuration failed';
+				System_Daemon::debug($msg);
+				return $msg . '<br />' . $retVal;
+				}
+				 */
 				$retVal = self::apacheDisableSite($domainData['domain_name']);
 				if ($retVal !== true) {
 					$msg = 'Disabling domain failed';
