@@ -14,7 +14,6 @@ export
 install:
 		cd ./apache && $(MAKE) install
 		cd ./init.d && $(MAKE) install
-		cp -pR ./iptables $(SYSTEM_CONF)
 		cd ./systemd && $(MAKE) install
 		cp -pR ./tpl $(SYSTEM_CONF)
 		cp -p ./EasySCP_CMD.xml $(SYSTEM_CONF)
@@ -23,7 +22,6 @@ install:
 uninstall:
 		cd ./apache && $(MAKE) uninstall
 		cd ./init.d && $(MAKE) uninstall
-		rm -rf $(SYSTEM_CONF)/iptables
 		cd ./systemd && $(MAKE) uninstall
 		rm -rf $(SYSTEM_CONF)/tpl
 		rm -rf $(SYSTEM_CONF)/easyscp.conf

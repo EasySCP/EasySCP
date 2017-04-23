@@ -14,6 +14,7 @@ install:
 	cp -pR ./awstats $(SYSTEM_CONF)
 	cp -pR ./database $(SYSTEM_CONF)
 	cp -pR ./dovecot $(SYSTEM_CONF)
+	cp -pR ./iptables $(SYSTEM_CONF)
 	cd ./logrotate && $(MAKE) install
 	cp -pR ./pdns $(SYSTEM_CONF)
 	cp -pR ./php $(SYSTEM_CONF)
@@ -32,6 +33,7 @@ uninstall:
 	rm -rf $(SYSTEM_CONF)/awstats
 	rm -rf $(SYSTEM_CONF)/database
 	rm -rf $(SYSTEM_CONF)/dovecot
+	rm -rf $(SYSTEM_CONF)/iptables
 	cd ./logrotate && $(MAKE) uninstall
 	rm -rf $(SYSTEM_CONF)/pdns
 	rm -rf $(SYSTEM_CONF)/php
