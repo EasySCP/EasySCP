@@ -36,7 +36,6 @@ if ($runmode['help'] == true) {
  
 error_reporting(E_ALL);
 require_once(dirname(__FILE__).'/extlibs/Daemon.php');
-require_once(dirname(__FILE__).'/ControlIPT.php');
 require_once(dirname(__FILE__).'/DaemonCommon.php');
 require_once(dirname(__FILE__).'/DaemonConfig.php');
 require_once(dirname(__FILE__).'/DaemonMaps.php');
@@ -60,8 +59,6 @@ $options = array(
  
 System_Daemon::setOptions($options);
 System_Daemon::start();
-ControlIPT::$logLocation = $options['logLocation'];
-// ControlIPT::Add();
 
 try {
 	SocketHandler::$File = DaemonConfig::$cfg->{'SOCK_EASYSCPC'};
@@ -178,9 +175,6 @@ while (!System_Daemon::isDying() && $runningOkay) {
 
 						$ApacheRestart = 15;
 
-						// System_Daemon::iterate(0.25);
-						// exec(DaemonConfig::$cmd->CMD_HTTPD_CTL . ' graceful 1>&1 2>&1', $result, $error);
-
 						System_Daemon::info('Finished "ApacheCountdown" subprocess.');
 						break;
 					case 'DaemonRestart':
@@ -211,7 +205,7 @@ while (!System_Daemon::isDying() && $runningOkay) {
 }
 SocketHandler::Close();
 System_Daemon::info('Shutting down.');
-// ControlIPT::Remove();
+
 // Shut down the daemon nicely
 System_Daemon::stop();
 ?>
