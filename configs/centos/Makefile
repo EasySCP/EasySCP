@@ -15,7 +15,6 @@ install:
 		cd ./apache && $(MAKE) install
 		cd ./init.d && $(MAKE) install
 		cp -R ./iptables $(SYSTEM_CONF)
-		cp -R ./pdns $(SYSTEM_CONF)
 		cd ./systemd && $(MAKE) install
 		cp -R ./tpl $(SYSTEM_CONF) 
 		cp ./EasySCP_CMD.xml $(SYSTEM_CONF)
@@ -25,7 +24,6 @@ uninstall:
 		cd ./apache && $(MAKE) uninstall
 		cd ./init.d && $(MAKE) uninstall
 		rm -rf $(SYSTEM_CONF)/iptables
-		rm -rf $(SYSTEM_CONF)/pdns
 		cd ./systemd && $(MAKE) uninstall
 		rm -rf $(SYSTEM_CONF)/tpl
 		rm -rf $(SYSTEM_CONF)/easyscp.conf

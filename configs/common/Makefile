@@ -15,6 +15,7 @@ install:
 	cp -pR ./database $(SYSTEM_CONF)
 	cp -pR ./dovecot $(SYSTEM_CONF)
 	cd ./logrotate && $(MAKE) install
+	cp -pR ./pdns $(SYSTEM_CONF)
 	cp -pR ./php $(SYSTEM_CONF)
 	cp -pR ./pma $(SYSTEM_CONF)
 	cp -pR ./postfix $(SYSTEM_CONF)
@@ -32,6 +33,7 @@ uninstall:
 	rm -rf $(SYSTEM_CONF)/database
 	rm -rf $(SYSTEM_CONF)/dovecot
 	cd ./logrotate && $(MAKE) uninstall
+	rm -rf $(SYSTEM_CONF)/pdns
 	rm -rf $(SYSTEM_CONF)/php
 	rm -rf $(SYSTEM_CONF)/pma
 	rm -rf $(SYSTEM_CONF)/postfix
