@@ -165,7 +165,12 @@ function SetupMysqlTest(){
 	catch(PDOException $e){
 		return 'Can´t connect to database. Please check your data and make sure that database is running!';
 	}
-	if ($connectid != '' && !file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DB.php')){
+	if ($connectid != ''){
+		// Backup current EasySCP_Config_DB.php if exists
+		if (file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DB.php')){
+			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DB.php' . ' ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DB.php' . '_' . date("Y_m_d_H_i_s"), $result, $error);
+		}
+
 		if ($sql->{'DB_KEY'} == 'AUTO' || strlen($sql->{'DB_KEY'}) != 32 ){
 			$sql->{'DB_KEY'} = DaemonCommon::generatePassword(32);
 		}
@@ -173,19 +178,19 @@ function SetupMysqlTest(){
 			$sql->{'DB_IV'} = DaemonCommon::generatePassword(8);
 		}
 		if (extension_loaded('mcrypt')) {
-			$td = @mcrypt_module_open(MCRYPT_BLOWFISH, '', MCRYPT_MODE_CBC, '');
-
-			// Initialize encryption
-			@mcrypt_generic_init($td, $sql->{'DB_KEY'}, $sql->{'DB_IV'});
-
-			// Encrypt string
-			$encrypted = @mcrypt_generic($td, $sql->{'DB_PASSWORD'});
-			@mcrypt_generic_deinit($td);
-			@mcrypt_module_close($td);
-
-			$sql->{'DB_PASSWORDENCRYPT'} = @base64_encode($encrypted);
+			$sql->{'DB_PASSWORDENCRYPT'} = trim(base64_encode(mcrypt_encrypt(MCRYPT_BLOWFISH, $sql->{'DB_KEY'}, $sql->{'DB_PASSWORD'}, MCRYPT_MODE_CBC, $sql->{'DB_IV'})));
 		} else {
-			return 'Error: PHP extension "mcrypt" not loaded!';
+			require_once('../gui/include/Crypt/Blowfish.php');
+
+			$cipher = new Crypt_Blowfish();
+			$cipher->disablePadding();
+			$cipher->setKey($sql->{'DB_KEY'});
+			$cipher->setIV($sql->{'DB_IV'});
+
+			$sql->{'DB_PASSWORDENCRYPT'} = base64_encode($cipher->encrypt($sql->{'DB_PASSWORD'}));
+
+			$cipher=null;
+			unset($cipher);
 		}
 
 		$tpl_param = array(
@@ -324,19 +329,19 @@ function EasySCP_main_configuration_file(){
 	DaemonConfig::$cfg->{'DATABASE_HOST'} = $xml->{'DB_HOST'};
 	DaemonConfig::$cfg->{'DATABASE_NAME'} = $xml->{'DB_DATABASE'};
 	if (extension_loaded('mcrypt')) {
-		$td = @mcrypt_module_open(MCRYPT_BLOWFISH, '', MCRYPT_MODE_CBC, '');
-
-		// Initialize encryption
-		@mcrypt_generic_init($td, $xml->{'DB_KEY'}, $xml->{'DB_IV'});
-
-		// Encrypt string
-		$encrypted = @mcrypt_generic($td, $xml->{'DB_PASSWORD'});
-		@mcrypt_generic_deinit($td);
-		@mcrypt_module_close($td);
-
-		DaemonConfig::$cfg->{'DATABASE_PASSWORD'} = @base64_encode($encrypted);
+		DaemonConfig::$cfg->{'DATABASE_PASSWORD'} = trim(base64_encode(mcrypt_encrypt(MCRYPT_BLOWFISH, $xml->{'DB_KEY'}, $xml->{'DB_PASSWORD'}, MCRYPT_MODE_CBC, $xml->{'DB_IV'})));
 	} else {
-		throw new Exception('Error: PHP extension "mcrypt" not loaded!');
+		require_once('../gui/include/Crypt/Blowfish.php');
+
+		$cipher = new Crypt_Blowfish();
+		$cipher->disablePadding();
+		$cipher->setKey($xml->{'DB_KEY'});
+		$cipher->setIV($xml->{'DB_IV'});
+
+		DaemonConfig::$cfg->{'DATABASE_PASSWORD'} = base64_encode($cipher->encrypt($xml->{'DB_PASSWORD'}));
+
+		$cipher=null;
+		unset($cipher);
 	}
 	DaemonConfig::$cfg->{'DATABASE_USER'} = $xml->{'DB_USER'};
 	DaemonConfig::$cfg->{'PHP_TIMEZONE'} = $xml->{'Timezone'};

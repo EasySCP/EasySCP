@@ -200,7 +200,19 @@ class DB extends DB_Config {
 		if (extension_loaded('mcrypt')) {
 			return trim(mcrypt_decrypt(MCRYPT_BLOWFISH, self::$DB_KEY, base64_decode($data), MCRYPT_MODE_CBC, self::$DB_IV));
 		} else {
-			throw new Exception('Error: PHP extension "mcrypt" not loaded!');
+			require_once('Crypt/Blowfish.php');
+
+			$cipher = new Crypt_Blowfish();
+			$cipher->disablePadding();
+			$cipher->setKey(self::$DB_KEY);
+			$cipher->setIV(self::$DB_IV);
+
+			$data = trim($cipher->decrypt(base64_decode($data)));
+
+			$cipher=null;
+			unset($cipher);
+
+			return $data;
 		}
 	}
 
@@ -215,7 +227,19 @@ class DB extends DB_Config {
 		if (extension_loaded('mcrypt')) {
 			return trim(base64_encode(mcrypt_encrypt(MCRYPT_BLOWFISH, self::$DB_KEY, $data, MCRYPT_MODE_CBC, self::$DB_IV)));
 		} else {
-			throw new Exception('Error: PHP extension "mcrypt" not loaded!');
+			require_once('Crypt/Blowfish.php');
+
+			$cipher = new Crypt_Blowfish();
+			$cipher->disablePadding();
+			$cipher->setKey(self::$DB_KEY);
+			$cipher->setIV(self::$DB_IV);
+
+			$data = trim(base64_encode($cipher->encrypt($data)));
+
+			$cipher=null;
+			unset($cipher);
+
+			return $data;
 		}
 	}
 
