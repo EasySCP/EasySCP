@@ -106,7 +106,7 @@ class EasySCP_TemplateEngine {
 	 * @param String $dir The new EasySCP_TemplateEngine template dir
 	 */
 	public function set_template_dir($dir) {
-		$this->template_engine->setTemplateDir($dir);
+		$this->template_engine->setTemplateDir(array('EasySCP' => $dir));
 	}
 
 	/**

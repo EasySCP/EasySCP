@@ -80,6 +80,9 @@ class EasySCP_Exception extends Exception {
 	 */
 	protected static function write() {
 		if(!is_null(self::$EasySCP_TemplateEngine)) {
+			if(!file_exists(self::$EasySCP_TemplateEngine->get_template_dir() . 'exception_message.tpl')) {
+				self::$EasySCP_TemplateEngine->set_template_dir(EasyConfig::$cfg->{'GUI_ROOT_DIR'} . '/themes/default/');
+			}
 			self::$EasySCP_TemplateEngine->display('exception_message.tpl');
 		} else {
 			echo self::$exceptionMessage;
