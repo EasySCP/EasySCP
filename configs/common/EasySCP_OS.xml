@@ -38,11 +38,6 @@
 
 	<Dist Name="Ubuntu">
 		<OS>
-			<Name>Ubuntu 12.04 (Precise) LTS</Name>
-			<DistName>Ubuntu</DistName>
-			<DistVersion>12.04</DistVersion>
-		</OS>
-		<OS>
 			<Name>Ubuntu 14.04 (Trusty) LTS</Name>
 			<DistName>Ubuntu</DistName>
 			<DistVersion>14.04</DistVersion>

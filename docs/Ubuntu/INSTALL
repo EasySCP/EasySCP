@@ -23,11 +23,11 @@ Table of Content
 ================================================================================
 1) Version Info
 ---------------
-EasySCP Version: 	2.0.0
+EasySCP Version: 	2.1.0
 INSTALL Script:		1.00
 Maintainer:			Markus Szywon
 Homepage:			http://www.easyscp.net
-Linux Distros:		Ubuntu Server 12.04 LTS / Ubuntu Server 14.04 LTS / Ubuntu Server 16.04 LTS
+Linux Distros:		Ubuntu Server 14.04 LTS / Ubuntu Server 16.04 LTS
 
 ================================================================================
 2) Requirements
@@ -39,7 +39,6 @@ Pentium III or K6-4 with 500 MHz
 100 MB disk space (only for install of EasySCP)
 Debian (or even any other *NIX-Distribution)
 
-All required packages for "Ubuntu 12.04 LTS" are listed in "./docs/ubuntu-packages-1204"
 All required packages for "Ubuntu 14.04 LTS" are listed in "./docs/ubuntu-packages-1404"
 All required packages for "Ubuntu 16.04 LTS" are listed in "./docs/ubuntu-packages-1604"
 
@@ -76,8 +75,6 @@ provides graphic user interfaces for the administrators, resellers and users.
 
 	Install all required packages:
 
-	# sudo apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-1204)
-	or
 	# sudo apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-1404)
 	or
    	# sudo apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-1604)
@@ -88,7 +85,7 @@ provides graphic user interfaces for the administrators, resellers and users.
 		If you've set debian up correctly on install your domain should be already shown.
 	If you get to the 'Configuring pdns-backend-mysql' screen about database configuration, select 'no'.
 
-4.	Enable php modul mcrypt (only needed on Ubuntu 14.04)
+4.	Enable php modul mcrypt
 
 	# php5enmod mcrypt
 

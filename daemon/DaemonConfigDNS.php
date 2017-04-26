@@ -103,7 +103,6 @@ class DaemonConfigDNS {
 
 				break;
 			case 'Debian_7':
-			case 'Ubuntu_12.04':
 				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/pdns.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf', $result, $error);
 
 				$tpl = DaemonCommon::getTemplate($tpl_param);

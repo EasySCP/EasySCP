@@ -372,9 +372,9 @@ function getOS($xml){
 			} elseif(strpos($temp, 'VERSION_ID="8"') !== false){
 				// Debian 8
 				$select = base64_encode('{"DistName":"Debian","DistVersion":"8"}');
-			} elseif(strpos($temp, 'VERSION_ID="12.04"')  !== false){
-				// Ubuntu 12.04
-				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"12.04"}');
+			} elseif(strpos($temp, 'VERSION_ID="9"') !== false){
+				// Debian 9
+				$select = base64_encode('{"DistName":"Debian","DistVersion":"9"}');
 			} elseif(strpos($temp, 'VERSION_ID="14.04"')  !== false){
 				// Ubuntu 14.04
 				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"14.04"}');
