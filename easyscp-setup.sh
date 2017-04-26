@@ -171,7 +171,7 @@ do
 
 			while :
 			do
-				read -p "Secure your mysql installation [Y/N]?" MySQL
+				read -p "Secure your MariaDB/MySQL installation [Y/N]?" MySQL
 				case "$MySQL" in
 					[JjYy])
 						#echo "ja"

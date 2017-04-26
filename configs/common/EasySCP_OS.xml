@@ -29,21 +29,26 @@
 			<DistName>Debian</DistName>
 			<DistVersion>8</DistVersion>
 		</OS>
+		<OS>
+			<Name>Debian GNU/Linux 9 (Stretch)</Name>
+			<DistName>Debian</DistName>
+			<DistVersion>9</DistVersion>
+		</OS>
 	</Dist>
 
 	<Dist Name="Ubuntu">
 		<OS>
-			<Name>Ubuntu 12.04 LTS</Name>
+			<Name>Ubuntu 12.04 (Precise) LTS</Name>
 			<DistName>Ubuntu</DistName>
 			<DistVersion>12.04</DistVersion>
 		</OS>
 		<OS>
-			<Name>Ubuntu 14.04 LTS</Name>
+			<Name>Ubuntu 14.04 (Trusty) LTS</Name>
 			<DistName>Ubuntu</DistName>
 			<DistVersion>14.04</DistVersion>
 		</OS>
 		<OS>
-			<Name>Ubuntu 16.04 LTS</Name>
+			<Name>Ubuntu 16.04 (Xenial) LTS</Name>
 			<DistName>Ubuntu</DistName>
 			<DistVersion>16.04</DistVersion>
 		</OS>

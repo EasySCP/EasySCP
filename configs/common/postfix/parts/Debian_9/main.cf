@@ -1,0 +1,124 @@
+# EasySCP a Virtual Hosting Control Panel
+# Copyright (C) 2010-2017 by Easy Server Control Panel - http://www.easyscp.net
+#
+# This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+# To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+#
+# @link 		http://www.easyscp.net
+# @author 		EasySCP Team
+
+# Postfix directory settings; These are critical for normal Postfix MTA functionallity
+command_directory            = /usr/sbin
+daemon_directory             = /usr/lib/postfix/sbin
+
+# Some common configuration parameters
+inet_interfaces              = all
+mynetworks_style             = host
+
+myhostname                   = {$MTA_HOSTNAME}
+mydomain                     = {$MTA_LOCAL_DOMAIN}
+myorigin                     = $myhostname
+
+smtpd_banner                 = $myhostname ESMTP EasySCP {$MTA_VERSION} Managed
+setgid_group                 = postdrop
+
+# Receiving messages parameters
+mydestination                = $myhostname, $mydomain
+append_dot_mydomain          = no
+append_at_myorigin           = yes
+local_transport              = local
+virtual_transport            = lmtp:unix:private/dovecot-lmtp
+transport_maps               = proxy:{$MTA_TRANSPORT}
+alias_maps                   = hash:{$MTA_LOCAL_ALIAS_HASH}
+alias_database               = hash:{$MTA_LOCAL_ALIAS_HASH}
+
+# Delivering local messages parameters
+mail_spool_directory         = {$MTA_LOCAL_MAIL_DIR}
+
+# Mailboxquota
+# => 0 for unlimited
+# => 104857600 for 100 MB
+mailbox_size_limit           = 0
+mailbox_command              = procmail -a "$EXTENSION"
+
+# Message size limit
+# => 0 for unlimited
+# => 104857600 for 100 MB
+message_size_limit           = 0
+
+biff                         = no
+recipient_delimiter          = +
+
+local_destination_recipient_limit = 1
+local_recipient_maps         = unix:passwd.byname $alias_database
+
+# Delivering virtual messages parameters
+virtual_mailbox_base         = {$MTA_VIRTUAL_MAIL_DIR}
+virtual_mailbox_limit        = 0
+
+virtual_mailbox_domains      = proxy:{$MTA_VIRTUAL_DMN}
+virtual_mailbox_maps         = proxy:{$MTA_VIRTUAL_MAILBOX}
+
+virtual_alias_maps           = proxy:{$MTA_VIRTUAL_ALIAS}
+
+virtual_minimum_uid          = {$MTA_MAILBOX_MIN_UID}
+virtual_uid_maps             = static:{$MTA_MAILBOX_UID}
+virtual_gid_maps             = static:{$MTA_MAILBOX_GID}
+
+# SASL paramters
+smtpd_sasl_auth_enable       = yes
+smtpd_sasl_type              = dovecot
+smtpd_sasl_path              = private/auth
+smtpd_sasl_security_options  = noanonymous
+smtpd_sasl_local_domain      = $mydomain
+broken_sasl_auth_clients     = yes
+
+smtpd_helo_required          = yes
+
+smtpd_helo_restrictions      = permit_mynetworks,
+                               permit_sasl_authenticated,
+                               reject_invalid_helo_hostname,
+                               reject_non_fqdn_helo_hostname
+
+smtpd_sender_restrictions    = permit_mynetworks,
+                               permit_sasl_authenticated,
+                               reject_non_fqdn_sender,
+                               reject_unknown_sender_domain
+
+smtpd_recipient_restrictions = permit_mynetworks,
+                               permit_sasl_authenticated,
+                               reject_non_fqdn_recipient,
+                               reject_unknown_recipient_domain,
+                               reject_unauth_destination,
+                               reject_unlisted_recipient,
+                               check_policy_service inet:127.0.0.1:12525,
+                               check_policy_service inet:127.0.0.1:{$PORT_POSTGREY},
+                               permit
+
+smtpd_data_restrictions      = reject_multi_recipient_bounce,
+                               reject_unauth_pipelining
+
+{if isset($MTA_SSL) && $MTA_SSL == true}
+# TLS parameters; activate, if avaible/used
+smtpd_tls_security_level      = may
+smtpd_tls_loglevel            = 2
+smtpd_tls_cert_file           = /etc/ssl/certs/ssl-cert-snakeoil.pem
+smtpd_tls_key_file            = /etc/ssl/private/ssl-cert-snakeoil.key
+smtpd_tls_auth_only           = no
+smtpd_tls_received_header     = yes
+smtp_tls_mandatory_protocols  = !SSLv2 !SSLv3
+smtpd_tls_mandatory_protocols = !SSLv2 !SSLv3
+smtp_tls_protocols            = !SSLv2 !SSLv3
+smtpd_tls_protocols           = !SSLv2 !SSLv3
+{/if}
+
+# AMaViS parameters; activate, if available/used
+#content_filter               = amavis:[127.0.0.1]:10024
+
+# Quota support; activate, if available/used
+#virtual_create_maildirsize     = yes
+#virtual_mailbox_extended       = yes
+#virtual_mailbox_limit_maps     = mysql:/etc/postfix/mysql_virtual_mailbox_limit_maps.cf
+#virtual_mailbox_limit_override = yes
+#virtual_maildir_limit_message  = "The user you're trying to reach is over mailbox quota."
+#virtual_overquota_bounce       = yes

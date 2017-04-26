@@ -8,6 +8,8 @@
 
 	@link 		http://www.easyscp.net
 	@author		EasySCP Team
+
+	Debian GNU/Linux 8 (Jessie)
 -->
 <EasySCP_Distro>
 	<!--
@@ -43,11 +45,17 @@
 	<DOVECOT_CONF_DIR>/etc/dovecot</DOVECOT_CONF_DIR>
 
 	<!--
+		Lighttpd data
+	-->
+	<LIGHTTPD_CONF_DIR>/etc/lighttpd</LIGHTTPD_CONF_DIR>
+
+	<!--
 		PHP data
 	-->
 	<PEAR_DIR>/usr/share/php</PEAR_DIR>
-	<PHP_FASTCGI_BIN>/usr/bin/php-cgi</PHP_FASTCGI_BIN>
+	<PHP_FASTCGI_BIN>/usr/bin/php5-cgi</PHP_FASTCGI_BIN>
 	<PHP_STARTER_DIR>/var/www/fcgi</PHP_STARTER_DIR>
+	<PHP_FPM_POOL_DIR>/etc/php5/fpm/pool.d</PHP_FPM_POOL_DIR>
 
 	<!--
 		Postfix MTA data

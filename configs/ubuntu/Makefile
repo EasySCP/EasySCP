@@ -11,13 +11,15 @@
 
 export
 
+OS := $(shell lsb_release -sc)
+
 install:
 		cd ./apache && $(MAKE) install
 		cd ./init.d && $(MAKE) install
 		cd ./systemd && $(MAKE) install
 		cp -pR ./tpl $(SYSTEM_CONF)
-		cp -p ./EasySCP_CMD.xml $(SYSTEM_CONF)
-		cp -p ./EasySCP_Distro.xml $(SYSTEM_CONF)
+		cp -p ./EasySCP_CMD_$(OS).xml $(SYSTEM_CONF)/EasySCP_CMD.xml
+		cp -p ./EasySCP_Distro_$(OS).xml $(SYSTEM_CONF)/EasySCP_Distro.xml
 
 uninstall:
 		cd ./apache && $(MAKE) uninstall

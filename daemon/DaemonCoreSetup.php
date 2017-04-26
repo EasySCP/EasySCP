@@ -745,23 +745,23 @@ function EasySCP_init_scripts(){
 	DaemonCommon::systemSetFilePermissions('/etc/init.d/easyscp_control', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
 	DaemonCommon::systemSetFilePermissions('/etc/init.d/easyscp_daemon', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0755);
 
-	switch(DaemonConfig::$cfg->{'DistName'}){
-		case 'CentOS':
+	switch(DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'}){
+		case 'CentOS_7':
 			exec('/sbin/chkconfig easyscp_control on', $result, $error);
 			exec('/sbin/chkconfig easyscp_daemon on', $result, $error);
 
 			break;
+		case 'Debian_8':
+		case 'Debian_9':
+			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' enable easyscp_control', $result, $error);
+			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' enable easyscp_daemon', $result, $error);
+			break;
 		default:
-			if (DaemonConfig::$cfg->{'DistName'} == 'Debian' && DaemonConfig::$cfg->{'DistVersion'} == '8' ){
-				exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' enable easyscp_control', $result, $error);
-				exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' enable easyscp_daemon', $result, $error);
-			} else {
-				exec('/usr/sbin/update-rc.d -f easyscp_control remove', $result, $error);
-				exec('/usr/sbin/update-rc.d -f easyscp_daemon remove', $result, $error);
+			exec('/usr/sbin/update-rc.d -f easyscp_control remove', $result, $error);
+			exec('/usr/sbin/update-rc.d -f easyscp_daemon remove', $result, $error);
 
-				exec('/usr/sbin/update-rc.d easyscp_control defaults 99', $result, $error);
-				exec('/usr/sbin/update-rc.d easyscp_daemon defaults 99', $result, $error);
-			}
+			exec('/usr/sbin/update-rc.d easyscp_control defaults 99', $result, $error);
+			exec('/usr/sbin/update-rc.d easyscp_daemon defaults 99', $result, $error);
 	}
 
 	return 'Ok';
@@ -972,6 +972,7 @@ function Set_gui_permissions(){
 			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' restart ip6tables', $result, $error);
 			break;
 		case 'Debian_8':
+		case 'Debian_9':
 			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . $iptables_path . '/rules.v4 /etc/iptables/rules.v4', $result, $error);
 			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . $iptables_path . '/rules.v6 /etc/iptables/rules.v6', $result, $error);
 

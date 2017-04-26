@@ -102,80 +102,8 @@ class DaemonConfigDNS {
 				}
 
 				break;
-			case 'Debian_8':
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/pdns.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf', $result, $error);
-
-				$tpl = DaemonCommon::getTemplate($tpl_param);
-				$config = $tpl->fetch('pdns/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/pdns.local.gmysql.conf');
-				$confFile = DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf';
-				$tpl = NULL;
-				unset($tpl);
-
-				if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640 )){
-					return 'Error: Failed to write ' . $confFile;
-				}
-
-				// Installing the new file
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf ' . DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.local.gmysql.conf', $result, $error);
-
-				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
-					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
-				}
-
-				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf')) {
-					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf');
-				}
-
-				break;
-			case 'Ubuntu_14.04':
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/pdns.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf', $result, $error);
-
-				$tpl = DaemonCommon::getTemplate($tpl_param);
-				$config = $tpl->fetch('pdns/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/pdns.local.gmysql.conf');
-				$confFile = DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf';
-				$tpl = NULL;
-				unset($tpl);
-
-				if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640 )){
-					return 'Error: Failed to write ' . $confFile;
-				}
-
-				// Installing the new file
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf ' . DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.local.gmysql.conf', $result, $error);
-
-				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
-					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
-				}
-
-				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf')) {
-					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf');
-				}
-				break;
-			case 'Ubuntu_16.04':
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/pdns.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf', $result, $error);
-
-				$tpl = DaemonCommon::getTemplate($tpl_param);
-				$config = $tpl->fetch('pdns/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/pdns.local.gmysql.conf');
-				$confFile = DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf';
-				$tpl = NULL;
-				unset($tpl);
-
-				if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640 )){
-					return 'Error: Failed to write ' . $confFile;
-				}
-
-				// Installing the new file
-				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf ' . DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.local.gmysql.conf', $result, $error);
-
-				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
-					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
-				}
-
-				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf')) {
-					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf');
-				}
-				break;
-			default:
+			case 'Debian_7':
+			case 'Ubuntu_12.04':
 				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/pdns.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf', $result, $error);
 
 				$tpl = DaemonCommon::getTemplate($tpl_param);
@@ -194,10 +122,35 @@ class DaemonConfigDNS {
 				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
 					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
 				}
+
 				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind')) {
 					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind');
 				}
 
+				break;
+			default:
+				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/pdns.conf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.conf', $result, $error);
+
+				$tpl = DaemonCommon::getTemplate($tpl_param);
+				$config = $tpl->fetch('pdns/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/pdns.local.gmysql.conf');
+				$confFile = DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf';
+				$tpl = NULL;
+				unset($tpl);
+
+				if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640 )){
+					return 'Error: Failed to write ' . $confFile;
+				}
+
+				// Installing the new file
+				exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/pdns/working/pdns.local.gmysql.conf ' . DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.local.gmysql.conf', $result, $error);
+
+				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf')) {
+					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/../bindbackend.conf');
+				}
+
+				if(file_exists(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf')) {
+					unlink(DaemonConfig::$distro->{'PDNS_DB_DIR'} . '/pdns.simplebind.conf');
+				}
 		}
 
 		// Backup current pdns.conf if exists
