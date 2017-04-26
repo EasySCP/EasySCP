@@ -1,5 +1,6 @@
 bash
 bzip2
+dovecot
 dovecot-mysql
 gamin
 glibc-common
@@ -7,12 +8,14 @@ gzip
 httpd
 httpd-tools
 iptables
+iptables-services
 lzma
 make
 mariadb-server
 mc
 mod_fcgid
 mod_ssl
+pdns
 pdns-backend-mysql
 php
 php-bcmath
@@ -34,6 +37,7 @@ php-xml
 postfix
 postgrey
 procmail
+proftpd
 proftpd-mysql
 rkhunter
 tar
