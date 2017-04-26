@@ -110,8 +110,6 @@ $tpl->assign(
 		'DOMAIN_ALS_URL' 	=> 'http://' . $cfg->APACHE_SUEXEC_USER_PREF . $dmn_props['domain_uid'] . '.' . $cfg->BASE_SERVER_VHOST,
 		'MAIN_DOMAIN'		=> tohtml($dmn_props['domain_name']),
 		'DMN_EXPIRES_DATE'	=> $dmn_expires_date,
-		//'MYSQL_SUPPORT'		=> ($dmn_props['domain_sqld_limit'] != -1 && $dmn_props['domain_sqlu_limit'] != -1) ? tr('Yes') . ' / MySQL ' . substr($sql->getAttribute(PDO::ATTR_SERVER_VERSION), 0, strpos($sql->getAttribute(PDO::ATTR_SERVER_VERSION), '-')) : tr('No'),
-		'MYSQL_SUPPORT'		=> ($dmn_props['domain_sqld_limit'] != -1 && $dmn_props['domain_sqlu_limit'] != -1) ? tr('Yes') . ' / MySQL ' . DB::getInstance()->getAttribute(PDO::ATTR_SERVER_VERSION) : tr('No'),
 		'SUBDOMAINS'		=> gen_num_limit_msg($sub_cnt, $dmn_props['domain_subd_limit']),
 		'DOMAIN_ALIASES'	=> gen_num_limit_msg($als_cnt, $dmn_props['domain_alias_limit']),
 		'MAIL_ACCOUNTS'		=> gen_num_limit_msg($mail_acc_cnt, $dmn_props['domain_mailacc_limit']),
@@ -120,6 +118,14 @@ $tpl->assign(
 		'SQL_USERS'			=> gen_num_limit_msg($sqlu_acc_cnt, $dmn_props['domain_sqlu_limit'])
 	)
 );
+
+switch(EasyConfig::$cfg->{'DistName'}) {
+	case 'CentOS':
+		$tpl->assign('MYSQL_SUPPORT', ($dmn_props['domain_sqld_limit'] != -1 && $dmn_props['domain_sqlu_limit'] != -1) ? tr('Yes') . ' / MariaDB ' . substr(DB::getInstance()->getAttribute(PDO::ATTR_SERVER_VERSION), 0, strpos(DB::getInstance()->getAttribute(PDO::ATTR_SERVER_VERSION), '-')) : tr('No')	);
+		break;
+	default:
+		$tpl->assign('MYSQL_SUPPORT', ($dmn_props['domain_sqld_limit'] != -1 && $dmn_props['domain_sqlu_limit'] != -1) ? tr('Yes') . ' / MySQL ' . DB::getInstance()->getAttribute(PDO::ATTR_SERVER_VERSION) : tr('No')	);
+}
 
 // static page messages.
 gen_logged_from($tpl);
@@ -324,7 +330,13 @@ function check_user_permissions($tpl, $dmn_sqld_limit, $dmn_sqlu_limit, $dmn_php
 
 	// check if PHP Support is available for this user
 	if ($dmn_php == 'yes') {
-		$tpl->assign( array('PHP_SUPPORT' => tr('Yes') . ' / PHP ' . substr(PHP_VERSION, 0, strpos(PHP_VERSION, '-'))));
+		switch(EasyConfig::$cfg->{'DistName'}) {
+			case 'CentOS':
+				$tpl->assign( array('PHP_SUPPORT' => tr('Yes') . ' / PHP ' . PHP_VERSION));
+				break;
+			default:
+				$tpl->assign( array('PHP_SUPPORT' => tr('Yes') . ' / PHP ' . substr(PHP_VERSION, 0, strpos(PHP_VERSION, '-'))));
+		}
 	}
 
 	// check if CGI Support is available for this user
