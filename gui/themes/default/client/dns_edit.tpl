@@ -19,9 +19,7 @@
 	}
 
 	function dns_show_rows(arr_show) {
-		var arr_possible = new Array('name', 'ip_address', 'ip_address_v6',
-				'srv_name', 'srv_protocol', 'srv_ttl', 'srv_prio',
-				'srv_weight', 'srv_host', 'srv_port', 'cname', 'ns');
+		var arr_possible = ['cname', 'ip_address', 'ip_address_v6', 'name', 'ns', 'plain', 'srv_host', 'srv_name', 'srv_prio', 'srv_port', 'srv_protocol', 'srv_ttl', 'srv_weight'];
 		var n = arr_possible.length;
 		var trname;
 		for (var i = 0; i < n; i++) {
@@ -40,19 +38,28 @@
 	}
 
 	function dns_type_changed(value) {
-		if (value == 'A') {
-			dns_show_rows(new Array('name', 'ip_address'));
-		} else if (value == 'AAAA') {
-			dns_show_rows(new Array('name', 'ip_address_v6'));
-		} else if (value == 'SRV') {
-			dns_show_rows(new Array('srv_name', 'srv_protocol', 'srv_ttl',
-					'srv_prio', 'srv_weight', 'srv_host', 'srv_port'));
-		} else if (value == 'CNAME') {
-			dns_show_rows(new Array('name', 'cname'));
-		} else if (value == 'MX') {
-			dns_show_rows(new Array('srv_prio', 'srv_host'));
-		} else if (value == 'NS') {
-			dns_show_rows(new Array('ns'));
+		switch (value){
+			case 'A':
+				dns_show_rows(['name', 'ip_address']);
+				break;
+			case 'AAAA':
+				dns_show_rows(['name', 'ip_address_v6']);
+				break;
+			case 'CNAME':
+				dns_show_rows(['name', 'cname']);
+				break;
+			case 'MX':
+				dns_show_rows(['srv_prio', 'srv_host']);
+				break;
+			case 'NS':
+				dns_show_rows(['ns']);
+				break;
+			case 'SRV':
+				dns_show_rows(['srv_name', 'srv_protocol', 'srv_ttl', 'srv_prio', 'srv_weight', 'srv_host', 'srv_port']);
+				break;
+			case 'TXT':
+				dns_show_rows(['plain']);
+				break;
 		}
 	}
 
@@ -155,6 +162,10 @@
 		<tr id="tr_dns_ns">
 			<td>{$TR_DNS_NS}</td>
 			<td><input type="text" name="dns_ns" value="{$DNS_NS_HOSTNAME}" />.</td>
+		</tr>
+		<tr id="tr_dns_plain">
+			<td>{$TR_DNS_PLAIN}</td>
+			<td><input type="text" name="dns_plain_data" value="{$DNS_PLAIN}" size="60"/></td>
 		</tr>
 	</table>
 	<div class="buttons">

@@ -21,8 +21,6 @@
  * @author 		EasySCP Team
  */
 
-ini_set('display_errors', '1');
-error_reporting(E_ALL);
 require_once '../../include/easyscp-lib.php';
 require_once '../../include/Net/DNS2.php';
 
@@ -146,10 +144,9 @@ function not_allowed() {
 function decode_zone_data($data) {
 
 	$address = $addressv6 = $srv_name = $srv_proto = $cname = $txt = $name = '';
-	$srv_TTL = $srv_prio = $srv_weight = $srv_host = $srv_port = $ns = '';
+	$srv_TTL = $srv_prio = $srv_weight = $srv_host = $srv_port = $ns = $plain = '';
 
 	if (is_array($data)) {
-		//$name = $data['domain_dns'];
 		$name = $data['name'];
 		switch ($data['type']) {
 			case 'A':
@@ -160,6 +157,11 @@ function decode_zone_data($data) {
 				break;
 			case 'CNAME':
 				$cname = $data['content'];
+				break;
+			case 'MX':
+				$name = '';
+				$srv_prio = $data['prio'];
+				$srv_host = $data['content'];
 				break;
 			case 'NS':
 				$ns = $data['content'];
@@ -178,14 +180,9 @@ function decode_zone_data($data) {
 					$srv_host = $srv[4];
 				}
 				break;
-			case 'MX':
-				$name = '';
-				$srv_prio = $data['prio'];
-				$srv_host = $data['content'];
-				break;
 			case 'TXT':
 				$name = '';
-				// @todo implement
+				$plain = $data['content'];
 				break;
 			default:
 				$txt = $data['domain_text'];
@@ -193,7 +190,7 @@ function decode_zone_data($data) {
 	}
 	return array(
 		$name, $address, $addressv6, $srv_name, $srv_proto, $srv_TTL, $srv_prio,
-		$srv_weight, $srv_host, $srv_port, $cname, $txt, $ns
+		$srv_weight, $srv_host, $srv_port, $cname, $txt, $ns, $plain
 	);
 }
 
@@ -208,7 +205,7 @@ function gen_editdns_page($tpl, $edit_id, $add_mode) {
 	$cfg = EasySCP_Registry::get('Config');
 	$sql = EasySCP_Registry::get('Db');
 
-	$DNS_allowed_types = array('A', 'AAAA', 'CNAME', 'MX', 'SRV', 'NS');
+	$DNS_allowed_types = array('A', 'AAAA', 'CNAME', 'MX', 'NS', 'SRV', 'TXT');
 
 	$dmn_props = get_domain_default_props($_SESSION['user_id']);
 
@@ -281,7 +278,7 @@ function gen_editdns_page($tpl, $edit_id, $add_mode) {
 	
 	list(
 		$name, $address, $addressv6, $srv_name, $srv_proto, $srv_ttl, $srv_prio,
-		$srv_weight, $srv_host, $srv_port, $cname, $plain, $ns
+		$srv_weight, $srv_host, $srv_port, $cname, $txt, $ns, $plain
 	) = decode_zone_data($data);
 
 	// Protection against edition (eg. for external mail MX record)
@@ -482,6 +479,15 @@ function validate_NAME($domain, &$err) {
 	return true;
 }
 
+function validate_TXT($record, &$err = null) {
+	if (empty($record['dns_plain_data'])) {
+		$err .= tr('Text must be filled.');
+		return false;
+	}
+
+	return true;
+}
+
 /**
  * @throws EasySCP_Exception_Database
  * @param int $edit_id
@@ -575,13 +581,6 @@ function check_fwd_data($edit_id) {
 	$_dns_srv_prio = null;
 
 	switch ($_POST['type']) {
-		case 'CNAME':
-			if (!validate_CNAME($_POST, $err)) {
-				$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
-			}
-			$_text = $_POST['dns_cname'];
-			$_dns = $_POST['dns_name'];
-			break;
 		case 'A':
 			if (!validate_A($_POST, $err)) {
 				$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
@@ -603,10 +602,12 @@ function check_fwd_data($edit_id) {
 			$_text = $_POST['dns_AAAA_address'];
 			$_dns = $_POST['dns_name'];
 			break;
-		case 'SRV':
-			if (!validate_SRV($_POST, $err, $_dns, $_text)) {
+		case 'CNAME':
+			if (!validate_CNAME($_POST, $err)) {
 				$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
 			}
+			$_text = $_POST['dns_cname'];
+			$_dns = $_POST['dns_name'];
 			break;
 		case 'MX':
 			if (!validate_MX($_POST, $err, $_dns_srv_prio, $_text)) {
@@ -625,6 +626,11 @@ function check_fwd_data($edit_id) {
 			break;
 		case 'SOA':
 			$_ttl = '3600';
+			break;
+		case 'SRV':
+			if (!validate_SRV($_POST, $err, $_dns, $_text)) {
+				$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
+			}
 			break;
 		default :
 			$ed_error = sprintf(tr('Unknown zone type %s!'), $_POST['type']);

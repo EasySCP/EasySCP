@@ -37,45 +37,6 @@ if (isset($_GET['edit_id']) && !empty($_GET['edit_id'])) {
 	}
 
 	$sql_param = array(
-		'domain_id' => $dmn_id,
-	);
-
-	$sql_query = "
-		SELECT
-			id, name
-		FROM
-			powerdns.domains
-		WHERE
-			easyscp_domain_id = :domain_id
-	";
-
-	DB::prepare($sql_query);
-	$data = DB::execute($sql_param, true);
-
-	$sql_param = array(
-		'domain_content'	=> 'ns1.' . $data['domain_name'] . '. ' . EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
-		'domain_id'			=> $data['id'],
-		'domain_name'		=> $data['name'],
-		'domain_type'		=> 'SOA'
-	);
-	
-	$sql_query = "
-		UPDATE
-			powerdns.records
-		SET
-			content = :domain_content
-		WHERE
-			domain_id = :domain_id
-		AND
-			name = :domain_name
-		AND
-			type = :domain_type;
-		";
-
-	DB::prepare($sql_query);
-	DB::execute($sql_param);
-
-	$sql_param = array(
 		'record_id' => $_GET['edit_id'],
 	);
 	
@@ -91,26 +52,64 @@ if (isset($_GET['edit_id']) && !empty($_GET['edit_id'])) {
 	
 	DB::prepare($sql_query);
 	$row = DB::execute($sql_param, true);
-	if ($row['protected']==1) {
+	if ($row['protected'] == 1) {
 		set_page_message(
 			tr('You are not allowed to remove this DNS record!'),
 			'error'
 		);
 		user_goto('dns_overview.php');
-	}
-	
-	$sql_query = "
-		DELETE FROM
-			`powerdns`.`records`
-		WHERE
-			`id` = :record_id
-	";
-	
+	} else {
+		$sql_param = array(
+				'domain_id' => $dmn_id,
+		);
 
-	DB::prepare($sql_query);
-	if (DB::execute($sql_param)) {
-		set_page_message(tr('Custom DNS record scheduled for deletion!'), 'success');
-		user_goto('dns_overview.php');
+		$sql_query = "
+			SELECT
+				id, name
+			FROM
+				powerdns.domains
+			WHERE
+				easyscp_domain_id = :domain_id;
+		";
+
+		DB::prepare($sql_query);
+		$data = DB::execute($sql_param, true);
+
+		$sql_param = array(
+			'domain_content'	=> 'ns1.' . $data['domain_name'] . '. ' . EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
+			'domain_id'			=> $data['id'],
+			'domain_name'		=> $data['name'],
+			'domain_type'		=> 'SOA'
+		);
+
+		$sql_query = "
+			UPDATE
+				powerdns.records
+			SET
+				content = :domain_content
+			WHERE
+				domain_id = :domain_id
+			AND
+				name = :domain_name
+			AND
+				type = :domain_type;
+		";
+
+		DB::prepare($sql_query);
+		DB::execute($sql_param);
+
+		$sql_query = "
+			DELETE FROM
+				`powerdns`.`records`
+			WHERE
+				`id` = :record_id;
+		";
+
+		DB::prepare($sql_query);
+		if (DB::execute($sql_param)) {
+			set_page_message(tr('Custom DNS record scheduled for deletion!'), 'success');
+			user_goto('dns_overview.php');
+		}
 	}
 }
 
