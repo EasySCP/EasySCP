@@ -118,6 +118,17 @@ class DaemonConfigCommon {
 				System_Daemon::debug('Finished "DNS" subprocess.');
 
 				break;
+			case 'EasyConfig':
+				System_Daemon::debug('Starting "EasyConfig" subprocess.');
+
+				$SaveEasyConfig = DaemonConfig::Rebuild();
+				if ($SaveEasyConfig !== true){
+					return $SaveEasyConfig;
+				}
+
+				System_Daemon::debug('Finished "EasyConfig" subprocess.');
+
+				break;
 			case 'FTP':
 				System_Daemon::debug('Starting "FTP" subprocess.');
 

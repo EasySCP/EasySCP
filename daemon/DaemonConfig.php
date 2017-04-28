@@ -19,21 +19,50 @@ class DaemonConfig {
 	static $cmd;
 	static $distro;
 
+	public static function Rebuild(){
+		$xml_new = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config.xml');
+
+		foreach ($xml_new->children() as $child){
+			$temp = $child->getName();
+			if (isset(self::$cfg->$temp)){
+				$xml_new->$temp = self::$cfg->$temp;
+			}
+		}
+
+		$xml_new->{'BuildDate'} = file_get_contents(DaemonConfig::$cfg->{'CONF_DIR'} . '/BUILD');
+		$xml_new->{'Version'} = file_get_contents(DaemonConfig::$cfg->{'CONF_DIR'} . '/VERSION');
+
+		$handle = fopen(EasyConfig_PATH . '/EasySCP_Config_new.xml', "wb");
+		fwrite($handle, $xml_new->asXML());
+		fclose($handle);
+
+		$handle = NULL;
+		unset($handle);
+
+		return true;
+	}
+
 	public static function Reload(){
 		// unset(self::$cfg);
 		self::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
 	}
 
 	public static function Save(){
+		System_Daemon::debug('Starting "DaemonConfig::Save" subprocess.');
+
 		$handle = fopen(EasyConfig_PATH . '/EasySCP_Config.xml', "wb");
 		fwrite($handle, self::$cfg->asXML());
 		fclose($handle);
 
 		$handle = NULL;
 		unset($handle);
+
+		System_Daemon::debug('Finished "DaemonConfig::Save" subprocess.');
 	}
 
 	public static function SaveOldConfig(){
+		System_Daemon::debug('Starting "DaemonConfig::SaveOldConfig" subprocess.');
+
 		$tpl_param = array(
 			'BuildDate'					=> self::$cfg->{'BuildDate'},
 			'DistName'					=> self::$cfg->{'DistName'},
@@ -72,6 +101,8 @@ class DaemonConfig {
 
 		$tpl = NULL;
 		unset($tpl);
+
+		System_Daemon::debug('Finished "DaemonConfig::SaveOldConfig" subprocess.');
 
 		return 'Ok';
 	}

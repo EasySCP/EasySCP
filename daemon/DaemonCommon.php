@@ -191,6 +191,49 @@ class DaemonCommon {
 	}
 
 	/**
+	 * Debug Modus ein/ausschalten
+	 *
+	 * Mit dieser Funktion kann man den Debug Modus zur Laufzeit ein/ausschalten.
+	 *
+	 * @param int $mode Modus 0 = off, 1 = on.
+	 * @param mixed $permanent Modus Permanent speichern. Default ist aus.
+	 * @return boolean.
+	 */
+	public static function systemSetDebugMode($mode, $permanent = false){
+		System_Daemon::debug('Starting "DaemonCommon::systemSetDebugMode" subprocess.');
+
+		// System_Daemon::info("logVerbosity = " . System_Daemon::getOption('logVerbosity'));
+		// System_Daemon::info("DEBUG = " .DaemonConfig::$cfg->{'DEBUG'});
+
+		switch($mode) {
+			case '0':
+				System_Daemon::setOption('logVerbosity', 6);
+				DaemonConfig::$cfg->{'DEBUG'} = '0';
+				break;
+			case '1':
+				System_Daemon::setOption('logVerbosity', 7);
+				DaemonConfig::$cfg->{'DEBUG'} = '1';
+				break;
+			default:
+				System_Daemon::setOption('logVerbosity', 6);
+				DaemonConfig::$cfg->{'DEBUG'} = '0';
+
+		}
+
+		// System_Daemon::info("logVerbosity = " . System_Daemon::getOption('logVerbosity'));
+		// System_Daemon::info("DEBUG = " .DaemonConfig::$cfg->{'DEBUG'});
+
+		if ($permanent == true){
+			DaemonConfig::SaveOldConfig();
+			DaemonConfig::Save();
+		}
+
+		System_Daemon::debug('Finished "DaemonCommon::systemSetDebugMode" subprocess.');
+
+		return true;
+	}
+
+	/**
 	 * Rechte für Datei setzen
 	 *
 	 * Mit dieser Funktion kann man die Rechte einzelner Dateien neu setzen lassen.
