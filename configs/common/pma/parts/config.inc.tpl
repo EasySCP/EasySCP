@@ -154,4 +154,10 @@ $cfg['ThemeDefault'] = 'pmahomme';
 
 /* Hide the warning about Suhosin */
 $cfg['SuhosinDisableWarning'] = true;
+
+/* The maximum number of items displayed in navigation panel */
+$cfg['MaxNavigationItems'] = 500;
+
+/* The maximum number of table names to be displayed in the main panel’s list (except on the Export page). */
+$cfg['MaxTableList'] = 500;
 ?>
