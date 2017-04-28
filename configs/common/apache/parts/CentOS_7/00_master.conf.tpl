@@ -10,19 +10,6 @@
 #
 # Master Begin
 #
-{if (isset($REDIRECT) && $REDIRECT == true) || {$BASE_PORT} == 80 }
-NameVirtualHost {$BASE_SERVER_IP}:80
-{if (isset($BASE_SERVER_IPv6))}
-NameVirtualHost [{$BASE_SERVER_IPv6}]:80
-{/if}
-{/if}
-{if {$BASE_PORT} == 443 }
-NameVirtualHost {$BASE_SERVER_IP}:443
-{if (isset($BASE_SERVER_IPv6))}
-NameVirtualHost [{$BASE_SERVER_IPv6}]:443
-{/if}
-{/if}
-
 {if isset($REDIRECT) && $REDIRECT == true }
 <VirtualHost {$BASE_SERVER_IP}:80>
 	ServerAdmin		{$DEFAULT_ADMIN_ADDRESS}
@@ -54,9 +41,9 @@ NameVirtualHost [{$BASE_SERVER_IPv6}]:443
 {/if}
 {/if}
 
-	ErrorLog {$APACHE_LOG_DIR}/error.log
+	ErrorLog {$APACHE_LOG_DIR}/error_log
 
-	CustomLog {$APACHE_LOG_DIR}/access.log combined
+	CustomLog {$APACHE_LOG_DIR}/access_log combined
 
 	Alias /errors   {$GUI_ROOT_DIR}/errordocs/
 
@@ -145,9 +132,9 @@ NameVirtualHost [{$BASE_SERVER_IPv6}]:443
 {/if}
 {/if}
 
-	ErrorLog {$APACHE_LOG_DIR}/error.log
+	ErrorLog {$APACHE_LOG_DIR}/error_log
 
-	CustomLog {$APACHE_LOG_DIR}/access.log combined
+	CustomLog {$APACHE_LOG_DIR}/access_log combined
 
 	Alias /errors   {$GUI_ROOT_DIR}/errordocs/
 
