@@ -84,11 +84,8 @@ function gen_admin_menu($tpl, $menu_file) {
 			'TR_MENU_ADD_RESELLER'			=> tr('Add reseller'),
 			'TR_MENU_RESELLER_ASIGNMENT'	=> tr('Reseller assignment'),
 			'TR_MENU_USER_ASIGNMENT'		=> tr('User assignment'),
-			'TR_MENU_EMAIL_SETUP'			=> tr('Email setup'),
 			'TR_MENU_CIRCULAR'				=> tr('Email marketing'),
 			'TR_MENU_MANAGE_SESSIONS'		=> tr('User sessions'),
-
-			'TR_MENU_ADD_HOSTING'			=> tr('Add hosting plan'),
 
 			'TR_MAINTENANCEMODE'			=> tr('Maintenance mode'),
 			'TR_MANAGE_SSL'					=> tr('Manage SSL certificate'),
@@ -98,6 +95,7 @@ function gen_admin_menu($tpl, $menu_file) {
 			'TR_MENU_CRONJOB_OVERVIEW'		=> tr('Cronjob Overview'),
 			'TR_MENU_CRONJOB_ADD'			=> tr('Add Cronjob'),
 
+			'TR_SERVER_STATISTICS'			=> tr('Server statistics'),
 			'TR_MENU_RESELLER_STATISTICS'	=> tr('Reseller statistics'),
 			'TR_MENU_IP_USAGE'				=> tr('IP Usage'),
 
@@ -107,7 +105,7 @@ function gen_admin_menu($tpl, $menu_file) {
 			'TR_GENERAL_SETTINGS'			=> tr('General settings'),
 			'TR_MENU_MANAGE_IPS'			=> tr('Manage IPs'),
 			'TR_MENU_SERVER_TRAFFIC_SETTINGS'=> tr('Server traffic settings'),
-
+			'TR_MENU_EMAIL_SETUP'			=> tr('Email setup'),
 			'TR_MENU_LOSTPW_EMAIL'			=> tr('Lostpw email setup'),
 			'TR_SERVERPORTS'				=> tr('Server ports'),
 

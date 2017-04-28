@@ -50,7 +50,7 @@
 	<tbody>
 		{section name=i loop=$RESELLER_NAME}
 		<tr>
-			<td><a href="/admin/reseller_user_statistics.php?rid={$RESELLER_ID[i]}&amp;name={$RESELLER_NAME[i]}&amp;month={$MONTH[i]}&amp;year={$YEAR[i]}" title="{$RESELLER_NAME[i]}" class="icon i_domain">{$RESELLER_NAME[i]}</a></td>
+			<td>{$RESELLER_NAME[i]}</td>
 			<td><div class="graph"><span style="width: {$TRAFF_PERCENT[i]}%">&nbsp;</span><strong>{$TRAFF_SHOW_PERCENT[i]}&nbsp;%</strong></div>{$TRAFF_MSG[i]}</td>
 			<td><div class="graph"><span style="width: {$DISK_PERCENT[i]}%">&nbsp;</span><strong>{$DISK_SHOW_PERCENT[i]}&nbsp;%</strong></div>{$DISK_MSG[i]}</td>
 			<td>{$DMN_MSG[i]}</td>

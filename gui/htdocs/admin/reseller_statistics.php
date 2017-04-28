@@ -169,10 +169,8 @@ function generate_page($tpl) {
 
 		gen_select_lists($tpl, @$month, @$year);
 
-		$row = 1;
-
 		while (!$rs->EOF) {
-			generate_reseller_entry($tpl, $rs->fields['admin_id'], $rs->fields['admin_name'], $row++);
+			generate_reseller_entry($tpl, $rs->fields['admin_id'], $rs->fields['admin_name']);
 
 			$rs->moveNext();
 		}
@@ -184,11 +182,9 @@ function generate_page($tpl) {
  * @param EasySCP_TemplateEngine $tpl
  * @param int $reseller_id
  * @param string $reseller_name
- * @param int $row
  * @return void
  */
-function generate_reseller_entry($tpl, $reseller_id, $reseller_name, $row) {
-	global $crnt_month, $crnt_year;
+function generate_reseller_entry($tpl, $reseller_id, $reseller_name) {
 
 	list($rdmn_current, $rdmn_max,
 		$rsub_current, $rsub_max,
@@ -235,9 +231,6 @@ function generate_reseller_entry($tpl, $reseller_id, $reseller_name, $row) {
 	$tpl->append(
 		array(
 			'RESELLER_NAME' => tohtml($reseller_name),
-			'RESELLER_ID' => $reseller_id,
-			'MONTH' => $crnt_month,
-			'YEAR' => $crnt_year,
 
 			'TRAFF_SHOW_PERCENT' => $traff_show_percent,
 			'TRAFF_PERCENT' => $traff_percent,
