@@ -393,14 +393,14 @@ function get_user_traffic($user_id) {
 			SELECT
 				YEAR(FROM_UNIXTIME(`dtraff_time`)) AS `tyear`,
 				MONTH(FROM_UNIXTIME(`dtraff_time`)) AS `tmonth`,
-				SUM(`dtraff_web`) AS web,
-				SUM(`dtraff_ftp`) AS ftp,
-				SUM(`dtraff_mail`) AS smtp,
-				SUM(`dtraff_pop`) AS pop,
-				SUM(`dtraff_web`) +
-				SUM(`dtraff_ftp`) +
-				SUM(`dtraff_mail`) +
-				SUM(`dtraff_pop`) AS total
+				SUM(IFNULL((`dtraff_web_in`), 0) + IFNULL(`dtraff_web_out`, 0)) AS web,
+				SUM(IFNULL(`dtraff_ftp_in`, 0) + IFNULL(`dtraff_ftp_out`, 0)) AS ftp,
+				IFNULL(`dtraff_mail`, 0) AS smtp,
+				IFNULL(`dtraff_pop`, 0) AS pop,
+				SUM(IFNULL((`dtraff_web_in`), 0) + IFNULL(`dtraff_web_out`, 0)) +
+				SUM(IFNULL(`dtraff_ftp_in`, 0) + IFNULL(`dtraff_ftp_out`, 0)) +
+				IFNULL(`dtraff_mail`, 0) +
+				IFNULL(`dtraff_pop`, 0) AS total
 			FROM
 				`domain_traffic`
 			WHERE
