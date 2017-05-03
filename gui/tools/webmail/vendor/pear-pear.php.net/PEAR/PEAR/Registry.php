@@ -36,7 +36,7 @@ define('PEAR_REGISTRY_ERROR_CHANNEL_FILE', -6);
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.10.1
+ * @version    Release: 1.10.3
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -906,7 +906,7 @@ class PEAR_Registry extends PEAR
     }
 
     /**
-     * Determine whether a mirror exists within the deafult channel in the registry
+     * Determine whether a mirror exists within the default channel in the registry
      *
      * @param string Channel name
      * @param string Mirror name
@@ -1008,7 +1008,7 @@ class PEAR_Registry extends PEAR
         if ($lastmodified) {
             $info['_lastmodified'] = $lastmodified;
         } else {
-            $info['_lastmodified'] = date('r');
+            $info['_lastmodified'] = time();
         }
 
         fwrite($fp, serialize($info));

@@ -22,7 +22,7 @@ require_once 'PEAR/ErrorStack.php';
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.10.1
+ * @version    Release: 1.10.3
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -625,15 +625,14 @@ class PEAR_PackageFile_v2
                 $lastversion = isset($this->_packageInfo['_lastversion']) ?
                     $this->_packageInfo['_lastversion'] : null;
                 $task->init($raw, $atts, $lastversion);
-                $res = $task->startSession($this, $atts['installed_as']);
+                $res = $task->startSession($this, $atts['installed_as'], null);
                 if (!$res) {
                     continue; // skip this file
                 }
                 if (PEAR::isError($res)) {
                     return $res;
                 }
-                $assign = &$task;
-                $this->_scripts[] = &$assign;
+                $this->_scripts[] = $task;
             }
         }
         if (count($this->_scripts)) {

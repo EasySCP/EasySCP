@@ -322,8 +322,21 @@ function rcube_webmail()
           // init message compose form
           this.init_messageform();
         }
-        else if (this.env.action == 'get')
-          this.enable_command('download', 'print', true);
+        else if (this.env.action == 'get') {
+          this.enable_command('download', true);
+
+          // Mozilla's PDF.js viewer does not allow printing from host page (#5125)
+          // to minimize user confusion we disable the Print button
+          if (bw.mz && this.env.mimetype == 'application/pdf') {
+            n = 0; // there will be two onload events, first for the preload page
+            $(this.gui_objects.messagepartframe).on('load', function() {
+              if (n++) try { this.contentWindow.document; ref.enable_command('print', true); }
+                catch (e) {/* ignore */}
+            });
+          }
+          else
+            this.enable_command('print', true);
+        }
         // show printing dialog
         else if (this.env.action == 'print' && this.env.uid) {
           this.print_dialog();
@@ -3201,7 +3214,8 @@ function rcube_webmail()
     var r_uids = [],
       post_data = this.selection_post_data({_uid: this.uids_to_list(a_uids), _flag: 'delete'}),
       lock = this.display_message(this.get_label('markingmessage'), 'loading'),
-      rows = this.message_list ? this.message_list.rows : {},
+      list = this.message_list,
+      rows = list ? list.rows : {},
       count = 0;
 
     for (var i=0, len=a_uids.length; i<len; i++) {
@@ -3212,7 +3226,7 @@ function rcube_webmail()
 
         if (this.env.skip_deleted) {
           count += this.update_thread(uid);
-          this.message_list.remove_row(uid, (this.env.display_next && i == this.message_list.selection.length-1));
+          list.remove_row(uid, (this.env.display_next && i == list.selection.length-1));
         }
         else
           this.set_message(uid, 'deleted', true);
@@ -3220,9 +3234,9 @@ function rcube_webmail()
     }
 
     // make sure there are no selected rows
-    if (this.env.skip_deleted && this.message_list) {
-      if (!this.env.display_next)
-        this.message_list.clear_selection();
+    if (this.env.skip_deleted && list) {
+      if (!this.env.display_next || !list.rowcount)
+        list.clear_selection();
       if (count < 0)
         post_data._count = (count*-1);
       else if (count > 0)
@@ -3411,6 +3425,8 @@ function rcube_webmail()
       // add signature according to selected identity
       // if we have HTML editor, signature is added in a callback
       if (input_from.prop('type') == 'select-one') {
+        // for some reason the caret initially is not at pos=0 in Firefox 51 (#5628)
+        this.set_caret_pos(input_message, 0);
         this.change_identity(input_from[0]);
       }
 
@@ -4965,6 +4981,9 @@ function rcube_webmail()
       url._search = this.env.search_request;
 
     this.http_request(this.env.task == 'mail' ? 'list-contacts' : 'list', url, lock);
+
+    if (this.env.task != 'mail')
+      this.update_state({_source: src, _page: page && page > 1 ? page : null, _gid: group});
   };
 
   this.list_contacts_clear = function()

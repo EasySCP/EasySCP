@@ -34,7 +34,7 @@ define('PEAR_PACKAGEFILE_ERROR_INVALID_PACKAGEVERSION', 2);
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2009 The Authors
  * @license    http://opensource.org/licenses/bsd-license.php New BSD License
- * @version    Release: 1.10.1
+ * @version    Release: 1.10.3
  * @link       http://pear.php.net/package/PEAR
  * @since      Class available since Release 1.4.0a1
  */
@@ -289,7 +289,7 @@ class PEAR_PackageFile
     }
 
     /**
-     * Create a PEAR_PackageFile_v* from a compresed Tar or Tgz file.
+     * Create a PEAR_PackageFile_v* from a compressed Tar or Tgz file.
      * @access  public
      * @param string contents of package.xml file
      * @param int package state (one of PEAR_VALIDATE_* constants)

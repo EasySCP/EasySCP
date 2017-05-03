@@ -22,7 +22,7 @@ require_once 'Console/Getopt.php';
 $GLOBALS['_System_temp_files'] = array();
 
 /**
-* System offers cross plattform compatible system functions
+* System offers cross platform compatible system functions
 *
 * Static functions for different operations. Should work under
 * Unix and Windows. The names and usage has been taken from its respectively
@@ -50,7 +50,7 @@ $GLOBALS['_System_temp_files'] = array();
 * @author     Tomas V.V. Cox <cox@idecnet.com>
 * @copyright  1997-2006 The PHP Group
 * @license    http://opensource.org/licenses/bsd-license.php New BSD License
-* @version    Release: 1.10.1
+* @version    Release: 1.10.3
 * @link       http://pear.php.net/package/PEAR
 * @since      Class available since Release 0.1
 * @static
@@ -547,7 +547,7 @@ class System
      * System::find("$dir -name *.php -name *.htm*");
      * System::find("$dir -maxdepth 1");
      *
-     * Params implmented:
+     * Params implemented:
      * $dir            -> Start the search at this directory
      * -type d         -> return only directories
      * -type f         -> return only files

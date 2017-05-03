@@ -15,7 +15,11 @@ return array(
     $vendorDir . '/pear-pear.php.net/PEAR',
     $vendorDir . '/pear-pear.php.net/Net_Socket',
     $vendorDir . '/pear-pear.php.net/Net_Sieve',
+    $vendorDir . '/pear-pear.php.net/Net_LDAP2',
     $vendorDir . '/pear-pear.php.net/Mail_Mime',
     $vendorDir . '/pear-pear.php.net/Net_SMTP',
-    $vendorDir . '/pear-pear.php.net/Net_LDAP2',
+    $vendorDir . '/pear/pear_exception',
+    $vendorDir . '/pear/console_getopt',
+    $vendorDir . '/pear/pear-core-minimal/src',
+    $vendorDir . '/pear/net_ldap2',
 );

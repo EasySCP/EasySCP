@@ -701,7 +701,8 @@ class Net_SMTP
             return $error;
         }
 
-        $digest    = Auth_SASL::factory('digest-md5');
+        $auth_sasl = new Auth_SASL;
+        $digest    = $auth_sasl->factory('digest-md5');
         $challenge = base64_decode($this->arguments[0]);
         $auth_str  = base64_encode(
             $digest->getResponse($uid, $pwd, $challenge, $this->host, "smtp", $authz)
@@ -752,8 +753,9 @@ class Net_SMTP
             return $error;
         }
 
+        $auth_sasl = new Auth_SASL;
         $challenge = base64_decode($this->arguments[0]);
-        $cram      = Auth_SASL::factory('cram-md5');
+        $cram      = $auth_sasl->factory('cram-md5');
         $auth_str  = base64_encode($cram->getResponse($uid, $pwd, $challenge));
 
         if (PEAR::isError($error = $this->put($auth_str))) {
@@ -998,7 +1000,7 @@ class Net_SMTP
         /* Start by considering the size of the optional headers string.  We
          * also account for the addition 4 character "\r\n\r\n" separator
          * sequence. */
-        $size = (is_null($headers)) ? 0 : strlen($headers) + 4;
+        $size = $headers_size = (is_null($headers)) ? 0 : strlen($headers) + 4;
 
         if (is_resource($data)) {
             $stat = fstat($data);
@@ -1036,7 +1038,7 @@ class Net_SMTP
             }
 
             /* Subtract the headers size now that they've been sent. */
-            $size -= strlen($headers) + 4;
+            $size -= $headers_size;
         }
 
         /* Now we can send the message body data. */

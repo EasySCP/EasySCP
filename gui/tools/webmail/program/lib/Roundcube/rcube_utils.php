@@ -543,6 +543,7 @@ class rcube_utils
         $out = preg_replace_callback('/\\\([0-9a-f]{4})/i',
             array(self, 'xss_entity_decode_callback'), $out);
         $out = preg_replace('#/\*.*\*/#Ums', '', $out);
+        $out = strip_tags($out);
 
         return $out;
     }
@@ -1177,5 +1178,31 @@ class rcube_utils
         }
 
         return $random;
+    }
+
+    /**
+     * Format current date according to specified format.
+     * This method supports microseconds (u).
+     *
+     * @param string $format Date format (default: 'd-M-Y H:i:s O')
+     *
+     * @return string Formatted date
+     */
+    public static function date_format($format = null)
+    {
+        if (empty($format)) {
+            $format = 'd-M-Y H:i:s O';
+        }
+
+        if (strpos($format, 'u') !== false && function_exists('date_create_from_format')) {
+            $dt  = number_format(microtime(true), 6, '.', '');
+            $dt .=  '.' . date_default_timezone_get();
+
+            if ($date = date_create_from_format('U.u.e', $dt)) {
+                return $date->format($format);
+            }
+        }
+
+        return date($format);
     }
 }
