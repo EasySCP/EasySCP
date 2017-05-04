@@ -20,8 +20,8 @@
  */
 //the space is needed for windows include paths with trailing backslash
 // http://pear.php.net/bugs/bug.php?id=19482
-if ('/www/roundcube/releases/roundcubemail-1.1.8/vendor/pear-pear.php.net/PEAR ' != '@'.'include_path'.'@ ') {
-    ini_set('include_path', trim('/www/roundcube/releases/roundcubemail-1.1.8/vendor/pear-pear.php.net/PEAR '). PATH_SEPARATOR .  get_include_path());
+if ('/www/roundcube/releases/roundcubemail-1.1.9/vendor/pear-pear.php.net/PEAR ' != '@'.'include_path'.'@ ') {
+    ini_set('include_path', trim('/www/roundcube/releases/roundcubemail-1.1.9/vendor/pear-pear.php.net/PEAR '). PATH_SEPARATOR .  get_include_path());
     $raw = false;
 } else {
     // this is a raw, uninstalled pear, either a cvs checkout, or php distro

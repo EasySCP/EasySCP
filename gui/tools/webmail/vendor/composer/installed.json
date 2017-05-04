@@ -239,11 +239,11 @@
     },
     {
         "name": "pear-pear.php.net/PEAR",
-        "version": "1.10.3",
-        "version_normalized": "1.10.3.0",
+        "version": "1.10.4",
+        "version_normalized": "1.10.4.0",
         "dist": {
             "type": "file",
-            "url": "https://pear.php.net/get/PEAR-1.10.3.tgz",
+            "url": "https://pear.php.net/get/PEAR-1.10.4.tgz",
             "reference": null,
             "shasum": null
         },
@@ -261,7 +261,7 @@
             "pear-pear.php.net/pear_frontend_web": "<=0.4.0.0"
         },
         "replace": {
-            "pear-pear/pear": "== 1.10.3.0"
+            "pear-pear/pear": "== 1.10.4.0"
         },
         "type": "pear-library",
         "installation-source": "dist",
@@ -305,7 +305,7 @@
             "/"
         ],
         "license": [
-            "PHP License"
+            "BSD-2-Clause"
         ],
         "description": "Net_Socket is a class interface to TCP sockets.  It provides blocking\n  and non-blocking operation, with different reading and writing modes\n  (byte-wise, block-wise, line-wise and special formats like network\n  byte-order ip addresses)."
     },
