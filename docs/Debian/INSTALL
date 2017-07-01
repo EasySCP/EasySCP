@@ -27,7 +27,7 @@ EasySCP Version:	2.1.0
 INSTALL Script:		1.0.0
 Maintainer:			Markus Szywon
 Homepage:			http://www.easyscp.net
-Linux Distros:		Debian 7 (Wheezy) / Debian 8 (Jessie)
+Linux Distros:		Debian 7 (Wheezy) / Debian 8 (Jessie) / Debian 9 (Stretch)
 
 ================================================================================
 2) System requirements
@@ -40,6 +40,7 @@ Basic Debian (do not install any additional software on the server as it will co
 
 All required packages for "Debian 7 (Wheezy)" are listed in "./docs/Debian/debian-packages-7"
 All required packages for "Debian 8 (Jessie)" are listed in "./docs/Debian/debian-packages-8"
+All required packages for "Debian 9 (Stretch)" are listed in "./docs/Debian/debian-packages-9"
 
 ================================================================================
 3) Introduction
@@ -80,6 +81,9 @@ Be sure you are logged in as root.
 
 	or when you running "Debian 8 (Jessie)"
 	# apt-get install $(cat ./docs/Debian/debian-packages-8)
+
+	or when you running "Debian 9 (Stretch)"
+	# apt-get install $(cat ./docs/Debian/debian-packages-9)
 
 	Note:
 		If you get to the "ProFTPD configuration" screen, select 'standalone'.

@@ -61,12 +61,12 @@ provides graphic user interfaces for the administrators, resellers and users.
 
 1. Untar or unzip the distribution files to a secure directory:
 	# cd /usr/src
-	# sudo tar xfvz easyscp-2.0.0.tar.gz
+	# sudo tar xfvz easyscp-2.1.0.tar.gz
 	or when you load Bzip2 Archive
-	# sudo tar xjvf easyscp-2.0.0.tar.bz2
+	# sudo tar xjvf easyscp-2.1.0.tar.bz2
 
 2. Change to the newly created directory:
-	# cd ./easyscp-2.0.0
+	# cd ./easyscp-2.1.0
 
 3. Install the required packages
 
