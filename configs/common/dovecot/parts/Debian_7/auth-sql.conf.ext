@@ -26,5 +26,5 @@ passdb {
 # <doc/wiki/UserDatabase.Static.txt>
 userdb {
   driver = static
-  args = uid={$MTA_MAILBOX_UID} gid={$MTA_MAILBOX_GID} home={$MTA_VIRTUAL_MAIL_DIR}/%d/%n allow_all_users=yes
+  args = uid={$MTA_MAILBOX_UID} gid={$MTA_MAILBOX_GID} home={$MTA_VIRTUAL_MAIL_DIR}/%d/%n
 }
