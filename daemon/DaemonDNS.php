@@ -40,7 +40,7 @@ class DaemonDNS {
 		$sql_query = "
 			SELECT
 				d.domain_uid,
-				i.ip_number
+				i.ip_number, i.ip_number_v6
 			FROM
 				domain d,
 				server_ips i
@@ -67,6 +67,7 @@ class DaemonDNS {
 
 		$dmn_uid = $row['domain_uid'];
 		$dmn_ip = $row['ip_number'];
+		$dmn_ipv6 = $row['ip_number_v6'];
 		$dmn_name = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $dmn_uid . "." . DaemonConfig::$cfg->BASE_SERVER_VHOST;
 
 		$sql_param[] = array(
@@ -77,6 +78,17 @@ class DaemonDNS {
 			'domain_ttl'	=> '7200',
 			'domain_prio'	=> NULL
 		);
+
+		if ($dmn_ipv6){
+			$sql_param[] = array(
+				'domain_id'		=> 1,
+				'domain_name'	=> $dmn_name,
+				'domain_type'	=> 'AAAA',
+				'domain_content'=> $dmn_ipv6,
+				'domain_ttl'	=> '7200',
+				'domain_prio'	=> NULL
+			);
+		}
 
 		$sql_query = "
 			INSERT INTO
@@ -118,7 +130,7 @@ class DaemonDNS {
 			$sql_query = "
 				SELECT
 					d.domain_id, d.domain_name,
-					i.ip_number
+					i.ip_number, i.ip_number_v6
 				FROM
 					domain d,
 					server_ips i
@@ -132,7 +144,7 @@ class DaemonDNS {
 			$sql_query = "
 				SELECT
 					d.alias_id AS domain_id, d.alias_name AS domain_name,
-					i.ip_number
+					i.ip_number, i.ip_number_v6
 				FROM
 					domain_aliasses d,
 					server_ips i
@@ -149,6 +161,7 @@ class DaemonDNS {
 		$dmn_id = $row['domain_id'];
 		$dmn_name = $row['domain_name'];
 		$dmn_ip = $row['ip_number'];
+		$dmn_ipv6 = $row['ip_number_v6'];
 
 
 		// Add some default DNS entries
@@ -184,35 +197,17 @@ class DaemonDNS {
 			'domain_id'		=> $dmn_dns_id,
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'SOA',
-			'domain_content'=> 'ns1.' . $dmn_name . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
-			'domain_ttl'	=> '3600',
+			'domain_content'=> 'ns1.' . DaemonConfig::$cfg->{'SERVER_HOSTNAME'} . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
+			'domain_ttl'	=> '86400',
 			'domain_prio'	=> Null
-		);
-
-		$sql_param[] = array(
-			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> 'ns1.' . $dmn_name,
-			'domain_type'	=> 'A',
-			'domain_content'=> $dmn_ip,
-			'domain_ttl'	=> '7200',
-			'domain_prio'	=> NULL
 		);
 
 		$sql_param[] = array(
 			'domain_id'		=> $dmn_dns_id,
 			'domain_name'	=> $dmn_name,
 			'domain_type'	=> 'NS',
-			'domain_content'=> 'ns1.' . $dmn_name,
+			'domain_content'=> 'ns1.' . DaemonConfig::$cfg->{'SERVER_HOSTNAME'},
 			'domain_ttl'	=> '28800',
-			'domain_prio'	=> NULL
-		);
-
-		$sql_param[] = array(
-			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> 'ns.' . $dmn_name,
-			'domain_type'	=> 'CNAME',
-			'domain_content'=> 'ns1.' . $dmn_name,
-			'domain_ttl'	=> '7200',
 			'domain_prio'	=> NULL
 		);
 
@@ -270,6 +265,25 @@ class DaemonDNS {
 			'domain_prio'	=> NULL
 		);
 
+		if ($dmn_ipv6){
+			$sql_param[] = array(
+				'domain_id'		=> $dmn_dns_id,
+				'domain_name'	=> 'mail.' . $dmn_name,
+				'domain_type'	=> 'AAAA',
+				'domain_content'=> $dmn_ipv6,
+				'domain_ttl'	=> '7200',
+				'domain_prio'	=> NULL
+			);
+			$sql_param[] = array(
+				'domain_id'		=> $dmn_dns_id,
+				'domain_name'	=> $dmn_name,
+				'domain_type'	=> 'AAAA',
+				'domain_content'=> $dmn_ipv6,
+				'domain_ttl'	=> '7200',
+				'domain_prio'	=> NULL
+			);
+		}
+
 
 		$sql_query = "
 			INSERT INTO
@@ -322,7 +336,7 @@ class DaemonDNS {
 		$dmn_dns_id = $row['id'];
 
 		$sql_param = array(
-            'domain_content'	=> 'ns1.' . $domainData['domain_name'] . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
+            'domain_content'	=> 'ns1.' . DaemonConfig::$cfg->{'SERVER_HOSTNAME'} . '. ' . DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
 			'domain_id'			=> $dmn_dns_id,
 			'domain_name'		=> $domainData['domain_name'],
             'domain_type'		=> 'SOA'
@@ -376,15 +390,6 @@ class DaemonDNS {
 
 		$dmn_dns_id = $row['id'];
 
-		$sql_param = array(
-			'domain_id'		=> $dmn_dns_id,
-			'domain_name'	=> $domainData['subdomain_name'] . '.' . $domainData['domain_name'],
-			'domain_type'	=> 'A',
-			'domain_content'=> $domainData['ip_number'],
-			'domain_ttl'	=> '7200',
-			'domain_prio'	=> NULL
-		);
-
 		$sql_query = "
 			INSERT INTO
 				powerdns.records (domain_id, name, type, content, ttl, prio)
@@ -394,8 +399,34 @@ class DaemonDNS {
 			 	name = :domain_name;
 			";
 
-		DB::prepare($sql_query);
-		DB::execute($sql_param)->closeCursor();
+		$stmt = DB::prepare($sql_query);
+
+		$sql_param = array(
+			'domain_id'		=> $dmn_dns_id,
+			'domain_name'	=> $domainData['subdomain_name'] . '.' . $domainData['domain_name'],
+			'domain_type'	=> 'A',
+			'domain_content'=> $domainData['ip_number'],
+			'domain_ttl'	=> '7200',
+			'domain_prio'	=> NULL
+		);
+
+		$stmt->execute($sql_param);
+
+		if ($domainData['ip_number_v6']){
+			$sql_param = array(
+				'domain_id'		=> $dmn_dns_id,
+				'domain_name'	=> $domainData['subdomain_name'] . '.' . $domainData['domain_name'],
+				'domain_type'	=> 'AAAA',
+				'domain_content'=> $domainData['ip_number_v6'],
+				'domain_ttl'	=> '7200',
+				'domain_prio'	=> NULL
+			);
+
+			$stmt->execute($sql_param);
+		}
+
+		$stmt = Null;
+		unset($stmt);
 
 		// Update the DNS serial
 		self::UpdateNotifiedSerial($domainData);
