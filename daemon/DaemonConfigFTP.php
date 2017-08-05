@@ -28,6 +28,7 @@ class DaemonConfigFTP {
 
 		$xml->{'DB_DATABASE'}	= DB::$DB_DATABASE;
 		$xml->{'DB_HOST'}		= idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'});
+		// $xml->{'DB_HOST'}		= idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
 		$xml->{'FTP_USER'}		= 'vftp';
 		$xml->{'FTP_PASSWORD'}	= DB::encrypt_data(DaemonCommon::generatePassword(18));
 
@@ -123,6 +124,7 @@ class DaemonConfigFTP {
 
 		$tpl_param = array(
 			'HOST_NAME' => idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'})
+			// 'HOST_NAME' => idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46)
 		);
 
 		$tpl_param['UseIPv6'] = (isset(DaemonConfig::$cfg->{'BASE_SERVER_IPv6'}) && DaemonConfig::$cfg->{'BASE_SERVER_IPv6'} != '') ? 'on' : 'off';

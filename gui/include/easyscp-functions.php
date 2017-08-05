@@ -375,6 +375,7 @@ function decode_idna($input) {
 	if (function_exists('idn_to_utf8')) {
 		// return idn_to_utf8($input, IDNA_USE_STD3_RULES);
 		return idn_to_utf8($input);
+		// return idn_to_utf8($input,IDNA_NONTRANSITIONAL_TO_UNICODE,INTL_IDNA_VARIANT_UTS46);
 	} else {
 
 		$IDNA = new Net_IDNA2();
@@ -394,6 +395,7 @@ function encode_idna($input) {
 
 	if (function_exists('idn_to_ascii')) {
 		return idn_to_ascii($input);
+		// return idn_to_ascii($input,IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
 	} else {
 
 		$IDNA = new Net_IDNA2();

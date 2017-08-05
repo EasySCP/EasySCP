@@ -809,6 +809,7 @@ function GUI_PHP(){
 		'EASYSCPC_DIR'			=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPC'}),
 		'EASYSCPD_DIR'			=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPD'}),
 		'MAIL_DMN'				=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'}),
+		// 'MAIL_DMN'				=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46),
 		'OTHER_ROOTKIT_LOG'		=> (DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} != '') ? DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} : '',
 		'PEAR_DIR'				=> DaemonConfig::$distro->{'PEAR_DIR'},
 		'PHP_STARTER_DIR'		=> DaemonConfig::$distro->{'PHP_STARTER_DIR'},
@@ -839,6 +840,7 @@ function GUI_VHOST(){
 		'BASE_PORT'					=> 80,
 		'BASE_SERVER_IP'			=> DaemonConfig::$cfg->BASE_SERVER_IP,
 		'BASE_SERVER_VHOST'			=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'}),
+		// 'BASE_SERVER_VHOST'			=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46),
 		'DEFAULT_ADMIN_ADDRESS'		=> DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS,
 		'GUI_ROOT_DIR'				=> DaemonConfig::$cfg->GUI_ROOT_DIR,
 		'PHP_STARTER_DIR'			=> DaemonConfig::$distro->{'PHP_STARTER_DIR'},
@@ -875,6 +877,7 @@ function GUI_PMA(){
 	$pma->{'PMA_USER'}		= $xml->{'PMA_USER'};
 	$pma->{'PMA_PASSWORD'}	= DB::encrypt_data($xml->{'PMA_PASSWORD'});
 	$pma->{'DATABASE_HOST'}	= idn_to_ascii($xml->{'DB_HOST'});
+	// $pma->{'DATABASE_HOST'}	= idn_to_ascii($xml->{'DB_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
 	$pma->{'TMP_DIR'}		= DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/phptmp';
 
 	$handle = fopen(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_PMA.xml', "wb");
@@ -889,6 +892,7 @@ function GUI_PMA(){
 
 	$sql_param = array(
 		':DATABASE_HOST'=> idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'}),
+		// ':DATABASE_HOST'=> idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46),
 		':PMA_USER'		=> $xml->{'PMA_USER'},
 		':PMA_PASSWORD'	=> $xml->{'PMA_PASSWORD'}
 	);
@@ -913,6 +917,7 @@ function GUI_RoundCube(){
 	$cubeUser = 'cube';
 	$cubeUserPwd = DaemonCommon::generatePassword(18);
 	$cubeDBHost = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'});
+	// $cubeDBHost = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
 
 	$rc = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_RC.xml');
 
