@@ -32,7 +32,7 @@ class DaemonConfig {
 		$xml_new->{'BuildDate'} = file_get_contents(DaemonConfig::$cfg->{'CONF_DIR'} . '/BUILD');
 		$xml_new->{'Version'} = file_get_contents(DaemonConfig::$cfg->{'CONF_DIR'} . '/VERSION');
 
-		$handle = fopen(EasyConfig_PATH . '/EasySCP_Config_new.xml', "wb");
+		$handle = fopen(EasyConfig_PATH . '/EasySCP_Config.xml', "wb");
 		fwrite($handle, $xml_new->asXML());
 		fclose($handle);
 

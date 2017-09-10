@@ -110,8 +110,8 @@ function gen_admin_menu($tpl, $menu_file) {
 			'TR_SERVERPORTS'				=> tr('Server ports'),
 
 			'TR_MENU_LOGOUT'				=> tr('Logout'),
-			'VERSION'						=> $cfg->Version,
-			'BUILDDATE'						=> $cfg->BuildDate
+			'VERSION'						=> EasyConfig::$cfg->{'Version'},
+			'BUILDDATE'						=> EasyConfig::$cfg->{'BuildDate'}
 		)
 	);
 

@@ -126,8 +126,8 @@ function gen_reseller_menu($tpl, $menu_file) {
 			'TR_MENU_NEW_TICKET'			=> tr('New ticket'),
 
 			'TR_MENU_LOGOUT'				=> tr('Logout'),
-			'VERSION'						=> $cfg->Version,
-			'BUILDDATE'						=> $cfg->BuildDate
+			'VERSION'						=> EasyConfig::$cfg->{'Version'},
+			'BUILDDATE'						=> EasyConfig::$cfg->{'BuildDate'}
 		)
 	);
 
