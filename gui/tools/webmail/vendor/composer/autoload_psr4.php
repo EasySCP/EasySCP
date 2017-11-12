@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Patchwork\\' => array($vendorDir . '/patchwork/utf8/src/Patchwork'),
+    'Composer\\Semver\\' => array($vendorDir . '/composer/semver/src'),
 );

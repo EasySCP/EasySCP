@@ -1,6 +1,10 @@
 CHANGELOG Roundcube Webmail
 ===========================
 
+RELEASE 1.1.10
+--------------
+- Fix file disclosure vulnerability caused by insufficient input validation [CVE-2017-16651] (#6026)
+
 RELEASE 1.1.9
 -------------
 - Fix regression in LDAP fuzzy search where it always used prefix search instead (#5713)

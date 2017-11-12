@@ -1,26 +1,91 @@
 [
     {
-        "name": "roundcube/plugin-installer",
-        "version": "0.1.8",
-        "version_normalized": "0.1.8.0",
+        "name": "composer/semver",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
-            "url": "https://github.com/roundcube/plugin-installer.git",
-            "reference": "43f0938f2c4ce6885c5cb7c5c43d13e8fdc8b8a8"
+            "url": "https://github.com/composer/semver.git",
+            "reference": "2b303e43d14d15cc90c8e8db4a1cdb6259f1a5c5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/roundcube/plugin-installer/zipball/43f0938f2c4ce6885c5cb7c5c43d13e8fdc8b8a8",
-            "reference": "43f0938f2c4ce6885c5cb7c5c43d13e8fdc8b8a8",
+            "url": "https://api.github.com/repos/composer/semver/zipball/2b303e43d14d15cc90c8e8db4a1cdb6259f1a5c5",
+            "reference": "2b303e43d14d15cc90c8e8db4a1cdb6259f1a5c5",
             "shasum": ""
         },
         "require": {
+            "php": "^5.3.2 || ^7.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.5 || ^5.0.5",
+            "phpunit/phpunit-mock-objects": "2.3.0 || ^3.0"
+        },
+        "time": "2017-11-06T09:05:54+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Composer\\Semver\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Nils Adermann",
+                "email": "naderman@naderman.de",
+                "homepage": "http://www.naderman.de"
+            },
+            {
+                "name": "Jordi Boggiano",
+                "email": "j.boggiano@seld.be",
+                "homepage": "http://seld.be"
+            },
+            {
+                "name": "Rob Bast",
+                "email": "rob.bast@gmail.com",
+                "homepage": "http://robbast.nl"
+            }
+        ],
+        "description": "Semver library that offers utilities, version constraint parsing and validation.",
+        "keywords": [
+            "semantic",
+            "semver",
+            "validation",
+            "versioning"
+        ]
+    },
+    {
+        "name": "roundcube/plugin-installer",
+        "version": "0.1.9",
+        "version_normalized": "0.1.9.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/roundcube/plugin-installer.git",
+            "reference": "782420af7fb3f24295a61101d7e9296110c894e4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/roundcube/plugin-installer/zipball/782420af7fb3f24295a61101d7e9296110c894e4",
+            "reference": "782420af7fb3f24295a61101d7e9296110c894e4",
+            "shasum": ""
+        },
+        "require": {
+            "composer/semver": "^1.4.2",
             "php": ">=5.3.0"
         },
         "require-dev": {
             "composer/composer": "*"
         },
-        "time": "2015-12-22T11:29:24+00:00",
+        "time": "2017-10-29T16:13:28+00:00",
         "bin": [
             "src/bin/rcubeinitdb.sh"
         ],
@@ -141,15 +206,15 @@
         "license": [
             "BSD-2-Clause"
         ],
-        "description": "This is a PHP implementation of \"getopt\" supporting both\nshort and long options."
+        "description": "This is a PHP implementation of &quot;getopt&quot; supporting both\nshort and long options."
     },
     {
         "name": "pear-pear.php.net/Archive_Tar",
-        "version": "1.4.2",
-        "version_normalized": "1.4.2.0",
+        "version": "1.4.3",
+        "version_normalized": "1.4.3.0",
         "dist": {
             "type": "file",
-            "url": "https://pear.php.net/get/Archive_Tar-1.4.2.tgz",
+            "url": "https://pear.php.net/get/Archive_Tar-1.4.3.tgz",
             "reference": null,
             "shasum": null
         },
@@ -157,7 +222,7 @@
             "php": ">=5.2.0.0"
         },
         "replace": {
-            "pear-pear/archive_tar": "== 1.4.2.0"
+            "pear-pear/archive_tar": "== 1.4.3.0"
         },
         "type": "pear-library",
         "installation-source": "dist",
@@ -207,11 +272,11 @@
     },
     {
         "name": "pear-pear.php.net/XML_Util",
-        "version": "1.4.2",
-        "version_normalized": "1.4.2.0",
+        "version": "1.4.3",
+        "version_normalized": "1.4.3.0",
         "dist": {
             "type": "file",
-            "url": "https://pear.php.net/get/XML_Util-1.4.2.tgz",
+            "url": "https://pear.php.net/get/XML_Util-1.4.3.tgz",
             "reference": null,
             "shasum": null
         },
@@ -220,7 +285,7 @@
             "php": ">=5.4.0.0"
         },
         "replace": {
-            "pear-pear/xml_util": "== 1.4.2.0"
+            "pear-pear/xml_util": "== 1.4.3.0"
         },
         "type": "pear-library",
         "installation-source": "dist",
@@ -239,11 +304,11 @@
     },
     {
         "name": "pear-pear.php.net/PEAR",
-        "version": "1.10.4",
-        "version_normalized": "1.10.4.0",
+        "version": "1.10.5",
+        "version_normalized": "1.10.5.0",
         "dist": {
             "type": "file",
-            "url": "https://pear.php.net/get/PEAR-1.10.4.tgz",
+            "url": "https://pear.php.net/get/PEAR-1.10.5.tgz",
             "reference": null,
             "shasum": null
         },
@@ -261,7 +326,7 @@
             "pear-pear.php.net/pear_frontend_web": "<=0.4.0.0"
         },
         "replace": {
-            "pear-pear/pear": "== 1.10.4.0"
+            "pear-pear/pear": "== 1.10.5.0"
         },
         "type": "pear-library",
         "installation-source": "dist",
@@ -637,13 +702,13 @@
         "source": {
             "type": "git",
             "url": "https://git.kolab.org/diffusion/PNL/php-net_ldap.git",
-            "reference": "51afe33906e1c9f5cf0811271b29b08c615c95ce"
+            "reference": "4c21bdebaa62d05a36f3ef3eee4e9742875d7e57"
         },
         "require": {
             "pear/net_ldap2": ">=2.0.12",
             "php": ">=5.3.3"
         },
-        "time": "2017-03-08T07:40:52+00:00",
+        "time": "2017-08-07T12:48:10+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
