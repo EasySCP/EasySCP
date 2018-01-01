@@ -24,7 +24,7 @@ define('INSTALL_PATH', realpath(__DIR__ . '/..') . '/' );
 require_once INSTALL_PATH . 'program/include/clisetup.php';
 
 // get arguments
-$opts = rcube_utils::get_opt(array('v' => 'version', 'y' => 'accept'));
+$opts = rcube_utils::get_opt(array('v' => 'version', 'y' => 'accept:bool'));
 
 // ask user if no version is specified
 if (!$opts['version']) {
@@ -156,10 +156,8 @@ if ($RCI->configured) {
   // check database schema
   if ($RCI->config['db_dsnw']) {
     echo "Executing database schema update.\n";
-    system("php " . INSTALL_PATH . "bin/updatedb.sh --package=roundcube --version=" . $opts['version']
-      . " --dir=" . INSTALL_PATH . "SQL", $res);
-
-    $success = !$res;
+    $success = rcmail_utils::db_update(INSTALL_PATH . 'SQL', 'roundcube', $opts['version'],
+        array('errors' => true));
   }
 
   // update composer dependencies
@@ -171,14 +169,20 @@ if ($RCI->configured) {
     // update the require section with the new dependencies
     if (is_array($composer_data['require']) && is_array($composer_template['require'])) {
       $composer_data['require'] = array_merge($composer_data['require'], $composer_template['require']);
-      /* TO BE ADDED LATER
-      $old_packages = array();
-      for ($old_packages as $pkg) {
-        if (array_key_exists($composer_data['require'], $pkg)) {
+
+      // remove obsolete packages
+      $old_packages = array(
+        'pear/mail_mime',
+        'pear/mail_mime-decode',
+        'pear/net_smtp',
+        'pear/net_sieve',
+        'pear-pear.php.net/net_sieve',
+      );
+      foreach ($old_packages as $pkg) {
+        if (array_key_exists($pkg, $composer_data['require'])) {
           unset($composer_data['require'][$pkg]);
         }
       }
-      */
     }
 
     // update the repositories section with the new dependencies
@@ -192,12 +196,18 @@ if ($RCI->configured) {
         $existing = false;
         foreach ($composer_data['repositories'] as $k =>  $_repo) {
           if ($rkey == $_repo['type'] . preg_replace('/^https?:/', '', $_repo['url']) . $_repo['package']['name']) {
+            // switch to https://
+            if (isset($_repo['url']) && strpos($_repo['url'], 'http://') === 0)
+              $composer_data['repositories'][$k]['url'] = 'https:' . substr($_repo['url'], 5);
             $existing = true;
             break;
           }
           // remove old repos
           else if (strpos($_repo['url'], 'git://git.kolab.org') === 0) {
-              unset($composer_data['repositories'][$k]);
+            unset($composer_data['repositories'][$k]);
+          }
+          else if ($_repo['type'] == 'package' && $_repo['package']['name'] == 'Net_SMTP') {
+            unset($composer_data['repositories'][$k]);
           }
         }
         if (!$existing) {
@@ -245,7 +255,7 @@ if ($RCI->configured) {
 
   // index contacts for fulltext searching
   if ($opts['version'] && version_compare(version_parse($opts['version']), '0.6.0', '<')) {
-    system("php " . INSTALL_PATH . 'bin/indexcontacts.sh');
+    rcmail_utils::indexcontacts();
   }
 
   if ($success) {

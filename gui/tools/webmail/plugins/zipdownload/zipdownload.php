@@ -6,7 +6,7 @@
  * Plugin to allow the download of all message attachments in one zip file
  * and downloading of many messages in one go.
  *
- * @version 3.0
+ * @version 3.1
  * @requires php_zip extension (including ZipArchive class)
  * @author Philip Weir
  * @author Thomas Bruderli
@@ -119,7 +119,7 @@ class zipdownload extends rcube_plugin
      */
     public function download_attachments()
     {
-        $rcmail    = rcmail::get_instance();
+        $rcmail = rcmail::get_instance();
 
         // require CSRF protected request
         $rcmail->request_security_check(rcube_utils::INPUT_GET);
@@ -160,7 +160,8 @@ class zipdownload extends rcube_plugin
 
         $zip->close();
 
-        $filename = ($message->subject ? $message->subject : 'roundcube') . '.zip';
+        $filename = ($this->_filename_from_subject($message->subject) ?: 'attachments') . '.zip';
+
         $this->_deliver_zipfile($tmpfname, $filename);
 
         // delete temporary files from disk
@@ -247,12 +248,11 @@ class zipdownload extends rcube_plugin
                     fwrite($tmpfp, "\r\n");
                 }
                 else { // maildir
-                    $subject = rcube_mime::decode_mime_string((string)$headers->subject);
+                    $subject = rcube_mime::decode_header($headers->subject, $headers->charset);
+                    $subject = $this->_filename_from_subject(mb_substr($subject, 0, 16));
                     $subject = $this->_convert_filename($subject);
-                    $subject = substr($subject, 0, 16);
 
-                    $disp_name = ($subject ? $subject : 'message_rfc822') . ".eml";
-                    $disp_name = $path . $uid . "_" . $disp_name;
+                    $disp_name = $path . $uid . ($subject ? " $subject" : '') . '.eml';
 
                     $tmpfn = tempnam($temp_dir, 'zipmessage');
                     $tmpfp = fopen($tmpfn, 'w');
@@ -317,9 +317,19 @@ class zipdownload extends rcube_plugin
      */
     private function _convert_filename($str)
     {
-        $str = rcube_charset::convert($str, RCUBE_CHARSET, $this->charset);
+        $str = strtr($str, array(':' => '', '/' => '-'));
 
-        return strtr($str, array(':' => '', '/' => '-'));
+        return rcube_charset::convert($str, RCUBE_CHARSET, $this->charset);
+    }
+
+    /**
+     * Helper function to convert message subject into filename
+     */
+    private function _filename_from_subject($str)
+    {
+        $str = preg_replace('/[\t\n\r\0\x0B]+\s*/', ' ', $str);
+
+        return trim($str, " ./_");
     }
 }
 

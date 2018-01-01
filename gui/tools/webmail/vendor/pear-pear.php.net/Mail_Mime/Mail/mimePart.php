@@ -53,7 +53,7 @@
  */
 
 /**
- * require PEAR
+ * Require PEAR
  *
  * This package depends on PEAR to raise errors.
  */
@@ -124,6 +124,13 @@ class Mail_mimePart
     protected $body_file;
 
     /**
+     * The short text of multipart part preamble (RFC2046 5.1.1)
+     *
+     * @var string
+     */
+    protected $preamble;
+
+    /**
      * The end-of-line sequence
      *
      * @var string
@@ -155,9 +162,10 @@ class Mail_mimePart
      *     headers_charset   - Charset of the headers e.g. filename, description.
      *                         If not set, 'charset' will be used
      *     eol               - End of line sequence. Default: "\r\n"
-     *     headers           - Hash array with additional part headers. Array keys can be
-     *                         in form of <header_name>:<parameter_name>
+     *     headers           - Hash array with additional part headers. Array keys
+     *                         can be in form of <header_name>:<parameter_name>
      *     body_file         - Location of file with part's body (instead of $body)
+     *     preamble          - short text of multipart part preamble (RFC2046 5.1.1)
      */
     public function __construct($body = '', $params = array())
     {
@@ -189,6 +197,10 @@ class Mail_mimePart
 
             case 'body_file':
                 $this->body_file = $value;
+                break;
+
+            case 'preamble':
+                $this->preamble = $value;
                 break;
 
             // for backward compatibility
@@ -225,7 +237,6 @@ class Mail_mimePart
         $h_charset  = !empty($params['headers_charset']) ? $params['headers_charset'] : 'US-ASCII';
         $h_language = !empty($params['language']) ? $params['language'] : null;
         $h_encoding = !empty($params['name_encoding']) ? $params['name_encoding'] : null;
-
 
         if (!empty($params['filename'])) {
             $headers['Content-Type'] .= ';' . $this->eol;
@@ -306,7 +317,11 @@ class Mail_mimePart
 
             $this->headers['Content-Type'] .= ";$eol boundary=\"$boundary\"";
 
-            $encoded['body'] = ''; 
+            $encoded['body'] = '';
+
+            if ($this->preamble) {
+                $encoded['body'] .= $this->preamble . $eol . $eol;
+            }
 
             for ($i = 0; $i < count($this->subparts); $i++) {
                 $encoded['body'] .= '--' . $boundary . $eol;
@@ -321,7 +336,6 @@ class Mail_mimePart
             }
 
             $encoded['body'] .= '--' . $boundary . '--' . $eol;
-
         } else if ($this->body) {
             $encoded['body'] = $this->getEncodedData($this->body, $this->encoding);
         } else if ($this->body_file) {
@@ -359,7 +373,7 @@ class Mail_mimePart
      *
      * @return array An associative array containing message headers
      *               or PEAR error object
-     * @since 1.6.0
+     * @since  1.6.0
      */
     public function encodeToFile($filename, $boundary = null, $skip_head = false)
     {
@@ -423,6 +437,11 @@ class Mail_mimePart
         }
 
         if (count($this->subparts)) {
+            if ($this->preamble) {
+                fwrite($fh, $f_eol . $this->preamble . $eol);
+                $f_eol = $eol;
+            }
+
             for ($i = 0; $i < count($this->subparts); $i++) {
                 fwrite($fh, $f_eol . '--' . $boundary . $eol);
                 $res = $this->subparts[$i]->encodePartToFile($fh);
@@ -433,9 +452,9 @@ class Mail_mimePart
             }
 
             fwrite($fh, $eol . '--' . $boundary . '--' . $eol);
-
         } else if ($this->body) {
-            fwrite($fh, $f_eol . $this->getEncodedData($this->body, $this->encoding));
+            fwrite($fh, $f_eol);
+            fwrite($fh, $this->getEncodedData($this->body, $this->encoding));
         } else if ($this->body_file) {
             fwrite($fh, $f_eol);
             $res = $this->getEncodedDataFromFile(
@@ -453,15 +472,21 @@ class Mail_mimePart
      * Adds a subpart to current mime part and returns
      * a reference to it
      *
-     * @param string $body   The body of the subpart, if any.
-     * @param array  $params The parameters for the subpart, same
-     *                       as the $params argument for constructor.
+     * @param mixed $body   The body of the subpart or Mail_mimePart object
+     * @param array $params The parameters for the subpart, same
+     *                      as the $params argument for constructor
      *
      * @return Mail_mimePart A reference to the part you just added.
      */
-    public function addSubpart($body, $params)
+    public function addSubpart($body, $params = null)
     {
-        $this->subparts[] = $part = new Mail_mimePart($body, $params);
+        if ($body instanceof Mail_mimePart) {
+            $part = $body;
+        } else {
+            $part = new Mail_mimePart($body, $params);
+        }
+
+        $this->subparts[] = $part;
 
         return $part;
     }
@@ -795,7 +820,7 @@ class Mail_mimePart
      * @param string $eol      End-of-line sequence. Default: "\r\n"
      *
      * @return string Encoded header data (without a name)
-     * @since 1.6.1
+     * @since  1.6.1
      */
     public static function encodeHeader($name, $value, $charset = 'ISO-8859-1',
         $encoding = 'quoted-printable', $eol = "\r\n"
@@ -824,10 +849,18 @@ class Mail_mimePart
             $charset = 'ISO-8859-1';
         }
 
+        // exploding quoted strings as well as some regexes below do not
+        // work properly with some charset e.g. ISO-2022-JP, we'll use UTF-8
+        $mb = $charset != 'UTF-8' && function_exists('mb_convert_encoding');
+
         // Structured header (make sure addr-spec inside is not encoded)
         if (!empty($separator)) {
             // Simple e-mail address regexp
             $email_regexp = '([^\s<]+|("[^\r\n"]+"))@\S+';
+
+            if ($mb) {
+                $value = mb_convert_encoding($value, 'UTF-8', $charset);
+            }
 
             $parts = Mail_mimePart::explodeQuotedString("[\t$separator]", $value);
             $value = '';
@@ -854,8 +887,9 @@ class Mail_mimePart
                 } else if (preg_match('/<*' . $email_regexp . '>*$/', $part, $matches)) {
                     // address with name (handle name)
                     $address = $matches[0];
-                    $word = str_replace($address, '', $part);
-                    $word = trim($word);
+                    $word    = str_replace($address, '', $part);
+                    $word    = trim($word);
+
                     // check if phrase requires quoting
                     if ($word) {
                         // non-ASCII: require encoding
@@ -863,17 +897,20 @@ class Mail_mimePart
                             if ($word[0] == '"' && $word[strlen($word)-1] == '"') {
                                 // de-quote quoted-string, encoding changes
                                 // string to atom
-                                $search = array("\\\"", "\\\\");
-                                $replace = array("\"", "\\");
-                                $word = str_replace($search, $replace, $word);
                                 $word = substr($word, 1, -1);
+                                $word = preg_replace('/\\\\([\\\\"])/', '$1', $word);
                             }
+                            if ($mb) {
+                                $word = mb_convert_encoding($word, $charset, 'UTF-8');
+                            }
+
                             // find length of last line
                             if (($pos = strrpos($value, $eol)) !== false) {
                                 $last_len = strlen($value) - $pos;
                             } else {
                                 $last_len = strlen($value);
                             }
+
                             $word = Mail_mimePart::encodeHeaderValue(
                                 $word, $charset, $encoding, $last_len, $eol
                             );
@@ -884,8 +921,12 @@ class Mail_mimePart
                             $word = '"'.addcslashes($word, '\\"').'"';
                         }
                     }
+
                     $value .= $word.' '.$address;
                 } else {
+                    if ($mb) {
+                        $part = mb_convert_encoding($part, $charset, 'UTF-8');
+                    }
                     // addr-spec not found, don't encode (?)
                     $value .= $part;
                 }
@@ -903,21 +944,26 @@ class Mail_mimePart
             // non-ASCII: require encoding
             if (preg_match('#([^\s\x21-\x7E]){1}#', $value)) {
                 if ($value[0] == '"' && $value[strlen($value)-1] == '"') {
+                    if ($mb) {
+                        $value = mb_convert_encoding($value, 'UTF-8', $charset);
+                    }
                     // de-quote quoted-string, encoding changes
                     // string to atom
-                    $search = array("\\\"", "\\\\");
-                    $replace = array("\"", "\\");
-                    $value = str_replace($search, $replace, $value);
                     $value = substr($value, 1, -1);
+                    $value = preg_replace('/\\\\([\\\\"])/', '$1', $value);
+                    if ($mb) {
+                        $value = mb_convert_encoding($value, $charset, 'UTF-8');
+                    }
                 }
+
                 $value = Mail_mimePart::encodeHeaderValue(
                     $value, $charset, $encoding, strlen($name) + 2, $eol
                 );
             } else if (strlen($name.': '.$value) > 78) {
                 // ASCII: check if header line isn't too long and use folding
                 $value = preg_replace('/\r?\n[\s\t]*/', $eol . ' ', $value);
-                $tmp = wordwrap($name.': '.$value, 78, $eol . ' ');
-                $value = preg_replace('/^'.$name.':\s*/', '', $tmp);
+                $tmp   = wordwrap($name . ': ' . $value, 78, $eol . ' ');
+                $value = preg_replace('/^' . $name . ':\s*/', '', $tmp);
                 // hard limit 998 (RFC2822)
                 $value = wordwrap($value, 998, $eol . ' ', true);
             }
@@ -938,18 +984,20 @@ class Mail_mimePart
     {
         $result = array();
         $strlen = strlen($string);
+        $quoted_string = '"(?:[^"\\\\]|\\\\.)*"';
 
-        for ($q=$p=$i=0; $i < $strlen; $i++) {
-            if ($string[$i] == "\""
-                && (empty($string[$i-1]) || $string[$i-1] != "\\")
-            ) {
-                $q = $q ? false : true;
-            } else if (!$q && preg_match("/$delimiter/", $string[$i])) {
+        for ($p=$i=0; $i < $strlen; $i++) {
+            if ($string[$i] === '"') {
+                $r = preg_match("/$quoted_string/", $string, $matches, 0, $i);
+                if (!$r || empty($matches[0])) {
+                    break;
+                }
+                $i += strlen($matches[0]) - 1;
+            } else if (preg_match("/$delimiter/", $string[$i])) {
                 $result[] = substr($string, $p, $i - $p);
                 $p = $i + 1;
             }
         }
-
         $result[] = substr($string, $p);
         return $result;
     }
@@ -964,7 +1012,7 @@ class Mail_mimePart
      * @param string $eol        End-of-line sequence. Default: "\r\n"
      *
      * @return string Encoded header data
-     * @since 1.6.1
+     * @since  1.6.1
      */
     public static function encodeHeaderValue($value, $charset, $encoding, $prefix_len = 0, $eol = "\r\n")
     {
@@ -1063,7 +1111,7 @@ class Mail_mimePart
      * @param string $str String to encode
      *
      * @return string Encoded string
-     * @since 1.6.0
+     * @since  1.6.0
      */
     public static function encodeQP($str)
     {
@@ -1092,7 +1140,7 @@ class Mail_mimePart
      * @param string $eol        End-of-line sequence. Default: "\r\n"
      *
      * @return string Encoded string
-     * @since 1.8.0
+     * @since  1.8.0
      */
     public static function encodeMB($str, $charset, $encoding, $prefix_len=0, $eol="\r\n")
     {

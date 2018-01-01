@@ -57,7 +57,7 @@ class filesystem_attachments extends rcube_plugin
     {
         $args['status'] = false;
         $group  = $args['group'];
-        $rcmail = rcmail::get_instance();
+        $rcmail = rcube::get_instance();
 
         // use common temp dir for file uploads
         $temp_dir = $rcmail->config->get('temp_dir');
@@ -85,7 +85,7 @@ class filesystem_attachments extends rcube_plugin
         $args['status'] = false;
 
         if (!$args['path']) {
-            $rcmail   = rcmail::get_instance();
+            $rcmail   = rcube::get_instance();
             $temp_dir = $rcmail->config->get('temp_dir');
             $tmp_path = tempnam($temp_dir, 'rcmAttmnt');
 
@@ -171,7 +171,7 @@ class filesystem_attachments extends rcube_plugin
 
     function file_id()
     {
-        $userid = rcmail::get_instance()->user->ID;
+        $userid = rcube::get_instance()->user->ID;
         list($usec, $sec) = explode(' ', microtime());
         $id = preg_replace('/[^0-9]/', '', $userid . $sec . $usec);
 

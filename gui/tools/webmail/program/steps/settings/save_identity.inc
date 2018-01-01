@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  +-----------------------------------------------------------------------+
  | program/steps/settings/save_identity.inc                              |
  |                                                                       |
@@ -96,7 +96,7 @@ if (!empty($save_data['signature']) && !empty($save_data['html_signature'])) {
     unset($_POST['_signature']);
 }
 
-// update an existing contact
+// update an existing identity
 if ($_POST['_iid']) {
     $iid = rcube_utils::get_input_value('_iid', rcube_utils::INPUT_POST);
 
@@ -135,7 +135,7 @@ if ($_POST['_iid']) {
     }
     else {
         // show error message
-        $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'errorsaving', 'error', null, false);
+        $OUTPUT->show_message($plugin['message'] ?: 'errorsaving', 'error', null, false);
         $RCMAIL->overwrite_action('edit-identity');
         return;
     }
@@ -177,7 +177,7 @@ else if (IDENTITIES_LEVEL < 2) {
     }
     else {
         // show error message
-        $OUTPUT->show_message($plugin['message'] ? $plugin['message'] : 'errorsaving', 'error', null, false);
+        $OUTPUT->show_message($plugin['message'] ?: 'errorsaving', 'error', null, false);
         $RCMAIL->overwrite_action('edit-identity');
         return;
     }
@@ -218,7 +218,7 @@ function rcmail_attach_images($html)
             $file = $RCMAIL->plugins->exec_hook('attachment_get', $file);
 
             $data_uri .= 'src="data:' . $file['mimetype'] . ';base64,';
-            $data_uri .= base64_encode($file['data'] ? $file['data'] : file_get_contents($file['path']));
+            $data_uri .= base64_encode($file['data'] ?: file_get_contents($file['path']));
             $data_uri .= '" ';
         }
 

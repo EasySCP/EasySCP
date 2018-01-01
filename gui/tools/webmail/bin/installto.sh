@@ -5,7 +5,7 @@
  | bin/installto.sh                                                      |
  |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2014, The Roundcube Dev Team                            |
+ | Copyright (C) 2014-2016, The Roundcube Dev Team                       |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -42,27 +42,47 @@ echo "Upgrading from $oldversion. Do you want to continue? (y/N)\n";
 $input = trim(fgets(STDIN));
 
 if (strtolower($input) == 'y') {
-  $err = false;
   echo "Copying files to target location...";
+
+  // Save a copy of original .htaccess file (#1490623)
+  if (file_exists("$target_dir/.htaccess")) {
+    $htaccess_copied = copy("$target_dir/.htaccess", "$target_dir/.htaccess.orig");
+  }
+
   $dirs = array('program','installer','bin','SQL','plugins','skins');
   if (is_dir(INSTALL_PATH . 'vendor') && !is_file(INSTALL_PATH . 'composer.json')) {
     $dirs[] = 'vendor';
   }
   foreach ($dirs as $dir) {
-    if (!system("rsync -avC " . INSTALL_PATH . "$dir/* $target_dir/$dir/")) {
-      $err = true;
-      break;
+    // @FIXME: should we use --delete for all directories?
+    $delete  = in_array($dir, array('program', 'installer')) ? '--delete ' : '';
+    $command = "rsync -aC --out-format \"%n\" " . $delete . INSTALL_PATH . "$dir/* $target_dir/$dir/";
+    if (!system($command, $ret) || $ret > 0) {
+      rcube::raise_error("Failed to execute command: $command", false, true);
     }
   }
   foreach (array('index.php','.htaccess','config/defaults.inc.php','composer.json-dist','CHANGELOG','README.md','UPGRADING','LICENSE','INSTALL') as $file) {
-    if (!system("rsync -av " . INSTALL_PATH . "$file $target_dir/$file")) {
-      $err = true;
-      break;
+    $command = "rsync -a --out-format \"%n\" " . INSTALL_PATH . "$file $target_dir/$file";
+    if (file_exists(INSTALL_PATH . $file) && (!system($command, $ret) || $ret > 0)) {
+      rcube::raise_error("Failed to execute command: $command", false, true);
     }
   }
+
   // remove old (<1.0) .htaccess file
   @unlink("$target_dir/program/.htaccess");
-  echo "done.\n\n";
+  echo "done.";
+
+  // Inform the user about .htaccess change
+  if (!empty($htaccess_copied)) {
+    if (file_get_contents("$target_dir/.htaccess") != file_get_contents("$target_dir/.htaccess.orig")) {
+      echo "\n!! Old .htaccess file saved as .htaccess.orig !!";
+    }
+    else {
+      @unlink("$target_dir/.htaccess.orig");
+    }
+  }
+
+  echo "\n\n";
 
   if (is_dir("$target_dir/skins/default")) {
       echo "Removing old default skin...";
@@ -75,13 +95,12 @@ if (strtolower($input) == 'y') {
       echo "done.\n\n";
   }
 
-  if (!$err) {
-    echo "Running update script at target...\n";
-    system("cd $target_dir && php bin/update.sh --version=$oldversion");
-    echo "All done.\n";
-  }
+  echo "Running update script at target...\n";
+  system("cd $target_dir && php bin/update.sh --version=$oldversion");
+  echo "All done.\n";
 }
-else
+else {
   echo "Update cancelled. See ya!\n";
+}
 
 ?>

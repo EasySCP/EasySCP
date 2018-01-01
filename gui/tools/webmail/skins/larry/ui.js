@@ -60,6 +60,8 @@ function rcube_mail_ui()
     if (bw.tablet) {
       $('#viewport').attr('content', "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0");
     }
+
+    $(document).ready(function() { me.init(); });
   }
 
 
@@ -129,6 +131,10 @@ function rcube_mail_ui()
       var ismin = $(document.body).toggleClass('minimal').hasClass('minimal');
       save_pref('minimalmode', ismin?1:0);
       $(window).resize();
+
+      // This hack fixes re-positioning of the fixed header of messages list (#5711)
+      if (bw.chrome)
+        $('#mailviewsplitterv').trigger('mousedown').trigger('mouseup');
     });
 
     /***  mail task  ***/
@@ -136,6 +142,7 @@ function rcube_mail_ui()
       rcmail.addEventListener('menu-open', menu_toggle)
         .addEventListener('menu-close', menu_toggle)
         .addEventListener('menu-save', save_listoptions)
+        .addEventListener('enable-command', enable_command)
         .addEventListener('responseafterlist', function(e){ switch_view_mode(rcmail.env.threading ? 'thread' : 'list', true) })
         .addEventListener('responseaftersearch', function(e){ switch_view_mode(rcmail.env.threading ? 'thread' : 'list', true) });
 
@@ -146,9 +153,9 @@ function rcube_mail_ui()
       }
 
       if (rcmail.env.action == 'show' || rcmail.env.action == 'preview') {
-        rcmail.addEventListener('enable-command', enable_command)
-          .addEventListener('aftershow-headers', function() { layout_messageview(); })
+        rcmail.addEventListener('aftershow-headers', function() { layout_messageview(); })
           .addEventListener('afterhide-headers', function() { layout_messageview(); });
+
         $('#previewheaderstoggle').click(function(e) {
             toggle_preview_headers();
             if (this.blur && !rcube_event.is_keyboard(e))
@@ -159,7 +166,7 @@ function rcube_mail_ui()
         // add menu link for each attachment
         $('#attachment-list > li').each(function() {
           $(this).append($('<a class="drop" tabindex="0" aria-haspopup="true">Show options</a>')
-              .bind('click keypress', function(e) {
+              .on('click keypress', function(e) {
                   if (e.type != 'keypress' || rcube_event.get_keycode(e) == 13) {
                       attachmentmenu(this, e);
                       return false;
@@ -174,10 +181,15 @@ function rcube_mail_ui()
       }
       else if (rcmail.env.action == 'compose') {
         rcmail.addEventListener('aftersend-attachment', show_uploadform)
-          .addEventListener('aftertoggle-editor', function(e){
+          .addEventListener('aftertoggle-editor', function(e) {
             window.setTimeout(function(){ layout_composeview() }, 200);
             if (e && e.mode)
               $("select[name='editorSelector']").val(e.mode);
+          })
+          .addEventListener('compose-encrypted', function(e) {
+            $("select[name='editorSelector']").prop('disabled', e.active);
+            $('a.button.attach, a.button.responses')[(e.active?'addClass':'removeClass')]('disabled');
+            $('#responseslist a.insertresponse')[(e.active?'removeClass':'addClass')]('active');
           });
 
         // Show input elements with non-empty value
@@ -226,12 +238,13 @@ function rcube_mail_ui()
         $('#mailthreadmode').addClass(rcmail.env.threading ? 'selected' : '').click(function(e) { switch_view_mode('thread'); return false; });
 
         mailviewsplit = new rcube_splitter({ id:'mailviewsplitter', p1:'#mailview-top', p2:'#mailview-bottom',
-          orientation:'h', relative:true, start:310, min:150, size:12, offset:4 });
+          orientation:'h', relative:true, start:276, min:150, size:12, offset:4 });
         if (previewframe)
           mailviewsplit.init();
 
+        rcmail.init_pagejumper('#pagejumper');
+
         rcmail.addEventListener('setquota', update_quota)
-          .addEventListener('enable-command', enable_command)
           .addEventListener('afterimport-messages', show_uploadform);
       }
       else if (rcmail.env.action == 'get') {
@@ -278,8 +291,8 @@ function rcube_mail_ui()
       else if (rcmail.env.action == 'edit-prefs') {
         var legend = $('#preferences-details fieldset.advanced legend'),
           toggle = $('<a href="#toggle"></a>')
-            .text(env.toggleoptions)
-            .attr('title', env.toggleoptions)
+            .text(rcmail.gettext('toggleadvancedoptions'))
+            .attr('title', rcmail.gettext('toggleadvancedoptions'))
             .addClass('advanced-toggle');
 
         legend.click(function(e) {
@@ -439,7 +452,7 @@ function rcube_mail_ui()
           resizable: false,
           closeOnEscape: true,
           dialogClass: 'popupmessage ' + p.type,
-          title: env.errortitle,
+          title: rcmail.gettext('errortitle'),
           close: dialog_close,
           position: ['center', 'center'],
           hide: {effect: 'fadeOut'},
@@ -466,6 +479,14 @@ function rcube_mail_ui()
     if (!$('#attachment-list li').length) {
       $('div.rightcol').hide().attr('aria-hidden', 'true');
       $('div.leftcol').css('margin-right', '0');
+    }
+
+    var mvlpe = $('#messagebody.mailvelope, #messagebody > .mailvelope');
+    if (mvlpe.length) {
+      var h = $('#messagecontent').length ?
+        $('#messagecontent').height() - 16 :
+        $(window).height() - mvlpe.offset().top - 10;
+      mvlpe.height(h);
     }
   }
 
@@ -533,6 +554,7 @@ function rcube_mail_ui()
       y -= step;
 
     element.css('background-position', '0 -' + y + 'px');
+    element.attr('class', 'countdisplay p' + (Math.round(p.percent / 10) * 10));
 
     if (p.table) {
       if (!menu.length)
@@ -586,6 +608,10 @@ function rcube_mail_ui()
         $('a.button.replyall').attr('title', label);
       else
         $('a.button.reply-all').text(label).attr('title', label);
+    }
+    else if (p.command == 'compose-encrypted') {
+      // show the toolbar button for Mailvelope
+      $('a.button.encrypt').show();
     }
   }
 
@@ -804,11 +830,11 @@ function rcube_mail_ui()
   {
     var id = elem.parentNode.id.replace(/^attach/, '');
 
-    $('#attachmenuopen').unbind('click').attr('onclick', '').click(function(e) {
+    $('#attachmenuopen').off('click').attr('onclick', '').click(function(e) {
       return rcmail.command('open-attachment', id, this);
     });
 
-    $('#attachmenudownload').unbind('click').attr('onclick', '').click(function() {
+    $('#attachmenudownload').off('click').attr('onclick', '').click(function() {
       rcmail.command('download-attachment', id, this);
     });
 
@@ -829,7 +855,7 @@ function rcube_mail_ui()
         li = $('<li role="menuitem">');
         link = $('<a href="#'+k+'" tabindex="0"></a>').text(rcmail.env.spell_langs[k])
           .addClass('active').data('lang', k)
-          .bind('click keypress', function(e) {
+          .on('click keypress', function(e) {
               if (e.type != 'keypress' || rcube_event.get_keycode(e) == 13) {
                   rcmail.spellcheck_lang_set($(this).data('lang'));
                   rcmail.hide_menu('spellmenu', e);
@@ -1013,6 +1039,10 @@ function rcube_mail_ui()
       $dialog.dialog('close');
       return;
     }
+
+    // do nothing if mailvelope editor is active
+    if (rcmail.mailvelope_editor)
+      return;
 
     // add icons to clone file input field
     if (rcmail.env.action == 'compose' && !$dialog.data('extended')) {
@@ -1253,7 +1283,7 @@ function rcube_splitter(p)
       .attr('role', 'presentation')
       .addClass('splitter ' + (this.horizontal ? 'splitter-h' : 'splitter-v'))
       .appendTo(this.parent)
-      .bind('mousedown', onDragStart);
+      .mousedown(onDragStart);
 
     if (this.horizontal) {
       var top = this.p1pos.top + this.p1.outerHeight();
@@ -1334,7 +1364,7 @@ function rcube_splitter(p)
     me.drag_active = true;
 
     // start listening to mousemove events
-    $(document).bind('mousemove.'+this.id, onDrag).bind('mouseup.'+this.id, onDragStop);
+    $(document).on('mousemove.' + this.id, onDrag).on('mouseup.' + this.id, onDragStop);
 
     // enable dragging above iframes
     $('iframe').each(function(i, elem) {
@@ -1411,7 +1441,7 @@ function rcube_splitter(p)
       document.body.style.webkitUserSelect = 'auto';
 
     // cancel the listening for drag events
-    $(document).unbind('.'+me.id);
+    $(document).off('.' + me.id);
     me.drag_active = false;
 
     // remove temp divs

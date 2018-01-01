@@ -104,7 +104,7 @@ input.button
   font-size: 12px;
   padding-left: 8px;
   padding-right: 8px;
-  background: url(images/buttons/bg.gif?v=30b2.196) repeat-x #f0f0f0;
+  background: url(images/buttons/bg.gif?v=0200.203) repeat-x #f0f0f0;
   border: 1px solid #a4a4a4;
 }
 
@@ -211,7 +211,7 @@ body > #logo
   color: #666666;
   text-decoration: none;
   padding: 6px 12px 6px 26px;
-  background: url(images/taskicons.gif?v=b8e0.1519) no-repeat;
+  background: url(images/taskicons.gif?v=9719.2207) no-repeat;
 }
 
 #taskbar a:hover
@@ -260,6 +260,7 @@ body > #message div
 
 body > #message div.notice,
 body > #messagebody .part-notice,
+body > #mainscreen #messagebody .part-notice,
 #message-objects div.notice
 {
   background: url(images/display/icons.png?v=e866.4201) 6px 3px no-repeat;
@@ -324,7 +325,7 @@ body.extwin #closelink
 .boxtitle
 {
   height: 12px !important;
-  padding: 2px 10px 5px 5px;
+  padding: 3px 10px 4px 5px;
   border-bottom: 1px solid #999;
   color: #333;
   font-size: 11px;
@@ -353,6 +354,16 @@ body.iframe .boxtitle
 {
   padding: 15px 10px 10px 10px;
   background-color: #F2F2F2;
+}
+
+.boxcontent .boxwarning
+{
+  margin: 0 0 10px;
+  display: block;
+  min-height: 22px;
+  background: url(images/display/icons.png?v=e866.4201) #EF9398 6px -95px no-repeat;
+  border: 1px solid #DC5757;
+  padding: 8px 10px 8px 46px;
 }
 
 .boxcontent table td.title
@@ -444,7 +455,7 @@ body.iframe .boxtitle
   margin: 1px;
   margin-top: 2px;
   overflow: hidden;
-  background: url(images/pagenav.gif?v=2e75.355) 0 0 no-repeat transparent;
+  background: url(images/pagenav.gif?v=8464.1147) 0 0 no-repeat transparent;
   opacity: 0.99; /* this is needed to make buttons appear correctly in Chrome */
 }
 
@@ -478,6 +489,22 @@ body.iframe .boxtitle
 
 .pagenav a.lastpageSel {
   background-position: -33px -11px;
+}
+
+#rcmcountdisplay
+{
+  float: left;
+  margin-right: 10px;
+}
+
+#countcontrols #pagejumper
+{
+  margin: 0 5px;
+  float: right;
+  text-align: center;
+  padding: 0;
+  cursor: default;
+  font-size: 10px;
 }
 
 .splitter
@@ -544,9 +571,10 @@ body.iframe .boxtitle
 {
   display: block;
   color: #a0a0a0;
-  padding: 2px 16px 2px 10px;
+  padding: 3px 16px 3px 10px;
   text-decoration: none;
   min-height: 14px;
+  line-height: 14px;
   background: transparent;
 }
 
@@ -933,7 +961,7 @@ div.searchbox,
   width: 190px;
   height: 20px;
   text-align: right;
-  background: url(images/searchfield.gif?v=aaf8.313) top left no-repeat;
+  background: url(images/searchfield.gif?v=36a5.397) top left no-repeat;
 }
 
 #quicksearchbar
@@ -1119,7 +1147,8 @@ a.rcmContactAddress:hover
   cursor: pointer;
 }
 
-#rcmKSearchpane ul li.selected
+#rcmKSearchpane ul li.selected,
+#pagejump-selector ul li.selected
 {
   color: #ffffff;
   background-color: #CC3333;
@@ -1205,9 +1234,10 @@ ul.toolbarmenu li a
 {
   display: block;
   color: #a0a0a0;
-  padding: 1px 12px 3px 28px;
+  padding: 3px 12px 3px 28px;
   text-decoration: none;
   min-height: 14px;
+  line-height: 14px;
 }
 
 ul.toolbarmenu li a.active,
@@ -1265,6 +1295,35 @@ ul.toolbarmenu li.separator_above
 #searchmenu ul.toolbarmenu li
 {
   margin: 1px 4px 1px;
+}
+
+#searchmenu ul.toolbarmenu li label
+{
+  padding: 2px 0;
+  color: black;
+}
+
+#searchmenu ul.toolbarmenu li label.comment
+{
+  color: #999;
+}
+
+#searchmenu select
+{
+  width: 100%;
+}
+
+#pagejump-selector
+{
+  max-height: 250px;
+  overflow-x: hidden;
+}
+
+#pagejump-selector ul li
+{
+  min-width: 45px;
+  padding: 2px 5px;
+  cursor: default;
 }
 
 
@@ -1347,7 +1406,7 @@ span.tablink-selected
   height: 23px !important;
   height: 22px;
   overflow: hidden;
-  background: url(images/tabs-left.gif?v=0541.219) top left no-repeat;
+  background: url(images/tabs-left.gif?v=d7b0.230) top left no-repeat;
 }
 
 span.tablink
@@ -1374,7 +1433,7 @@ span.tablink-selected a
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
-  background: url(images/tabs-right.gif?v=5414.733) top right no-repeat;
+  background: url(images/tabs-right.gif?v=5c83.1417) top right no-repeat;
 }
 
 span.tablink-selected a

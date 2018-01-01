@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  +-----------------------------------------------------------------------+
  | program/steps/mail/viewsource.inc                                     |
  |                                                                       |
@@ -28,19 +28,16 @@ ob_end_clean();
 // similar code as in program/steps/mail/get.inc
 if ($uid = rcube_utils::get_input_value('_uid', rcube_utils::INPUT_GET)) {
     $headers = $RCMAIL->storage->get_message_headers($uid);
-    $charset = $headers->charset ? $headers->charset : $RCMAIL->config->get('default_charset');
+    $charset = $headers->charset ?: $RCMAIL->config->get('default_charset');
 
     header("Content-Type: text/plain; charset={$charset}");
 
     if (!empty($_GET['_save'])) {
-        $subject  = rcube_mime::decode_header($headers->subject, $headers->charset);
-        $filename = ($subject ? $subject : $RCMAIL->config->get('product_name', 'email')) . '.eml';
         $browser  = $RCMAIL->output->browser;
-
-        if ($browser->ie)
-            $filename = rawurlencode($filename);
-        else
-            $filename = addcslashes($filename, '"');
+        $subject  = rcube_mime::decode_header($headers->subject, $headers->charset);
+        $filename = rcmail_filename_from_subject(mb_substr($subject, 0, 128));
+        $filename = ($filename ?: $uid)  . '.eml';
+        $filename = $browser->ie ? rawurlencode($filename) : addcslashes($filename, '"');
 
         header("Content-Length: {$headers->size}");
         header("Content-Disposition: attachment; filename=\"$filename\"");
@@ -60,3 +57,14 @@ else {
 }
 
 exit;
+
+
+/**
+ * Helper function to convert message subject into filename
+ */
+function rcmail_filename_from_subject($str)
+{
+    $str = preg_replace('/[:\t\n\r\0\x0B\/]+\s*/', ' ', $str);
+
+    return trim($str, " \t\n\r\0\x0B./_");
+}

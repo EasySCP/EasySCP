@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  +-----------------------------------------------------------------------+
  | Roundcube/rcube_ldap_generic.php                                      |
  |                                                                       |
@@ -48,7 +48,8 @@ class rcube_ldap_generic extends Net_LDAP3
     {
         // Net_LDAP3 does not support IDNA yet
         // also parse_host() here is very Roundcube specific
-        $host = rcube_utils::idn_to_ascii(rcube_utils::parse_host($host));
+        $host = rcube_utils::parse_host($host, $this->config['mail_domain']);
+        $host = rcube_utils::idn_to_ascii($host);
 
         return parent::connect($host);
     }
@@ -57,12 +58,13 @@ class rcube_ldap_generic extends Net_LDAP3
      * Get a specific LDAP entry, identified by its DN
      *
      * @param string $dn Record identifier
+     * @param array  $attributes Attributes to return
      *
      * @return array Hash array
      */
-    function get_entry($dn)
+    function get_entry($dn, $attributes = array())
     {
-        return parent::get_entry($dn, $this->attributes);
+        return parent::get_entry($dn, !empty($attributes) ? $attributes : $this->attributes);
     }
 
     /**
@@ -284,10 +286,11 @@ class rcube_ldap_generic extends Net_LDAP3
      * Turn an LDAP entry into a regular PHP array with attributes as keys.
      *
      * @param array $entry Attributes array as retrieved from ldap_get_attributes() or ldap_get_entries()
+     * @param bool  $flat  Convert one-element-array values into strings (not implemented)
      *
      * @return array Hash array with attributes as keys
      */
-    public static function normalize_entry($entry)
+    public static function normalize_entry($entry, $flat = false)
     {
         if (!isset($entry['count'])) {
             return $entry;

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  +-----------------------------------------------------------------------+
  | program/steps/mail/autocomplete.inc                                   |
  |                                                                       |
@@ -65,8 +65,8 @@ if (!empty($book_types) && strlen($search)) {
     $search_lc = mb_strtolower($search);
     $mode     |= rcube_addressbook::SEARCH_GROUPS;
 
-    foreach ($book_types as $abook_id) {
-        $abook = $RCMAIL->get_address_book($abook_id);
+    foreach ($book_types as $id) {
+        $abook = $RCMAIL->get_address_book($id);
         $abook->set_pagesize($MAXNUM);
 
         if ($result = $abook->search($RCMAIL->config->get('contactlist_fields'), $search, $mode, true, true, 'email')) {
@@ -93,12 +93,7 @@ if (!empty($book_types) && strlen($search)) {
 
                     // skip duplicates
                     if (empty($contacts[$index])) {
-                        $contact = array(
-                            'name'   => $contact,
-                            'type'   => $record['_type'],
-                            'id'     => $record['ID'],
-                            'source' => $abook_id,
-                        );
+                        $contact = array('name' => $contact, 'type' => $record['_type']);
 
                         if (($display = rcube_addressbook::compose_search_name($record, $email, $name)) && $display != $contact['name']) {
                             $contact['display'] = $display;
@@ -146,7 +141,7 @@ if (!empty($book_types) && strlen($search)) {
                                 'email'  => $email,
                                 'type'   => 'group',
                                 'id'     => $group['ID'],
-                                'source' => $abook_id,
+                                'source' => $id,
                             );
 
                             if (count($contacts) >= $MAXNUM) {
@@ -163,7 +158,7 @@ if (!empty($book_types) && strlen($search)) {
                             'name'   => $group['name'] . ' (' . intval($result->count) . ')',
                             'type'   => 'group',
                             'id'     => $group['ID'],
-                            'source' => $abook_id,
+                            'source' => $id
                         );
 
                         if (count($contacts) >= $MAXNUM) {

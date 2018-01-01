@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  +-----------------------------------------------------------------------+
  | program/steps/mail/get.inc                                            |
  |                                                                       |
@@ -37,12 +37,11 @@ if (!empty($_GET['_preload'])) {
 
 ob_end_clean();
 
-
 // similar code as in program/steps/mail/show.inc
 if (!empty($_GET['_uid'])) {
     $uid = rcube_utils::get_input_value('_uid', rcube_utils::INPUT_GET);
     $RCMAIL->config->set('prefer_html', true);
-    $MESSAGE = new rcube_message($uid);
+    $MESSAGE = new rcube_message($uid, null, intval($_GET['_safe']));
 }
 
 // check connection status
@@ -74,7 +73,7 @@ if (!empty($_GET['_frame'])) {
 }
 
 // render thumbnail of an image attachment
-else if ($_GET['_thumb']) {
+if ($_GET['_thumb']) {
     $pid = rcube_utils::get_input_value('_part', rcube_utils::INPUT_GET);
     if ($part = $MESSAGE->mime_parts[$pid]) {
         $thumbnail_size = $RCMAIL->config->get('image_thumbnail_size', 240);
@@ -95,27 +94,27 @@ else if ($_GET['_thumb']) {
                     $mimetype = 'image/' . $imgtype;
                     unlink($orig_name);
                 }
-                else if (stripos($mimetype, 'image/svg') === 0) {
-                    $content = rcmail_svg_filter(file_get_contents($orig_name));
-                    file_put_contents($cache_file, $content);
-                    unlink($orig_name);
-                }
                 else {
-                    rename($orig_name, $cache_file);
+                    // Resize failed, we need to check the file mimetype
+                    // So, we do not exit here, but goto generic file body handler below
+                    $_GET['_thumb']     = 0;
+                    $_REQUEST['_embed'] = 1;
                 }
             }
         }
 
-        if (is_file($cache_file)) {
-            header('Content-Type: ' . $mimetype);
-            readfile($cache_file);
+        if (!empty($_GET['_thumb'])) {
+            if (is_file($cache_file)) {
+                header('Content-Type: ' . $mimetype);
+                readfile($cache_file);
+            }
+
+            exit;
         }
     }
-
-    exit;
 }
 
-else if (strlen($part_id)) {
+if (strlen($part_id)) {
     if ($part = $MESSAGE->mime_parts[$part_id]) {
         $mimetype = rcmail_fix_mimetype($part->mimetype);
 
@@ -182,6 +181,10 @@ else if (strlen($part_id)) {
                 if ($mimetype == 'application/octet-stream' && strpos($real_mimetype, 'image/') === 0 && $valid_extension) {
                     $mimetype = $real_mimetype;
                 }
+                // fix mimetype for images with wrong mimetype
+                else if (strpos($real_mimetype, 'image/') === 0 && strpos($mimetype, 'image/') === 0) {
+                    $mimetype = $real_mimetype;
+                }
 
                 // "fix" real mimetype the same way the original is before comparison
                 $real_mimetype = rcmail_fix_mimetype($real_mimetype);
@@ -228,7 +231,6 @@ else if (strlen($part_id)) {
             }
         }
 
-
         // TIFF to JPEG conversion, if needed
         $tiff_support = !empty($_SESSION['browser_caps']) && !empty($_SESSION['browser_caps']['tif']);
         if (!empty($_REQUEST['_embed']) && !$tiff_support
@@ -244,7 +246,7 @@ else if (strlen($part_id)) {
         list($ctype_primary, $ctype_secondary) = explode('/', $mimetype);
 
         if (!$plugin['download'] && $ctype_primary == 'text') {
-            header("Content-Type: text/$ctype_secondary; charset=" . ($part->charset ? $part->charset : RCUBE_CHARSET));
+            header("Content-Type: text/$ctype_secondary; charset=" . ($part->charset ?: RCUBE_CHARSET));
         }
         else {
             header("Content-Type: $mimetype");

@@ -4,13 +4,9 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7cec93d24ac905166f1d01a13bd74830
+class ComposerStaticInit877ea556a72fbab14ebbdff131a56e2d
 {
     public static $prefixLengthsPsr4 = array (
-        'P' => 
-        array (
-            'Patchwork\\' => 10,
-        ),
         'C' => 
         array (
             'Composer\\Semver\\' => 16,
@@ -18,10 +14,6 @@ class ComposerStaticInit7cec93d24ac905166f1d01a13bd74830
     );
 
     public static $prefixDirsPsr4 = array (
-        'Patchwork\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/patchwork/utf8/src/Patchwork',
-        ),
         'Composer\\Semver\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/semver/src',
@@ -43,6 +35,13 @@ class ComposerStaticInit7cec93d24ac905166f1d01a13bd74830
                 0 => __DIR__ . '/..' . '/pear/pear_exception',
             ),
         ),
+        'N' => 
+        array (
+            'Net' => 
+            array (
+                0 => __DIR__ . '/..' . '/pear/net_socket',
+            ),
+        ),
         'C' => 
         array (
             'Console' => 
@@ -57,7 +56,6 @@ class ComposerStaticInit7cec93d24ac905166f1d01a13bd74830
     );
 
     public static $classMap = array (
-        'Archive_Tar' => __DIR__ . '/..' . '/pear-pear.php.net/Archive_Tar/Archive/Tar.php',
         'Auth_SASL' => __DIR__ . '/..' . '/pear-pear.php.net/Auth_SASL/Auth/SASL.php',
         'Auth_SASL_Anonymous' => __DIR__ . '/..' . '/pear-pear.php.net/Auth_SASL/Auth/SASL/Anonymous.php',
         'Auth_SASL_Common' => __DIR__ . '/..' . '/pear-pear.php.net/Auth_SASL/Auth/SASL/Common.php',
@@ -67,7 +65,60 @@ class ComposerStaticInit7cec93d24ac905166f1d01a13bd74830
         'Auth_SASL_Login' => __DIR__ . '/..' . '/pear-pear.php.net/Auth_SASL/Auth/SASL/Login.php',
         'Auth_SASL_Plain' => __DIR__ . '/..' . '/pear-pear.php.net/Auth_SASL/Auth/SASL/Plain.php',
         'Auth_SASL_SCRAM' => __DIR__ . '/..' . '/pear-pear.php.net/Auth_SASL/Auth/SASL/SCRAM.php',
-        'Console_Getopt' => __DIR__ . '/..' . '/pear-pear.php.net/Console_Getopt/Console/Getopt.php',
+        'Console_CommandLine' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine.php',
+        'Console_CommandLine_Action' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action.php',
+        'Console_CommandLine_Action_Callback' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/Callback.php',
+        'Console_CommandLine_Action_Counter' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/Counter.php',
+        'Console_CommandLine_Action_Help' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/Help.php',
+        'Console_CommandLine_Action_List' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/List.php',
+        'Console_CommandLine_Action_Password' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/Password.php',
+        'Console_CommandLine_Action_StoreArray' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/StoreArray.php',
+        'Console_CommandLine_Action_StoreFalse' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/StoreFalse.php',
+        'Console_CommandLine_Action_StoreFloat' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/StoreFloat.php',
+        'Console_CommandLine_Action_StoreInt' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/StoreInt.php',
+        'Console_CommandLine_Action_StoreString' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/StoreString.php',
+        'Console_CommandLine_Action_StoreTrue' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/StoreTrue.php',
+        'Console_CommandLine_Action_Version' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Action/Version.php',
+        'Console_CommandLine_Argument' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Argument.php',
+        'Console_CommandLine_Command' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Command.php',
+        'Console_CommandLine_CustomMessageProvider' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/CustomMessageProvider.php',
+        'Console_CommandLine_Element' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Element.php',
+        'Console_CommandLine_Exception' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Exception.php',
+        'Console_CommandLine_MessageProvider' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/MessageProvider.php',
+        'Console_CommandLine_MessageProvider_Default' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/MessageProvider/Default.php',
+        'Console_CommandLine_Option' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Option.php',
+        'Console_CommandLine_Outputter' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Outputter.php',
+        'Console_CommandLine_Outputter_Default' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Outputter/Default.php',
+        'Console_CommandLine_Renderer' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Renderer.php',
+        'Console_CommandLine_Renderer_Default' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Renderer/Default.php',
+        'Console_CommandLine_Result' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/Result.php',
+        'Console_CommandLine_XmlParser' => __DIR__ . '/..' . '/pear-pear.php.net/Console_CommandLine/Console/CommandLine/XmlParser.php',
+        'Crypt_GPG' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG.php',
+        'Crypt_GPGAbstract' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPGAbstract.php',
+        'Crypt_GPG_BadPassphraseException' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_ByteUtils' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/ByteUtils.php',
+        'Crypt_GPG_DecryptStatusHandler' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/DecryptStatusHandler.php',
+        'Crypt_GPG_DeletePrivateKeyException' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_Engine' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Engine.php',
+        'Crypt_GPG_Exception' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_FileException' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_InvalidKeyParamsException' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_InvalidOperationException' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_Key' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Key.php',
+        'Crypt_GPG_KeyGenerator' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/KeyGenerator.php',
+        'Crypt_GPG_KeyGeneratorErrorHandler' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/KeyGeneratorErrorHandler.php',
+        'Crypt_GPG_KeyGeneratorStatusHandler' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/KeyGeneratorStatusHandler.php',
+        'Crypt_GPG_KeyNotCreatedException' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_KeyNotFoundException' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_NoDataException' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_OpenSubprocessException' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_PinEntry' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/PinEntry.php',
+        'Crypt_GPG_ProcessControl' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/ProcessControl.php',
+        'Crypt_GPG_Signature' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/Signature.php',
+        'Crypt_GPG_SignatureCreationInfo' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/SignatureCreationInfo.php',
+        'Crypt_GPG_SubKey' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/SubKey.php',
+        'Crypt_GPG_UserId' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/UserId.php',
+        'Crypt_GPG_VerifyStatusHandler' => __DIR__ . '/..' . '/pear-pear.php.net/Crypt_GPG/Crypt/GPG/VerifyStatusHandler.php',
         'Mail_mime' => __DIR__ . '/..' . '/pear-pear.php.net/Mail_Mime/Mail/mime.php',
         'Mail_mimePart' => __DIR__ . '/..' . '/pear-pear.php.net/Mail_Mime/Mail/mimePart.php',
         'Net_IDNA2' => __DIR__ . '/..' . '/pear-pear.php.net/Net_IDNA2/Net/IDNA2.php',
@@ -87,96 +138,19 @@ class ComposerStaticInit7cec93d24ac905166f1d01a13bd74830
         'Net_LDAP3' => __DIR__ . '/..' . '/kolab/net_ldap3/lib/Net/LDAP3.php',
         'Net_LDAP3_Result' => __DIR__ . '/..' . '/kolab/net_ldap3/lib/Net/LDAP3/Result.php',
         'Net_SMTP' => __DIR__ . '/..' . '/pear-pear.php.net/Net_SMTP/Net/SMTP.php',
-        'Net_Sieve' => __DIR__ . '/..' . '/pear-pear.php.net/Net_Sieve/Net/Sieve.php',
+        'Net_Sieve' => __DIR__ . '/..' . '/roundcube/net_sieve/Sieve.php',
         'Net_Socket' => __DIR__ . '/..' . '/pear-pear.php.net/Net_Socket/Net/Socket.php',
-        'Normalizer' => __DIR__ . '/..' . '/patchwork/utf8/src/Normalizer.php',
-        'OS_Guess' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/OS/Guess.php',
-        'PEAR' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR.php',
-        'PEAR_Builder' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Builder.php',
-        'PEAR_ChannelFile' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/ChannelFile.php',
-        'PEAR_ChannelFile_Parser' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/ChannelFile/Parser.php',
-        'PEAR_Command' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command.php',
-        'PEAR_Command_Auth' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Auth.php',
-        'PEAR_Command_Build' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Build.php',
-        'PEAR_Command_Channels' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Channels.php',
-        'PEAR_Command_Common' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Common.php',
-        'PEAR_Command_Config' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Config.php',
-        'PEAR_Command_Install' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Install.php',
-        'PEAR_Command_Mirror' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Mirror.php',
-        'PEAR_Command_Package' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Package.php',
-        'PEAR_Command_Pickle' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Pickle.php',
-        'PEAR_Command_Registry' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Registry.php',
-        'PEAR_Command_Remote' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Remote.php',
-        'PEAR_Command_Test' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Command/Test.php',
-        'PEAR_Common' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Common.php',
-        'PEAR_Config' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Config.php',
-        'PEAR_Dependency2' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Dependency2.php',
-        'PEAR_DependencyDB' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/DependencyDB.php',
-        'PEAR_Downloader' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Downloader.php',
-        'PEAR_Downloader_Package' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Downloader/Package.php',
-        'PEAR_Error' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR.php',
-        'PEAR_ErrorStack' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/ErrorStack.php',
-        'PEAR_Exception' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Exception.php',
-        'PEAR_Frontend' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Frontend.php',
-        'PEAR_Frontend_CLI' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Frontend/CLI.php',
-        'PEAR_Installer' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer.php',
-        'PEAR_Installer_Role' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role.php',
-        'PEAR_Installer_Role_Cfg' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Cfg.php',
-        'PEAR_Installer_Role_Common' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Common.php',
-        'PEAR_Installer_Role_Data' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Data.php',
-        'PEAR_Installer_Role_Doc' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Doc.php',
-        'PEAR_Installer_Role_Ext' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Ext.php',
-        'PEAR_Installer_Role_Man' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Man.php',
-        'PEAR_Installer_Role_Php' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Php.php',
-        'PEAR_Installer_Role_Script' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Script.php',
-        'PEAR_Installer_Role_Src' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Src.php',
-        'PEAR_Installer_Role_Test' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Test.php',
-        'PEAR_Installer_Role_Www' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Installer/Role/Www.php',
-        'PEAR_PackageFile' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/PackageFile.php',
-        'PEAR_PackageFile_Generator_v1' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/PackageFile/Generator/v1.php',
-        'PEAR_PackageFile_Generator_v2' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/PackageFile/Generator/v2.php',
-        'PEAR_PackageFile_Parser_v1' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/PackageFile/Parser/v1.php',
-        'PEAR_PackageFile_Parser_v2' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/PackageFile/Parser/v2.php',
-        'PEAR_PackageFile_v1' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/PackageFile/v1.php',
-        'PEAR_PackageFile_v2' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/PackageFile/v2.php',
-        'PEAR_PackageFile_v2_Validator' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/PackageFile/v2/Validator.php',
-        'PEAR_PackageFile_v2_rw' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/PackageFile/v2/rw.php',
-        'PEAR_Packager' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Packager.php',
-        'PEAR_Proxy' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Proxy.php',
-        'PEAR_REST' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/REST.php',
-        'PEAR_REST_10' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/REST/10.php',
-        'PEAR_REST_11' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/REST/11.php',
-        'PEAR_REST_13' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/REST/13.php',
-        'PEAR_Registry' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Registry.php',
-        'PEAR_RunTest' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/RunTest.php',
-        'PEAR_Task_Common' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Task/Common.php',
-        'PEAR_Task_Postinstallscript' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Task/Postinstallscript.php',
-        'PEAR_Task_Postinstallscript_rw' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Task/Postinstallscript/rw.php',
-        'PEAR_Task_Replace' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Task/Replace.php',
-        'PEAR_Task_Replace_rw' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Task/Replace/rw.php',
-        'PEAR_Task_Unixeol' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Task/Unixeol.php',
-        'PEAR_Task_Unixeol_rw' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Task/Unixeol/rw.php',
-        'PEAR_Task_Windowseol' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Task/Windowseol.php',
-        'PEAR_Task_Windowseol_rw' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Task/Windowseol/rw.php',
-        'PEAR_Validate' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Validate.php',
-        'PEAR_Validator_PECL' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/Validator/PECL.php',
-        'PEAR_XMLParser' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/PEAR/XMLParser.php',
-        'Structures_Graph' => __DIR__ . '/..' . '/pear-pear.php.net/Structures_Graph/Structures/Graph.php',
-        'Structures_Graph_Manipulator_AcyclicTest' => __DIR__ . '/..' . '/pear-pear.php.net/Structures_Graph/Structures/Graph/Manipulator/AcyclicTest.php',
-        'Structures_Graph_Manipulator_TopologicalSorter' => __DIR__ . '/..' . '/pear-pear.php.net/Structures_Graph/Structures/Graph/Manipulator/TopologicalSorter.php',
-        'Structures_Graph_Node' => __DIR__ . '/..' . '/pear-pear.php.net/Structures_Graph/Structures/Graph/Node.php',
-        'System' => __DIR__ . '/..' . '/pear-pear.php.net/PEAR/System.php',
-        'XML_Util' => __DIR__ . '/..' . '/pear-pear.php.net/XML_Util/XML/Util.php',
+        'SieveTest' => __DIR__ . '/..' . '/roundcube/net_sieve/tests/SieveTest.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7cec93d24ac905166f1d01a13bd74830::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7cec93d24ac905166f1d01a13bd74830::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit7cec93d24ac905166f1d01a13bd74830::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit7cec93d24ac905166f1d01a13bd74830::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit7cec93d24ac905166f1d01a13bd74830::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit877ea556a72fbab14ebbdff131a56e2d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit877ea556a72fbab14ebbdff131a56e2d::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit877ea556a72fbab14ebbdff131a56e2d::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit877ea556a72fbab14ebbdff131a56e2d::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit877ea556a72fbab14ebbdff131a56e2d::$classMap;
 
         }, null, ClassLoader::class);
     }

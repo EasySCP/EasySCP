@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  +-----------------------------------------------------------------------+
  | program/include/rcmail.php                                            |
  |                                                                       |
@@ -60,16 +60,18 @@ class rcmail extends rcube
     const ERROR_INVALID_REQUEST  = 1;
     const ERROR_INVALID_HOST     = 2;
     const ERROR_COOKIES_DISABLED = 3;
+    const ERROR_RATE_LIMIT       = 4;
 
 
     /**
      * This implements the 'singleton' design pattern
      *
-     * @param string Environment name to run (e.g. live, dev, test)
+     * @param integer $mode Ignored rcube::get_instance() argument
+     * @param string  $env  Environment name to run (e.g. live, dev, test)
      *
      * @return rcmail The one and only instance
      */
-    static function get_instance($env = '')
+    static function get_instance($mode = 0, $env = '')
     {
         if (!self::$instance || !is_a(self::$instance, 'rcmail')) {
             self::$instance = new rcmail($env);
@@ -92,6 +94,11 @@ class rcmail extends rcube
         if (($basename = basename($_SERVER['SCRIPT_FILENAME'])) && $basename != 'index.php') {
             $this->filename = $basename;
         }
+
+        // load all configured plugins
+        $plugins          = (array) $this->config->get('plugins', array());
+        $required_plugins = array('filesystem_attachments', 'jqueryui');
+        $this->plugins->load_plugins($plugins, $required_plugins);
 
         // start session
         $this->session_init();
@@ -124,10 +131,8 @@ class rcmail extends rcube
             $GLOBALS['OUTPUT'] = $this->load_gui(!empty($_REQUEST['_framed']));
         }
 
-        // load plugins
+        // run init method on all the plugins
         $this->plugins->init($this, $this->task);
-        $this->plugins->load_plugins((array)$this->config->get('plugins', array()),
-            array('filesystem_attachments', 'jqueryui'));
     }
 
     /**
@@ -489,7 +494,7 @@ class rcmail extends rcube
      *
      * @return boolean True on success, False on failure
      */
-    function login($username, $pass, $host = null, $cookiecheck = false)
+    function login($username, $password, $host = null, $cookiecheck = false)
     {
         $this->login_error = null;
 
@@ -502,10 +507,22 @@ class rcmail extends rcube
             return false;
         }
 
+        $username_filter = $this->config->get('login_username_filter');
+        $username_maxlen = $this->config->get('login_username_maxlen', 1024);
+        $password_maxlen = $this->config->get('login_password_maxlen', 1024);
         $default_host    = $this->config->get('default_host');
         $default_port    = $this->config->get('default_port');
         $username_domain = $this->config->get('username_domain');
         $login_lc        = $this->config->get('login_lc', 2);
+
+        // check input for security (#1490500)
+        if (($username_maxlen && strlen($username) > $username_maxlen)
+            || ($username_filter && !preg_match($username_filter, $username))
+            || ($password_maxlen && strlen($password) > $password_maxlen)
+        ) {
+            $this->login_error = self::ERROR_INVALID_REQUEST;
+            return false;
+        }
 
         // host is validated in rcmail::autoselect_host(), so here
         // we'll only handle unset host (if possible)
@@ -586,12 +603,22 @@ class rcmail extends rcube
         // user already registered -> overwrite username
         if ($user = rcube_user::query($username, $host)) {
             $username = $user->data['username'];
+
+            // Brute-force prevention
+            if ($user->is_locked()) {
+                $this->login_error = self::ERROR_RATE_LIMIT;
+                return false;
+            }
         }
 
         $storage = $this->get_storage();
 
         // try to log in
-        if (!$storage->connect($host, $username, $pass, $port, $ssl)) {
+        if (!$storage->connect($host, $username, $password, $port, $ssl)) {
+            if ($user) {
+                $user->failed_login();
+            }
+
             // Wait a second to slow down brute-force attacks (#1490549)
             sleep(1);
             return false;
@@ -639,7 +666,7 @@ class rcmail extends rcube
             $_SESSION['storage_host'] = $host;
             $_SESSION['storage_port'] = $port;
             $_SESSION['storage_ssl']  = $ssl;
-            $_SESSION['password']     = $this->encrypt($pass);
+            $_SESSION['password']     = $this->encrypt($password);
             $_SESSION['login_time']   = time();
 
             $timezone = rcube_utils::get_input_value('_timezone', rcube_utils::INPUT_GPC);
@@ -809,7 +836,7 @@ class rcmail extends rcube
 
             // remove old token from the path
             $base_path = rtrim($base_path, '/');
-            $base_path = preg_replace('/\/[a-f0-9]{' . strlen($token) . '}$/', '', $base_path);
+            $base_path = preg_replace('/\/[a-zA-Z0-9]{' . strlen($token) . '}$/', '', $base_path);
 
             // this need to be full url to make redirects work
             $absolute = true;
@@ -1068,6 +1095,12 @@ class rcmail extends rcube
 
         // failed login
         if ($failed_login) {
+            // don't fill the log with complete input, which could
+            // have been prepared by a hacker
+            if (strlen($user) > 256) {
+                $user = substr($user, 0, 256) . '...';
+            }
+
             $message = sprintf('Failed login for %s from %s in session %s (error: %d)',
                 $user, rcube_utils::remote_ip(), session_id(), $error_code);
         }
@@ -1433,7 +1466,7 @@ class rcmail extends rcube
         $prefix = '';
         if (!$path) {
             $n_folder = $folder;
-            $folder = $this->storage->mod_folder($folder);
+            $folder   = $this->storage->mod_folder($folder);
 
             if ($n_folder != $folder) {
                 $prefix = substr($n_folder, 0, -strlen($folder));
@@ -1467,10 +1500,11 @@ class rcmail extends rcube
 
         if (!isset($arrFolders[$currentFolder])) {
             $arrFolders[$currentFolder] = array(
-                'id' => $path,
-                'name' => rcube_charset::convert($currentFolder, 'UTF7-IMAP'),
+                'id'      => $path,
+                'name'    => rcube_charset::convert($currentFolder, 'UTF7-IMAP'),
                 'virtual' => $virtual,
-                'folders' => array());
+                'folders' => array()
+            );
         }
         else {
             $arrFolders[$currentFolder]['virtual'] = $virtual;
@@ -1641,12 +1675,13 @@ class rcmail extends rcube
      * Try to localize the given IMAP folder name.
      * UTF-7 decode it in case no localized text was found
      *
-     * @param string $name      Folder name
-     * @param bool   $with_path Enable path localization
+     * @param string $name        Folder name
+     * @param bool   $with_path   Enable path localization
+     * @param bool   $path_remove Remove the path
      *
      * @return string Localized folder name in UTF-8 encoding
      */
-    public function localize_foldername($name, $with_path = false)
+    public function localize_foldername($name, $with_path = false, $path_remove = false)
     {
         $realnames = $this->config->get('show_real_foldernames');
 
@@ -1654,12 +1689,20 @@ class rcmail extends rcube
             return $this->gettext($folder_class);
         }
 
+        $storage   = $this->get_storage();
+        $delimiter = $storage->get_hierarchy_delimiter();
+
+        // Remove the path
+        if ($path_remove) {
+            if (strpos($name, $delimiter)) {
+                $path = explode($delimiter, $name);
+                $name = array_pop($path);
+            }
+        }
         // try to localize path of the folder
-        if ($with_path && !$realnames) {
-            $storage   = $this->get_storage();
-            $delimiter = $storage->get_hierarchy_delimiter();
-            $path      = explode($delimiter, $name);
-            $count     = count($path);
+        else if ($with_path && !$realnames) {
+            $path  = explode($delimiter, $name);
+            $count = count($path);
 
             if ($count > 1) {
                 for ($i = 1; $i < $count; $i++) {
@@ -1861,7 +1904,24 @@ class rcmail extends rcube
      */
     public function html_editor($mode = '')
     {
-        $hook = $this->plugins->exec_hook('html_editor', array('mode' => $mode));
+        $spellcheck       = intval($this->config->get('enable_spellcheck'));
+        $spelldict        = intval($this->config->get('spellcheck_dictionary'));
+        $disabled_plugins = array();
+        $disabled_buttons = array();
+        $extra_plugins    = array();
+        $extra_buttons    = array();
+
+        if (!$spellcheck) {
+            $disabled_plugins[] = 'spellchecker';
+        }
+
+        $hook = $this->plugins->exec_hook('html_editor', array(
+                'mode'             => $mode,
+                'disabled_plugins' => $disabled_plugins,
+                'disabled_buttons' => $disabled_buttons,
+                'extra_plugins' => $extra_plugins,
+                'extra_buttons' => $extra_buttons,
+        ));
 
         if ($hook['abort']) {
             return;
@@ -1889,8 +1949,12 @@ class rcmail extends rcube
             'mode'       => $mode,
             'lang'       => $lang,
             'skin_path'  => $this->output->get_skin_path(),
-            'spellcheck' => intval($this->config->get('enable_spellcheck')),
-            'spelldict'  => intval($this->config->get('spellcheck_dictionary'))
+            'spellcheck' => $spellcheck, // deprecated
+            'spelldict'  => $spelldict,
+            'disabled_plugins' => $hook['disabled_plugins'],
+            'disabled_buttons' => $hook['disabled_buttons'],
+            'extra_plugins'    => $hook['extra_plugins'],
+            'extra_buttons'    => $hook['extra_buttons'],
         );
 
         $this->output->add_label('selectimage', 'addimage', 'selectmedia', 'addmedia');
@@ -1898,44 +1962,6 @@ class rcmail extends rcube
         $this->output->include_css('program/js/tinymce/roundcube/browser.css');
         $this->output->include_script('tinymce/tinymce.min.js');
         $this->output->include_script('editor.js');
-    }
-
-    /**
-     * Replaces TinyMCE's emoticon images with plain-text representation
-     *
-     * @param string $html  HTML content
-     *
-     * @return string HTML content
-     */
-    public static function replace_emoticons($html)
-    {
-        $emoticons = array(
-            '8-)' => 'smiley-cool',
-            ':-#' => 'smiley-foot-in-mouth',
-            ':-*' => 'smiley-kiss',
-            ':-X' => 'smiley-sealed',
-            ':-P' => 'smiley-tongue-out',
-            ':-@' => 'smiley-yell',
-            ":'(" => 'smiley-cry',
-            ':-(' => 'smiley-frown',
-            ':-D' => 'smiley-laughing',
-            ':-)' => 'smiley-smile',
-            ':-S' => 'smiley-undecided',
-            ':-$' => 'smiley-embarassed',
-            'O:-)' => 'smiley-innocent',
-            ':-|' => 'smiley-money-mouth',
-            ':-O' => 'smiley-surprised',
-            ';-)' => 'smiley-wink',
-        );
-
-        foreach ($emoticons as $idx => $file) {
-            // <img title="Cry" src="http://.../program/js/tinymce/plugins/emoticons/img/smiley-cry.gif" border="0" alt="Cry" />
-            $file      = preg_quote('program/js/tinymce/plugins/emoticons/img/' . $file . '.gif', '/');
-            $search[]  = '/<img (title="[a-z ]+" )?src="[^"]+' . $file . '"[^>]+\/>/i';
-            $replace[] = $idx;
-        }
-
-        return preg_replace($search, $replace, $html);
     }
 
     /**
@@ -2039,13 +2065,7 @@ class rcmail extends rcube
         }
 
         // find max filesize value
-        $max_filesize = parse_bytes(ini_get('upload_max_filesize'));
-        $max_postsize = parse_bytes(ini_get('post_max_size'));
-
-        if ($max_postsize && $max_postsize < $max_filesize) {
-            $max_filesize = $max_postsize;
-        }
-
+        $max_filesize = rcube_utils::max_upload_size();
         if ($max_size && $max_size < $max_filesize) {
             $max_filesize = $max_size;
         }
@@ -2157,7 +2177,7 @@ class rcmail extends rcube
     /**
      * Returns supported font-family specifications
      *
-     * @param string $font  Font name
+     * @param string $font Font name
      *
      * @param string|array Font-family specification array or string (if $font is used)
      */
@@ -2189,8 +2209,8 @@ class rcmail extends rcube
     /**
      * Create a human readable string for a number of bytes
      *
-     * @param int    Number of bytes
-     * @param string Size unit
+     * @param int    $bytes Number of bytes
+     * @param string &$unit Size unit
      *
      * @return string Byte string
      */
@@ -2221,7 +2241,7 @@ class rcmail extends rcube
     /**
      * Returns real size (calculated) of the message part
      *
-     * @param rcube_message_part  Message part
+     * @param rcube_message_part $part Message part
      *
      * @return string Part size (and unit)
      */
@@ -2231,12 +2251,21 @@ class rcmail extends rcube
             $size = $this->show_bytes((int)$part->d_parameters['size']);
         }
         else {
-          $size = $part->size;
-          if ($part->encoding == 'base64') {
-            $size = $size / 1.33;
-          }
+            $size = $part->size;
 
-          $size = '~' . $this->show_bytes($size);
+            if ($size === 0) {
+                $part->exact_size = true;
+            }
+
+            if ($part->encoding == 'base64') {
+                $size = $size / 1.33;
+            }
+
+            $size = $this->show_bytes($size);
+        }
+
+        if (!$part->exact_size) {
+            $size = '~' . $size;
         }
 
         return $size;
@@ -2256,8 +2285,8 @@ class rcmail extends rcube
         // message UID (or comma-separated list of IDs) is provided in
         // the form of <ID>-<MBOX>[,<ID>-<MBOX>]*
 
-        $_uid  = $uids ?: rcube_utils::get_input_value('_uid', RCUBE_INPUT_GPC);
-        $_mbox = $mbox ?: (string)rcube_utils::get_input_value('_mbox', RCUBE_INPUT_GPC);
+        $_uid  = $uids ?: rcube_utils::get_input_value('_uid', rcube_utils::INPUT_GPC);
+        $_mbox = $mbox ?: (string) rcube_utils::get_input_value('_mbox', rcube_utils::INPUT_GPC);
 
         // already a hash array
         if (is_array($_uid) && !isset($_uid[0])) {
@@ -2305,6 +2334,8 @@ class rcmail extends rcube
      * Get resource file content (with assets_dir support)
      *
      * @param string $name File name
+     *
+     * @return string File content
      */
     public function get_resource_content($name)
     {
@@ -2355,26 +2386,6 @@ class rcmail extends rcube
         }
 
         return $options['body'];
-    }
-
-
-    /************************************************************************
-     *********          Deprecated methods (to be removed)          *********
-     ***********************************************************************/
-
-    public static function setcookie($name, $value, $exp = 0)
-    {
-        rcube_utils::setcookie($name, $value, $exp);
-    }
-
-    public function imap_connect()
-    {
-        return $this->storage_connect();
-    }
-
-    public function imap_init()
-    {
-        return $this->storage_init();
     }
 
     /**

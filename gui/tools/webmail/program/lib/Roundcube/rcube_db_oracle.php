@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  +-----------------------------------------------------------------------+
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2011-2014, Kolab Systems AG                             |
@@ -600,5 +600,19 @@ class rcube_db_oracle extends rcube_db
         }
 
         return $this->last_result = $this->dbh->rollBack();
+    }
+
+    /**
+     * Terminate database connection.
+     */
+    public function closeConnection()
+    {
+        // release statement and close connection(s)
+        $this->last_result = null;
+        foreach ($this->dbhs as $dbh) {
+            oci_close($dbh);
+        }
+
+        parent::closeConnection();
     }
 }

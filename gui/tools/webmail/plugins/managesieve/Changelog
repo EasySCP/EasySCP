@@ -1,3 +1,15 @@
+- Fix parsing dot-staffed lines in multiline text (#5838)
+- Fix handling of scripts with nested rules (#5540)
+- Fix possible defect in handling \r\n in scripts (#5685)
+
+* version 8.6 [2016-04-06]
+-----------------------------------------------------------
+- Refactored script parser to be 100x faster
+
+* version 8.5 [2015-11-15]
+-----------------------------------------------------------
+- Add support for :from parameter in vacation action (patch from Michele Locati)
+
 * version 8.4 [2015-04-20]
 -----------------------------------------------------------
 - Add option to prepopulate vacation addresses on form init (#1490030)

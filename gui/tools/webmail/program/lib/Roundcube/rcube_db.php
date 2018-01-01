@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  +-----------------------------------------------------------------------+
  | This file is part of the Roundcube Webmail client                     |
  | Copyright (C) 2005-2012, The Roundcube Dev Team                       |
@@ -148,10 +148,6 @@ class rcube_db
         // Get database specific connection options
         $dsn_string  = $this->dsn_string($dsn);
         $dsn_options = $this->dsn_options($dsn);
-
-        if ($this->db_pconn) {
-            $dsn_options[PDO::ATTR_PERSISTENT] = true;
-        }
 
         // Connect
         try {
@@ -778,6 +774,20 @@ class rcube_db
     }
 
     /**
+     * Terminate database connection.
+     */
+    public function closeConnection()
+    {
+        $this->db_connected = false;
+        $this->db_index     = 0;
+
+        // release statement and connection resources
+        $this->last_result  = null;
+        $this->dbh          = null;
+        $this->dbhs         = array();
+    }
+
+    /**
      * Formats input so it can be safely used in a query
      *
      * @param mixed  $input Value to quote
@@ -1187,7 +1197,7 @@ class rcube_db
         }
 
         // process the different protocol options
-        $parsed['protocol'] = (!empty($proto)) ? $proto : 'tcp';
+        $parsed['protocol'] = $proto ?: 'tcp';
         $proto_opts = rawurldecode($proto_opts);
         if (strpos($proto_opts, ':') !== false) {
             list($proto_opts, $parsed['port']) = explode(':', $proto_opts);
@@ -1270,6 +1280,18 @@ class rcube_db
     protected function dsn_options($dsn)
     {
         $result = array();
+
+        if ($this->db_pconn) {
+            $result[PDO::ATTR_PERSISTENT] = true;
+        }
+
+        if (!empty($dsn['prefetch'])) {
+            $result[PDO::ATTR_PREFETCH] = (int) $dsn['prefetch'];
+        }
+
+        if (!empty($dsn['timeout'])) {
+            $result[PDO::ATTR_TIMEOUT] = (int) $dsn['timeout'];
+        }
 
         return $result;
     }

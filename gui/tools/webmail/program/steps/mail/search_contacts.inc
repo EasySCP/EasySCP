@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  +-----------------------------------------------------------------------+
  | program/steps/mail/search_contacts.inc                                |
  |                                                                       |
@@ -89,7 +89,7 @@ if (!empty($result) && $result->count > 0) {
             $title = rcube_addressbook::compose_search_name($row, $email, $name);
 
             $OUTPUT->command('add_contact_row', $row_id, array(
-                $keyname => html::a(array('title' => $title), rcube::Q($name ? $name : $email) .
+                $keyname => html::a(array('title' => $title), rcube::Q($name ?: $email) .
                     ($name && count($emails) > 1 ? '&nbsp;' . html::span('email', rcube::Q($email)) : '')
                 )), $classname);
         }
