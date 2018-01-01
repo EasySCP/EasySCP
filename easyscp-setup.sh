@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # EasySCP a Virtual Hosting Control Panel
-# Copyright (C) 2010-2017 by Easy Server Control Panel - http://www.easyscp.net
+# Copyright (C) 2010-2018 by Easy Server Control Panel - http://www.easyscp.net
 #
 # This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -74,7 +74,7 @@ do
 
 			while :
 			do
-				read -p "Secure your mysql installation [Y/N]?" MySQL
+				read -p "Secure your MySQL installation [Y/N]?" MySQL
 				case "$MySQL" in
 					[JjYy])
 						#echo "ja"
@@ -117,7 +117,6 @@ do
 			if [ ! -f /etc/httpd/conf.d/vhost.conf ]; then
 				echo "Include vhost.d/*.conf" >>/etc/httpd/conf.d/vhost.conf
    			fi
-			chcon --reference /etc/httpd/conf.d/README /etc/httpd/conf.d/vhost.conf
 
 			while :
 			do
