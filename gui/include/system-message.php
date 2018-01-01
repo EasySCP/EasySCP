@@ -4,7 +4,7 @@
  *
  * @copyright 	2001-2006 by moleSoftware GmbH
  * @copyright 	2006-2010 by ispCP | http://isp-control.net
- * @copyright 	2010-2017 by Easy Server Control Panel - http://www.easyscp.net
+ * @copyright 	2010-2018 by Easy Server Control Panel - http://www.easyscp.net
  * @version 	SVN: $Id$
  * @link 		http://www.easyscp.net
  * @author 		EasySCP Team
@@ -29,20 +29,18 @@
  * Portions created by the ispCP Team are Copyright (C) 2006-2010 by
  * isp Control Panel. All Rights Reserved.
  *
- * Portions created by the EasySCP Team are Copyright (C) 2010-2017 by
+ * Portions created by the EasySCP Team are Copyright (C) 2010-2018 by
  * Easy Server Control Panel. All Rights Reserved.
  */
 
 /**
  * Generates a page message if something terribly goes wrong.
  *
- * @todo possible session injection, check $_SESSION['user_theme'] for valid
- *	value
+ * @param String $msg Message Content
+ * @param String $type Message Type (notice, warning, error, success)
+ * @param string $backButtonDestination Destination where to go on back link click
  *
- * @param String $msg					Message Content
- * @param String $type					Message Type (notice, warning, error, success)
- * @param string $backButtonDestination Destiation where to go on back link
- *										click
+ * @throws EasySCP_Exception
  */
 function system_message($msg, $type = 'error', $backButtonDestination = '') {
 

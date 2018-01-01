@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2017 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2018 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,12 +204,21 @@ class EasySCP_NetworkCard {
 		$this->_virtualInterfaces =
 			array_diff($this->_interfacesInfo[1], $this->_interfaces);
 
-		$this->_availableInterfaces = array_diff(
-			$this->_interfaces,
-			$this->_offlineInterfaces,
-			$this->_virtualInterfaces,
-			array('lo')
-		);
+		switch(EasyConfig::$cfg->{'DistName'} . '_' . EasyConfig::$cfg->{'DistVersion'}){
+			case 'Debian_9':
+				$this->_availableInterfaces = array_diff(
+						$this->_interfaces,
+						array('lo')
+				);
+				break;
+			default:
+				$this->_availableInterfaces = array_diff(
+						$this->_interfaces,
+						$this->_offlineInterfaces,
+						$this->_virtualInterfaces,
+						array('lo')
+				);
+		}
 	}
 
 	/**
