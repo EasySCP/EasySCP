@@ -88,7 +88,7 @@ class DaemonBackup {
 	 */
 	public static function DomainData($domainData){
 		$DATA_BACKUP_FILE = DaemonConfig::$distro->{'APACHE_WWW_DIR'} . '/' . $domainData['domain_name'] . '/backups/' . $domainData['domain_name'] . '_' . date('Ymd') . '.tar';
-		exec(DaemonConfig::$cmd->{'CMD_TAR'} . " -cf '" . $DATA_BACKUP_FILE . "' -C '" . DaemonConfig::$distro->{'APACHE_WWW_DIR'} . "/" . $domainData['domain_name'] . "/' . --exclude=backups --exclude=logs --exclude=phptmp");
+		exec(DaemonConfig::$cmd->{'CMD_TAR'} . " -cf '" . $DATA_BACKUP_FILE . "' -C '" . DaemonConfig::$distro->{'APACHE_WWW_DIR'} . "/" . $domainData['domain_name'] . "/' --exclude=backups --exclude=logs --exclude=phptmp .");
 		if (file_exists($DATA_BACKUP_FILE)){
 			DaemonCommon::systemSetFilePermissions($DATA_BACKUP_FILE, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . $domainData['domain_uid'], DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . $domainData['domain_gid'], 0644 );
 			DaemonBackup::Compress($DATA_BACKUP_FILE);
