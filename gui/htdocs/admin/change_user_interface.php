@@ -42,3 +42,4 @@ if (isset($_SESSION['user_id']) && isset($_GET['to_id'])) {
 } else {
 	user_goto('manage_users.php');
 }
+?>
