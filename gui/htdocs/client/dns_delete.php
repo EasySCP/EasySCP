@@ -76,7 +76,7 @@ if (isset($_GET['edit_id']) && !empty($_GET['edit_id'])) {
 		$data = DB::execute($sql_param, true);
 
 		$sql_param = array(
-			'domain_content'	=> 'ns1.' . $data['domain_name'] . '. ' . EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
+			'domain_content'	=> 'ns1.' . $data['name'] . '. ' . EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
 			'domain_id'			=> $data['id'],
 			'domain_name'		=> $data['name'],
 			'domain_type'		=> 'SOA'
@@ -97,6 +97,10 @@ if (isset($_GET['edit_id']) && !empty($_GET['edit_id'])) {
 
 		DB::prepare($sql_query);
 		DB::execute($sql_param);
+
+		$sql_param = array(
+			'record_id' => $_GET['edit_id'],
+		);
 
 		$sql_query = "
 			DELETE FROM
