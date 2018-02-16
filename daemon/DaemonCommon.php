@@ -57,7 +57,52 @@ spl_autoload_register('AutoLoader::loadClass');
 class DaemonCommon {
 
 	/**
-	 * Stell eine Verbindung zum EasySCP Controller her
+	 *	Smarty Template Cache Verzeichnisse aufräumen
+	 *
+	 * @param String $cache Template Cache to clean up
+	 * @return boolean
+	 */
+	public static function cleanTemplateCache($cache = 'all') {
+		System_Daemon::debug('Starting "DaemonCommon::cleanTemplateCache" subprocess.');
+
+		switch ($cache) {
+			case 'all':
+				System_Daemon::debug('Starting "all" subprocess.');
+
+				exec(DaemonConfig::$cmd->{'CMD_RM'}.' -rf /tmp/templates_c/* >> /dev/null 2>&1');
+				exec(DaemonConfig::$cmd->{'CMD_RM'}.' -rf ' . DaemonConfig::$cfg->{'GUI_ROOT_DIR'} . '/themes/**/templates_c/* >> /dev/null 2>&1');
+
+				System_Daemon::debug('Finished "all" subprocess.');
+
+				break;
+			case 'Daemon':
+				System_Daemon::debug('Starting "Daemon" subprocess.');
+
+				exec(DaemonConfig::$cmd->{'CMD_RM'}.' -rf /tmp/templates_c/* >> /dev/null 2>&1');
+
+				System_Daemon::debug('Finished "Daemon" subprocess.');
+
+				break;
+			case 'GUI':
+				System_Daemon::debug('Starting "GUI" subprocess.');
+
+				exec(DaemonConfig::$cmd->{'CMD_RM'}.' -rf ' . DaemonConfig::$cfg->{'GUI_ROOT_DIR'} . '/themes/**/templates_c/* >> /dev/null 2>&1');
+
+				System_Daemon::debug('Finished "GUI" subprocess.');
+
+				break;
+			default:
+				System_Daemon::warning("Don't know what to do with ".$cache);
+				return false;
+		}
+
+		System_Daemon::debug('Finished "DaemonCommon::cleanTemplateCache" subprocess.');
+
+		return true;
+	}
+
+	/**
+	 * Stellt eine Verbindung zum EasySCP Controller her
 	 *
 	 * @param string $execute Befehl der an den Controller gesendet wird.
 	 *

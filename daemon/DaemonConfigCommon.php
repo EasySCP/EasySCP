@@ -100,6 +100,8 @@ class DaemonConfigCommon {
 	}
 
 	/**
+	 *  Konfiguration neuschreiben bzw. aktualisieren
+	 *
 	 * @param string $config
 	 * @return mixed
 	 */

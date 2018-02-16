@@ -25,10 +25,24 @@ class DaemonSystem extends DaemonSystemCommon {
 
 		$data = explode(" ", $Input);
 		switch ($data[0]) {
+			case 'cleanTemplateCache':
+				System_Daemon::debug('Starting "DaemonSystem::cleanTemplateCache" subprocess.');
+				if (isset($data[1]) && $data[1] =! ''){
+					$retVal = DaemonCommon::cleanTemplateCache($data[1]);
+				} else {
+					$retVal = DaemonCommon::cleanTemplateCache();
+				}
+				if ($retVal !== true){
+					System_Daemon::warning('Failed to handle cleanTemplateCache');
+					System_Daemon::debug('Finished "DaemonSystem::cleanTemplateCache" subprocess.');
+					return false;
+				}
+				System_Daemon::debug('Finished "DaemonSystem::cleanTemplateCache" subprocess.');
+				break;
 			case 'cron':
 				System_Daemon::debug('Starting "DaemonSystem::cron" subprocess.');
 				$retVal = self::handleCronjobsForAllUsers();
-				if ($retVal!==true){
+				if ($retVal !== true){
 					System_Daemon::warning('Failed to handle Cronjobs');
 					System_Daemon::debug('Finished "cron" subprocess.');
 					return false;
@@ -85,7 +99,11 @@ class DaemonSystem extends DaemonSystemCommon {
 				break;
 			case 'rebuildConfig':
 				System_Daemon::debug('Starting "DaemonSystem::rebuildConfig" subprocess.');
-				$rebuildConfig = DaemonConfigCommon::rebuildConfig($data[1]);
+				if (isset($data[1]) && $data[1] =! ''){
+					$rebuildConfig = DaemonConfigCommon::rebuildConfig($data[1]);
+				} else {
+					$rebuildConfig = DaemonConfigCommon::rebuildConfig();
+				}
 				if ($rebuildConfig !== true){
 					return $rebuildConfig;
 				}
