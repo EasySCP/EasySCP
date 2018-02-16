@@ -15,8 +15,6 @@
  *
  * @category	EasySCP
  * @package		EasySCP_TemplateEngine
- * @copyright 	2010-2018 by EasySCP | http://www.easyscp.net
- * @author 		EasySCP Team
  */
 class EasySCP_TemplateEngine {
 
@@ -67,10 +65,10 @@ class EasySCP_TemplateEngine {
 		}
 	}
 
-		/**
+	/**
 	 * Assign data to the template for parsing
 	 *
-	 * @param String $nsp_name
+	 * @param Mixed $nsp_name
 	 * @param String $nsp_data
 	 */
 

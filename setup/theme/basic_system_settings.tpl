@@ -109,7 +109,7 @@
 					</table>
 				</fieldset>
 				<div class="buttons">
-					<input type="hidden" name="uaction" value="step2" />
+					<input type="hidden" name="uaction" value="basic_system_settings" />
 					<input type="submit" name="Submit" value="Next" />
 				</div>
 			</form>

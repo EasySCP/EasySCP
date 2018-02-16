@@ -153,9 +153,9 @@ function SetupMysqlTest(){
 
 	try {
 		$connectid = new PDO(
-			'mysql:host='.$sql->{'DB_HOST'}.';port=3306',
-			$sql->{'DB_USER'},
-			$sql->{'DB_PASSWORD'},
+			'mysql:host='.$sql->{'DB_HOST'}->__toString().';port=3306',
+			$sql->{'DB_USER'}->__toString(),
+			$sql->{'DB_PASSWORD'}->__toString(),
 			array(
 				PDO::ATTR_PERSISTENT => true,
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -171,6 +171,19 @@ function SetupMysqlTest(){
 			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DB.php' . ' ' . DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DB.php' . '_' . date("Y_m_d_H_i_s"), $result, $error);
 		}
 
+		switch($sql->{'DistName'}->__toString() . '_' . $sql->{'DistVersion'}->__toString()){
+			case 'Debian_9':
+				$sql->{'DB_HOST'} = 'localhost';
+				$sql->{'DB_DATABASE'} = 'easyscp';
+				$sql->{'DB_USER'} = 'easyscp';
+				if ($sql->{'DB_PASSWORD'} == '') {
+					$sql->{'DB_PASSWORD'} = DaemonCommon::generatePassword(18);
+				}
+				$connectid->query("grant all on *.* to easyscp@localhost identified by '" . $sql->{'DB_PASSWORD'}->__toString() . "' with grant option;flush privileges;")->closeCursor();
+				break;
+			default:
+
+		}
 		if ($sql->{'DB_KEY'} == 'AUTO' || strlen($sql->{'DB_KEY'}) != 32 ){
 			$sql->{'DB_KEY'} = DaemonCommon::generatePassword(32);
 		}
@@ -1133,8 +1146,5 @@ function Setup_Finishing(){
 
 	unlink(DaemonConfig::$cfg->{'ROOT_DIR'}.'/daemon/DaemonCoreSetup.php');
 	exec(DaemonConfig::$cmd->{'CMD_RM'}.' -rf '.DaemonConfig::$cfg->{'ROOT_DIR'}.'/../setup >> /dev/null 2>&1');
-
-	// SocketHandler::Close();
-	// System_Daemon::restart();
 }
 ?>

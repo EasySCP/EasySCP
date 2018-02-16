@@ -43,7 +43,7 @@
 					</table>
 				</fieldset>
 				<div class="buttons">
-					<input type="hidden" name="uaction" value="step1" />
+					<input type="hidden" name="uaction" value="database_settings" />
 					<input type="submit" name="Submit" value="Next" />
 				</div>
 			</form>

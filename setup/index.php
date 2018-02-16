@@ -16,26 +16,32 @@ require 'easyscp-setup-lib.php';
 set_error_handler("errorHandler");
 
 $tpl = EasySCP_TemplateEngine::getInstance();
-$template = 'index.tpl';
+$template = 'basic_system_settings.tpl';
 
 $xml = simplexml_load_file("config.xml");
 
 if (isset($_POST['uaction']) && $_POST['uaction'] != '') {
 	switch ($_POST['uaction']) {
-		case 'step1':
-			if (checkMySQL($xml)){
-				$template = 'index2.tpl';
+		case 'basic_system_settings':
+			if (checkData($xml)){
+				switch($xml->{'DistName'}->__toString() . '_' . $xml->{'DistVersion'}->__toString()){
+					case 'Debian_9':
+						$template = 'finisch.tpl';
+						break;
+					default:
+						$template = 'database_settings.tpl';
+				}
 			}
 			break;
-		case 'step2':
-			if (checkData($xml)){
-				$template = 'index_finisch.tpl';
+		case 'database_settings':
+			if (checkMySQL($xml)){
+				$template = 'finisch.tpl';
 			} else {
-				$template = 'index2.tpl';
+				$template = 'database_settings.tpl';
 			}
 			break;
 		default:
-			$template = 'index.tpl';
+			$template = 'basic_system_settings.tpl';
 	}
 }
 
@@ -46,19 +52,7 @@ $tpl->assign(
 	)
 );
 
-if ($template == 'index.tpl'){
-	$tpl->assign(
-		array(
-			'DB_HOST'		=> (isset($_POST['DB_HOST'])) ? trim($_POST['DB_HOST']) : $xml->{'DB_HOST'},
-			'DB_DATABASE'	=> (isset($_POST['DB_DATABASE'])) ? trim($_POST['DB_DATABASE']) : $xml->{'DB_DATABASE'},
-			'DB_USER'		=> (isset($_POST['DB_USER'])) ? trim($_POST['DB_USER']) : $xml->{'DB_USER'},
-			'DB_PASSWORD'	=> (isset($_POST['DB_PASSWORD'])) ? trim($_POST['DB_PASSWORD']) : $xml->{'DB_PASSWORD'},
-			'DB_PASSWORD2'	=> (isset($_POST['DB_PASSWORD2'])) ? trim($_POST['DB_PASSWORD2']) :$xml->{'DB_PASSWORD2'}
-		)
-	);
-}
-
-if ($template == 'index2.tpl'){
+if ($template == 'basic_system_settings.tpl'){
 	$tpl->assign(
 		array(
 			'HOST_OS'		=> getOS($xml),
@@ -112,29 +106,136 @@ if ($template == 'index2.tpl'){
 			)
 		);
 	}
-	/*
-	if(isset($_POST['AWStats'])){
-		$tpl->assign(
-			array(
-				'AWStats_yes'	=> ($_POST['AWStats'] == '_yes_' ) ? 'checked="checked"' : '',
-				'AWStats_no'	=> ($_POST['AWStats'] == '_no_' ) ? 'checked="checked"' : ''
-			)
-		);
-	} else {
-		$tpl->assign(
-			array(
-				'AWStats_yes'	=> '',
-				'AWStats_no'	=> 'checked="checked"'
-			)
-		);
-	}
-	*/
+}
+
+if ($template == 'database_settings.tpl'){
+	$tpl->assign(
+		array(
+			'DB_HOST'		=> (isset($_POST['DB_HOST'])) ? trim($_POST['DB_HOST']) : $xml->{'DB_HOST'},
+			'DB_DATABASE'	=> (isset($_POST['DB_DATABASE'])) ? trim($_POST['DB_DATABASE']) : $xml->{'DB_DATABASE'},
+			'DB_USER'		=> (isset($_POST['DB_USER'])) ? trim($_POST['DB_USER']) : $xml->{'DB_USER'},
+			'DB_PASSWORD'	=> (isset($_POST['DB_PASSWORD'])) ? trim($_POST['DB_PASSWORD']) : $xml->{'DB_PASSWORD'},
+			'DB_PASSWORD2'	=> (isset($_POST['DB_PASSWORD2'])) ? trim($_POST['DB_PASSWORD2']) :$xml->{'DB_PASSWORD2'}
+		)
+	);
 }
 
 gen_page_message($tpl);
 
 $tpl->display($template);
 
+/**
+ * checkData
+ *
+ * @param $xml
+ *
+ * @return bool
+ */
+function checkData($xml){
+	if(!isset($_POST['HOST_FQHN']) || $_POST['HOST_FQHN'] == ''){
+		set_page_message('Please enter a fully qualified hostname!', 'error');
+		return false;
+	} else {
+		$checkFQDN = explode('.', trim($_POST['HOST_FQHN']));
+		if (count($checkFQDN) < 3){
+			set_page_message('Please enter a fully qualified hostname!', 'error');
+			return false;
+		}
+	}
+	if(!isset($_POST['HOST_IP']) || $_POST['HOST_IP'] == ''){
+		set_page_message('Please enter the system network address!', 'error');
+		return false;
+	}
+	if(filter_var($_POST['HOST_IP'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) == false){
+		set_page_message('Please enter a valid ipv4 network address!', 'error');
+		return false;
+	}
+	if(isset($_POST['HOST_IPv6']) && $_POST['HOST_IPv6'] != '' && filter_var($_POST['HOST_IPv6'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) == false){
+		set_page_message('Please enter a valid ipv6 network address!', 'error');
+		return false;
+	}
+	if(!isset($_POST['HOST_NAME']) || $_POST['HOST_NAME'] == ''){
+		set_page_message('Please enter the domain name where EasySCP will be reachable on!', 'error');
+		return false;
+	} else {
+		$checkHOST = explode('.', trim($_POST['HOST_NAME']));
+		if (count($checkHOST) < 3){
+			set_page_message('Please enter the domain name where EasySCP will be reachable on!', 'error');
+			return false;
+		}
+	}
+
+	if(!isset($_POST['PANEL_ADMIN']) || $_POST['PANEL_ADMIN'] == ''){
+		set_page_message('Please enter administrator login name!', 'error');
+		return false;
+	}
+	if(!isset($_POST['PANEL_PASS']) || $_POST['PANEL_PASS'] == ''){
+		set_page_message('Please enter administrator password!', 'error');
+		return false;
+	}
+	if(!isset($_POST['PANEL_PASS2']) || $_POST['PANEL_PASS2'] == ''){
+		set_page_message('Please repeat administrator password!', 'error');
+		return false;
+	}
+	if($_POST['PANEL_PASS'] != $_POST['PANEL_PASS2']){
+		set_page_message('The entered administrator passwords do not match. Please check!', 'error');
+		return false;
+	}
+
+	if(!isset($_POST['PANEL_MAIL']) || $_POST['PANEL_MAIL'] == ''){
+		set_page_message('Please enter administrator e-mail address!', 'error');
+		return false;
+	}
+
+	if(!isset($_POST['Timezone']) || $_POST['Timezone'] == ''){
+		set_page_message('Please enter Server\'s Timezone!', 'error');
+		return false;
+	}
+
+	$HOST_OS = json_decode(base64_decode(trim($_POST['HOST_OS'])));
+	$xml->{'DistName'} = $HOST_OS->{'DistName'};
+	$xml->{'DistVersion'} = $HOST_OS->{'DistVersion'};
+
+	$xml->{'HOST_FQHN'} = trim($_POST['HOST_FQHN']);
+	$xml->{'HOST_IP'} = trim($_POST['HOST_IP']);
+	$xml->{'HOST_IPv6'} = trim($_POST['HOST_IPv6']);
+	$xml->{'HOST_NAME'} = trim($_POST['HOST_NAME']);
+
+	if ($xml->{'FTP_PASSWORD'} == 'AUTO'){
+		$xml->{'FTP_PASSWORD'} = generatePassword(18);
+	}
+
+	if ($xml->{'PMA_PASSWORD'} == 'AUTO'){
+		$xml->{'PMA_PASSWORD'} = generatePassword(18);
+	}
+	if ($xml->{'PMA_BLOWFISH'} == 'AUTO'){
+		$xml->{'PMA_BLOWFISH'} = generatePassword(32);
+	}
+
+	$xml->{'PANEL_ADMIN'} = trim($_POST['PANEL_ADMIN']);
+	$xml->{'PANEL_PASS'} = trim($_POST['PANEL_PASS']);
+	$xml->{'PANEL_PASS2'} = trim($_POST['PANEL_PASS2']);
+	$xml->{'PANEL_MAIL'} = trim($_POST['PANEL_MAIL']);
+
+	$xml->{'Secondary_DNS'} = trim($_POST['Secondary_DNS']);
+	$xml->{'LocalNS'} = trim($_POST['LocalNS']);
+	$xml->{'MySQL_Prefix'} = trim($_POST['MySQL_Prefix']);
+	$xml->{'Timezone'} = trim($_POST['Timezone']);
+
+	$handle = fopen("config.xml", "wb");
+	fwrite($handle, $xml->asXML());
+	fclose($handle);
+
+	return true;
+}
+
+/**
+ * checkMySQL
+ *
+ * @param $xml
+ *
+ * @return bool
+ */
 function checkMySQL($xml){
 	if(!isset($_POST['DB_HOST']) || $_POST['DB_HOST'] == ''){
 		set_page_message('Please enter SQL server hostname!', 'error');
@@ -204,104 +305,6 @@ function checkMySQL($xml){
 		}
 	}
 	return false;
-}
-
-function checkData($xml){
-	if(!isset($_POST['HOST_FQHN']) || $_POST['HOST_FQHN'] == ''){
-		set_page_message('Please enter a fully qualified hostname!', 'error');
-		return false;
-	} else {
-		$checkFQDN = explode('.', trim($_POST['HOST_FQHN']));
-		if (count($checkFQDN) < 3){
-			set_page_message('Please enter a fully qualified hostname!', 'error');
-			return false;
-		}
-	}
-	if(!isset($_POST['HOST_IP']) || $_POST['HOST_IP'] == ''){
-		set_page_message('Please enter the system network address!', 'error');
-		return false;
-	}
-	if(filter_var($_POST['HOST_IP'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) == false){
-		set_page_message('Please enter a valid ipv4 network address!', 'error');
-		return false;
-	}
-	if(isset($_POST['HOST_IPv6']) && $_POST['HOST_IPv6'] != '' && filter_var($_POST['HOST_IPv6'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) == false){
-		set_page_message('Please enter a valid ipv6 network address!', 'error');
-		return false;
-	}
-	if(!isset($_POST['HOST_NAME']) || $_POST['HOST_NAME'] == ''){
-		set_page_message('Please enter the domain name where EasySCP will be reachable on!', 'error');
-		return false;
-	} else {
-		$checkHOST = explode('.', trim($_POST['HOST_NAME']));
-		if (count($checkHOST) < 3){
-			set_page_message('Please enter the domain name where EasySCP will be reachable on!', 'error');
-			return false;
-		}
-	}
-
-	if(!isset($_POST['PANEL_ADMIN']) || $_POST['PANEL_ADMIN'] == ''){
-		set_page_message('Please enter administrator login name!', 'error');
-		return false;
-	}
-	if(!isset($_POST['PANEL_PASS']) || $_POST['PANEL_PASS'] == ''){
-		set_page_message('Please enter administrator password!', 'error');
-		return false;
-	}
-	if(!isset($_POST['PANEL_PASS2']) || $_POST['PANEL_PASS2'] == ''){
-		set_page_message('Please repeat administrator password!', 'error');
-		return false;
-	}
-	if($_POST['PANEL_PASS'] != $_POST['PANEL_PASS2']){
-		set_page_message('The entered administrator passwords do not match. Please check!', 'error');
-		return false;
-	}
-	if(!isset($_POST['PANEL_MAIL']) || $_POST['PANEL_MAIL'] == ''){
-		set_page_message('Please enter administrator e-mail address!', 'error');
-		return false;
-	}
-
-	if(!isset($_POST['Timezone']) || $_POST['Timezone'] == ''){
-		set_page_message('Please enter Server\'s Timezone!', 'error');
-		return false;
-	}
-
-	$HOST_OS = json_decode(base64_decode(trim($_POST['HOST_OS'])));
-	$xml->{'DistName'} = $HOST_OS->{'DistName'};
-	$xml->{'DistVersion'} = $HOST_OS->{'DistVersion'};
-
-	$xml->{'HOST_FQHN'} = trim($_POST['HOST_FQHN']);
-	$xml->{'HOST_IP'} = trim($_POST['HOST_IP']);
-	$xml->{'HOST_IPv6'} = trim($_POST['HOST_IPv6']);
-	$xml->{'HOST_NAME'} = trim($_POST['HOST_NAME']);
-
-	if ($xml->{'FTP_PASSWORD'} == 'AUTO'){
-		$xml->{'FTP_PASSWORD'} = generatePassword(18);
-	}
-
-	if ($xml->{'PMA_PASSWORD'} == 'AUTO'){
-		$xml->{'PMA_PASSWORD'} = generatePassword(18);
-	}
-	if ($xml->{'PMA_BLOWFISH'} == 'AUTO'){
-		$xml->{'PMA_BLOWFISH'} = generatePassword(32);
-	}
-
-	$xml->{'PANEL_ADMIN'} = trim($_POST['PANEL_ADMIN']);
-	$xml->{'PANEL_PASS'} = trim($_POST['PANEL_PASS']);
-	$xml->{'PANEL_PASS2'} = trim($_POST['PANEL_PASS2']);
-	$xml->{'PANEL_MAIL'} = trim($_POST['PANEL_MAIL']);
-
-	$xml->{'Secondary_DNS'} = trim($_POST['Secondary_DNS']);
-	$xml->{'LocalNS'} = trim($_POST['LocalNS']);
-	$xml->{'MySQL_Prefix'} = trim($_POST['MySQL_Prefix']);
-	$xml->{'Timezone'} = trim($_POST['Timezone']);
-	$xml->{'AWStats'} = trim($_POST['AWStats']);
-
-	$handle = fopen("config.xml", "wb");
-	fwrite($handle, $xml->asXML());
-	fclose($handle);
-
-	return true;
 }
 
 /**

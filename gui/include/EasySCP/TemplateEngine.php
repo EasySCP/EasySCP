@@ -64,10 +64,10 @@ class EasySCP_TemplateEngine {
 		}
 	}
 
-		/**
+	/**
 	 * Assign data to the template for parsing
 	 *
-	 * @param String $nsp_name
+	 * @param Mixed $nsp_name
 	 * @param String $nsp_data
 	 */
 
