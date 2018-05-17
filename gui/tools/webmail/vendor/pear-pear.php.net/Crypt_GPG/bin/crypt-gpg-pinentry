@@ -8,8 +8,8 @@
 $ds    = DIRECTORY_SEPARATOR;
 $root  = dirname(__FILE__) . $ds . '..' ;
 $paths = array(
-    '/www/roundcube/releases/roundcubemail-1.2.7/vendor/pear-pear.php.net/Crypt_GPG', // PEAR or Composer
-    $root, // Git (or Composer with wrong /www/roundcube/releases/roundcubemail-1.2.7/vendor/pear-pear.php.net/Crypt_GPG)
+    '/www/roundcube/releases/roundcubemail-1.2.9/vendor/pear-pear.php.net/Crypt_GPG', // PEAR or Composer
+    $root, // Git (or Composer with wrong /www/roundcube/releases/roundcubemail-1.2.9/vendor/pear-pear.php.net/Crypt_GPG)
     $root . $ds . '..' . $ds . 'Console_CommandLine', // Composer
     $root . $ds . '..' . $ds . 'console_commandline', // Composer
     // and composer-installed PEAR_Exception for Console_CommandLine (#21074)

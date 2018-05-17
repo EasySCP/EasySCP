@@ -103,7 +103,7 @@ class Console_CommandLine_XmlParser
         $pkgRoot  = __DIR__ . '/../../';
         $paths = array(
             // PEAR/Composer
-            '/www/roundcube/releases/roundcubemail-1.2.7/vendor/pear-pear.php.net/Console_CommandLine/data/Console_CommandLine/data/xmlschema.rng',
+            '/www/roundcube/releases/roundcubemail-1.2.9/vendor/pear-pear.php.net/Console_CommandLine/data/Console_CommandLine/data/xmlschema.rng',
             // Composer
             $pkgRoot . 'data/Console_CommandLine/data/xmlschema.rng',
             $pkgRoot . 'data/console_commandline/data/xmlschema.rng',

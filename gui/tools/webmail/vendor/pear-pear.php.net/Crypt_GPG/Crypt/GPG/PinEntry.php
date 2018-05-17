@@ -321,7 +321,7 @@ class Crypt_GPG_PinEntry
         $ds    = DIRECTORY_SEPARATOR;
         $root  = dirname(__FILE__) . $ds . '..' . $ds . '..' . $ds;
         $paths = array(
-            '/www/roundcube/releases/roundcubemail-1.2.7/vendor/pear-pear.php.net/Crypt_GPG/data' . $ds . '@package-name@' . $ds . 'data', // PEAR
+            '/www/roundcube/releases/roundcubemail-1.2.9/vendor/pear-pear.php.net/Crypt_GPG/data' . $ds . '@package-name@' . $ds . 'data', // PEAR
             $root . 'data', // Git
             $root . 'data' . $ds . 'Crypt_GPG' . $ds . 'data', // Composer
         );

@@ -738,7 +738,7 @@ class Net_LDAP3
                 $moz_ldapsearch,
                 '-x',
                 '-h',
-                $this->_current_host,
+                preg_replace('|^[a-z]+://|i', '', $this->_current_host),
                 '-p',
                 $this->config_get('port', 389),
                 '-b',
@@ -2149,8 +2149,9 @@ class Net_LDAP3
             );
 
             $_ldap_schema_cache_cfg = array(
-                'path' => "/tmp/" . $host . ":" . ($port ? $port : '389') . "-Net_LDAP2_Schema.cache",
                 'max_age' => 86400,
+                'path' => sprintf('%s/%s-Net_LDAP2_Schema.cache',
+                    sys_get_temp_dir() ?: '/tmp', str_replace('://', ':', $host) . (strpos($host, ":$port") ? '' : ":$port")),
             );
 
             $_ldap = Net_LDAP2::connect($_ldap_cfg);

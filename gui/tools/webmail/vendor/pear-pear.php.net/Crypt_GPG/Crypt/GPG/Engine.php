@@ -2030,7 +2030,7 @@ class Crypt_GPG_Engine
         $ds    = DIRECTORY_SEPARATOR;
         $root  = dirname(__FILE__) . $ds . '..' . $ds . '..' . $ds;
         $paths = array(
-            '/www/roundcube/releases/roundcubemail-1.2.7/vendor/pear-pear.php.net/Crypt_GPG/bin', // PEAR
+            '/www/roundcube/releases/roundcubemail-1.2.9/vendor/pear-pear.php.net/Crypt_GPG/bin', // PEAR
              $root . 'scripts', // Git
              $root . 'bin', // Composer
         );

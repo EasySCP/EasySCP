@@ -1,7 +1,7 @@
 EasySCP 2.1.0 ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2018-01-16
+2018-05-17
 	- DOCS:
 		* Add: CentOS 7 package file
 		* Add: Debian 9 package file
@@ -31,4 +31,4 @@ EasySCP 2.1.0 ChangeLog
 	- TOOLS:
 		* Update: net2ftp to version 1.0 build 50
 		* Update: phpMyAdmin to version 4.0.10.20
-		* Update: Roundcube to version 1.2.7
+		* Update: Roundcube to version 1.2.9
