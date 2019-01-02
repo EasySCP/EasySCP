@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2018 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
  *
  * @category	EasySCP
  * @package     EasySCP_Update
- * @copyright 	2010-2018 by EasySCP | http://www.easyscp.net
+ * @copyright 	2010-2019 by EasySCP | http://www.easyscp.net
  * @author 		EasySCP Team
  */
 abstract class EasySCP_Update {

@@ -3,7 +3,7 @@
  *
  * @copyright 	2001-2006 by moleSoftware GmbH
  * @copyright 	2006-2010 by ispCP | http://isp-control.net
- * @copyright 	2010-2018 by Easy Server Control Panel - http://www.easyscp.net
+ * @copyright 	2010-2019 by Easy Server Control Panel - http://www.easyscp.net
  * @version 	SVN: $Id$
  * @link 		http://www.easyscp.net
  * @author 		EasySCP Team
