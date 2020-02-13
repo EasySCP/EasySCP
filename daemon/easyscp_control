@@ -3,7 +3,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -36,10 +36,6 @@ if ($runmode['help'] == true) {
  
 error_reporting(E_ALL);
 require_once(dirname(__FILE__).'/extlibs/Daemon.php');
-require_once(dirname(__FILE__).'/DaemonCommon.php');
-require_once(dirname(__FILE__).'/DaemonConfig.php');
-require_once(dirname(__FILE__).'/DaemonMaps.php');
-require_once(dirname(__FILE__).'/SocketHandler.php');
 
 // Setup
 $options = array(
@@ -56,6 +52,20 @@ $options = array(
 	'appRunAsUID' => 0, // Maybe this should be changed later
 	'logLocation' => '/var/log/easyscp/easyscp_control.log'
 );
+
+System_Daemon::setOptions($options);
+require_once(dirname(__FILE__).'/DaemonCommon.php');
+require_once(dirname(__FILE__).'/DaemonConfig.php');
+require_once(dirname(__FILE__).'/DaemonMaps.php');
+require_once(dirname(__FILE__).'/SocketHandler.php');
+
+if (DaemonConfig::$cfg->{'DEBUG'} == '1'){
+	// Default: 6
+	$options['logVerbosity'] = 7;
+} else {
+	// Default: 6
+	$options['logVerbosity'] = 6;
+}	
  
 System_Daemon::setOptions($options);
 System_Daemon::start();
@@ -100,6 +110,62 @@ while (!System_Daemon::isDying() && $runningOkay) {
 			unset($ApacheRestart);
 
 			System_Daemon::info('Finished "ApacheRestart" subprocess.');
+		}
+	}
+
+	if (isset($PHPfpmRestart)){
+		if ($PHPfpmRestart > 0){
+			$PHPfpmRestart--;
+		} else {
+			System_Daemon::info('Running "PHPfpmRestart" subprocess.');
+
+			switch (DaemonConfig::$cfg->DistName) {
+				case 'CentOS':
+					// reload PHP-FPM if available
+					if (DaemonConfig::$php !== null) {
+						foreach(DaemonConfig::$php->PHP_Entry as $PHP_Entry) {
+							if (isset($PHP_Entry->SRV_PHP) && isset($PHP_Entry->ENABLE) && $PHP_Entry->ENABLE->__toString() == '1') {
+								exec('/bin/systemctl stop ' . $PHP_Entry->SRV_PHP->__toString() . '.service 1>&1 2>&1', $result, $error);
+							}
+						}
+						// wait 1s
+						sleep(1);
+						foreach(DaemonConfig::$php->PHP_Entry as $PHP_Entry) {
+							if (isset($PHP_Entry->SRV_PHP) && isset($PHP_Entry->ENABLE) && $PHP_Entry->ENABLE->__toString() == '1') {
+								exec('/bin/systemctl start ' . $PHP_Entry->SRV_PHP->__toString() . '.service 1>&1 2>&1', $result, $error);
+							}
+						}
+					} else {
+						if (isset(DaemonConfig::$cmd->{'SRV_PHP'})) {
+							exec('/bin/systemctl reload ' . DaemonConfig::$cmd->{'SRV_PHP'} . '.service 1>&1 2>&1', $result, $error);
+						}
+					}
+					break;
+				default:
+					// reload PHP-FPM if available
+					if (DaemonConfig::$php !== null) {
+						foreach(DaemonConfig::$php->PHP_Entry as $PHP_Entry) {
+							if (isset($PHP_Entry->SRV_PHP) && isset($PHP_Entry->ENABLE) && $PHP_Entry->ENABLE->__toString() == '1') {
+								exec('service ' . $PHP_Entry->SRV_PHP->__toString() . ' stop 1>&1 2>&1', $result, $error);
+							}
+						}
+						// wait 1s
+						sleep(1);
+						foreach(DaemonConfig::$php->PHP_Entry as $PHP_Entry) {
+							if (isset($PHP_Entry->SRV_PHP) && isset($PHP_Entry->ENABLE) && $PHP_Entry->ENABLE->__toString() == '1') {
+								exec('service ' . $PHP_Entry->SRV_PHP->__toString() . ' start 1>&1 2>&1', $result, $error);
+							}
+						}
+					} else {
+						if (isset(DaemonConfig::$cmd->{'SRV_PHP'})) {
+							exec('service ' . DaemonConfig::$cmd->{'SRV_PHP'} . ' reload 1>&1 2>&1', $result, $error);
+						}
+					}
+				}
+
+			unset($PHPfpmRestart);
+
+			System_Daemon::info('Finished "PHPfpmRestart" subprocess.');
 		}
 	}
 
@@ -177,7 +243,17 @@ while (!System_Daemon::isDying() && $runningOkay) {
 
 						System_Daemon::info('Finished "ApacheCountdown" subprocess.');
 						break;
+					case 'PHPfpmRestart':
+						System_Daemon::info('Running "PHPfpmCountdown" subprocess.');
 
+						if (isset($PHPfpmRestart)){
+							System_Daemon::info('Reset "PHPfpmCountdown".');
+						}
+
+						$PHPfpmRestart = 15;
+
+						System_Daemon::info('Finished "PHPfpmCountdown" subprocess.');
+						break;
 					case 'DaemonConfigReload':
 						System_Daemon::info('Running "DaemonConfigReload" subprocess.');
 
@@ -185,7 +261,6 @@ while (!System_Daemon::isDying() && $runningOkay) {
 
 						System_Daemon::info('Finished "DaemonConfigReload" subprocess.');
 						break;
-
 					case 'DaemonRestart':
 						System_Daemon::info('Running "DaemonCountdown" subprocess.');
 

@@ -15,5 +15,9 @@
 
  For translation see https://www.transifex.com/roundcube/roundcube-webmail/plugin-enigma/
 */
-$messages['decryptbadpass'] = 'فشل فك التشفير.  كلمة السر غير صالحة.';
+$labels['keyname'] = 'الاسم';
+$labels['subkeycreated'] = 'أُنشئ في';
+$labels['expiresnever'] = 'أبداً';
+$labels['unknown'] = 'مجهول';
+$labels['newkeypass'] = 'كلمة المرور';
 ?>

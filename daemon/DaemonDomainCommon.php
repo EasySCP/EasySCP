@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -17,11 +17,11 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Disable a site in Apache web-server
-	 *
-	 * @param string $siteName
-	 * @return mixed
-	 */
+	* Disable a site in Apache web-server
+	*
+	* @param string $siteName
+	* @return mixed
+	*/
 	protected static function apacheDisableSite($siteName) {
 		System_Daemon::debug('Disabling '.$siteName);
 		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $siteName . '.conf';
@@ -56,11 +56,11 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Enable a site in Apache web-server
-	 *
-	 * @param string $siteName
-	 * @return mixed
-	 */
+	* Enable a site in Apache web-server
+	*
+	* @param string $siteName
+	* @return mixed
+	*/
 	protected static function apacheEnableSite($siteName) {
 		System_Daemon::debug('Enabling '.$siteName);
 		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $siteName . '.conf';
@@ -98,11 +98,11 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Reload Apache web-server
-	 *
-	 * @static
-	 * @return bool
-	 */
+	* Reload Apache web-server
+	*
+	* @static
+	* @return bool
+	*/
 	protected static function apacheReloadConfig() {
 		System_Daemon::debug('Starting "apacheReloadConfig" subprocess.');
 
@@ -139,9 +139,44 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * @param array $domainData
-	 * @return boolean
-	 */
+	* Reload PHP-FPM
+	*
+	* @static
+	* @return bool
+	*/
+	protected static function PHPfpmReloadConfig() {
+		System_Daemon::debug('Starting "PHPfpmReloadConfig" subprocess.');
+
+		$error = 0;
+		
+		if($error == 0){
+			if (file_exists(DaemonConfig::$cfg->SOCK_EASYSCPC)){
+				$socket = socket_create(AF_UNIX, SOCK_STREAM, 0);
+				if ($socket < 0) {return 'socket_create() failed.<br />';}
+
+				$result = socket_connect($socket, DaemonConfig::$cfg->SOCK_EASYSCPC);
+				if ($result == false) {return 'socket_connect() failed.<br />';	}
+
+				socket_read($socket, 1024, PHP_NORMAL_READ);
+
+				socket_write($socket, 'PHPfpmRestart' . "\n", strlen('PHPfpmRestart' . "\n"));
+
+				socket_shutdown($socket, 2);
+				socket_close($socket);
+			} else {
+				return 'EasySCP Controller not running. System is unable to reload PHP-FPM config.<br />';
+			}
+		}
+
+		System_Daemon::debug('Finished "PHPfpmReloadConfig" subprocess.');
+
+		return ($error == 0) ? true : $result;
+	}
+
+	/**
+	* @param array $domainData
+	* @return boolean
+	*/
 	protected static function apacheWriteDisabledSiteConfig($domainData) {
 		$tpl_param = array(
 			'DOMAIN_IP'			=> $domainData['ip_number'],
@@ -169,11 +204,11 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Writes Apache configuration for default domain and enables configuration.
-	 *
-	 * @param array $domainData
-	 * @return boolean
-	 */
+	* Writes Apache configuration for default domain and enables configuration.
+	*
+	* @param array $domainData
+	* @return boolean
+	*/
 	protected static function apacheWriteDomainConfig($domainData) {
 		if ($domainData['domain_mailacc_limit'] == '-1'){
 			DaemonMail::DaemonMailDeleteDomain($domainData['domain_name']);
@@ -186,6 +221,19 @@ class DaemonDomainCommon {
 		$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
 		$serverName = $domainData['domain_name'];
 
+		$php_fpm = false;
+
+		if (!isset($domainData['subdomain_php_version'])) {
+			$PHP_Entry = DaemonConfig::$php->PHP_Entry[intval($domainData['domain_php_version'])];
+		} else {
+			$PHP_Entry = DaemonConfig::$php->PHP_Entry[intval($domainData['subdomain_php_version'])];
+		}
+		
+		if (isset($PHP_Entry->SRV_PHP) && isset($PHP_Entry->PHP_FPM_POOL_DIR)
+				&& $PHP_Entry->SRV_PHP != '' && $PHP_Entry->PHP_FPM_POOL_DIR != '') {
+			$php_fpm = true;
+		}
+
 		$tpl_param = array(
 			'DOMAIN_IP'					=> $domainData['ip_number'],
 			'DOMAIN_GID'				=> $sysUser,
@@ -196,6 +244,7 @@ class DaemonDomainCommon {
 			'SERVER_ALIAS'				=> 'www.'.$domainData['domain_name'].' '.$sysGroup.'.'.DaemonConfig::$cfg->BASE_SERVER_VHOST,
 			'MASTER_DOMAIN'				=> $domainData['domain_name'],
 			'AWSTATS'					=> (DaemonConfig::$cfg->AWSTATS_ACTIVE == 'yes') ? true : false,
+			'LETSENCRYPT'				=> (DaemonConfig::$cfg->CREATE_LETSENCRYPT_DIR == 'yes') ? true : false,
 			'DOMAIN_CGI'				=> ($domainData['domain_cgi'] == 'yes') ? true : false,
 			'DOMAIN_PHP'				=> ($domainData['domain_php'] == 'yes') ? true : false,
 			'BASE_SERVER_VHOST'			=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
@@ -208,7 +257,8 @@ class DaemonDomainCommon {
 			'PHP_STARTER_DIR'			=> DaemonConfig::$distro->PHP_STARTER_DIR,
 			'APACHE_LOG_DIR'			=> DaemonConfig::$distro->APACHE_LOG_DIR,
 			'APACHE_TRAFFIC_LOG_DIR'	=> DaemonConfig::$distro->APACHE_TRAFFIC_LOG_DIR,
-			'SELF'						=> $domainData['domain_name']
+			'SELF'						=> $domainData['domain_name'],
+			'PHP_FPM'					=> ($php_fpm == true) ? true : false
 		);
 
 		if ($tpl_param['SERVER_ADMIN'] == null || $tpl_param['SERVER_ADMIN'] == ''){
@@ -217,7 +267,8 @@ class DaemonDomainCommon {
 			return $msg.'<br />'.false;
 		}
 
-		if($domainData['ssl_status'] == 1){
+		if($domainData['ssl_status'] == 1 || $domainData['ssl_status'] == 3
+			|| $domainData['ssl_status'] == 11 || $domainData['ssl_status'] == 13){
 			$tpl_param['DOMAIN_PORT'] = 80;
 			$tpl_param['REDIRECT'] = true;
 		} else {
@@ -283,41 +334,155 @@ class DaemonDomainCommon {
 
 			$tpl_param['DOMAIN_IP']	= $domainData['ip_number'];
 		}
-
-		if ($domainData['ssl_status']>0){
-			$append = true;
-			$retVal = self::writeSSLKeys($domainData);
-			if($retVal !== true){
-				$msg = 'Writing SSL keys failed';
-				System_Daemon::debug($msg);
-				return $msg.'<br />'.$retVal;
-			}
-			$tpl_param['DOMAIN_PORT']	= 443;
-			$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
-			$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
-			$tpl_param['REDIRECT']		= false;
-
-			if (isset($domainData['ssl_cacert']) && $domainData['ssl_cacert'] != ''){
-				$tpl_param['SSL_CACERT'] = true;
-			}
-
-			$tpl = DaemonCommon::getTemplate($tpl_param);
-			// write Apache config
-			$config = $tpl->fetch('apache/parts/vhost.tpl');
-			$tpl = NULL;
-			unset($tpl);
-			$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
-
-			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
-			if ($retVal !== true) {
-				$msg = 'Failed to write'. $confFile;
-				System_Daemon::warning($msg);
-				return $msg.'<br />'.$retVal;
-			}
-
-			if (isset($domainData['ip_number_v6']) && $domainData['ip_number_v6'] != ''){
+		$ssl_status_ok = false;
+		if ($domainData['ssl_status'] != 0 && $domainData['ssl_status'] != 10) {
+			$ssl_valid = false;
+			if ($domainData['ssl_status'] == 1 || $domainData['ssl_status'] == 2
+				|| $domainData['ssl_status'] == 11 || $domainData['ssl_status'] == 12) {
 				$append = true;
-				$tpl_param['DOMAIN_IP']	= '['.$domainData['ip_number_v6'].']';
+				$retVal = self::writeSSLKeys($domainData);
+				if($retVal !== true){
+					$msg = 'Writing SSL keys failed';
+					System_Daemon::debug($msg);
+					return $msg.'<br />'.$retVal;
+				}
+				$ssl_status_ok = true;
+				$ssl_valid = true;
+				$tpl_param['DOMAIN_PORT']	= 443;
+				$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
+				$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
+				$tpl_param['REDIRECT']		= false;
+
+				if (isset($domainData['ssl_cacert']) && $domainData['ssl_cacert'] != ''){
+					$tpl_param['SSL_CACERT'] = true;
+				}
+			} elseif ($domainData['ssl_status'] == 3 || $domainData['ssl_status'] == 4
+						|| $domainData['ssl_status'] == 13 || $domainData['ssl_status'] == 14) {
+				$append = true;
+				$domains = array ();
+
+				$domainData1 = self::queryDomainDataByDomainID($domainData['domain_id']);
+				if ($domainData1['ssl_status'] == 3 || $domainData1['ssl_status'] == 4
+					|| $domainData1['ssl_status'] == 13 || $domainData1['ssl_status'] == 14) {
+					array_push($domains, $domainData1['domain_name']);
+					array_push($domains, 'www.' . $domainData1['domain_name']);
+				}
+				if ($subDomainData = self::querySubDomainDataByDomainID($domainData['domain_id'])) {
+					foreach ($subDomainData->fetchAll() as $row) {
+						if ($row['ssl_status'] == 3 || $row['ssl_status'] == 4
+							|| $row['ssl_status'] == 13 || $row['ssl_status'] == 14) {
+							array_push($domains, $row['subdomain_name'] . $row['domain_name']);
+							//array_push($domains, 'www.' . $row['subdomain_name'] . $row['domain_name']);
+						}
+					}
+				}
+				$email = array($domainData['email']);
+
+				// Fetch only with daily CRON (CronDomainLetsEncrypt.php)
+				/*
+				if (count($domains) > 0) {
+					$retVal = DaemonLetsEncrypt::writeLetsEncrypt($domains, DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'], $email);
+					if ($retVal !== true && $retVal !== false) {
+						$msg = 'LetsEncrypt: ' . $retVal;
+						System_Daemon::warning($msg);
+						return $msg.'<br />'.$retVal;
+					}
+				}
+				*/
+
+				if(isset($domainData['subdomain_name'])){
+					$ssl_cert_file = EasyConfig_PATH . '/letsencrypt/' . $domainData['subdomain_name'] . '.' . $domainData['domain_name'] . '/cert.pem';
+					$ssl_cacert_file = EasyConfig_PATH . '/letsencrypt/' . $domainData['subdomain_name'] . '.' . $domainData['domain_name'] . '/chain.pem';
+					$ssl_key_file = EasyConfig_PATH . '/letsencrypt/' . $domainData['subdomain_name'] . '.' . $domainData['domain_name'] . '/private.pem';
+				} else {
+					$ssl_cert_file = EasyConfig_PATH . '/letsencrypt/' . $domainData['domain_name'] . '/cert.pem';
+					$ssl_cacert_file = EasyConfig_PATH . '/letsencrypt/' . $domainData['domain_name'] . '/chain.pem';
+					$ssl_key_file = EasyConfig_PATH . '/letsencrypt/' . $domainData['domain_name'] . '/private.pem';
+				}
+					
+				if (file_exists($ssl_cert_file) && file_exists($ssl_cacert_file) && file_exists($ssl_key_file)) {
+					$ssl_cert = file_get_contents($ssl_cert_file);
+					$ssl_cacert = file_get_contents($ssl_cacert_file);
+					$ssl_key = file_get_contents($ssl_key_file);
+
+					$domainData['ssl_cert'] = $ssl_cert;
+					$domainData['ssl_cacert'] = $ssl_cacert;
+					$domainData['ssl_key'] = $ssl_key;
+
+					if (!isset($domainData['subdomain_name'])) {
+
+						$sql_param = array(
+							':domain_id' => $domainData['domain_id'],
+							":ssl_cert"	 => $ssl_cert,
+							":ssl_cacert"=> $ssl_cacert,
+							":ssl_key"	 => $ssl_key
+						);
+				
+						$sql_query = '
+							UPDATE
+								domain
+							SET
+								ssl_cert   = :ssl_cert,
+								ssl_cacert = :ssl_cacert,
+								ssl_key    = :ssl_key
+							WHERE
+								domain_id = :domain_id;
+						';
+				
+						DB::prepare($sql_query);
+						DB::execute($sql_param);
+
+					} else {
+
+						$sql_param = array(
+							':subdomain_id' => $domainData['subdomain_id'],
+							":ssl_cert"	    => $ssl_cert,
+							":ssl_cacert"   => $ssl_cacert,
+							":ssl_key"	    => $ssl_key
+						);
+				
+						$sql_query = '
+							UPDATE
+								subdomain
+							SET
+								ssl_cert   = :ssl_cert,
+								ssl_cacert = :ssl_cacert,
+								ssl_key    = :ssl_key
+							WHERE
+								subdomain_id = :subdomain_id;
+						';
+				
+						DB::prepare($sql_query);
+						DB::execute($sql_param);
+						
+					}
+
+					$ssl_status_ok = true;
+				}
+				
+				// Write SSL Data if available
+				if ($domainData['ssl_cert'] != '' && $domainData['ssl_key']) {
+					$append = true;
+					$retVal = self::writeSSLKeys($domainData);
+
+					if($retVal !== true){
+						$msg = 'Writing SSL keys failed';
+						System_Daemon::debug($msg);
+						return $msg.'<br />'.$retVal;
+					}
+					$ssl_valid = true;
+					$tpl_param['DOMAIN_PORT']	= 443;
+					$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
+					$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
+					$tpl_param['REDIRECT']		= false;
+	
+					if (isset($domainData['ssl_cacert']) && $domainData['ssl_cacert'] != ''){
+						$tpl_param['SSL_CACERT'] = true;
+					}
+				}       
+			}
+
+			if ($ssl_valid == true ) {
 
 				$tpl = DaemonCommon::getTemplate($tpl_param);
 				// write Apache config
@@ -325,16 +490,81 @@ class DaemonDomainCommon {
 				$tpl = NULL;
 				unset($tpl);
 				$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
-
+	
 				$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
 				if ($retVal !== true) {
 					$msg = 'Failed to write'. $confFile;
 					System_Daemon::warning($msg);
 					return $msg.'<br />'.$retVal;
 				}
+	
+				if (isset($domainData['ip_number_v6']) && $domainData['ip_number_v6'] != ''){
+					$append = true;
+					$tpl_param['DOMAIN_IP']	= '['.$domainData['ip_number_v6'].']';
+	
+					$tpl = DaemonCommon::getTemplate($tpl_param);
+					// write Apache config
+					$config = $tpl->fetch('apache/parts/vhost.tpl');
+					$tpl = NULL;
+					unset($tpl);
+					$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+	
+					$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
+					if ($retVal !== true) {
+						$msg = 'Failed to write'. $confFile;
+						System_Daemon::warning($msg);
+						return $msg.'<br />'.$retVal;
+					}
+				}
 			}
+		} else {
+			$ssl_status_ok = true;
 		}
 
+		// Set ssl_status to valid if not already set
+		if ($domainData['ssl_status'] >= 10 && $ssl_status_ok == true) {
+			$ssl_status = $domainData['ssl_status'] - 10;
+
+ 			if (!isset($domainData['subdomain_name'])) {
+				$sql_param = array(
+					':domain_id' 	=> $domainData['domain_id'],
+					":ssl_status" 	=> $ssl_status
+				);
+		
+				$sql_query = '
+					UPDATE
+						domain
+					SET
+						ssl_status = :ssl_status
+					WHERE
+						domain_id = :domain_id;
+				';
+		
+				DB::prepare($sql_query);
+				DB::execute($sql_param);
+
+			} else {
+
+				$sql_param = array(
+					':subdomain_id' => $domainData['subdomain_id'],
+					":ssl_status" 	=> $ssl_status
+				);
+		
+				$sql_query = '
+					UPDATE
+						subdomain
+					SET
+						ssl_status = :ssl_status
+					WHERE
+						subdomain_id = :subdomain_id;
+				';
+		
+				DB::prepare($sql_query);
+				DB::execute($sql_param);
+				
+			}
+		}
+		
 		$tpl = DaemonCommon::getTemplate($tpl_param);
 		// write Apache config
 		$config = $tpl->fetch('apache/parts/custom.conf.tpl');
@@ -354,11 +584,11 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Create new Domain
-	 *
-	 * @param array $domainData
-	 * @return boolean
-	 */
+	* Create new Domain
+	*
+	* @param array $domainData
+	* @return boolean
+	*/
 	protected static function createDomain($domainData) {
 		$retVal = self::systemCreateUserGroup($domainData);
 		if($retVal !== true){
@@ -370,13 +600,6 @@ class DaemonDomainCommon {
 		$retVal = self::directoriesCreateHtdocsStructure($domainData);
 		if($retVal !== true){
 			$msg = 'Failed to create htdocs!';
-			System_Daemon::debug($msg);
-			return $msg.'<br />'.$retVal;
-		}
-
-		$retVal = self::directoriesCreateFCGI($domainData);
-		if($retVal !== true){
-			$msg = 'Failed to create fcgi!';
 			System_Daemon::debug($msg);
 			return $msg.'<br />'.$retVal;
 		}
@@ -437,12 +660,12 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Update domain status
-	 *
-	 * @param string $status
-	 * @param int $domainID
-	 * @return mixed
-	 */
+	* Update domain status
+	*
+	* @param string $status
+	* @param int $domainID
+	* @return mixed
+	*/
 	protected static function dbSetDomainStatus($status, $domainID) {
 		$sql_param = array(
 			':domain_id'=> $domainID,
@@ -567,12 +790,29 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 *
-	 * @param array $domainData
-	 * @return mixed
-	 */
+	*
+	* @param array $domainData
+	* @return mixed
+	*/
 	protected static function deleteDomain($domainData) {
 
+		//delete domain php-fpm file
+		foreach(DaemonConfig::$php->PHP_Entry as $PHP_Entry) {
+			if (isset($PHP_Entry->PHP_FPM_POOL_DIR) && $PHP_Entry->PHP_FPM_POOL_DIR != '') {
+				$confFile = $PHP_Entry->PHP_FPM_POOL_DIR . '/' . $domainData['domain_name'] . '.conf';
+				if (file_exists($confFile)) {
+					$retVal = self::deleteFile($confFile);
+					if ($retVal!==true){
+						return $retVal;
+					}
+					System_Daemon::debug('Deleted '.$confFile);
+				}
+			}
+		}
+
+		//reload php-fpm here that user isn't used by a process anymore
+		//would not work, because reload will interrupt php exec 
+		
 		//delete user and group
 		$sysGroup = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'];
 		$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
@@ -583,7 +823,6 @@ class DaemonDomainCommon {
 
 		//delete directories
 		$homeDir = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
-		$fcgiDir = $fcgiDir = DaemonConfig::$distro->PHP_STARTER_DIR . '/' . $domainData['domain_name'];
 		$cmd = DaemonConfig::$cmd->CMD_RM . ' -rf ' . $homeDir;
 		exec($cmd);
 		System_Daemon::debug('Deleted ' . $homeDir);
@@ -599,15 +838,18 @@ class DaemonDomainCommon {
 		if ($retVal!==true){
 			return $retVal;
 		}
-
+		//delete domain fcgi directory
+		$fcgiDir = $fcgiDir = DaemonConfig::$distro->PHP_STARTER_DIR . '/' . $domainData['domain_name'];
 		$cmd = DaemonConfig::$cmd->CMD_RM . ' -rf ' . $fcgiDir;
 		exec($cmd);
 		System_Daemon::debug('Deleted '.$fcgiDir);
 
+		//delete SSL Keys
 		$rs = self::getDomainNames($domainData['domain_id']);
 		while ($row = $rs->fetch()) {
 			self::deleteSSLKeys($row['domain_name']);
 		}
+
 		//delete domain from db
 		$sql_param = array(
 			':domain_id' => $domainData['domain_id']
@@ -630,12 +872,12 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Delete HTAccess File
-	 *
-	 * @param array $domainData
-	 * @param array $row
-	 * @return bool
-	 */
+	* Delete HTAccess File
+	*
+	* @param array $domainData
+	* @param array $row
+	* @return bool
+	*/
 	protected static function deleteHTAccessFile($domainData, $row) {
 		$confFile = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'] . $row['path'] . '/.htaccess';
 
@@ -676,6 +918,21 @@ class DaemonDomainCommon {
 			return $retVal;
 		}
 		self::deleteSSLKeys($fqdn);
+
+		//delete subdomain php-fpm file
+		foreach(DaemonConfig::$php->PHP_Entry as $PHP_Entry) {
+			if (isset($PHP_Entry->PHP_FPM_POOL_DIR) && $PHP_Entry->PHP_FPM_POOL_DIR != '') {
+				$confFile = $PHP_Entry->PHP_FPM_POOL_DIR . '/' . $subDomainData['subdomain_name'] . "." . $subDomainData['domain_name'] . '.conf';
+				if (file_exists($confFile)) {
+					$retVal = self::deleteFile($confFile);
+					if ($retVal!==true){
+						return $retVal;
+					}
+					System_Daemon::debug('Deleted '.$confFile);
+				}
+			}
+		}
+			
 		$sql_param = array(
 			':subdomain_id' => $subDomainData['subdomain_id']
 		);
@@ -694,10 +951,10 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 *
-	 * @param array $domainData
-	 * @return boolean
-	 */
+	*
+	* @param array $domainData
+	* @return boolean
+	*/
 	protected static function directoriesCreateDisabled($domainData) {
 		$disabledDir = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
@@ -751,9 +1008,9 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * @param array $domainData
-	 * @return boolean
-	 */
+	* @param array $domainData
+	* @return boolean
+	*/
 	protected static function directoriesCreateError($domainData) {
 		$errorDir = DaemonConfig::$distro->APACHE_WWW_DIR . '/' . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
@@ -804,11 +1061,11 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Writes Apache configuration for default domain and enables configuration.
-	 *
-	 * @param array $domainData
-	 * @return boolean
-	 */
+	* Writes Apache configuration for default domain and enables configuration.
+	*
+	* @param array $domainData
+	* @return boolean
+	*/
 	protected static function directoriesCreateFCGI($domainData) {
 		System_Daemon::debug('Starting "directoriesCreateFCGI" subprocess.');
 
@@ -823,22 +1080,21 @@ class DaemonDomainCommon {
 		}
 
 		//file
-		if (!file_exists($fcgiDir . "/php-fcgi-starter")) {
-			$tpl_param = array(
-				'DOMAIN_NAME'		=> $domainData['domain_name'],
-				'WWW_DIR'			=> DaemonConfig::$distro->APACHE_WWW_DIR,
-				'PHP_STARTER_DIR'	=> DaemonConfig::$distro->PHP_STARTER_DIR,
-				'PHP_FASTCGI_BIN'	=> DaemonConfig::$distro->PHP_FASTCGI_BIN
-			);
+		$PHP_Entry = DaemonConfig::$php->PHP_Entry[intval($domainData['domain_php_version'])];
+		$tpl_param = array(
+			'DOMAIN_NAME'		=> $domainData['domain_name'],
+			'WWW_DIR'			=> $PHP_Entry->APACHE_WWW_DIR,
+			'PHP_STARTER_DIR'	=> $PHP_Entry->PHP_STARTER_DIR,
+			'PHP_FASTCGI_BIN'	=> $PHP_Entry->PHP_FASTCGI_BIN
+		);
+			
+		$tpl = DaemonCommon::getTemplate($tpl_param);
 
-			$tpl = DaemonCommon::getTemplate($tpl_param);
-
-			$config = $tpl->fetch("php/parts/php-fcgi-starter.tpl");
-			$tpl = NULL;
-			unset($tpl);
-			if (!DaemonCommon::systemWriteContentToFile($fcgiDir . '/php-fcgi-starter', $config, $sysUser, $sysGroup, 0550)) {
-				return false;
-			}
+		$config = $tpl->fetch("php/parts/php-fcgi-starter.tpl");
+		$tpl = NULL;
+		unset($tpl);
+		if (!DaemonCommon::systemWriteContentToFile($fcgiDir . '/php-fcgi-starter', $config, $sysUser, $sysGroup, 0550)) {
+			return false;
 		}
 
 		if (!file_exists($fcgiDir . "/php/php.ini")) {
@@ -858,17 +1114,136 @@ class DaemonDomainCommon {
 				return false;
 			}
 		}
-
 		System_Daemon::debug('Finished "directoriesCreateFCGI" subprocess.');
-
 		return true;
 	}
 
 	/**
-	 *
-	 * @param array $domainData
-	 * @return boolean
-	 */
+	* Handle PHP-FPM Pool configuration
+	*
+	* @param array $domainData
+	* @return boolean
+	*/
+	protected static function phpHandleFPMpool($domainData) {
+		System_Daemon::debug('Starting "phpHandleFPMpool" subprocess.');
+
+		//delete domain php-fpm file
+		foreach(DaemonConfig::$php->PHP_Entry as $PHP_Entry) {
+			if (isset($PHP_Entry->PHP_FPM_POOL_DIR) && $PHP_Entry->PHP_FPM_POOL_DIR != '') {
+				$confFile = $PHP_Entry->PHP_FPM_POOL_DIR . '/' . $domainData['domain_name'] . '.conf';
+				if(isset($domainData['subdomain_name'])){
+					$confFile = $PHP_Entry->PHP_FPM_POOL_DIR . '/' . $domainData['subdomain_name'] . '.' . $domainData['domain_name'] . '.conf';
+				}
+				if (file_exists($confFile)) {
+					$retVal = self::deleteFile($confFile);
+					if ($retVal!==true){
+						return $retVal;
+					}
+					System_Daemon::debug('Deleted '.$confFile);
+				}
+			}
+		}
+
+		// create php-fpm file only if php is enabled at domain settings
+		if ($domainData['domain_php'] == 'yes') {
+			$create_fpm = false;
+			if (!isset($domainData['subdomain_php_version'])) {
+				$PHP_Entry = DaemonConfig::$php->PHP_Entry[intval($domainData['domain_php_version'])];
+			} else {
+				$PHP_Entry = DaemonConfig::$php->PHP_Entry[intval($domainData['subdomain_php_version'])];
+			}
+			
+			if (isset($PHP_Entry->SRV_PHP) && isset($PHP_Entry->PHP_FPM_POOL_DIR)
+					&& $PHP_Entry->SRV_PHP != '' && $PHP_Entry->PHP_FPM_POOL_DIR != '') {
+				$create_fpm = true;
+	
+				$PHPfpmdir = $PHP_Entry->PHP_FPM_POOL_DIR;
+				$sysGroup = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'];
+				$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_uid'];
+	
+				$poolfile = $PHPfpmdir . '/' . $domainData['domain_name'] . '.conf';
+	
+				$tpl_param = array(
+					'SERVER_NAME'	=> $domainData['domain_name'],
+					'MASTER_DOMAIN'	=> $domainData['domain_name'],
+					'DOMAIN_UID'	=> $sysUser,
+					'DOMAIN_GID'	=> $sysGroup,
+					'WWW_DIR'		=> DaemonConfig::$distro->APACHE_WWW_DIR,
+					'PEAR_DIR'		=> $PHP_Entry->PEAR_DIR,
+					'PHP_TIMEZONE'	=> DaemonConfig::$cfg->PHP_TIMEZONE
+					);
+			}
+					
+			if ($create_fpm == true) {
+				if(isset($domainData['subdomain_name'])){
+					$serverName = $domainData['subdomain_name'].'.'.$domainData['domain_name'];
+					$poolfile = $PHPfpmdir . '/' . $serverName . '.conf';
+					
+					$tpl_param['SERVER_NAME']		= $serverName;
+				}
+
+				if (!file_exists($poolfile)) {
+					$tpl = DaemonCommon::getTemplate($tpl_param);
+		
+					$config = $tpl->fetch("php/parts/vhost.tpl");
+					$tpl = NULL;
+					unset($tpl);
+					if (!DaemonCommon::systemWriteContentToFile($poolfile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644)) {
+						return false;
+					}
+				}
+			}
+
+			// Create PHP User Config File
+			$create_fpm = false;
+			if (!isset($domainData['subdomain_php_version'])) {
+				$PHP_Entry = DaemonConfig::$php->PHP_Entry[intval($domainData['domain_php_version'])];
+			} else {
+				$PHP_Entry = DaemonConfig::$php->PHP_Entry[intval($domainData['subdomain_php_version'])];
+			}
+			
+			if (isset($PHP_Entry->SRV_PHP) && isset($PHP_Entry->PHP_FPM_POOL_DIR)
+					&& $PHP_Entry->SRV_PHP != '' && $PHP_Entry->PHP_FPM_POOL_DIR != '') {
+				$create_fpm = true;
+	
+				$poolfile = DaemonConfig::$cfg->CONF_DIR . '/php/user/' . $domainData['domain_name'] . '.conf';
+	
+				$tpl_param = array(
+					'SERVER_NAME'	=> $domainData['domain_name'],
+					);
+			}
+					
+			if ($create_fpm == true) {
+				if(isset($domainData['subdomain_name'])){
+					$serverName = $domainData['subdomain_name'].'.'.$domainData['domain_name'];
+					$poolfile = DaemonConfig::$cfg->CONF_DIR . '/php/user/' . $serverName . '.conf';
+					
+					$tpl_param['SERVER_NAME']		= $serverName;
+				}
+
+				if (!file_exists($poolfile)) {
+					$tpl = DaemonCommon::getTemplate($tpl_param);
+		
+					$config = $tpl->fetch("php/parts/vhost-user.tpl");
+					$tpl = NULL;
+					unset($tpl);
+					if (!DaemonCommon::systemWriteContentToFile($poolfile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644)) {
+						return false;
+					}
+				}
+			}
+		}
+			
+		System_Daemon::debug('Finished "phpHandleFPMpool" subprocess.');
+		return true;
+	}
+
+
+	/**
+	*
+	* @param array $domainData
+	* @return boolean
+	*/
 	protected static function directoriesCreateHtdocs($domainData) {
 		$htdocsDir = DaemonConfig::$distro->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
@@ -920,9 +1295,9 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * @param array $domainData
-	 * @return boolean
-	 */
+	* @param array $domainData
+	* @return boolean
+	*/
 	protected static function directoriesCreateHtdocsStructure($domainData) {
 		$homeDir	= DaemonConfig::$distro->APACHE_WWW_DIR . "/" . $domainData['domain_name'];
 		if (isset($domainData['mount'])) {
@@ -966,6 +1341,22 @@ class DaemonDomainCommon {
 				System_Daemon::warning($msg);
 				return $msg . '<br />' . $retVal;
 			}
+
+			if (DaemonConfig::$cfg->{'CREATE_LETSENCRYPT_DIR'} == 'yes') {
+				$retVal = DaemonCommon::systemCreateDirectory($homeDir . '/.well-known', $sysUser, $sysGroup, 0755);
+				if ($retVal!==true){
+					$msg = 'Failed to create '.$homeDir.'/.well-known!';
+					System_Daemon::warning($msg);
+					return $msg . '<br />' . $retVal;
+				}
+				$retVal = DaemonCommon::systemCreateDirectory($homeDir . '/.well-known/acme-challenge', $sysUser, $sysGroup, 0755);
+				if ($retVal!==true){
+					$msg = 'Failed to create '.$homeDir.'/.well-known/acme-challenge!';
+					System_Daemon::warning($msg);
+					return $msg . '<br />' . $retVal;
+				}
+			}
+			
 		}
 
 		$retVal = DaemonCommon::systemCreateDirectory($homeDir . '/cgi-bin', $sysUser, $sysGroup, 0755);
@@ -1000,10 +1391,10 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 *
-	 * @param array $domainData
-	 * @return boolean
-	 */
+	*
+	* @param array $domainData
+	* @return boolean
+	*/
 	protected static function getFQDN($domainData) {
 		$fqdn = "";
 		if (isset($domainData['alias_name'])) {
@@ -1171,6 +1562,7 @@ class DaemonDomainCommon {
 				d.domain_name,
 				d.domain_mailacc_limit,
 				d.domain_ssl,
+				d.domain_php_version,
 				s.ip_number,
 				s.ip_number_v6,
 				sd.subdomain_name,
@@ -1181,9 +1573,10 @@ class DaemonDomainCommon {
 				sd.ssl_cert,
 				sd.ssl_cacert,
 				sd.ssl_status,
-	  		    sd.subdomain_id,
+				sd.subdomain_id,
 				sd.subdomain_url_forward,
-				sd.subdomain_id
+				sd.subdomain_id,
+				sd.subdomain_php_version
 			FROM
 				admin a,
 				domain d,
@@ -1229,7 +1622,7 @@ class DaemonDomainCommon {
 				sd.ssl_cert,
 				sd.ssl_cacert,
 				sd.ssl_status,
-	  		    sd.subdomain_id,
+				sd.subdomain_id,
 				sd.subdomain_url_forward,
 				sd.subdomain_id
 			FROM
@@ -1272,10 +1665,10 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Create system user and group
-	 * @param array $domainData
-	 * @return boolean
-	 */
+	* Create system user and group
+	* @param array $domainData
+	* @return boolean
+	*/
 	protected static function systemCreateUserGroup($domainData) {
 		$retVal = true;
 		$sysGroup = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . $domainData['domain_gid'];
@@ -1317,11 +1710,11 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * @static
-	 * @param $domainData
- 	 * @param $row
-	 * @return bool
-	 */
+	* @static
+	* @param $domainData
+	* @param $row
+	* @return bool
+	*/
 	protected static function writeHTAccessFile($domainData, $row){
 		$content = '';
 		$content .= 'AuthType ' . $row['auth_type'] ."\n";
@@ -1385,10 +1778,10 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * @static
-	 * @param $domainData
-	 * @return bool
-	 */
+	* @static
+	* @param $domainData
+	* @return bool
+	*/
 	protected static function writeHTAccessGroup($domainData){
 		System_Daemon::debug('Starting "DaemonDomainCommon::writeHTAccessGroup = ' . $domainData['domain_name'] . '" subprocess.');
 
@@ -1463,10 +1856,10 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * @static
-	 * @param $domainData
-	 * @return bool
-	 */
+	* @static
+	* @param $domainData
+	* @return bool
+	*/
 	protected static function writeHTAccessUser($domainData){
 		System_Daemon::debug('Starting "DaemonDomainCommon::writeHTAccessUser = ' . $domainData['domain_name'] . '" subprocess.');
 
@@ -1533,6 +1926,7 @@ class DaemonDomainCommon {
 	}
 
 	protected static function writeMasterConfig(){
+
 		$append = false;
 		$sysGroup = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . DaemonConfig::$cfg->APACHE_SUEXEC_MIN_GID;
 		$sysUser = DaemonConfig::$cfg->APACHE_SUEXEC_USER_PREF . DaemonConfig::$cfg->APACHE_SUEXEC_MIN_UID;
@@ -1547,7 +1941,8 @@ class DaemonDomainCommon {
 					'SSL_KEY',
 					'SSL_CERT',
 					'SSL_CACERT',
-					'SSL_STATUS')
+					'SSL_STATUS',
+					'PHP_VERSION')
 		";
 
 		$rs = DB::query($sql_query);
@@ -1556,6 +1951,14 @@ class DaemonDomainCommon {
 			$sslData[strtolower($row['name'])] = $row['value'];
 		}
 
+		$php_fpm = false;
+		$PHP_Entry = DaemonConfig::$php->PHP_Entry[intval($sslData['php_version'])];
+	
+		if (isset($PHP_Entry->SRV_PHP) && isset($PHP_Entry->PHP_FPM_POOL_DIR)
+				&& $PHP_Entry->SRV_PHP != '' && $PHP_Entry->PHP_FPM_POOL_DIR != '') {
+			$php_fpm = true;
+		}
+		
 		$tpl_param = array(
 			'BASE_SERVER_IP'			=> DaemonConfig::$cfg->BASE_SERVER_IP,
 			'SUEXEC_GID'				=> $sysUser,
@@ -1564,14 +1967,17 @@ class DaemonDomainCommon {
 			'GUI_ROOT_DIR'				=> DaemonConfig::$cfg->GUI_ROOT_DIR,
 			'BASE_SERVER_VHOST'			=> DaemonConfig::$cfg->BASE_SERVER_VHOST,
 			'APACHE_LOG_DIR'			=> DaemonConfig::$distro->APACHE_LOG_DIR,
-			'PHP_STARTER_DIR'			=> DaemonConfig::$distro->PHP_STARTER_DIR
+			'PHP_STARTER_DIR'			=> DaemonConfig::$distro->PHP_STARTER_DIR,
+			'LETSENCRYPT'				=> (DaemonConfig::$cfg->CREATE_LETSENCRYPT_DIR == 'yes') ? true : false,
+			'PHP_FPM'					=> ($php_fpm == true) ? true : false
 		);
 
 		if (isset(DaemonConfig::$cfg->BASE_SERVER_IPv6) && DaemonConfig::$cfg->BASE_SERVER_IPv6 != ''){
 			$tpl_param['BASE_SERVER_IPv6'] = DaemonConfig::$cfg->BASE_SERVER_IPv6;
 		}
 
-		if($sslData['ssl_status']==1){
+		if($sslData['ssl_status'] == 1 || $sslData['ssl_status'] == 3
+			|| $sslData['ssl_status'] == 11 || $sslData['ssl_status'] == 13){
 			$tpl_param['BASE_PORT']	= 80;
 			$tpl_param['REDIRECT']	= true;
 		} else {
@@ -1592,37 +1998,165 @@ class DaemonDomainCommon {
 			return $msg.'<br />'.$retVal;
 		}
 
-		if ($sslData['ssl_status']>0){
-			$append = true;
-			$sslData['domain_name'] = 'master';
-			$retVal = self::writeSSLKeys($sslData);
-			if($retVal !== true){
-				$msg = 'Writing SSL keys failed';
-				System_Daemon::debug($msg);
-				return $msg.'<br />'.$retVal;
-			}
-			$tpl_param['BASE_PORT']		= 443;
-			$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
-			$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
-			$tpl_param['REDIRECT']		= false;
+		if ($sslData['ssl_status'] != 0 && $sslData['ssl_status'] != 10){
+			$ssl_valid = false;
+			if ($sslData['ssl_status'] == 1 || $sslData['ssl_status'] == 2
+				|| $sslData['ssl_status'] == 11 || $sslData['ssl_status'] == 12) {
+				$append = true;
+				$sslData['domain_name'] = 'master';
+				$retVal = self::writeSSLKeys($sslData);
+				if($retVal !== true){
+					$msg = 'Writing SSL keys failed';
+					System_Daemon::debug($msg);
+					return $msg.'<br />'.$retVal;
+				}
+				$ssl_valid = true;
+				$tpl_param['BASE_PORT']		= 443;
+				$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
+				$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
+				$tpl_param['REDIRECT']		= false;
 
-			if (isset($sslData['ssl_cacert']) && $sslData['ssl_cacert'] != ''){
-				$tpl_param['SSL_CACERT'] = true;
+				if (isset($sslData['ssl_cacert']) && $sslData['ssl_cacert'] != ''){
+					$tpl_param['SSL_CACERT'] = true;
+				}
+
+			} elseif ($sslData['ssl_status'] == 3 || $sslData['ssl_status'] == 4
+						|| $sslData['ssl_status'] == 13 || $sslData['ssl_status'] == 14) {
+				$domains = array (DaemonConfig::$cfg->BASE_SERVER_VHOST);
+				$email = array(DaemonConfig::$cfg->DEFAULT_ADMIN_ADDRESS);
+
+				if (count($domains) > 0) {
+					$retVal = DaemonLetsEncrypt::writeLetsEncrypt($domains, DaemonConfig::$cfg->GUI_ROOT_DIR, $email);
+					if ($retVal !== true && $retVal !== false) {
+						$msg = 'LetsEncrypt: ' . $retVal;
+						System_Daemon::warning($msg);
+						return $msg.'<br />'.$retVal;
+					}
+				}
+
+				$ssl_cert_file = EasyConfig_PATH . '/letsencrypt/' . DaemonConfig::$cfg->BASE_SERVER_VHOST . '/cert.pem';
+				$ssl_cacert_file = EasyConfig_PATH . '/letsencrypt/' . DaemonConfig::$cfg->BASE_SERVER_VHOST . '/chain.pem';
+				$ssl_key_file = EasyConfig_PATH . '/letsencrypt/' . DaemonConfig::$cfg->BASE_SERVER_VHOST . '/private.pem';
+				
+				if (file_exists($ssl_cert_file) && file_exists($ssl_cacert_file) && file_exists($ssl_key_file)) {
+					$ssl_cert = file_get_contents($ssl_cert_file);
+					$ssl_cacert = file_get_contents($ssl_cacert_file);
+					$ssl_key = file_get_contents($ssl_key_file);
+
+					$sslData['ssl_cert'] = $ssl_cert;
+					$sslData['ssl_cacert'] = $ssl_cacert;
+					$sslData['ssl_key'] = $ssl_key;
+
+					$sql_param = array(
+						":name"		=> 'SSL_KEY',
+						":value"	=> $ssl_key
+					);
+			
+					$sql_query = '
+						UPDATE
+							config
+						SET
+							value   = :value
+						WHERE
+							name    = :name
+					';
+
+					DB::prepare($sql_query);
+					DB::execute($sql_param);
+
+					$sql_param = array(
+						":name"		=> 'SSL_CERT',
+						":value"	=> $ssl_cert
+					);
+
+					$sql_query = '
+						UPDATE
+							config
+						SET
+							value   = :value
+						WHERE
+							name    = :name
+					';
+
+					DB::prepare($sql_query);
+					DB::execute($sql_param);
+				
+					$sql_param = array(
+						":name"		=> 'SSL_CACERT',
+						":value"	=> $ssl_cacert
+					);
+			
+					$sql_query = '
+						UPDATE
+							config
+						SET
+							value   = :value
+						WHERE
+							name    = :name
+					';
+			
+					DB::prepare($sql_query);
+					DB::execute($sql_param);
+				}
+				
+				// Write SSL Data if available
+				if ($sslData['ssl_cert'] != '' && $sslData['ssl_key']) {
+					$append = true;
+					$sslData['domain_name'] = 'master';
+					$retVal = self::writeSSLKeys($sslData);
+					if($retVal !== true){
+						$msg = 'Writing SSL keys failed';
+						System_Daemon::debug($msg);
+						return $msg.'<br />'.$retVal;
+					}
+					$ssl_valid = true;
+					$tpl_param['BASE_PORT']		= 443;
+					$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
+					$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
+					$tpl_param['REDIRECT']		= false;
+	
+					if (isset($sslData['ssl_cacert']) && $sslData['ssl_cacert'] != ''){
+						$tpl_param['SSL_CACERT'] = true;
+					}
+				}                            
 			}
 
-			$tpl = DaemonCommon::getTemplate($tpl_param);
-			// write Apache config
-			$config = $tpl->fetch('apache/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/00_master.conf.tpl');
-			$tpl = NULL;
-			unset($tpl);
-			$confFile = DaemonConfig::$cfg->CONF_DIR.'/apache/working/00_master.conf';
+			if ($ssl_valid == true ) {
+				$tpl = DaemonCommon::getTemplate($tpl_param);
+				// write Apache config
+				$config = $tpl->fetch('apache/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/00_master.conf.tpl');
+				$tpl = NULL;
+				unset($tpl);
+				$confFile = DaemonConfig::$cfg->CONF_DIR.'/apache/working/00_master.conf';
 
-			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
-			if ($retVal !== true) {
-				$msg = 'Failed to write'. $confFile;
-				System_Daemon::warning($msg);
-				return $msg.'<br />'.$retVal;
+				$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
+				if ($retVal !== true) {
+					$msg = 'Failed to write'. $confFile;
+					System_Daemon::warning($msg);
+					return $msg.'<br />'.$retVal;
+				}
 			}
+		}
+		
+		// Set ssl_status to valid if not already set
+		if ($sslData['ssl_status'] >= 10 ) {
+			$ssl_status = $sslData['ssl_status'] - 10;
+			$sql_param = array(
+				":name"		=> 'SSL_STATUS',
+				":value"	=> $ssl_status
+			);
+	
+			$sql_query = '
+				UPDATE
+					config
+				SET
+					value   = :value
+				WHERE
+					name    = :name
+			';
+	
+			DB::prepare($sql_query);
+			DB::execute($sql_param);
 		}
 
 		exec(DaemonConfig::$cmd->CMD_CP.' -pf '.DaemonConfig::$cfg->CONF_DIR.'/apache/working/00_master.conf '.DaemonConfig::$distro->APACHE_SITES_DIR.'/00_master.conf', $result, $error);
@@ -1631,10 +2165,175 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Verify if SSL-key and certificate corresponds. Write key and certificate
-	 * @param array $domainData
-	 * @return mixed
-	 */
+	* Writes PHP FCGI configuration for master domain
+	*
+	* @return boolean
+	*/
+	protected static function directoriesCreateFCGImaster() {
+		System_Daemon::debug('Starting "directoriesCreateFCGImaster" subprocess.');
+
+		$sql_query = "
+			SELECT
+				*
+			FROM
+				config
+			WHERE
+				name IN (
+					'PHP_VERSION')
+		";
+
+		$rs = DB::query($sql_query);
+		$phpData = array();
+		while ($row=$rs->fetch()){
+			$phpData[strtolower($row['name'])] = $row['value'];
+		}
+
+		//file
+		$PHP_Entry = DaemonConfig::$php->PHP_Entry[intval($phpData['php_version'])];
+		$tpl_param = array(
+			'PHP_STARTER_DIR'	=> $PHP_Entry->PHP_STARTER_DIR,
+			'DOMAIN_NAME'		=> 'master',
+			'GUI_ROOT_DIR'		=> DaemonConfig::$cfg->{'GUI_ROOT_DIR'},
+			'PHP_FASTCGI_BIN'	=> $PHP_Entry->PHP_FASTCGI_BIN
+		);
+
+		$tpl = DaemonCommon::getTemplate($tpl_param);
+		$config = $tpl->fetch('php/parts/master.php-fcgi-starter.tpl');
+		$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.php-fcgi-starter';
+		$tpl = NULL;
+		unset($tpl);
+
+		if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0550 )){
+			return 'Error: Failed to write '.$confFile;
+		}
+
+		// Install the new file
+		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.php-fcgi-starter '.DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php-fcgi-starter', $result, $error);
+
+
+		// PHP5 php.ini file
+		// Loading the template from /etc/easyscp/php/parts/master/php, Building the new file
+		// and Store the new file in working directory
+
+		$tpl_param = array(
+			'CHKROOTKIT_LOG'		=> DaemonConfig::$distro->{'CHKROOTKIT_LOG'},
+			'CONF_DIR'				=> DaemonConfig::$cfg->{'CONF_DIR'},
+			'DEFAULT_ADMIN_ADDRESS'	=> DaemonConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'},
+			'DOMAIN_NAME'			=> 'gui',
+			'EASYSCPC_DIR'			=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPC'}),
+			'EASYSCPD_DIR'			=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPD'}),
+			'MAIL_DMN'				=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'}),
+			'OTHER_ROOTKIT_LOG'		=> (DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} != '') ? DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} : '',
+			'PEAR_DIR'				=> DaemonConfig::$distro->{'PEAR_DIR'},
+			'PHP_STARTER_DIR'		=> DaemonConfig::$distro->{'PHP_STARTER_DIR'},
+			'PHP_TIMEZONE'			=> DaemonConfig::$cfg->{'PHP_TIMEZONE'},
+			'RKHUNTER_LOG'			=> DaemonConfig::$distro->{'RKHUNTER_LOG'},
+			'WWW_DIR'				=> DaemonConfig::$cfg->{'ROOT_DIR'}
+		);
+
+		$tpl = DaemonCommon::getTemplate($tpl_param);
+		$config = $tpl->fetch('php/parts/' . DaemonConfig::$cfg->{'DistName'} . '_' . DaemonConfig::$cfg->{'DistVersion'} . '/master.php.ini');
+		$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.php.ini';
+		$tpl = NULL;
+		unset($tpl);
+
+		if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}, DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'}, 0440 )){
+			return 'Error: Failed to write '.$confFile;
+		}
+
+		// Install the new file
+		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.php.ini '.DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php/php.ini', $result, $error);
+
+		System_Daemon::debug('Finished "directoriesCreateFCGImaster" subprocess.');
+		return true;
+	}
+	
+	/**
+	* Handle PHP-FPM Pool Master configuration
+	*
+	* @return boolean
+	*/
+	protected static function phpHandleFPMmaster() {
+		System_Daemon::debug('Starting "phpHandleFPMmaster" subprocess.');
+
+		$sql_query = "
+			SELECT
+				*
+			FROM
+				config
+			WHERE
+				name IN (
+					'PHP_VERSION')
+		";
+
+		$rs = DB::query($sql_query);
+		$phpData = array();
+		while ($row=$rs->fetch()){
+			$phpData[strtolower($row['name'])] = $row['value'];
+		}
+
+		//delete domain php-fpm file
+		foreach(DaemonConfig::$php->PHP_Entry as $PHP_Entry) {
+			if (isset($PHP_Entry->PHP_FPM_POOL_DIR)) {
+				$confFile = $PHP_Entry->PHP_FPM_POOL_DIR . "/master.conf";
+				if (file_exists($confFile)) {
+					$retVal = self::deleteFile($confFile);
+					if ($retVal!==true){
+						return $retVal;
+					}
+					System_Daemon::debug('Deleted '.$confFile);
+				}
+			}
+		}
+
+		$create_fpm = false;
+		$PHP_Entry = DaemonConfig::$php->PHP_Entry[intval($phpData['php_version'])];
+		$create_fpm = true;
+
+		$PHPfpmdir = $PHP_Entry->PHP_FPM_POOL_DIR;
+		$sysUser = DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'};
+		$sysGroup = DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'};
+
+		//file
+		$tpl_param = array(
+			'DOMAIN_NAME'		=> 'gui',
+			'DOMAIN_UID'		=> $sysUser,
+			'DOMAIN_GID'		=> $sysGroup,
+			'WWW_DIR'			=> DaemonConfig::$cfg->{'ROOT_DIR'},
+			'MAIL_DMN'			=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'}),
+			'CONF_DIR'			=> DaemonConfig::$cfg->{'CONF_DIR'},
+			'PEAR_DIR'			=> $PHP_Entry->PEAR_DIR,
+			'RKHUNTER_LOG'		=> DaemonConfig::$distro->{'RKHUNTER_LOG'},
+			'CHKROOTKIT_LOG'	=> DaemonConfig::$distro->{'CHKROOTKIT_LOG'},
+			'OTHER_ROOTKIT_LOG'	=> (DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} != '') ? DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} : '',
+			'EASYSCPC_DIR'		=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPC'}),
+			'EASYSCPD_DIR'		=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPD'}),
+			'PHP_TIMEZONE'		=> DaemonConfig::$cfg->{'PHP_TIMEZONE'}
+		);
+
+		if ($create_fpm == true) {
+			$tpl = DaemonCommon::getTemplate($tpl_param);
+
+			$config = $tpl->fetch("php/parts/master.tpl");
+			$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.conf';
+			$tpl = NULL;
+			unset($tpl);
+			if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644)) {
+				return 'Error: Failed to write '.$confFile;
+			}
+			// Install the new file
+			exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.conf '.$PHPfpmdir.'/master.conf', $result, $error);
+		}
+	
+		System_Daemon::debug('Finished "phpHandleFPMmaster" subprocess.');
+		return true;
+	}
+	
+	/**
+	* Verify if SSL-key and certificate corresponds. Write key and certificate
+	* @param array $domainData
+	* @return mixed
+	*/
 	protected static function writeSSLKeys($domainData){
 		System_Daemon::debug(print_r($domainData,true));
 		if (isset($domainData['subdomain_name'])) {
@@ -1679,9 +2378,9 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Delete all keys and certificates for domain name
-	 * @param $domainName
-	 */
+	* Delete all keys and certificates for domain name
+	* @param $domainName
+	*/
 	protected static function deleteSSLKeys($domainName){
 		$cacertFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainName . '-cacert.pem';
 		$certFile = DaemonConfig::$distro->SSL_CERT_DIR . '/easyscp_' . $domainName . '-cert.pem';
@@ -1707,11 +2406,11 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Query for domain names from domain, subdomain, alias and subdomain alias tables.
-	 * @param $domain_id
-	 * @return mixed
-	 * @throws Exception
-	 */
+	* Query for domain names from domain, subdomain, alias and subdomain alias tables.
+	* @param $domain_id
+	* @return mixed
+	* @throws Exception
+	*/
 	protected static function getDomainNames($domain_id){
 		$sql_param = array(
 			"domain_id"	=> $domain_id
@@ -1764,13 +2463,13 @@ class DaemonDomainCommon {
 	}
 
 	/**
-	 * Delete a given fileName
-	 *
-	 * returns true on success or error message otherwise
-	 *
-	 * @param $fileName
-	 * @return bool|string
-	 */
+	* Delete a given fileName
+	*
+	* returns true on success or error message otherwise
+	*
+	* @param $fileName
+	* @return bool|string
+	*/
 	protected static function deleteFile($fileName){
 		if (file_exists($fileName)){
 			if(!unlink($fileName)){

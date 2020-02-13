@@ -25,6 +25,9 @@ $i = 0;
  * First server
  */
 $i++;
+/* Name */
+$cfg['Servers'][$i]['verbose'] = '{$HOSTNAME}';
+
 /* Authentication type */
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Parameters set by EasySCP */
@@ -37,6 +40,10 @@ $cfg['Servers'][$i]['compress'] = true;
 /* Select mysql if your server does not have mysqli */
 $cfg['Servers'][$i]['extension'] = 'mysqli';
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
+
+/* Session to use for 'signon' authentication method */
+$cfg['Servers'][$i]['SignonSession'] = 'EasySCP';
+$cfg['Servers'][$i]['SignonURL']     = '';
 
 /*
  * phpMyAdmin configuration storage settings.
@@ -61,12 +68,79 @@ $cfg['Servers'][$i]['tracking'] = 'pma__tracking';
 $cfg['Servers'][$i]['designer_coords'] = 'pma__designer_coords';
 $cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';
 $cfg['Servers'][$i]['recent'] = 'pma__recent';
+$cfg['Servers'][$i]['favorite'] = 'pma__favorite';
+$cfg['Servers'][$i]['users'] = 'pma__users';
+$cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';
+$cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';
+$cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';
+$cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
+$cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
+$cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
 
 /* Hide some databases from listing */
 $cfg['Servers'][$i]['hide_db'] = '(information_schema|phpmyadmin|mysql)';
 
+/* Contrib / Swekey authentication */
+// $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
+
+
+/*
+ * Second server
+ */
+
+ $i++;
+/* Name */
+$cfg['Servers'][$i]['verbose'] = ' ';
+/* Authentication type */
+$cfg['Servers'][$i]['auth_type'] = 'signon';
+
+/* Server parameters */
+$cfg['Servers'][$i]['host'] = '{$HOSTNAME}';
+$cfg['Servers'][$i]['connect_type'] = 'tcp';
+$cfg['Servers'][$i]['compress'] = true;
+
+/* Select mysql if your server does not have mysqli */
+$cfg['Servers'][$i]['extension'] = 'mysqli';
+$cfg['Servers'][$i]['AllowNoPassword'] = false;
+
 /* Session to use for 'signon' authentication method */
 $cfg['Servers'][$i]['SignonSession'] = 'EasySCP';
+$cfg['Servers'][$i]['SignonURL']     = '/pma/easyscp/signon-easyscp.php';
+
+/*
+ * phpMyAdmin configuration storage settings.
+ */
+
+/* User used to manipulate with storage */
+$cfg['Servers'][$i]['controlhost'] = '';
+$cfg['Servers'][$i]['controluser'] = '{$PMA_USER}';
+$cfg['Servers'][$i]['controlpass'] = '{$PMA_PASS}';
+
+/* Storage database and tables */
+$cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
+$cfg['Servers'][$i]['bookmarktable'] = 'pma__bookmark';
+$cfg['Servers'][$i]['relation'] = 'pma__relation';
+$cfg['Servers'][$i]['table_info'] = 'pma__table_info';
+$cfg['Servers'][$i]['table_coords'] = 'pma__table_coords';
+$cfg['Servers'][$i]['pdf_pages'] = 'pma__pdf_pages';
+$cfg['Servers'][$i]['column_info'] = 'pma__column_info';
+$cfg['Servers'][$i]['history'] = 'pma__history';
+$cfg['Servers'][$i]['table_uiprefs'] = 'pma__table_uiprefs';
+$cfg['Servers'][$i]['tracking'] = 'pma__tracking';
+$cfg['Servers'][$i]['designer_coords'] = 'pma__designer_coords';
+$cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';
+$cfg['Servers'][$i]['recent'] = 'pma__recent';
+$cfg['Servers'][$i]['favorite'] = 'pma__favorite';
+$cfg['Servers'][$i]['users'] = 'pma__users';
+$cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';
+$cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';
+$cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';
+$cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
+$cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
+$cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
+
+/* Hide some databases from listing */
+$cfg['Servers'][$i]['hide_db'] = '(information_schema|phpmyadmin|mysql)';
 
 /* Contrib / Swekey authentication */
 // $cfg['Servers'][$i]['auth_swekey_config'] = '/etc/swekey-pma.conf';
@@ -155,9 +229,6 @@ $cfg['ThemeDefault'] = 'pmahomme';
 /* Hide the warning about Suhosin */
 $cfg['SuhosinDisableWarning'] = true;
 
-/* The maximum number of items displayed in navigation panel */
-$cfg['MaxNavigationItems'] = 500;
-
-/* The maximum number of table names to be displayed in the main panel’s list (except on the Export page). */
-$cfg['MaxTableList'] = 500;
 ?>
+
+

@@ -1,34 +1,37 @@
-EasySCP 2.1.0 ChangeLog
+EasySCP 2.2.0f ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2018-05-17
+2020-02-11
+
 	- DOCS:
-		* Add: CentOS 7 package file
-		* Add: Debian 9 package file
-		* Add: Ubuntu 16.04 LTS package file
-		* Removed: Ubuntu 12.04 LTS package file
+		* Add: Debian 10 package file
+		* Add: Ubuntu 18.04 LTS package file
+		* Removed: Debian 7 package file
+		* Removed: Ubuntu 14.04 LTS file
+		* Removed: Oracle package file
+
+	- DAEMON:
+		* Add: Debian 10 support
+		* Add: Ubuntu 18.04 LTS support
+		* Removed: Debian 7 support
+		* Removed: Ubuntu 14.04 LTS support
+		* Removed: Oracle support
+		* Add: LeScript (Letsencrypt) V0.2.4
+		* Add: Support for different PHP versions
 
 	- GUI:
-   		* Update: jQuery to version 1.12.4
-		* Add: Cronjobs for all users
-		* Add: Call Iana update from GUI
-		* Improved: Template files and removed duplicate content/functions
-
-		* Fix: Delete alias order
-
-	- Setup:
-		* Add: CentOS 7 support
-		* Add: Debian 9 support
-		* Add: Ubuntu 16.04 LTS support
-		* Removed: Ubuntu 12.04 LTS support
+		* DNS: Fix broken features
+		* Add: Letsencrypt support
+		* Add: Support for different PHP versions
 
 	- System:
-		* Add: PHP 7 support
-		* Improved: Menu handling
-		* Fix: Creation and deletion of vuXXXX DNS entries (Issue #9)
-		* Add: Configuring separate SSL certificates for domain, alias and subdomains (Issue #8)
+		* Add: PHP 7.3 support
+		* Add: Letsencrypt support
+		* Add: Support for different PHP versions
+		* Add: EasySCP_DNS.xml template for DNS entires at domain creation
+		* Change: now use of PHP-FPM
 
 	- TOOLS:
 		* Update: net2ftp to version 1.0 build 50
-		* Update: phpMyAdmin to version 4.0.10.20
-		* Update: Roundcube to version 1.2.9
+		* Update: phpMyAdmin to version 4.9.4
+		* Update: Roundcube to version 1.3.10

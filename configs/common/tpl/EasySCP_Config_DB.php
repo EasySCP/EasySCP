@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ class DB_Config {
 	/* Datenbankuser */
 	protected static $DB_USER		= '{$DB_USER}';
 
-	/* Datenbankpasswort */
+	/* Datenbankpasswort {$DB_PASSWORD_ORIG} */
 	protected static $DB_PASSWORD	= '{$DB_PASSWORD}';
 
 	/* Datenbank Prefix */

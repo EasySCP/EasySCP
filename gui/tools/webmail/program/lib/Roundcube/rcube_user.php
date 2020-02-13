@@ -254,7 +254,7 @@ class rcube_user
 
         // generate a random hash and store it in user prefs
         if (empty($prefs['client_hash'])) {
-            $prefs['client_hash'] = md5($this->data['username'] . mt_rand() . $this->data['mail_host']);
+            $prefs['client_hash'] = rcube_utils::random_bytes(16);
             $this->save_prefs(array('client_hash' => $prefs['client_hash']));
         }
 
@@ -391,20 +391,22 @@ class rcube_user
 
         unset($data['user_id']);
 
-        $insert_cols = $insert_values = array();
+        $insert_cols   = array();
+        $insert_values = array();
+
         foreach ((array)$data as $col => $value) {
             $insert_cols[]   = $this->db->quote_identifier($col);
             $insert_values[] = $value;
         }
+
         $insert_cols[]   = $this->db->quote_identifier('user_id');
         $insert_values[] = $this->ID;
 
         $sql = "INSERT INTO ".$this->db->table_name('identities', true).
             " (`changed`, ".join(', ', $insert_cols).")".
-            " VALUES (".$this->db->now().", ".join(', ', array_pad(array(), sizeof($insert_values), '?')).")";
+            " VALUES (".$this->db->now().", ".join(', ', array_pad(array(), count($insert_values), '?')).")";
 
-        call_user_func_array(array($this->db, 'query'),
-            array_merge(array($sql), $insert_values));
+        $insert = $this->db->query($sql, $insert_values);
 
         // clear the cache
         $this->identities = array();
@@ -505,10 +507,10 @@ class rcube_user
 
             $this->db->query(
                 "UPDATE " . $this->db->table_name('users', true)
-                    . " SET `failed_login` = " . $this->db->fromunixtime($failed_login->format('U'))
+                    . " SET `failed_login` = ?"
                     . ", `failed_login_counter` = " . ($counter ?: "`failed_login_counter` + 1")
                 . " WHERE `user_id` = ?",
-                $this->ID);
+                $failed_login, $this->ID);
         }
     }
 
@@ -611,7 +613,7 @@ class rcube_user
             return false;
         }
 
-        $dbh->query(
+        $insert = $dbh->query(
             "INSERT INTO ".$dbh->table_name('users', true).
             " (`created`, `last_login`, `username`, `mail_host`, `language`)".
             " VALUES (".$dbh->now().", ".$dbh->now().", ?, ?, ?)",
@@ -619,7 +621,7 @@ class rcube_user
             $data['host'],
             $data['language']);
 
-        if ($user_id = $dbh->insert_id('users')) {
+        if ($dbh->affected_rows($insert) && ($user_id = $dbh->insert_id('users'))) {
             // create rcube_user instance to make plugin hooks work
             $user_instance = new rcube_user($user_id, array(
                 'user_id'   => $user_id,
@@ -834,11 +836,10 @@ class rcube_user
 
         $sql = "INSERT INTO ".$this->db->table_name('searches', true)
             ." (".join(', ', $insert_cols).")"
-            ." VALUES (".join(', ', array_pad(array(), sizeof($insert_values), '?')).")";
+            ." VALUES (".join(', ', array_pad(array(), count($insert_values), '?')).")";
 
-        call_user_func_array(array($this->db, 'query'),
-            array_merge(array($sql), $insert_values));
+        $insert = $this->db->query($sql, $insert_values);
 
-        return $this->db->insert_id('searches');
+        return $this->db->affected_rows($insert) ? $this->db->insert_id('searches') : false;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -149,7 +149,7 @@ function SetupStopServices(){
 }
 
 function SetupMysqlTest(){
-	$sql = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
+	$sql = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
 	try {
 		$connectid = new PDO(
@@ -173,13 +173,21 @@ function SetupMysqlTest(){
 
 		switch($sql->{'DistName'}->__toString() . '_' . $sql->{'DistVersion'}->__toString()){
 			case 'Debian_9':
-				$sql->{'DB_HOST'} = 'localhost';
-				$sql->{'DB_DATABASE'} = 'easyscp';
-				$sql->{'DB_USER'} = 'easyscp';
+			case 'Debian_10':
+			case 'Ubuntu_18.04':
+				if ($sql->{'DB_HOST'} == '') {
+					$sql->{'DB_HOST'} = 'localhost';
+				}
+				if ($sql->{'DB_DATABASE'} == '') {
+					$sql->{'DB_DATABASE'} = 'easyscp';
+				}
 				if ($sql->{'DB_PASSWORD'} == '') {
+					$sql->{'DB_USER'} = 'easyscp';
 					$sql->{'DB_PASSWORD'} = DaemonCommon::generatePassword(18);
 				}
-				$connectid->query("grant all on *.* to easyscp@localhost identified by '" . $sql->{'DB_PASSWORD'}->__toString() . "' with grant option;flush privileges;")->closeCursor();
+				if ($sql->{'DB_USER'} == 'easyscp' && $sql->{'DB_HOST'} == 'localhost') {
+					$connectid->query("grant all on *.* to easyscp@localhost identified by '" . $sql->{'DB_PASSWORD'}->__toString() . "' with grant option;flush privileges;")->closeCursor();
+				}
 				break;
 			default:
 
@@ -309,7 +317,13 @@ function EasySCP_Directories(){
 		return 'Error: Failed to create "PHP_STARTER_DIR": '.DaemonConfig::$distro->{'PHP_STARTER_DIR'};
 	}
 
-	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
+	if (DaemonConfig::$cfg->{'CREATE_LETSENCRYPT_DIR'} == 'yes') {
+		if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/.well-known', DaemonConfig::$distro->{'APACHE_USER'}, DaemonConfig::$distro->{'APACHE_GROUP'}, 0755)){
+			return 'Error: Failed to create "LETSENCRYPT_DIR": '.DaemonConfig::$cfg->{'GUI_ROOT_DIR'}.'/.well-known';
+		}
+	}
+	
+	$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 	if ($xml->{'AWStats'} == '_yes_'){
 		if (!DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'AWSTATS_CACHE_DIR'}, DaemonConfig::$distro->{'APACHE_USER'}, DaemonConfig::$distro->{'APACHE_GROUP'}, 0755)){
 			return 'Error: Failed to create "AWSTATS_CACHE_DIR": '.DaemonConfig::$distro->{'AWSTATS_CACHE_DIR'};
@@ -327,7 +341,7 @@ function EasySCP_Directories(){
 }
 
 function EasySCP_main_configuration_file(){
-	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
+	$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
 	DaemonConfig::$cfg->{'BuildDate'} = file_get_contents(DaemonConfig::$cfg->{'CONF_DIR'} . '/BUILD');
 	DaemonConfig::$cfg->{'Version'} = file_get_contents(DaemonConfig::$cfg->{'CONF_DIR'} . '/VERSION');
@@ -380,7 +394,35 @@ function EasySCP_main_configuration_file(){
 	}
 
 	DaemonConfig::Save();
+	
+	// Install new file EasySCP_DNS.xml (if not exists)
+	if (file_exists(DaemonConfig::$cfg->{'CONF_DIR'}.'/tpl/EasySCP_DNS.xml')
+		&& !file_exists(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_DNS.xml')) {
+		exec(DaemonConfig::$cmd->{'CMD_CP'}.' -n '.DaemonConfig::$cfg->{'CONF_DIR'}.'/tpl/EasySCP_DNS.xml '.DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_DNS.xml', $result, $error);
+	}
 
+	// Install new file EasySCP_PHP.xml (if not exists)
+	if (file_exists(DaemonConfig::$cfg->{'CONF_DIR'}.'/tpl/EasySCP_PHP.xml')
+		&& !file_exists(DaemonConfig::$cfg->{'CONF_DIR'}.'/EasySCP_PHP.xml')) {
+
+		$php = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_PHP.xml');
+
+		$php->PHP_Entry->{'PHP_NAME'}			= 'PHP ' . PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
+		$php->PHP_Entry->{'ID'}					= '0';
+		$php->PHP_Entry->{'ENABLE'}				= '1';
+		$php->PHP_Entry->{'SRV_PHP'}			= (isset(DaemonConfig::$cmd->{'SRV_PHP'}) == true) ? DaemonConfig::$cmd->{'SRV_PHP'} : '';
+		$php->PHP_Entry->{'PEAR_DIR'}			= (isset(DaemonConfig::$distro->{'PEAR_DIR'}) == true) ? DaemonConfig::$distro->{'PEAR_DIR'} : '';
+		$php->PHP_Entry->{'PHP_FASTCGI_BIN'}	= (isset(DaemonConfig::$distro->{'PHP_FASTCGI_BIN'}) == true) ? DaemonConfig::$distro->{'PHP_FASTCGI_BIN'} : '';
+		$php->PHP_Entry->{'PHP_STARTER_DIR'}	= (isset(DaemonConfig::$distro->{'PHP_STARTER_DIR'}) == true) ? DaemonConfig::$distro->{'PHP_STARTER_DIR'} : '';
+		$php->PHP_Entry->{'PHP_FPM_POOL_DIR'}	= (isset(DaemonConfig::$distro->{'PHP_FPM_POOL_DIR'}) == true) ? DaemonConfig::$distro->{'PHP_FPM_POOL_DIR'} : '';
+
+		$handle = fopen(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_PHP.xml', "wb");
+		fwrite($handle, $php->asXML());
+		fclose($handle);
+
+		DaemonCommon::systemSetFilePermissions(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_PHP.xml', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0644);
+	}
+		
 	return DaemonConfig::SaveOldConfig();
 	// return 'Ok';
 }
@@ -423,7 +465,7 @@ function EasySCP_database(){
 }
 
 function EasySCP_default_SQL_data(){
-	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
+	$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
 	System_Daemon::debug('Inserting primary admin account data...');
 
@@ -738,7 +780,7 @@ function EasySCP_MTA_configuration_files(){
 
 function EasySCP_ProFTPd_configuration_file(){
 	//TODO Übernahme der Daten aus der Setup config.xml (FTP user und Pass) implementieren
-	//$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
+	//$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
 	$CreateProFTPdPass = DaemonConfigFTP::CreateProFTPdPass();
 	if ($CreateProFTPdPass !== true){
@@ -766,6 +808,8 @@ function EasySCP_init_scripts(){
 			break;
 		case 'Debian_8':
 		case 'Debian_9':
+		case 'Debian_10':
+		case 'Ubuntu_18.04':
 			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' enable easyscp_control', $result, $error);
 			exec(DaemonConfig::$cmd->{'CMD_SYSTEMCTL'} . ' enable easyscp_daemon', $result, $error);
 			break;
@@ -844,6 +888,44 @@ function GUI_PHP(){
 	// Install the new file
 	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.php.ini '.DaemonConfig::$distro->{'PHP_STARTER_DIR'}.'/master/php/php.ini', $result, $error);
 
+  if (isset(DaemonConfig::$cmd->SRV_PHP) && isset(DaemonConfig::$distro->PHP_FPM_POOL_DIR)
+		&& DaemonConfig::$cmd->SRV_PHP != '' && DaemonConfig::$distro->PHP_FPM_POOL_DIR != '') {
+ 
+	$PHPfpmdir = DaemonConfig::$distro->PHP_FPM_POOL_DIR;
+	$sysUser = DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'};
+	$sysGroup = DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'}.DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'};
+
+	//file
+	$tpl_param = array(
+		'DOMAIN_NAME'			=> 'gui',
+		'DOMAIN_UID'			=> $sysUser,
+		'DOMAIN_GID'			=> $sysGroup,
+		'WWW_DIR'				=> DaemonConfig::$cfg->{'ROOT_DIR'},
+		'MAIL_DMN'				=> idn_to_ascii(DaemonConfig::$cfg->{'BASE_SERVER_VHOST'}),
+		'CONF_DIR'				=> DaemonConfig::$cfg->{'CONF_DIR'},
+		'PEAR_DIR'				=> DaemonConfig::$distro->{'PEAR_DIR'},
+		'RKHUNTER_LOG'			=> DaemonConfig::$distro->{'RKHUNTER_LOG'},
+		'CHKROOTKIT_LOG'		=> DaemonConfig::$distro->{'CHKROOTKIT_LOG'},
+		'OTHER_ROOTKIT_LOG'		=> (DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} != '') ? DaemonConfig::$distro->{'OTHER_ROOTKIT_LOG'} : '',
+		'EASYSCPC_DIR'			=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPC'}),
+		'EASYSCPD_DIR'			=> dirname(DaemonConfig::$cfg->{'SOCK_EASYSCPD'}),
+		'PHP_TIMEZONE'			=> DaemonConfig::$cfg->{'PHP_TIMEZONE'}
+	);
+
+	$tpl = DaemonCommon::getTemplate($tpl_param);
+
+	$config = $tpl->fetch("php/parts/master.tpl");
+	$confFile = DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.conf';
+	$tpl = NULL;
+	unset($tpl);
+	if (!DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644)) {
+		return 'Error: Failed to write '.$confFile;
+	}
+	// Install the new file
+	exec(DaemonConfig::$cmd->{'CMD_CP'}.' -pf '.DaemonConfig::$cfg->{'CONF_DIR'}.'/php/working/master.conf '.$PHPfpmdir.'/master.conf', $result, $error);
+
+	}
+
 	return 'Ok';
 }
 
@@ -858,7 +940,10 @@ function GUI_VHOST(){
 		'GUI_ROOT_DIR'				=> DaemonConfig::$cfg->GUI_ROOT_DIR,
 		'PHP_STARTER_DIR'			=> DaemonConfig::$distro->{'PHP_STARTER_DIR'},
 		'SUEXEC_GID'				=> DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_GID'},
-		'SUEXEC_UID'				=> DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'}
+		'SUEXEC_UID'				=> DaemonConfig::$cfg->{'APACHE_SUEXEC_USER_PREF'} . DaemonConfig::$cfg->{'APACHE_SUEXEC_MIN_UID'},
+		'LETSENCRYPT'				=> (DaemonConfig::$cfg->CREATE_LETSENCRYPT_DIR == 'yes') ? true : false,
+		'PHP_FPM'					=> (isset(DaemonConfig::$cmd->SRV_PHP) && isset(DaemonConfig::$distro->PHP_FPM_POOL_DIR)
+										&& DaemonConfig::$cmd->SRV_PHP != '' && DaemonConfig::$distro->PHP_FPM_POOL_DIR != '') ? true : false 
 	);
 
 	if (isset(DaemonConfig::$cfg->BASE_SERVER_IPv6) && DaemonConfig::$cfg->BASE_SERVER_IPv6 != ''){
@@ -881,8 +966,8 @@ function GUI_VHOST(){
 }
 
 function GUI_PMA(){
-	$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
-	$pma = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_PMA.xml');
+	$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
+	$pma = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_PMA.xml');
 
 	System_Daemon::debug('Building the new pma config file');
 
@@ -932,7 +1017,7 @@ function GUI_RoundCube(){
 	$cubeDBHost = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'});
 	// $cubeDBHost = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
 
-	$rc = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_RC.xml');
+	$rc = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_RC.xml');
 
 	System_Daemon::debug('Building the new roundcube config file');
 
@@ -991,6 +1076,8 @@ function Set_gui_permissions(){
 			break;
 		case 'Debian_8':
 		case 'Debian_9':
+		case 'Debian_10':
+		case 'Ubuntu_18.04':
 			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . $iptables_path . '/rules.v4 /etc/iptables/rules.v4', $result, $error);
 			exec(DaemonConfig::$cmd->{'CMD_CP'} . ' -pf ' . $iptables_path . '/rules.v6 /etc/iptables/rules.v6', $result, $error);
 
@@ -1117,6 +1204,11 @@ function System_cleanup(){
 			// Enabling mod suexec
 			// Allows CGI scripts to run as a specified user and Group
 			exec('a2enmod suexec');
+
+			// Enabling mod proxy fcgi (if FPM set at config)
+			if (isset(DaemonConfig::$cmd->{'SRV_PHP'}) && DaemonConfig::$cmd->{'SRV_PHP'} != '') {
+			    exec('a2enmod proxy_fcgi');
+			}
 	}
 
 	return 'Finished'.DaemonConfig::$cfg->{'BASE_SERVER_VHOST'};
@@ -1144,7 +1236,17 @@ function Setup_Finishing(){
 		return $ControlConnect . ' System is unable to restart EasySCP Daemon.<br />';
 	}
 
+	System_Daemon::info('Restart PHP-FPM.');
+
+	$ControlConnect = DaemonCommon::ControlConnect('PHPfpmRestart');
+	if ($ControlConnect !== true){
+		return $ControlConnect . ' System is unable to restart PHP-FPM.<br />';
+	}
+
 	unlink(DaemonConfig::$cfg->{'ROOT_DIR'}.'/daemon/DaemonCoreSetup.php');
 	exec(DaemonConfig::$cmd->{'CMD_RM'}.' -rf '.DaemonConfig::$cfg->{'ROOT_DIR'}.'/../setup >> /dev/null 2>&1');
+
+	// SocketHandler::Close();
+	// System_Daemon::restart();
 }
 ?>

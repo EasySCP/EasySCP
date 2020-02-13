@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -101,6 +101,18 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
+				$retVal = self::directoriesCreateFCGImaster();
+				if ($retVal !== true){
+					$msg = 'Failed to create master fcgi!';
+					System_Daemon::debug($msg);
+					return $msg.'<br />'.$retVal;
+				}
+				$retVal = self::phpHandleFPMmaster();
+				if ($retVal !== true){
+					$msg = 'Updating of master phpFPM failed!';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
 				break;
 			default:
 				System_Daemon::warning("Don't know what to do with " . $data[0]);
@@ -110,6 +122,12 @@ class DaemonDomain extends DaemonDomainCommon {
 			$retVal = self::apacheReloadConfig();
 			if($retVal !== true){
 				$msg = 'Reload apache config failed';
+				System_Daemon::debug($msg);
+				return $msg . '<br />' . ((DaemonConfig::$cfg->{'DEBUG'} == '1') ? DaemonCommon::listArrayforGUI($retVal) : '');
+			}
+			$retVal = self::PHPfpmReloadConfig();
+			if($retVal !== true){
+				$msg = 'Reload PHP-FPM config failed';
 				System_Daemon::debug($msg);
 				return $msg . '<br />' . ((DaemonConfig::$cfg->{'DEBUG'} == '1') ? DaemonCommon::listArrayforGUI($retVal) : '');
 			}
@@ -131,14 +149,12 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
-				$retVal = DaemonDNS::AddDefaultDNSEntries($aliasData['domain_id'], true);
+				$retVal = DaemonDNS::AddDefaultDNSEntries($aliasData, true);
 				if ($retVal !== true) {
 					$msg = 'Creating of default domain dns entries failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				$retVal = self::apacheEnableSite($aliasData['alias_name']);
 				if ($retVal !== true) {
 					$msg = 'Failed to enable alias!';
@@ -151,6 +167,12 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheWriteDomainConfig($aliasData);
 				if ($retVal !== true) {
 					$msg = 'Writing alias configuration failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
+				$retVal = DaemonDNS::UpdateNotifiedSerial($aliasData);
+				if ($retVal !== true) {
+					$msg = 'Update alias DNS Notified Serial failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
@@ -168,7 +190,7 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-				$retVal = DaemonDNS::DeleteAllDomainDNSEntries($aliasData['alias_id'], true);
+				$retVal = DaemonDNS::DeleteAllDomainDNSEntries($aliasData, true);
 				if ($retVal !== true) {
 					$msg = 'Deleting alias DNS entries failed';
 					System_Daemon::debug($msg);
@@ -243,7 +265,6 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				$retVal = self::apacheWriteDomainConfig($domainData);
 				if ($retVal !== true) {
 					$msg = 'Writing domain configuration failed';
@@ -251,27 +272,36 @@ class DaemonDomain extends DaemonDomainCommon {
 					return $msg . '<br />' . $retVal;
 				}
 
-				$retVal = DaemonDNS::AddDefaultDNSEntries($domainData['domain_id']);
+				$retVal = DaemonDNS::AddDefaultDNSEntries($domainData);
 				if ($retVal !== true) {
 					$msg = 'Creating of default domain dns entries failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				$retVal = self::handleHTAccess($domainData);
 				if ($retVal !== true) {
 					$msg = 'Creating of htaccess data failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				$retVal = self::apacheEnableSite($domainData['domain_name']);
 				if ($retVal !== true) {
 					$msg = 'Enabling domain failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
+				$retVal = self::directoriesCreateFCGI($domainData);
+				if ($retVal !== true){
+					$msg = 'Failed to create fcgi!';
+					System_Daemon::debug($msg);
+					return $msg.'<br />'.$retVal;
+				}
+				$retVal = self::phpHandleFPMpool($domainData);
+				if ($retVal !== true) {
+					$msg = 'Creating of phpFPMpool failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
 				break;
 			case 'change':
 				$retVal = self::apacheWriteDomainConfig($domainData);
@@ -280,14 +310,30 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
+				$retVal = DaemonDNS::UpdateNotifiedSerial($domainData);
+				if ($retVal !== true) {
+					$msg = 'Update DNS Notified Serial failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
 				$retVal = self::handleHTAccess($domainData);
 				if ($retVal !== true) {
 					$msg = 'Creating of htaccess data failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
+				$retVal = self::directoriesCreateFCGI($domainData);
+				if ($retVal !== true){
+					$msg = 'Failed to create fcgi!';
+					System_Daemon::debug($msg);
+					return $msg.'<br />'.$retVal;
+				}
+				$retVal = self::phpHandleFPMpool($domainData);
+				if ($retVal !== true) {
+					$msg = 'Updating of phpFPMpool failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
 				break;
 			case 'delete':
 				$retVal = self::apacheDisableSite($domainData['domain_name']);
@@ -296,15 +342,13 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				// Needs to be before deletedomain because DNS entry for vuXXXX must be deleted as well
-				$retVal = DaemonDNS::DeleteAllDomainDNSEntries($domainData['domain_id']);
+				$retVal = DaemonDNS::DeleteAllDomainDNSEntries($domainData);
 				if ($retVal !== true) {
 					$msg = 'Deleting of domain dns entries failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				$retVal = self::deleteDomain($domainData);
 				if ($retVal !== true) {
 					$msg = 'Deleting domain failed';
@@ -354,6 +398,18 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheWriteDomainConfig($domainData);
 				if ($retVal !== true) {
 					$msg = 'Writing domain configuration failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
+				$retVal = self::directoriesCreateFCGI($domainData);
+				if ($retVal !== true){
+					$msg = 'Failed to create fcgi!';
+					System_Daemon::debug($msg);
+					return $msg.'<br />'.$retVal;
+				}
+				$retVal = self::phpHandleFPMpool($domainData);
+				if ($retVal !== true) {
+					$msg = 'Updating of phpFPMpool failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
@@ -448,21 +504,30 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				$retVal = self::apacheWriteDomainConfig($subDomainData);
 				if ($retVal !== true) {
 					$msg = 'Writing subdomain configuration failed!';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				$retVal = DaemonDNS::AddDNSEntry($subDomainData);
 				if ($retVal !== true) {
 					$msg = 'Creating of subdomain dns entry failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
+				$retVal = DaemonDNS::UpdateNotifiedSerial($subDomainData);
+				if ($retVal !== true) {
+					$msg = 'Update DNS Notified Serial failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
+				$retVal = self::phpHandleFPMpool($subDomainData);
+				if ($retVal !== true) {
+					$msg = 'Creating of phpFPMpool failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
 				break;
 			case 'change':
 				$retVal = self::apacheWriteDomainConfig($subDomainData);
@@ -471,7 +536,12 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-				//			$retVal = domainChange($domainData);
+				$retVal = self::phpHandleFPMpool($subDomainData);
+				if ($retVal !== true) {
+					$msg = 'Updating of phpFPMpool failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
 				break;
 			case 'delete':
 				System_Daemon::debug("Delete subdomain");
@@ -481,10 +551,15 @@ class DaemonDomain extends DaemonDomainCommon {
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
-
 				$retVal = DaemonDNS::DeleteDNSEntry($subDomainData);
 				if ($retVal !== true) {
 					$msg = 'Deleting of subdomain dns entry failed';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
+				$retVal = DaemonDNS::UpdateNotifiedSerial($subDomainData);
+				if ($retVal !== true) {
+					$msg = 'Update DNS Notified Serial failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}
@@ -495,6 +570,12 @@ class DaemonDomain extends DaemonDomainCommon {
 				$retVal = self::apacheWriteDomainConfig($subDomainData);
 				if ($retVal !== true) {
 					$msg = 'Writing subdomain configuration failed!';
+					System_Daemon::debug($msg);
+					return $msg . '<br />' . $retVal;
+				}
+				$retVal = self::phpHandleFPMpool($subDomainData);
+				if ($retVal !== true) {
+					$msg = 'Updating of phpFPMpool failed';
 					System_Daemon::debug($msg);
 					return $msg . '<br />' . $retVal;
 				}

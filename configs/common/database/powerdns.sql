@@ -1,6 +1,6 @@
 --
 -- EasySCP a Virtual Hosting Control Panel
--- Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+-- Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
 --
 -- This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 -- To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -20,33 +20,32 @@ use `powerdns`;
 --
 -- Table structure for table `domains`
 --
-CREATE TABLE IF NOT EXISTS `domains` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `easyscp_domain_id` INT DEFAULT NULL,
+CREATE TABLE `domains` (
+  `id`                  INT AUTO_INCREMENT,
+  `easyscp_domain_id`   INT DEFAULT NULL,
   `easyscp_domain_alias_id` INT DEFAULT NULL,
-  `name` VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `master` VARCHAR(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `last_check` INT DEFAULT NULL,
-  `type` VARCHAR(6) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `notified_serial` INT DEFAULT NULL,
-  `account` VARCHAR(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name`                VARCHAR(255) NOT NULL,
+  `master`              VARCHAR(128) DEFAULT NULL,
+  `last_check`          INT DEFAULT NULL,
+  `type`                VARCHAR(6) NOT NULL,
+  `notified_serial`     INT DEFAULT NULL,
+  `account`             VARCHAR(40) CHARACTER SET 'utf8' DEFAULT NULL,
   PRIMARY KEY (`id`)
-);
+) Engine=InnoDB CHARACTER SET 'latin1';
 
 CREATE UNIQUE INDEX name_index ON domains(name);
-
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `domainmetadata`
 --
-CREATE TABLE IF NOT EXISTS `domainmetadata` (
-		`id` INT NOT NULL AUTO_INCREMENT,
-		`domain_id` INT NOT NULL,
-		`kind` VARCHAR(32),
-		`content` TEXT,
-		PRIMARY KEY (`id`)
-);
+CREATE TABLE `domainmetadata` (
+  `id`                  INT AUTO_INCREMENT,
+  `domain_id`           INT NOT NULL,
+  `kind`                VARCHAR(32),
+  `content`             TEXT,
+  PRIMARY KEY (`id`)
+) Engine=InnoDB CHARACTER SET 'latin1';
 
 CREATE INDEX domainmetadata_idx ON domainmetadata (domain_id, kind);
 -- --------------------------------------------------------
@@ -54,34 +53,81 @@ CREATE INDEX domainmetadata_idx ON domainmetadata (domain_id, kind);
 --
 -- Table structure for table `records`
 --
-CREATE TABLE IF NOT EXISTS `records` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `domain_id` INT DEFAULT NULL,
-  `name` VARCHAR(150) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `type` VARCHAR(6) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `content` VARCHAR(150) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ttl` INT DEFAULT NULL,
-  `prio` INT DEFAULT NULL,
-  `change_date` INT DEFAULT NULL,
-  `disabled` TINYINT(1) DEFAULT 0,
-  `ordername` VARCHAR(255) BINARY DEFAULT NULL,
-  `auth` TINYINT(1) DEFAULT 1,
+CREATE TABLE `records` (
+  `id`                  BIGINT AUTO_INCREMENT,
+  `domain_id`           INT DEFAULT NULL,
+  `name`                VARCHAR(255) DEFAULT NULL,
+  `type`                VARCHAR(10) DEFAULT NULL,
+  `content`             VARCHAR(64000) DEFAULT NULL,
+  `ttl`                 INT DEFAULT NULL,
+  `prio`                INT DEFAULT NULL,
+  `change_date`         INT DEFAULT NULL,
+  `disabled`            TINYINT(1) DEFAULT 0,
+  `ordername`           VARCHAR(255) BINARY DEFAULT NULL,
+  `auth`                TINYINT(1) DEFAULT 1,
   `protected` TINYINT(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `DomainRecords` (`domain_id`,`name`,`type`,`content`)
-);
+  PRIMARY KEY (`id`)
+) Engine=InnoDB CHARACTER SET 'latin1';
 
 CREATE INDEX nametype_index ON records(name,type);
 CREATE INDEX domain_id ON records(domain_id);
-CREATE INDEX recordorder ON records (domain_id, ordername);
+CREATE INDEX ordername ON records (ordername);
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `supermasters`
 --
-CREATE TABLE IF NOT EXISTS `supermasters` (
-  `ip` VARCHAR(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `nameserver` VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `account` VARCHAR(40) COLLATE utf8_unicode_ci DEFAULT NULL
-);
+CREATE TABLE `supermasters` (
+  `ip`                  VARCHAR(64) NOT NULL,
+  `nameserver`          VARCHAR(255) NOT NULL,
+  `account`             VARCHAR(40) CHARACTER SET 'utf8' NOT NULL,
+  PRIMARY KEY (`ip`, `nameserver`)
+) Engine=InnoDB CHARACTER SET 'latin1';
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comments`
+--
+CREATE TABLE `comments` (
+  `id`                  INT AUTO_INCREMENT,
+  `domain_id`           INT NOT NULL,
+  `name`                VARCHAR(255) NOT NULL,
+  `type`                VARCHAR(10) NOT NULL,
+  `modified_at`         INT NOT NULL,
+  `account`             VARCHAR(40) CHARACTER SET 'utf8' DEFAULT NULL,
+  `comment`             TEXT CHARACTER SET 'utf8' NOT NULL,
+  PRIMARY KEY (`id`)
+) Engine=InnoDB CHARACTER SET 'latin1';
+
+CREATE INDEX comments_name_type_idx ON comments (name, type);
+CREATE INDEX comments_order_idx ON comments (domain_id, modified_at);
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cryptokeys`
+--
+CREATE TABLE `cryptokeys` (
+  `id`                  INT AUTO_INCREMENT,
+  `domain_id`           INT NOT NULL,
+  `flags`               INT NOT NULL,
+  `active`              BOOL,
+  `content`             TEXT,
+  PRIMARY KEY(`id`)
+) Engine=InnoDB CHARACTER SET 'latin1';
+
+CREATE INDEX domainidindex ON cryptokeys(domain_id);
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tsigkeys`
+--
+CREATE TABLE `tsigkeys` (
+  `id`                  INT AUTO_INCREMENT,
+  `name`                VARCHAR(255),
+  `algorithm`           VARCHAR(50),
+  `secret`              VARCHAR(255),
+  PRIMARY KEY (`id`)
+) Engine=InnoDB CHARACTER SET 'latin1';
+
+CREATE UNIQUE INDEX namealgoindex ON tsigkeys(name, algorithm);
 -- --------------------------------------------------------

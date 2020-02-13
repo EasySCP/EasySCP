@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,9 @@ define('EasyConfig_PATH', '/etc/easyscp');
 
 // Boot EasySCP
 EasySCP_Bootstrap::boot();
+
+// Set display mode here to not show deprecated warnings
+EasySCP_Initializer::run('_setDisplayErrors');
 
 // Get a reference to a EasySCP_Config_Handler_File instance
 $config = new EasySCP_Config_Handler_File();

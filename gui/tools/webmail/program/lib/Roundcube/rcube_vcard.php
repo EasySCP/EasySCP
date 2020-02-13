@@ -381,9 +381,9 @@ class rcube_vcard
             }
 
             if (($tag = self::$fieldmap[$field]) && (is_array($value) || strlen($value))) {
-                $index = count($this->raw[$tag]);
-                $this->raw[$tag][$index] = (array)$value;
+                $this->raw[$tag][] = (array) $value;
                 if ($type) {
+                    $index   = count($this->raw[$tag]) - 1;
                     $typemap = array_flip($this->typemap);
                     $this->raw[$tag][$index]['type'] = explode(',', $typemap[$type_uc] ?: $type);
                 }
@@ -405,7 +405,7 @@ class rcube_vcard
      */
     public function set_raw($tag, $value, $append = false)
     {
-        $index = $append ? count($this->raw[$tag]) : 0;
+        $index = $append && isset($this->raw[$tag]) ? count($this->raw[$tag]) : 0;
         $this->raw[$tag][$index] = (array)$value;
     }
 
@@ -525,18 +525,18 @@ class rcube_vcard
     {
         // convert Apple X-ABRELATEDNAMES into X-* fields for better compatibility
         $vcard = preg_replace_callback(
-            '/item(\d+)\.(X-ABRELATEDNAMES)([^:]*?):(.*?)item\1.X-ABLabel:(?:_\$!<)?([\w-() ]*)(?:>!\$_)?./s',
+            '/item(\d+)\.(X-ABRELATEDNAMES)([^:]*?):(.*?)item\1.X-ABLabel:(?:_\$!<)?([\w() -]*)(?:>!\$_)?./s',
             array('self', 'x_abrelatednames_callback'),
             $vcard);
 
         // Cleanup
         $vcard = preg_replace(array(
                 // convert special types (like Skype) to normal type='skype' classes with this simple regex ;)
-                '/item(\d+)\.(TEL|EMAIL|URL)([^:]*?):(.*?)item\1.X-ABLabel:(?:_\$!<)?([\w-() ]*)(?:>!\$_)?./si',
+                '/item(\d+)\.(TEL|EMAIL|URL)([^:]*?):(.*?)item\1.X-ABLabel:(?:_\$!<)?([\w() -]*)(?:>!\$_)?./si',
                 '/^item\d*\.X-AB.*$/mi',  // remove cruft like item1.X-AB*
                 '/^item\d*\./mi',         // remove item1.ADR instead of ADR
-                '/\n+/',                 // remove empty lines
-                '/^(N:[^;\R]*)$/m',      // if N doesn't have any semicolons, add some
+                '/\n+/',                  // remove empty lines
+                '/^(N:[^;\r\n]*)$/m',     // if N doesn't have any semicolons, add some
             ),
             array(
                 '\2;type=\5\3:\4',
@@ -626,7 +626,7 @@ class rcube_vcard
                 $field = strtoupper($regs2[1][0]);
                 $enc   = null;
 
-                foreach($regs2[1] as $attrid => $attr) {
+                foreach ($regs2[1] as $attrid => $attr) {
                     $attr = preg_replace('/[\s\t\n\r\0\x0B]/', '', $attr);
                     if ((list($key, $value) = explode('=', $attr)) && $value) {
                         if ($key == 'ENCODING') {
@@ -673,8 +673,10 @@ class rcube_vcard
                     $data = self::vcard_unquote($data);
                 }
 
-                $entry = array_merge($entry, (array) $data);
-                $result[$field][] = $entry;
+                if (is_array($data) || (is_string($data) && strlen($data))) {
+                    $entry = array_merge($entry, (array) $data);
+                    $result[$field][] = $entry;
+                }
             }
         }
 
@@ -752,7 +754,7 @@ class rcube_vcard
                             }
                         }
                         else {
-                            foreach((array)$attrvalues as $attrvalue) {
+                            foreach ((array)$attrvalues as $attrvalue) {
                                 $attr .= strtoupper(";$attrname=") . self::vcard_quote($attrvalue, ',');
                             }
                         }
@@ -785,7 +787,7 @@ class rcube_vcard
     public static function vcard_quote($s, $sep = ';')
     {
         if (is_array($s)) {
-            foreach($s as $part) {
+            foreach ($s as $part) {
                 $r[] = self::vcard_quote($part, $sep);
             }
             return(implode($sep, (array)$r));

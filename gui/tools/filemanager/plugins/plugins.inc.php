@@ -152,7 +152,7 @@ function getPluginProperties() {
 	elseif ($net2ftp_globals["language"] == "zh") { $ckeditor_language = "zh-cn"; }
 	else                                          { $ckeditor_language = "en"; }
 
-	$pluginProperties["ckeditor"]["use"]                     = "no";
+	$pluginProperties["ckeditor"]["use"]                     = "yes";
 	$pluginProperties["ckeditor"]["label"]                   = "CKEditor (WYSIWYG)";
 	$pluginProperties["ckeditor"]["directory"]               = "ckeditor";
 	$pluginProperties["ckeditor"]["type"]                    = "textarea";
@@ -203,7 +203,7 @@ function getPluginProperties() {
 	elseif ($net2ftp_globals["language"] == "zh") { $tinymce_language = "zh-cn"; }
 	else                                          { $tinymce_language = "en"; }
 
-	$pluginProperties["tinymce"]["use"]                      = "no";
+	$pluginProperties["tinymce"]["use"]                      = "yes";
 	$pluginProperties["tinymce"]["label"]                    = "TinyMCE (WYSIWYG)";
 	$pluginProperties["tinymce"]["directory"]                = "tinymce";
 	$pluginProperties["tinymce"]["type"]                     = "textarea";
@@ -266,7 +266,7 @@ function getPluginProperties() {
 // A syntax highlighting text editor in javascript
 // -------------------------------------------------------------------------
 
-	$pluginProperties["ace"]["use"]                    = "no";
+	$pluginProperties["ace"]["use"]                    = "yes";
 	$pluginProperties["ace"]["label"]                  = "Ace (code editor)";
 	$pluginProperties["ace"]["directory"]              = "ace";
 	$pluginProperties["ace"]["type"]                   = "textarea";
@@ -305,7 +305,7 @@ function getPluginProperties() {
 // and display a message if there is. 
 // -------------------------------------------------------------------------
 
-	$pluginProperties["versioncheck"]["use"]                = "no";
+	$pluginProperties["versioncheck"]["use"]                = "yes";
 	$pluginProperties["versioncheck"]["label"]              = "Javascript Version Checker";
 	$pluginProperties["versioncheck"]["directory"]          = "versioncheck";
 	$pluginProperties["versioncheck"]["type"]               = "versioncheck";
@@ -347,7 +347,7 @@ function getPluginProperties() {
 	elseif ($net2ftp_globals["language"] == "zh") { $jscalendar_language = "calendar-zh"; }
 	else                                          { $jscalendar_language = "calendar-en"; }
 
-	$pluginProperties["jscalendar"]["use"]                    = "no";
+	$pluginProperties["jscalendar"]["use"]                    = "yes";
 	$pluginProperties["jscalendar"]["label"]                  = "JS Calendar";
 	$pluginProperties["jscalendar"]["directory"]              = "jscalendar";
 	$pluginProperties["jscalendar"]["type"]                   = "calendar";
@@ -394,7 +394,7 @@ function getPluginProperties() {
 // Syntax highlighter
 // -------------------------------------------------------------------------
 
-	$pluginProperties["luminous"]["use"]                     = "no";
+	$pluginProperties["luminous"]["use"]                     = "yes";
 	$pluginProperties["luminous"]["label"]                   = "Luminous";
 	$pluginProperties["luminous"]["directory"]               = "luminous";
 	$pluginProperties["luminous"]["type"]                    = "highlighter";

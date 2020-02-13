@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -725,8 +725,10 @@ class EasySCP_Update_Database extends EasySCP_Update {
 
 	/**
 	 * Add database field for external ip´s/nat support
+	 * Add missing fields for php_version
+	 * Add new cronjob
 	 *
-	 * @author Markus Szywon <markus.szywon@easyscp.net>
+	 * @author Tommy <tommy@sallingstadt.net>
 	 * @return array
 	 */
 	protected function _databaseUpdate_65(){
@@ -750,8 +752,38 @@ class EasySCP_Update_Database extends EasySCP_Update {
 				`ip_number_v6`;
 		";
 
+		$sqlUpd[] = "
+			INSERT INTO
+				`config` (name, value)
+			VALUES
+				('PHP_VERSION','0')
+			;
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`domain`
+			ADD
+				  `domain_php_version` int(1) unsigned NOT NULL DEFAULT '0';
+		";
+
+		$sqlUpd[] = "
+			ALTER TABLE
+				`subdomain`
+			ADD
+				  `subdomain_php_version` int(1) unsigned NOT NULL DEFAULT '0';
+		";
+
+		$sqlUpd[] = "
+			INSERT INTO
+				`cronjobs` (`user_id`, `schedule`, `command`, `active`, `description`, `name`, `user`)
+			VALUES
+				(1, '@daily', 'umask 027; /var/www/easyscp/daemon/CronDomainLetsEncrypt.php >> /var/log/easyscp/CronDomainLetsEncrypt.log', 'yes', 'Create and Update the LetsEncrypt Certificates', 'System LetsEncrypt', 'root');
+		";
+		
 		return $sqlUpd;
 	}
+
 	/*
 	 * DO NOT CHANGE ANYTHING BELOW THIS LINE!
 	 */

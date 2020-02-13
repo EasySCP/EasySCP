@@ -15,7 +15,7 @@
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-archive/
 */
-$labels['buttontext'] = 'Archiv';
+$labels['buttontext'] = 'Ar­chi­vie­ren';
 $labels['buttontitle'] = 'Nachricht archivieren';
 $labels['archived'] = 'Nachricht erfolgreich archiviert';
 $labels['archivedreload'] = 'Erfolgreich archiviert. Bitte die Seite aktualisieren, um die neuen Archivordner zu sehen.';
@@ -25,6 +25,7 @@ $labels['settingstitle'] = 'Archiv';
 $labels['archivetype'] = 'Archiv aufteilen nach';
 $labels['archivetypeyear'] = 'Jahr (z.B. Archiv/2012)';
 $labels['archivetypemonth'] = 'Monat (z.B. Archiv/2012/06)';
+$labels['archivetypetbmonth'] = 'Monat - Thunderbird-kompatibel (z.B. Archiv/2012/2012-06)';
 $labels['archivetypefolder'] = 'Originalordner';
 $labels['archivetypesender'] = 'Absender-E-Mail';
 $labels['unkownsender'] = 'unbekannt';

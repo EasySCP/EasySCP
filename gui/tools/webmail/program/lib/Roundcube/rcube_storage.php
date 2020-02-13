@@ -42,13 +42,13 @@ abstract class rcube_storage
      */
     public static $folder_types = array('drafts', 'sent', 'junk', 'trash');
 
-    protected $folder = 'INBOX';
+    protected $folder          = 'INBOX';
     protected $default_charset = 'ISO-8859-1';
+    protected $options         = array('auth_type' => 'check', 'language' => 'en_US');
+    protected $page_size       = 10;
+    protected $list_page       = 1;
+    protected $threading       = false;
     protected $search_set;
-    protected $options = array('auth_type' => 'check');
-    protected $page_size = 10;
-    protected $list_page = 1;
-    protected $threading = false;
 
     /**
      * All (additional) headers used (in any way) by Roundcube
@@ -177,7 +177,7 @@ abstract class rcube_storage
 
     /**
      * Set internal folder reference.
-     * All operations will be perfomed on this folder.
+     * All operations will be performed on this folder.
      *
      * @param  string $folder  Folder name
      */
@@ -434,7 +434,7 @@ abstract class rcube_storage
      * @param  int                $uid    Message UID
      * @param  string             $part   Part number
      * @param  rcube_message_part $o_part Part object created by get_structure()
-     * @param  mixed              $print  True to print part, ressource to write part contents in
+     * @param  mixed              $print  True to print part, resource to write part contents in
      * @param  resource           $fp     File pointer to save the message part
      * @param  boolean            $skip_charset_conv Disables charset conversion
      *
@@ -608,7 +608,7 @@ abstract class rcube_storage
 
 
     /* --------------------------------
-     *        folder managment
+     *        folder management
      * --------------------------------*/
 
     /**
@@ -797,6 +797,26 @@ abstract class rcube_storage
     abstract function mod_folder($folder, $mode = 'out');
 
     /**
+     * Check if the folder name is valid
+     *
+     * @param string $folder Folder name (UTF-8)
+     * @param string &$char  First forbidden character found
+     *
+     * @return bool True if the name is valid, False otherwise
+     */
+    public function folder_validate($folder, &$char = null)
+    {
+        $delim = $this->get_hierarchy_delimiter();
+
+        if (strpos($folder, $delim) !== false) {
+            $char = $delim;
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Create all folders specified as default
      */
     public function create_default_folders()
@@ -849,7 +869,7 @@ abstract class rcube_storage
      */
     public function set_special_folders($specials)
     {
-        // should be overriden by storage class if backend supports special folders (SPECIAL-USE)
+        // should be overridden by storage class if backend supports special folders (SPECIAL-USE)
         unset($this->icache['special-folders']);
     }
 

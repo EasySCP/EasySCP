@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -18,6 +18,7 @@ class DaemonConfig {
 	static $cfg;
 	static $cmd;
 	static $distro;
+	static $php;
 
 	public static function Rebuild(){
 		$xml_new = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config.xml');
@@ -44,7 +45,7 @@ class DaemonConfig {
 
 	public static function Reload(){
 		// unset(self::$cfg);
-		self::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
+		self::$cfg = DaemonCommon::xml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
 	}
 
 	public static function Save(){
@@ -108,7 +109,9 @@ class DaemonConfig {
 	}
 }
 
-DaemonConfig::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
-DaemonConfig::$cmd = simplexml_load_file(EasyConfig_PATH . '/EasySCP_CMD.xml');
-DaemonConfig::$distro = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Distro.xml');
+DaemonConfig::$cfg 		= DaemonCommon::xml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
+DaemonConfig::$cmd 		= DaemonCommon::xml_load_file(EasyConfig_PATH . '/EasySCP_CMD.xml');
+DaemonConfig::$distro 	= DaemonCommon::xml_load_file(EasyConfig_PATH . '/EasySCP_Distro.xml');
+DaemonConfig::$php 		= DaemonCommon::xml_load_file(EasyConfig_PATH . '/EasySCP_PHP.xml');
+
 ?>

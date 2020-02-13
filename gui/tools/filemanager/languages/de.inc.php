@@ -72,7 +72,7 @@ $net2ftp_messages["left"] = "left";
 $net2ftp_messages["right"] = "right";
 
 // Encoding
-$net2ftp_messages["iso-8859-1"] = "iso-8859-1";
+$net2ftp_messages["iso-8859-1"] = "UTF-8";
 
 
 // -------------------------------------------------------------------------

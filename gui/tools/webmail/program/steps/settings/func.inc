@@ -157,7 +157,7 @@ function rcmail_user_prefs($current = null)
     $sections['mailbox']     = array('id' => 'mailbox', 'section' => $RCMAIL->gettext('mailboxview'));
     $sections['mailview']    = array('id' => 'mailview','section' => $RCMAIL->gettext('messagesdisplaying'));
     $sections['compose']     = array('id' => 'compose', 'section' => $RCMAIL->gettext('messagescomposition'));
-    $sections['addressbook'] = array('id' => 'addressbook','section' => $RCMAIL->gettext('addressbook'));
+    $sections['addressbook'] = array('id' => 'addressbook','section' => $RCMAIL->gettext('contacts'));
     $sections['folders']     = array('id' => 'folders', 'section' => $RCMAIL->gettext('specialfolders'));
     $sections['server']      = array('id' => 'server',  'section' => $RCMAIL->gettext('serversettings'));
 
@@ -170,6 +170,8 @@ function rcmail_user_prefs($current = null)
     $no_override = array_flip((array)$RCMAIL->config->get('dont_override'));
 
     foreach ($sections as $idx => $sect) {
+        $sections[$idx]['class'] = $idx;
+
         if ($current && $sect['id'] != $current) {
             continue;
         }
@@ -408,36 +410,37 @@ function rcmail_user_prefs($current = null)
                 'advanced'    => array('name' => rcube::Q($RCMAIL->gettext('advancedoptions'))),
             );
 
-            // show config parameter for preview pane
-            if (!isset($no_override['preview_pane'])) {
+            if (!isset($no_override['layout'])) {
                 if (!$current) {
                     continue 2;
                 }
 
-                $field_id = 'rcmfd_preview';
-                $input    = new html_checkbox(array('name' => '_preview_pane', 'id' => $field_id, 'value' => 1,
-                    'onchange' => "$('#rcmfd_preview_pane_mark_read').prop('disabled', !this.checked)"));
+                $field_id = 'rcmfd_layout';
+                $select   = new html_select(array('name' => '_layout', 'id' => $field_id));
 
-                $blocks['main']['options']['preview_pane'] = array(
-                    'title'   => html::label($field_id, rcube::Q($RCMAIL->gettext('previewpane'))),
-                    'content' => $input->show($config['preview_pane']?1:0),
+                $select->add($RCMAIL->gettext('layoutwidescreendesc'), 'widescreen');
+                $select->add($RCMAIL->gettext('layoutdesktopdesc'), 'desktop');
+                $select->add($RCMAIL->gettext('layoutlistdesc'), 'list');
+
+                $blocks['main']['options']['layout'] = array(
+                    'title'   => html::label($field_id, rcube::Q($RCMAIL->gettext('layout'))),
+                    'content' => $select->show($config['layout'] ?: 'widescreen'),
                 );
             }
 
-            // show config parameter for preview pane auto mark as read delay
-            if (!isset($no_override['preview_pane_mark_read'])) {
+            // show config parameter for auto marking the previewed message as read
+            if (!isset($no_override['mail_read_time'])) {
                 if (!$current) {
                     continue 2;
                 }
 
                 // apply default if config option is not set at all
-                $config['preview_pane_mark_read'] = $RCMAIL->config->get('preview_pane_mark_read', 0);
+                $config['mail_read_time'] = intval($RCMAIL->config->get('mail_read_time'));
 
-                $field_id = 'rcmfd_preview_pane_mark_read';
-                $select   = new html_select(array('name' => '_preview_pane_mark_read', 'id' => $field_id,
-                    'disabled' => $config['preview_pane']?0:1));
+                $field_id = 'rcmfd_mail_read_time';
+                $select   = new html_select(array('name' => '_mail_read_time', 'id' => $field_id));
 
-                $select->add($RCMAIL->gettext('never'), '-1');
+                $select->add($RCMAIL->gettext('never'), -1);
                 $select->add($RCMAIL->gettext('immediately'), 0);
 
                 foreach (array(5, 10, 20, 30) as $sec) {
@@ -445,9 +448,9 @@ function rcmail_user_prefs($current = null)
                     $select->add($label, $sec);
                 }
 
-                $blocks['main']['options']['preview_pane_mark_read'] = array(
-                    'title'   => html::label($field_id, rcube::Q($RCMAIL->gettext('previewpanemarkread'))),
-                    'content' => $select->show(intval($config['preview_pane_mark_read'])),
+                $blocks['main']['options']['mail_read_time'] = array(
+                    'title'   => html::label($field_id, rcube::Q($RCMAIL->gettext('automarkread'))),
+                    'content' => $select->show($config['mail_read_time']),
                 );
             }
 
@@ -749,7 +752,7 @@ function rcmail_user_prefs($current = null)
                 );
             }
 
-            if (!isset($no_override['dsn_default']) && $RCMAIL->config->get('smtp_server')) {
+            if (!isset($no_override['dsn_default'])) {
                 if (!$current) {
                     continue 2;
                 }
@@ -914,7 +917,7 @@ function rcmail_user_prefs($current = null)
                 $field_id = 'rcmfd_default_font_size';
                 $select_default_font_size = new html_select(array('name' => '_default_font_size', 'id' => $field_id));
 
-                $fontsizes = array('', '8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt');
+                $fontsizes = array('', '8pt', '9pt', '10pt', '11pt', '12pt', '14pt', '18pt', '24pt', '36pt');
                 foreach ($fontsizes as $size) {
                     $select_default_font_size->add($size, $size);
                 }
@@ -1332,7 +1335,9 @@ function rcmail_folder_options($mailbox)
     global $RCMAIL;
 
     $options = $RCMAIL->get_storage()->folder_info($mailbox);
-    $options['protected'] = $options['is_root'] || ($options['special'] && $RCMAIL->config->get('protect_default_folders'));
+    $options['protected'] = $options['is_root']
+        || strtoupper($mailbox) === 'INBOX'
+        || ($options['special'] && $RCMAIL->config->get('protect_default_folders'));
 
     return $options;
 }

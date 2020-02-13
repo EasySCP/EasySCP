@@ -49,16 +49,16 @@
 				dns_show_rows(['name', 'cname']);
 				break;
 			case 'MX':
-				dns_show_rows(['srv_prio', 'srv_host']);
+				dns_show_rows(['name', 'srv_prio', 'srv_host']);
 				break;
 			case 'NS':
-				dns_show_rows(['ns']);
+				dns_show_rows(['name', 'ns']);
 				break;
 			case 'SRV':
 				dns_show_rows(['srv_name', 'srv_protocol', 'srv_ttl', 'srv_prio', 'srv_weight', 'srv_host', 'srv_port']);
 				break;
 			case 'TXT':
-				dns_show_rows(['plain']);
+				dns_show_rows(['name', 'plain']);
 				break;
 		}
 	}
@@ -165,7 +165,7 @@
 		</tr>
 		<tr id="tr_dns_plain">
 			<td>{$TR_DNS_PLAIN}</td>
-			<td><input type="text" name="dns_plain_data" value="{$DNS_PLAIN}" size="60"/></td>
+			<td><input type="text" name="dns_plain_data" value="{$DNS_PLAIN}" size="100"/></td>
 		</tr>
 	</table>
 	<div class="buttons">

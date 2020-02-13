@@ -63,6 +63,16 @@
 				</td>
 			</tr>
 			<tr>
+				<td style="width: 300px;"><label for="php_version">{$TR_USER_PHP_VERSION}</label></td>
+				<td>
+					<select name="php_version" id="php_version">
+						{section name=i loop=$PHP_VERSION_NAME}
+						<option value="{$PHP_VERSION_VALUE[i]}" {$PHP_VERSION_SELECTED[i]}>{$PHP_VERSION_NAME[i]}</option>
+						{/section}
+					</select>
+				</td>
+			</tr>
+			<tr style="display:none;">
 				<td>{$TR_PHP_EDIT}</td>
 				<td>
 					<input type="radio" name="php_edit" id="php_edit_yes" value="_yes_" {$VL_PHPEY} />&nbsp;{$TR_YES}

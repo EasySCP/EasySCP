@@ -31,19 +31,19 @@ $net2ftp_settings["functionuse_newfile"] = "yes";
 $net2ftp_settings["functionuse_upload"] = "yes";
 
 // Java upload
-$net2ftp_settings["functionuse_jupload"] = "yes";
+$net2ftp_settings["functionuse_jupload"] = "no";
 
 // Create a website from pre-made HTML templates
 $net2ftp_settings["functionuse_easyWebsite"] = "no";
 
 // Bookmark a page
-$net2ftp_settings["functionuse_bookmark"] = "yes";
+$net2ftp_settings["functionuse_bookmark"] = "no";
 
 // Install functions
-$net2ftp_settings["functionuse_install"] = "yes";
+$net2ftp_settings["functionuse_install"] = "no";
 
 // Advanced functions
-$net2ftp_settings["functionuse_advanced"] = "yes";
+$net2ftp_settings["functionuse_advanced"] = "no";
 
 
 // ----------------------------------------------------------------------------------

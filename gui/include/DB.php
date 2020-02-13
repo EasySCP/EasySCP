@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -208,6 +208,9 @@ class DB extends DB_Config {
 			$cipher->setIV(self::$DB_IV);
 
 			$data = trim($cipher->decrypt(base64_decode($data)));
+
+			// Because it makes troubles with non-string symbols
+			$data = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $data);
 
 			$cipher=null;
 			unset($cipher);

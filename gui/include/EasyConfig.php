@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -16,9 +16,11 @@
 
 class EasyConfig {
 	static $cfg;
-
+	static $php;
+	
 	public static function Reload(){
 		self::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
+		self::$php = simplexml_load_file(EasyConfig_PATH . '/EasySCP_PHP.xml');
 	}
 
 	/**
@@ -33,4 +35,9 @@ class EasyConfig {
 }
 
 EasyConfig::$cfg = simplexml_load_file(EasyConfig_PATH . '/EasySCP_Config.xml');
+if (file_exists(EasyConfig_PATH . '/EasySCP_PHP.xml')) {
+	EasyConfig::$php = simplexml_load_file(EasyConfig_PATH . '/EasySCP_PHP.xml');
+} else {
+	EasyConfig::$php = null;
+}
 ?>

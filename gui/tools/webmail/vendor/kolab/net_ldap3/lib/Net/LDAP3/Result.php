@@ -42,6 +42,7 @@ class Net_LDAP3_Result implements Iterator
     protected $base_dn;
     protected $filter;
     protected $scope;
+    protected $result;
 
     private $count;
     private $current;

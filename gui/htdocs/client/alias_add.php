@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -377,8 +377,6 @@ function add_domain_alias(&$err_al) {
 
 	$dmn_id = $sql->insertId();
 	
-	AddDefaultDNSEntries(0, $dmn_id, $alias_name, $domain_ip);
-
 	update_reseller_c_props(get_reseller_id($cr_user_id));
 
 	$admin_login = $_SESSION['user_logged'];
@@ -393,8 +391,7 @@ function add_domain_alias(&$err_al) {
 			'success'
 		);
 	} else {
-		// TODO: Check
-//		send_request('110 DOMAIN alias '.$dmn_id);
+		send_request('110 DOMAIN alias '.$dmn_id);
 		write_log("$admin_login: domain alias scheduled for addition: $alias_name.");
 		set_page_message(
 			tr('Alias scheduled for addition!'),

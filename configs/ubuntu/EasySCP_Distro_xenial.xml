@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 	EasySCP a Virtual Hosting Control Panel
-	Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+	Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
 
 	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -45,11 +45,17 @@
 	<DOVECOT_CONF_DIR>/etc/dovecot</DOVECOT_CONF_DIR>
 
 	<!--
+		Lighttpd data
+	-->
+	<LIGHTTPD_CONF_DIR>/etc/lighttpd</LIGHTTPD_CONF_DIR>
+
+	<!--
 		PHP data
 	-->
 	<PEAR_DIR>/usr/share/php</PEAR_DIR>
-	<PHP_FASTCGI_BIN>/usr/bin/php-cgi</PHP_FASTCGI_BIN>
+	<PHP_FASTCGI_BIN>/usr/bin/php-cgi7.0</PHP_FASTCGI_BIN>
 	<PHP_STARTER_DIR>/var/www/fcgi</PHP_STARTER_DIR>
+	<PHP_FPM_POOL_DIR>/etc/php/7.0/fpm/pool.d</PHP_FPM_POOL_DIR>
 
 	<!--
 		Postfix MTA data
@@ -95,4 +101,5 @@
 	-->
 	<SSL_CERT_DIR>/etc/ssl/certs</SSL_CERT_DIR>
 	<SSL_KEY_DIR>/etc/ssl/private</SSL_KEY_DIR>
+	
 </EasySCP_Distro>

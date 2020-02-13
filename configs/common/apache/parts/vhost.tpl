@@ -30,9 +30,9 @@
 	SSLEngine       On
 	SSLCertificateFile {$SSL_CERT_DIR}/easyscp_{$SERVER_NAME}-cert.pem
 	SSLCertificateKeyFile {$SSL_KEY_DIR}/easyscp_{$SERVER_NAME}-key.pem
-	{if isset($SSL_CACERT) && $SSL_CACERT == true }
+{if isset($SSL_CACERT) && $SSL_CACERT == true }
 	SSLCACertificateFile {$SSL_CERT_DIR}/easyscp_{$SERVER_NAME}-cacert.pem
-	{/if}
+{/if}
 {/if}
 
 	ErrorLog {$WWW_DIR}/{$MASTER_DOMAIN}/logs/{$SERVER_NAME}-error.log
@@ -41,6 +41,9 @@
 	CustomLog {$APACHE_TRAFFIC_LOG_DIR}/{$TRAFFIC_PREFIX}{$SERVER_NAME} "%{literal}{%Y_%m_%d_%H_%M_%S}{/literal}t %I %O"
 
 	Alias /errors	{$WWW_DIR}/{$DOC_ROOT}/errors/
+{if isset($LETSENCRYPT) && $LETSENCRYPT == true }
+	Alias /.well-known/acme-challenge {$WWW_DIR}/{$MASTER_DOMAIN}/.well-known/acme-challenge/
+{/if}
 
 	RedirectMatch permanent ^/ftp[\/]?$		http://{$BASE_SERVER_VHOST}/ftp/
 	RedirectMatch permanent ^/pma[\/]?$		http://{$BASE_SERVER_VHOST}/pma/
@@ -52,6 +55,13 @@
 	ErrorDocument 404 /errors/404.html
 	ErrorDocument 500 /errors/500.html
 	ErrorDocument 503 /errors/503.html
+
+{if isset($LETSENCRYPT) && $LETSENCRYPT == true }
+	<Directory {$WWW_DIR}/{$MASTER_DOMAIN}/.well-known>
+		Options -Indexes +Includes +FollowSymLinks +MultiViews
+		AllowOverride None
+	</Directory>
+{/if}
 
 	<IfModule mod_cband.c>
 		CBandUser {$MASTER_DOMAIN}
@@ -127,6 +137,7 @@
 	</Directory>
 
 {if isset($DOMAIN_PHP) && $DOMAIN_PHP == true}
+{if isset($PHP_FPM) && $PHP_FPM == false}
 	<IfModule mod_fcgid.c>
 		<Directory {$WWW_DIR}/{$DOC_ROOT}/htdocs>
 			FCGIWrapper {$PHP_STARTER_DIR}/{$MASTER_DOMAIN}/php-fcgi-starter .php
@@ -146,6 +157,25 @@
 			</IfModule>
 		</Directory>
 	</IfModule>
+{/if}
+{if isset($PHP_FPM) && $PHP_FPM == true}
+	<IfModule mod_proxy_fcgi.c>
+		# ProxyErrorOverride On
+		<FilesMatch \.php$>
+			# 2.4.10+ can proxy to unix socket 
+			SetHandler "proxy:unix:/run/php-fpm.{$SERVER_NAME}.sock|fcgi://{$SERVER_NAME}/"
+			# Else we can just use a tcp socket: 
+			# SetHandler "proxy:fcgi://127.0.0.1:9000"
+		</FilesMatch>
+		# Define a matching worker.
+		# The part that is matched to the SetHandler is the part that
+		# follows the pipe. If you need to distinguish, "localhost; can
+		# be anything unique.
+		<Proxy "fcgi://{$SERVER_NAME}/">
+			ProxySet connectiontimeout=5 timeout=360
+		</Proxy>
+	</IfModule>
+{/if}
 {/if}
 
 	Include {$CUSTOM_SITES_CONFIG_DIR}/{$SERVER_NAME}.custom

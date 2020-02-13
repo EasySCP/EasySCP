@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -22,7 +22,7 @@ class DaemonConfigFTP {
 	public static function CreateProFTPdPass(){
 		System_Daemon::debug('Starting "DaemonConfigFTP::CreateProFTPdPass" subprocess.');
 
-		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_FTP.xml');
+		$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_FTP.xml');
 
 		System_Daemon::debug('Building the new ftp config file');
 
@@ -58,7 +58,7 @@ class DaemonConfigFTP {
 
 		/*
 
-		$xml = simplexml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
+		$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'ROOT_DIR'} . '/../setup/config.xml');
 
 		System_Daemon::debug('Create/Update Proftpd SQL user data');
 
@@ -81,7 +81,7 @@ class DaemonConfigFTP {
 		DB::execute($sql_param)->closeCursor();
 
 		if (!file_exists(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_FTP.xml')) {
-			$ftp = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_FTP.xml');
+			$ftp = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_FTP.xml');
 
 			System_Daemon::debug('Building the new ftp config file');
 
@@ -107,7 +107,7 @@ class DaemonConfigFTP {
 	public static function SaveProFTPdConfig(){
 		System_Daemon::debug('Starting "DaemonConfigFTP::SaveProFTPdConfig" subprocess.');
 
-		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_FTP.xml');
+		$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_FTP.xml');
 
 		// Create config dir if it doesn't exists
 		if (!file_exists(DaemonConfig::$distro->{'FTPD_CONF_DIR'})){

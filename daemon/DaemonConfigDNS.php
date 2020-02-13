@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -22,7 +22,7 @@ class DaemonConfigDNS {
 	public static function CreatePDNSPass(){
 		System_Daemon::debug('Starting "DaemonConfigDNS::createPDNSPass" subprocess.');
 
-		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_DNS.xml');
+		$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_DNS.xml');
 
 		System_Daemon::debug('Building the new pdns config file');
 
@@ -83,7 +83,7 @@ class DaemonConfigDNS {
 			DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'PDNS_DB_DIR'}.'/', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640);
 		}
 
-		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml');
+		$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml');
 
 		$tpl_param = array(
 			'PDNS_USER'	=> $xml->{'PDNS_USER'},

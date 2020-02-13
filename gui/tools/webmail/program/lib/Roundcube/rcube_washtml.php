@@ -76,7 +76,7 @@
  * - base URL support
  * - invalid HTML comments removal before parsing
  * - "fixing" unitless CSS values for XHTML output
- * - base url resolving
+ * - SVG and MathML support
  */
 
 /**
@@ -111,6 +111,15 @@ class rcube_washtml
         'feflood', 'fefunca', 'fefuncb', 'fefuncg', 'fefuncr', 'fegaussianblur',
         'feimage', 'femerge', 'femergenode', 'femorphology', 'feoffset',
         'fespecularlighting', 'fetile', 'feturbulence',
+        // MathML
+        'math', 'menclose', 'merror', 'mfenced', 'mfrac', 'mglyph', 'mi', 'mlabeledtr',
+        'mmuliscripts', 'mn', 'mo', 'mover', 'mpadded', 'mphantom', 'mroot', 'mrow',
+        'ms', 'mspace', 'msqrt', 'mstyle', 'msub', 'msup', 'msubsup', 'mtable', 'mtd',
+        'mtext', 'mtr', 'munder', 'munderover', 'maligngroup', 'malignmark',
+        'mprescripts', 'semantics', 'annotation', 'annotation-xml', 'none',
+        'infinity', 'matrix', 'matrixrow', 'ci', 'cn', 'sep', 'apply',
+        'plus', 'minus', 'eq', 'power', 'times', 'divide', 'csymbol', 'root',
+        'bvar', 'lowlimit', 'uplimit',
     );
 
     /* Ignore these HTML tags and their content */
@@ -153,11 +162,24 @@ class rcube_washtml
         'visibility', 'vert-adv-y', 'version', 'vert-origin-x', 'vert-origin-y', 'word-spacing',
         'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2',
         'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan',
+        // MathML
+        'accent', 'accentunder', 'bevelled', 'close', 'columnalign', 'columnlines',
+        'columnspan', 'denomalign', 'depth', 'display', 'displaystyle', 'encoding', 'fence',
+        'frame', 'largeop', 'length', 'linethickness', 'lspace', 'lquote',
+        'mathbackground', 'mathcolor', 'mathsize', 'mathvariant', 'maxsize',
+        'minsize', 'movablelimits', 'notation', 'numalign', 'open', 'rowalign',
+        'rowlines', 'rowspacing', 'rowspan', 'rspace', 'rquote', 'scriptlevel',
+        'scriptminsize', 'scriptsizemultiplier', 'selection', 'separator',
+        'separators', 'stretchy', 'subscriptshift', 'supscriptshift', 'symmetric', 'voffset',
+        'fontsize', 'fontweight', 'fontstyle', 'fontfamily', 'groupalign', 'edge', 'side',
     );
 
     /* Elements which could be empty and be returned in short form (<tag />) */
     static $void_elements = array('area', 'base', 'br', 'col', 'command', 'embed', 'hr',
         'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr',
+        // MathML
+        'sep', 'infinity', 'in', 'plus', 'eq', 'power', 'times', 'divide', 'root',
+        'maligngroup', 'none', 'mprescripts',
     );
 
     /* State for linked objects in HTML */
@@ -220,8 +242,11 @@ class rcube_washtml
         // Remove unwanted white-space characters so regular expressions below work better
         $style = preg_replace('/[\n\r\s\t]+/', ' ', $style);
 
+        // Decode insecure character sequences
+        $style = rcube_utils::xss_entity_decode($style);
+
         foreach (explode(';', $style) as $declaration) {
-            if (preg_match('/^\s*([a-z\-]+)\s*:\s*(.*)\s*$/i', $declaration, $match)) {
+            if (preg_match('/^\s*([a-z\\\-]+)\s*:\s*(.*)\s*$/i', $declaration, $match)) {
                 $cssid = $match[1];
                 $str   = $match[2];
                 $value = '';
@@ -293,7 +318,7 @@ class rcube_washtml
                     $out = $this->wash_uri($value, true);
                 }
                 else if ($this->is_link_attribute($node->nodeName, $key)) {
-                    if (!preg_match('!^(javascript|vbscript|data:text)!i', $value)
+                    if (!preg_match('!^(javascript|vbscript|data:)!i', $value)
                         && preg_match('!^([a-z][a-z0-9.+-]+:|//|#).+!i', $value)
                     ) {
                         $out = $value;
@@ -607,13 +632,16 @@ class rcube_washtml
             return '';
         }
 
+        // FIXME: HTML comments handling could be better. The code below can break comments (#6464),
+        //        we should probably do not modify content inside comments at all.
+
         // fix (unknown/malformed) HTML tags before "wash"
         $html = preg_replace_callback('/(<(?!\!)[\/]*)([^\s>]+)([^>]*)/', array($this, 'html_tag_callback'), $html);
 
         // Remove invalid HTML comments (#1487759)
-        // Don't remove valid conditional comments
-        // Don't remove MSOutlook (<!-->) conditional comments (#1489004)
-        $html = preg_replace('/<!--[^-<>\[\n]+>/', '', $html);
+        // Note: We don't want to remove valid comments, conditional comments
+        // and MSOutlook comments (<!-->)
+        $html = preg_replace('/<!--[a-zA-Z0-9]+>/', '', $html);
 
         // fix broken nested lists
         self::fix_broken_lists($html);
@@ -629,9 +657,15 @@ class rcube_washtml
      */
     public static function html_tag_callback($matches)
     {
+        // It might be an ending of a comment, ignore (#6464)
+        if (substr($matches[3], -2) == '--') {
+            $matches[0] = '';
+            return implode('', $matches);
+        }
+
         $tagname = $matches[2];
         $tagname = preg_replace(array(
-            '/:.*$/',               // Microsoft's Smart Tags <st1:xxxx>
+            '/:.*$/',                // Microsoft's Smart Tags <st1:xxxx>
             '/[^a-z0-9_\[\]\!?-]/i', // forbidden characters
         ), '', $tagname);
 

@@ -171,12 +171,14 @@ class rcube_ldap extends rcube_addressbook
             $this->coltypes['address'] = array(
                'limit'    => max(1, $this->coltypes['locality']['limit'] + $this->coltypes['address']['limit']),
                'subtypes' => array_merge((array)$this->coltypes['address']['subtypes'], (array)$this->coltypes['locality']['subtypes']),
-               'childs' => array(),
+               'childs'   => array(),
+               'attributes' => array(),
                ) + (array)$this->coltypes['address'];
 
             foreach (array('street','locality','zipcode','region','country') as $childcol) {
                 if ($this->coltypes[$childcol]) {
                     $this->coltypes['address']['childs'][$childcol] = array('type' => 'text');
+                    $this->coltypes['address']['attributes'] = array_merge($this->coltypes['address']['attributes'], $this->coltypes[$childcol]['attributes']);
                     unset($this->coltypes[$childcol]);  // remove address child col from global coltypes list
                 }
             }
@@ -297,7 +299,7 @@ class rcube_ldap extends rcube_addressbook
                 }
 
                 // Get the pieces needed for variable replacement.
-                if ($fu = $rcube->get_user_email()) {
+                if ($fu = ($rcube->get_user_email() ?: $this->prop['username'])) {
                     list($u, $d) = explode('@', $fu);
                 }
                 else {
@@ -868,7 +870,8 @@ class rcube_ldap extends rcube_addressbook
             $filter = 'e:' . $filter;
         }
 
-        $this->set_search_set($prefix . $filter);
+        // set filter string and execute search
+        $this->set_search_set($filter);
 
         if ($select)
             $this->list_records();
@@ -1006,7 +1009,7 @@ class rcube_ldap extends rcube_addressbook
         if ($this->ready && $dn) {
             $dn = self::dn_decode($dn);
 
-            if ($rec = $this->ldap->get_entry($dn)) {
+            if ($rec = $this->ldap->get_entry($dn, $this->prop['attributes'])) {
                 $rec = array_change_key_case($rec, CASE_LOWER);
             }
 
@@ -1471,16 +1474,23 @@ class rcube_ldap extends rcube_addressbook
                 if (strpos($templ, '(') !== false) {
                     // replace {attr} placeholders with (escaped!) attribute values to be safely eval'd
                     $code = preg_replace('/\{\w+\}/', '', strtr($templ, array_map('addslashes', $attrvals)));
-                    $fn   = create_function('', "return ($code);");
-                    if (!$fn) {
+                    $res  = false;
+
+                    try {
+                        $res = eval("return ($code);");
+                    }
+                    catch (ParseError $e) {
+                        // ignore
+                    }
+
+                    if ($res === false) {
                         rcube::raise_error(array(
-                            'code' => 505, 'type' => 'php',
-                            'file' => __FILE__, 'line' => __LINE__,
+                            'code' => 505, 'file' => __FILE__, 'line' => __LINE__,
                             'message' => "Expression parse error on: ($code)"), true, false);
                         continue;
                     }
 
-                    $attrs[$lf] = $fn();
+                    $attrs[$lf] = $res;
                 }
                 else {
                     // replace {attr} placeholders with concrete attribute values
@@ -1520,8 +1530,15 @@ class rcube_ldap extends rcube_addressbook
 
         foreach ($fieldmap as $rf => $lf)
         {
-            for ($i=0; $i < $rec[$lf]['count']; $i++) {
-                if (!($value = $rec[$lf][$i]))
+            // we might be dealing with normalized and non-normalized data
+            $entry = $rec[$lf];
+            if (!is_array($entry) || !isset($entry['count'])) {
+                $entry = (array) $entry;
+                $entry['count'] = count($entry);
+            }
+
+            for ($i=0; $i < $entry['count']; $i++) {
+                if (!($value = $entry[$i]))
                     continue;
 
                 list($col, $subtype) = explode(':', $rf);
@@ -1533,7 +1550,7 @@ class rcube_ldap extends rcube_addressbook
                     $out['address' . ($subtype ? ':' : '') . $subtype][$i][$col] = $value;
                 else if ($col == 'address' && strpos($value, '$') !== false)  // address data is represented as string separated with $
                     list($out[$rf][$i]['street'], $out[$rf][$i]['locality'], $out[$rf][$i]['zipcode'], $out[$rf][$i]['country']) = explode('$', $value);
-                else if ($rec[$lf]['count'] > 1)
+                else if ($entry['count'] > 1)
                     $out[$rf][] = $value;
                 else
                     $out[$rf] = $value;

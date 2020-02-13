@@ -226,6 +226,16 @@
 					</select>
 				</td>
 			</tr>
+			<tr>
+				<td style="width: 300px;"><label for="php_version">{$TR_USER_PHP_VERSION}</label></td>
+				<td>
+					<select name="php_version" id="php_version">
+						{section name=i loop=$PHP_VERSION_NAME}
+						<option value="{$PHP_VERSION_VALUE[i]}" {$PHP_VERSION_SELECTED[i]}>{$PHP_VERSION_NAME[i]}</option>
+						{/section}
+					</select>
+				</td>
+			</tr>
 		</table>
 	</fieldset>
 	<div class="buttons">
