@@ -1,6 +1,9 @@
 This is a Fork of the EasySCP a Virtual Hosting Control Panel
 ================================================================
 
+This version is for preview and testing only.
+It's not recommended to use for production.
+
 http://www.easyscp.net
 
 EasySCP software appliance provides complete hosting automation for Linux
