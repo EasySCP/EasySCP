@@ -23,7 +23,7 @@ that can be created.
 Enjoy the power of EasySCP
 Your EasySCP Team
 
-================================================================
+
 INSTALLATION
 ------------
 
@@ -34,7 +34,7 @@ If there is none, select Debian and try it with this one.
 You have successfully installed EasySCP on a non-listed distribution? Great,
 send us your install instructions.
 
-================================================================
+
 LICENSING
 ---------
 
@@ -42,7 +42,7 @@ Unless otherwise stated all code is licensed under the Creative Commons Attribut
 and has a Copyright 2010-2020 by EasySCP.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
 
-================================================================
+
 CREDITS
 -------
 EasySCP is a project of Easy Server Control Panel.
