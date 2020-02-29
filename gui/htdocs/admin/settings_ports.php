@@ -325,9 +325,13 @@ function show_services($tpl) {
 		$values = EasySCP_Registry::get('Db_Config');
 
 		// Filter function to get only the services ports names
-		$filter = create_function(
-			'$value', 'if(substr($value, 0, 5) == \'PORT_\') return $value;'
-		);
+//		$filter = create_function(
+//			'$value', 'if(substr($value, 0, 5) == \'PORT_\') return $value;'
+//		);
+
+		$filter = function ($value) {
+					if(substr($value, 0, 5) == 'PORT_') return $value;
+				};
 
 		// Gets list of services port names
 		$services = array_filter(array_keys($values->toArray()), $filter);
