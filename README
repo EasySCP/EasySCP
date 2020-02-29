@@ -1,8 +1,7 @@
 This is a Fork of the EasySCP a Virtual Hosting Control Panel
 ================================================================
 
-This version is for preview and testing only.
-It's not recommended to use for production.
+This version is beta, so be careful if you want to use for production.
 
 http://www.easyscp.net
 
