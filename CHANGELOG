@@ -1,7 +1,7 @@
-EasySCP 2.2.0f ChangeLog
+EasySCP 2.2.0g ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2020-02-11
+2020-02-24
 
 	- DOCS:
 		* Add: Debian 10 package file
@@ -23,6 +23,7 @@ EasySCP 2.2.0f ChangeLog
 		* DNS: Fix broken features
 		* Add: Letsencrypt support
 		* Add: Support for different PHP versions
+		* Update: Smarty V3.1.33
 
 	- System:
 		* Add: PHP 7.3 support
