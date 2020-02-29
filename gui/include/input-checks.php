@@ -534,8 +534,7 @@ function _validates_tld($tld) {
 	if ($cfg->TLD_STRICT_VALIDATION) {
 		$ianaTLDXML = simplexml_load_file(EasyConfig_PATH . '/Iana_TLD.xml');
 		
-		$idnTld = idn_to_ascii($tld);
-		// $idnTld = idn_to_ascii($tld,IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
+		$idnTld = idn_to_ascii($tld,IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
 		$search = "//domain[tld='".$idnTld."']";
 		if ($ianaTLDXML->xpath($search)) {
 			return true;

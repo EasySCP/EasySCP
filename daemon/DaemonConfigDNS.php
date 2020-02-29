@@ -28,8 +28,7 @@ class DaemonConfigDNS {
 
 		$xml->{'PDNS_USER'} = 'powerdns';
 		$xml->{'PDNS_PASS'} = DB::encrypt_data(DaemonCommon::generatePassword(18));
-		$xml->{'HOSTNAME'} = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'});
-		// $xml->{'HOSTNAME'} = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
+		$xml->{'HOSTNAME'} = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
 
 		$handle = fopen(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml', "wb");
 		fwrite($handle, $xml->asXML());
@@ -56,8 +55,7 @@ class DaemonConfigDNS {
 
 		$sql_param = array(
 			':DATABASE_USER'=> DaemonConfig::$cfg->DATABASE_USER,
-			':DATABASE_HOST'=> idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'})
-			// ':DATABASE_HOST'=> idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46)
+			':DATABASE_HOST'=> idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46)
 		);
 
 		$sql_query = "
