@@ -230,7 +230,8 @@
 		# The part that is matched to the SetHandler is the part that
 		# follows the pipe. If you need to distinguish, "localhost; can
 		# be anything unique.
-		<Proxy "fcgi://master/" enablereuse=on max=10>
+		<Proxy "fcgi://master/">
+			ProxySet connectiontimeout=5 timeout=3600
 		</Proxy>
 	</IfModule>
 {/if}

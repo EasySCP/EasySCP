@@ -172,7 +172,7 @@
 		# follows the pipe. If you need to distinguish, "localhost; can
 		# be anything unique.
 		<Proxy "fcgi://{$SERVER_NAME}/">
-			ProxySet connectiontimeout=5 timeout=360
+			ProxySet connectiontimeout=5 timeout=3600
 		</Proxy>
 	</IfModule>
 {/if}
