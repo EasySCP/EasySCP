@@ -336,18 +336,28 @@ abstract class Context
         if ($len === 0) {
             return null;
         }
+
+        // If comment is Bash style (#):
         if ($str[0] === '#') {
             return Token::FLAG_COMMENT_BASH;
-        } elseif (($len > 1) && ($str[0] === '/') && ($str[1] === '*')) {
-            return (($len > 2) && ($str[2] === '!')) ?
+        }
+        // If comment is opening C style (/*), warning, it could be a MySQL command (/*!)
+        if (($len > 1) && ($str[0] === '/') && ($str[1] === '*')) {
+            return ($len > 2) && ($str[2] === '!') ?
                 Token::FLAG_COMMENT_MYSQL_CMD : Token::FLAG_COMMENT_C;
-        } elseif (($len > 1) && ($str[0] === '*') && ($str[1] === '/')) {
+        }
+        // If comment is closing C style (*/), warning, it could conflicts with wildcard and a real opening C style.
+        // It would looks like the following valid SQL statement: "SELECT */* comment */ FROM...".
+        if (($len > 1) && ($str[0] === '*') && ($str[1] === '/')) {
             return Token::FLAG_COMMENT_C;
-        } elseif (($len > 2) && ($str[0] === '-')
+        }
+        // If comment is SQL style (--\s?):
+        if (($len > 2) && ($str[0] === '-')
             && ($str[1] === '-') && static::isWhitespace($str[2])
         ) {
             return Token::FLAG_COMMENT_SQL;
-        } elseif (($len === 2) && $end && ($str[0] === '-') && ($str[1] === '-')) {
+        }
+        if (($len === 2) && $end && ($str[0] === '-') && ($str[1] === '-')) {
             return Token::FLAG_COMMENT_SQL;
         }
 
@@ -578,6 +588,29 @@ abstract class Context
         }
 
         return $quote . str_replace($quote, $quote . $quote, $str) . $quote;
+    }
+
+    /**
+     * Returns char used to quote identifiers based on currently set SQL Mode (ie. standard or ANSI_QUOTES)
+     * @return string either " (double quote, ansi_quotes mode) or ` (backtick, standard mode)
+     */
+    public static function getIdentifierQuote()
+    {
+        return self::hasMode(self::SQL_MODE_ANSI_QUOTES) ? '"' : '`';
+    }
+
+    /**
+     * Function verifies that given SQL Mode constant is currently set
+     *
+     * @return boolean false on empty param, true/false on given constant/int value
+     * @param int $flag for example Context::SQL_MODE_ANSI_QUOTES
+     */
+    public static function hasMode($flag = null)
+    {
+        if (empty($flag)) {
+            return false;
+        }
+        return (self::$MODE & $flag) === $flag;
     }
 }
 

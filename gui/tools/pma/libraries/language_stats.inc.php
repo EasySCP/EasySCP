@@ -5,7 +5,7 @@
 $GLOBALS["language_stats"] = array (
     'af' => 8,
     'am' => 0,
-    'ar' => 48,
+    'ar' => 49,
     'az' => 49,
     'be' => 62,
     'be@latin' => 21,
@@ -61,7 +61,7 @@ $GLOBALS["language_stats"] = array (
     'ms' => 10,
     'my' => 0,
     'nb' => 60,
-    'ne' => 1,
+    'ne' => 2,
     'nl' => 100,
     'nn' => 0,
     'pa' => 3,

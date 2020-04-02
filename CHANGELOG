@@ -1,7 +1,7 @@
-EasySCP 2.2.0g ChangeLog
+EasySCP 2.2.0h ChangeLog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2020-02-24
+2020-04-02
 
 	- DOCS:
 		* Add: Debian 10 package file
@@ -34,5 +34,5 @@ EasySCP 2.2.0g ChangeLog
 
 	- TOOLS:
 		* Update: net2ftp to version 1.0 build 50
-		* Update: phpMyAdmin to version 4.9.4
+		* Update: phpMyAdmin to version 4.9.5
 		* Update: Roundcube to version 1.3.10
