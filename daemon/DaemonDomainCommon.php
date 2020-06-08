@@ -267,79 +267,11 @@ class DaemonDomainCommon {
 			return $msg.'<br />'.false;
 		}
 
-		if($domainData['ssl_status'] == 1 || $domainData['ssl_status'] == 3
-			|| $domainData['ssl_status'] == 11 || $domainData['ssl_status'] == 13){
-			$tpl_param['DOMAIN_PORT'] = 80;
-			$tpl_param['REDIRECT'] = true;
-		} else {
-			$tpl_param['DOMAIN_PORT'] = 80;
-		}
-
-		if(isset($domainData['subdomain_url_forward'])){
-			$tpl_param['FORWARD_URL'] = $domainData['subdomain_url_forward'];
-		}
-		if(isset($domainData['subdomain_name'])){
-			$append = true;
-			$serverName = $domainData['subdomain_name'].'.'.$domainData['domain_name'];
-
-			$tpl_param['DOC_ROOT']			= $domainData['domain_name'].$domainData['subdomain_mount'];
-			$tpl_param['SERVER_NAME']		= $serverName;
-			$tpl_param['SELF']				= $domainData['subdomain_name'].'.'.$domainData['domain_name'];
-			$tpl_param['SERVER_ALIAS']		= 'www.'.$domainData['subdomain_name'].'.'.$domainData['domain_name'];
-			$tpl_param['TRAFFIC_PREFIX']	= $domainData['domain_id'].'.'.$domainData['subdomain_id'].'.';
-		}
-		else {
-			$tpl_param['TRAFFIC_PREFIX']	= $domainData['domain_id'].'.0.';
-		}
-
-		if(isset($domainData['master_domain'])){
-			$tpl_param['MASTER_DOMAIN'] = $domainData['master_domain'];
-			$tpl_param['DOC_ROOT']		= $domainData['master_domain'];
-			if (isset($domainData['subdomain_mount'])){
-				$tpl_param['DOC_ROOT'] .= $domainData['subdomain_mount'];
-			}
-		}
-
-		$tpl = DaemonCommon::getTemplate($tpl_param);
-		// write Apache config
-		$config = $tpl->fetch('apache/parts/vhost.tpl');
-		$tpl = NULL;
-		unset($tpl);
-		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
-
-		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
-		if ($retVal !== true) {
-			$msg = 'Failed to write'. $confFile;
-			System_Daemon::warning($msg);
-			return $msg.'<br />'.$retVal;
-		}
-
-		if (isset($domainData['ip_number_v6']) && $domainData['ip_number_v6'] != ''){
-			$append = true;
-			$tpl_param['DOMAIN_IP']	= '['.$domainData['ip_number_v6'].']';
-
-			$tpl = DaemonCommon::getTemplate($tpl_param);
-			// write Apache config
-			$config = $tpl->fetch('apache/parts/vhost.tpl');
-			$tpl = NULL;
-			unset($tpl);
-			$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
-
-			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
-			if ($retVal !== true) {
-				$msg = 'Failed to write'. $confFile;
-				System_Daemon::warning($msg);
-				return $msg.'<br />'.$retVal;
-			}
-
-			$tpl_param['DOMAIN_IP']	= $domainData['ip_number'];
-		}
 		$ssl_status_ok = false;
+		$ssl_valid = false;
 		if ($domainData['ssl_status'] != 0 && $domainData['ssl_status'] != 10) {
-			$ssl_valid = false;
 			if ($domainData['ssl_status'] == 1 || $domainData['ssl_status'] == 2
 				|| $domainData['ssl_status'] == 11 || $domainData['ssl_status'] == 12) {
-				$append = true;
 				$retVal = self::writeSSLKeys($domainData);
 				if($retVal !== true){
 					$msg = 'Writing SSL keys failed';
@@ -348,17 +280,12 @@ class DaemonDomainCommon {
 				}
 				$ssl_status_ok = true;
 				$ssl_valid = true;
-				$tpl_param['DOMAIN_PORT']	= 443;
-				$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
-				$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
-				$tpl_param['REDIRECT']		= false;
 
 				if (isset($domainData['ssl_cacert']) && $domainData['ssl_cacert'] != ''){
 					$tpl_param['SSL_CACERT'] = true;
 				}
 			} elseif ($domainData['ssl_status'] == 3 || $domainData['ssl_status'] == 4
 						|| $domainData['ssl_status'] == 13 || $domainData['ssl_status'] == 14) {
-				$append = true;
 				$domains = array ();
 
 				$domainData1 = self::queryDomainDataByDomainID($domainData['domain_id']);
@@ -372,7 +299,7 @@ class DaemonDomainCommon {
 						if ($row['ssl_status'] == 3 || $row['ssl_status'] == 4
 							|| $row['ssl_status'] == 13 || $row['ssl_status'] == 14) {
 							array_push($domains, $row['subdomain_name'] . $row['domain_name']);
-							//array_push($domains, 'www.' . $row['subdomain_name'] . $row['domain_name']);
+							array_push($domains, 'www.' . $row['subdomain_name'] . $row['domain_name']);
 						}
 					}
 				}
@@ -462,7 +389,6 @@ class DaemonDomainCommon {
 				
 				// Write SSL Data if available
 				if ($domainData['ssl_cert'] != '' && $domainData['ssl_key']) {
-					$append = true;
 					$retVal = self::writeSSLKeys($domainData);
 
 					if($retVal !== true){
@@ -471,18 +397,109 @@ class DaemonDomainCommon {
 						return $msg.'<br />'.$retVal;
 					}
 					$ssl_valid = true;
-					$tpl_param['DOMAIN_PORT']	= 443;
-					$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
-					$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
-					$tpl_param['REDIRECT']		= false;
 	
 					if (isset($domainData['ssl_cacert']) && $domainData['ssl_cacert'] != ''){
 						$tpl_param['SSL_CACERT'] = true;
 					}
 				}       
 			}
+		} else {
+			$ssl_status_ok = true;
+		}
 
-			if ($ssl_valid == true ) {
+		if($domainData['ssl_status'] == 1 || $domainData['ssl_status'] == 3 
+				|| $domainData['ssl_status'] == 11
+				|| ($domainData['ssl_status'] == 13 && $ssl_valid == true)){
+			$tpl_param['DOMAIN_PORT'] = 80;
+			$tpl_param['REDIRECT'] = true;
+		} else {
+			$tpl_param['DOMAIN_PORT'] = 80;
+		}
+
+		if(isset($domainData['subdomain_url_forward'])){
+			$tpl_param['FORWARD_URL'] = $domainData['subdomain_url_forward'];
+		}
+		if(isset($domainData['subdomain_name'])){
+			$append = true;
+			$serverName = $domainData['subdomain_name'].'.'.$domainData['domain_name'];
+
+			$tpl_param['DOC_ROOT']			= $domainData['domain_name'].$domainData['subdomain_mount'];
+			$tpl_param['SERVER_NAME']		= $serverName;
+			$tpl_param['SELF']				= $domainData['subdomain_name'].'.'.$domainData['domain_name'];
+			$tpl_param['SERVER_ALIAS']		= 'www.'.$domainData['subdomain_name'].'.'.$domainData['domain_name'];
+			$tpl_param['TRAFFIC_PREFIX']	= $domainData['domain_id'].'.'.$domainData['subdomain_id'].'.';
+		}
+		else {
+			$tpl_param['TRAFFIC_PREFIX']	= $domainData['domain_id'].'.0.';
+		}
+
+		if(isset($domainData['master_domain'])){
+			$tpl_param['MASTER_DOMAIN'] = $domainData['master_domain'];
+			$tpl_param['DOC_ROOT']		= $domainData['master_domain'];
+			if (isset($domainData['subdomain_mount'])){
+				$tpl_param['DOC_ROOT'] .= $domainData['subdomain_mount'];
+			}
+		}
+
+		$tpl = DaemonCommon::getTemplate($tpl_param);
+		// write Apache config
+		$config = $tpl->fetch('apache/parts/vhost.tpl');
+		$tpl = NULL;
+		unset($tpl);
+		$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+
+		$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
+		if ($retVal !== true) {
+			$msg = 'Failed to write'. $confFile;
+			System_Daemon::warning($msg);
+			return $msg.'<br />'.$retVal;
+		}
+
+		if (isset($domainData['ip_number_v6']) && $domainData['ip_number_v6'] != ''){
+			$append = true;
+			$tpl_param['DOMAIN_IP']	= '['.$domainData['ip_number_v6'].']';
+
+			$tpl = DaemonCommon::getTemplate($tpl_param);
+			// write Apache config
+			$config = $tpl->fetch('apache/parts/vhost.tpl');
+			$tpl = NULL;
+			unset($tpl);
+			$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+
+			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
+			if ($retVal !== true) {
+				$msg = 'Failed to write'. $confFile;
+				System_Daemon::warning($msg);
+				return $msg.'<br />'.$retVal;
+			}
+
+			$tpl_param['DOMAIN_IP']	= $domainData['ip_number'];
+		}
+
+		if ($ssl_valid == true ) {
+			$append = true;
+			$tpl_param['DOMAIN_PORT']	= 443;
+			$tpl_param['SSL_CERT_DIR']	= DaemonConfig::$distro->SSL_CERT_DIR;
+			$tpl_param['SSL_KEY_DIR']	= DaemonConfig::$distro->SSL_KEY_DIR;
+			$tpl_param['REDIRECT']		= false;
+
+			$tpl = DaemonCommon::getTemplate($tpl_param);
+			// write Apache config
+			$config = $tpl->fetch('apache/parts/vhost.tpl');
+			$tpl = NULL;
+			unset($tpl);
+			$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
+
+			$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
+			if ($retVal !== true) {
+				$msg = 'Failed to write'. $confFile;
+				System_Daemon::warning($msg);
+				return $msg.'<br />'.$retVal;
+			}
+
+			if (isset($domainData['ip_number_v6']) && $domainData['ip_number_v6'] != ''){
+				$append = true;
+				$tpl_param['DOMAIN_IP']	= '['.$domainData['ip_number_v6'].']';
 
 				$tpl = DaemonCommon::getTemplate($tpl_param);
 				// write Apache config
@@ -490,35 +507,14 @@ class DaemonDomainCommon {
 				$tpl = NULL;
 				unset($tpl);
 				$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
-	
+
 				$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
 				if ($retVal !== true) {
 					$msg = 'Failed to write'. $confFile;
 					System_Daemon::warning($msg);
 					return $msg.'<br />'.$retVal;
 				}
-	
-				if (isset($domainData['ip_number_v6']) && $domainData['ip_number_v6'] != ''){
-					$append = true;
-					$tpl_param['DOMAIN_IP']	= '['.$domainData['ip_number_v6'].']';
-	
-					$tpl = DaemonCommon::getTemplate($tpl_param);
-					// write Apache config
-					$config = $tpl->fetch('apache/parts/vhost.tpl');
-					$tpl = NULL;
-					unset($tpl);
-					$confFile = DaemonConfig::$distro->APACHE_SITES_DIR . '/' . $domainData['domain_name'] . '.conf';
-	
-					$retVal = DaemonCommon::systemWriteContentToFile($confFile, $config, DaemonConfig::$cfg->ROOT_USER, DaemonConfig::$cfg->ROOT_GROUP, 0644, $append);
-					if ($retVal !== true) {
-						$msg = 'Failed to write'. $confFile;
-						System_Daemon::warning($msg);
-						return $msg.'<br />'.$retVal;
-					}
-				}
 			}
-		} else {
-			$ssl_status_ok = true;
 		}
 
 		// Set ssl_status to valid if not already set

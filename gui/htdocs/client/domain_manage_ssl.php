@@ -49,16 +49,20 @@ if (isset($_POST['Submit']) && isset($_POST['uaction']) && ($_POST['uaction'] ==
 	$sslcacert=clean_input(filter_input(INPUT_POST, 'ssl_cacert'));
 	$sslstatus=clean_input(filter_input(INPUT_POST, 'ssl_status'));
 
-    // Do not empty SSL cert
-    if ($sslkey === null) {
-        $sslkey = $dmn_props['ssl_key'];
-    }
-    if ($sslcert === null) {
-        $sslcert = $dmn_props['ssl_cert'];
-    }
-    if ($sslcacert === null) {
-        $sslcacert = $dmn_props['ssl_cacert'];
-    }
+	if(isset($_POST['ssl_domain'])){
+		$dmn_props = EasySSL::getSSLData($_POST['ssl_domain']);
+	}
+
+	// Do not empty SSL cert
+	if ($sslkey === null) {
+		$sslkey = $dmn_props['ssl_key'];
+	}
+	if ($sslcert === null) {
+		$sslcert = $dmn_props['ssl_cert'];
+	}
+	if ($sslcacert === null) {
+		$sslcacert = $dmn_props['ssl_cacert'];
+	}
 	
 	$rs = EasySSL::storeSSLData($_POST['ssl_domain'], $sslstatus, $sslkey, $sslcert, $sslcacert);
 
