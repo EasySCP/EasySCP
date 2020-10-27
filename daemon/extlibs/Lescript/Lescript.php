@@ -2,6 +2,8 @@
 
 namespace Analogic\ACME;
 
+use \RuntimeException;
+
 class Lescript
 {
     public $ca = 'https://acme-v02.api.letsencrypt.org';
