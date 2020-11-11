@@ -53,7 +53,6 @@ EasySCP_Exception::setHandler();
 /**
  * Include EasySCP common functions
  */
-require_once 'Net/IDNA2.php';
 require_once INCLUDEPATH . '/easyscp-functions.php';
 
 /**
