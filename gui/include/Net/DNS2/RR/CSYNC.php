@@ -13,32 +13,39 @@
  * @copyright 2020 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      https://netdns2.com/
- * @since     File available since Release 0.6.0
+ * @since     File available since Release 1.4.1
  *
  */
 
 /**
- * RT Resource Record - RFC1183 section 3.3
+ * CSYNC Resource Record - RFC 7477 seciond 2.1.1
  *
  *    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *    |                preference                     |
+ *    |                  SOA Serial                   |
+ *    |                                               |
  *    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
- *    /             intermediate-host                 /
- *    /                                               /
+ *    |                    Flags                      |
+ *    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ *    /                 Type Bit Map                  /
  *    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
  *
  */
-class Net_DNS2_RR_RT extends Net_DNS2_RR
+class Net_DNS2_RR_CSYNC extends Net_DNS2_RR
 {
     /*
-     * the preference of this route
+     * serial number
      */
-    public $preference;
+    public $serial;
 
     /*
-      * host which will servce as an intermediate in reaching the owner host
+     * flags
      */
-    public $intermediatehost;
+    public $flags;
+
+    /*
+     * array of RR type names
+     */
+    public $type_bit_maps = [];
 
     /**
      * method to return the rdata portion of the packet as a string
@@ -49,8 +56,17 @@ class Net_DNS2_RR_RT extends Net_DNS2_RR
      */
     protected function rrToString()
     {
-        return $this->preference . ' ' . 
-            $this->cleanString($this->intermediatehost) . '.';
+        $out = $this->serial . ' ' . $this->flags;
+
+        //
+        // show the RR's
+        //
+        foreach ($this->type_bit_maps as $rr) {
+
+            $out .= ' ' . strtoupper($rr);
+        }
+
+        return $out;
     }
 
     /**
@@ -64,8 +80,10 @@ class Net_DNS2_RR_RT extends Net_DNS2_RR
      */
     protected function rrFromString(array $rdata)
     {
-        $this->preference       = $rdata[0];
-        $this->intermediatehost = $this->cleanString($rdata[1]);
+        $this->serial   = array_shift($rdata);
+        $this->flags    = array_shift($rdata);
+
+        $this->type_bit_maps = $rdata;
 
         return true;
     }
@@ -84,14 +102,19 @@ class Net_DNS2_RR_RT extends Net_DNS2_RR
         if ($this->rdlength > 0) {
 
             //
-            // unpack the preference
+            // unpack the serial and flags values
             //
-            $x = unpack('npreference', $this->rdata);
+            $x = unpack('@' . $packet->offset . '/Nserial/nflags', $packet->rdata);
 
-            $this->preference       = $x['preference'];
-            $offset                 = $packet->offset + 2;
+            $this->serial   = Net_DNS2::expandUint32($x['serial']);
+            $this->flags    = $x['flags'];
 
-            $this->intermediatehost =  Net_DNS2_Packet::expand($packet, $offset);
+            //
+            // parse out the RR bitmap                 
+            //
+            $this->type_bit_maps = Net_DNS2_BitMap::bitMapToArray(
+                substr($this->rdata, 6)
+            );
 
             return true;
         }
@@ -112,16 +135,21 @@ class Net_DNS2_RR_RT extends Net_DNS2_RR
      */
     protected function rrGet(Net_DNS2_Packet &$packet)
     {
-        if (strlen($this->intermediatehost) > 0) {
+        //
+        // pack the serial and flags values
+        //
+        $data = pack('Nn', $this->serial, $this->flags);
 
-            $data = pack('n', $this->preference);
-            $packet->offset += 2;
+        //
+        // convert the array of RR names to a type bitmap
+        //
+        $data .= Net_DNS2_BitMap::arrayToBitMap($this->type_bit_maps);
 
-            $data .= $packet->compress($this->intermediatehost, $packet->offset);
+        //
+        // advance the offset
+        //
+        $packet->offset += strlen($data);
 
-            return $data;
-        }
-
-        return null;
+        return $data;
     }
 }

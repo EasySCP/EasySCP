@@ -1,54 +1,21 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * DNS Library for handling lookups and updates. 
  *
- * PHP Version 5
+ * Copyright (c) 2020, Mike Pultz <mike@mikepultz.com>. All rights reserved.
  *
- * Copyright (c) 2010, Mike Pultz <mike@mikepultz.com>.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   * Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in
- *     the documentation and/or other materials provided with the
- *     distribution.
- *
- *   * Neither the name of Mike Pultz nor the names of his contributors 
- *     may be used to endorse or promote products derived from this 
- *     software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRIC
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * See LICENSE for more details.
  *
  * @category  Networking
  * @package   Net_DNS2
  * @author    Mike Pultz <mike@mikepultz.com>
- * @copyright 2010 Mike Pultz <mike@mikepultz.com>
+ * @copyright 2020 Mike Pultz <mike@mikepultz.com>
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @version   SVN: $Id: SIG.php 179 2012-11-23 05:49:01Z mike.pultz $
- * @link      http://pear.php.net/package/Net_DNS2
+ * @link      https://netdns2.com/
  * @since     File available since Release 0.6.0
  *
- * This file contains code based off the Net::DNS::SEC Perl module by
- * Olaf M. Kolkman
+ * This file contains code based off the Net::DNS::SEC Perl module by Olaf M. Kolkman
  *
  * This is the copyright notice from the PERL Net::DNS::SEC module:
  *
@@ -96,13 +63,6 @@
  *   /                            Signature                          /
  *   /                                                               /
  *   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- *
- * @category Networking
- * @package  Net_DNS2
- * @author   Mike Pultz <mike@mikepultz.com>
- * @license  http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link     http://pear.php.net/package/Net_DNS2
- * @see      Net_DNS2_RR
  *
  */
 class Net_DNS2_RR_SIG extends Net_DNS2_RR
@@ -362,18 +322,44 @@ class Net_DNS2_RR_SIG extends Net_DNS2_RR
 
                 $algorithm = OPENSSL_ALGO_SHA1;
                 break;
+
+            //
+            // SHA256 (PHP 5.4.8 or higher)
+            //
+            case Net_DNS2_Lookups::DNSSEC_ALGORITHM_RSASHA256:
+
+                if (version_compare(PHP_VERSION, '5.4.8', '<') == true) {
+
+                    throw new Net_DNS2_Exception(
+                        'SHA256 support is only available in PHP >= 5.4.8',
+                        Net_DNS2_Lookups::E_OPENSSL_INV_ALGO
+                    );
+                }
+
+                $algorithm = OPENSSL_ALGO_SHA256;
+                break;
+
+            //
+            // SHA512 (PHP 5.4.8 or higher)
+            //
+            case Net_DNS2_Lookups::DNSSEC_ALGORITHM_RSASHA512:
+
+                if (version_compare(PHP_VERSION, '5.4.8', '<') == true) {
+
+                    throw new Net_DNS2_Exception(
+                        'SHA512 support is only available in PHP >= 5.4.8',
+                        Net_DNS2_Lookups::E_OPENSSL_INV_ALGO
+                    );
+                }
+
+                $algorithm = OPENSSL_ALGO_SHA512;
+                break;
         
             //
-            // un-supported
+            // unsupported at the moment
             //
             case Net_DNS2_Lookups::DNSSEC_ALGORITHM_DSA:
-                //
-                // DSA won't work in PHP until the OpenSSL extension has 
-                // better DSA support
-                //
             case Net_DNS2_Lookups::DSNSEC_ALGORITHM_RSASHA1NSEC3SHA1:
-            case Net_DNS2_Lookups::DNSSEC_ALGORITHM_RSASHA256:
-            case Net_DNS2_Lookups::DNSSEC_ALGORITHM_RSASHA512:
             case Net_DNS2_Lookups::DNSSEC_ALGORITHM_DSANSEC3SHA1:            
             default:
                 throw new Net_DNS2_Exception(
@@ -386,9 +372,7 @@ class Net_DNS2_RR_SIG extends Net_DNS2_RR
             //
             // sign the data
             //
-            if (openssl_sign(
-                $sigdata, $this->signature, $this->private_key->instance, $algorithm
-            ) == false) {
+            if (openssl_sign($sigdata, $this->signature, $this->private_key->instance, $algorithm) == false) {
 
                 throw new Net_DNS2_Exception(
                     openssl_error_string(), 
@@ -397,9 +381,21 @@ class Net_DNS2_RR_SIG extends Net_DNS2_RR
             }
 
             //
-            // add it locally encoded
+            // build the signature value based
             //
-            $this->signature = base64_encode($this->signature);
+            switch($this->algorithm) {
+
+            //
+            // RSA- add it directly
+            //
+            case Net_DNS2_Lookups::DNSSEC_ALGORITHM_RSAMD5:
+            case Net_DNS2_Lookups::DNSSEC_ALGORITHM_RSASHA1:
+            case Net_DNS2_Lookups::DNSSEC_ALGORITHM_RSASHA256:
+            case Net_DNS2_Lookups::DNSSEC_ALGORITHM_RSASHA512:
+
+                $this->signature = base64_encode($this->signature);
+                break;
+            }
         }
 
         //
@@ -412,12 +408,3 @@ class Net_DNS2_RR_SIG extends Net_DNS2_RR
         return $data;
     }
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * c-hanging-comment-ender-p: nil
- * End:
- */
-?>
