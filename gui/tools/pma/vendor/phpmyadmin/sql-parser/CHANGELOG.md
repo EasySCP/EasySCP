@@ -1,6 +1,20 @@
 # Change Log
 
+## [4.7.1] - 2020-10-15
+* Fix array_key_exists warning when parsing a "DEFAULT FALSE" token (#299)
+
+## [4.7.0] - 2020-10-08
+
+* EXISTS is also a function. (#297)
+* Remove some useless dev-dependencies
+* Fix lexer to not allow numbers with letters (#300)
+* Add support for INVISIBLE keyword (#292)
+* Fix the "$" might be a character used in a name (#301)
+* Fix use stream_select instead of non-blocking STDIN (#309)
+* Add select validation to a create view statement (#310)
+
 ## [4.6.1] - 2020-03-20
+
 * Revert some changes with the understanding of ANSI_QUOTES mode and identifiers
 * Suggest motranslator 4.0 in README
 
@@ -66,7 +80,7 @@
 
 * Fix parsing of CREATE TABLE with per field COLLATE.
 * Improved Context::loadClosest to better deal with corner cases.
-* Localizaton updates.
+* Localization updates.
 
 ## [4.2.3] - 2017-10-10
 
@@ -80,7 +94,7 @@
 ## [4.2.1] - 2017-09-08
 
 * Fixed minor bug in Query::getFlags.
-* Localizaton updates.
+* Localization updates.
 
 ## [4.2.0] - 2017-08-30
 

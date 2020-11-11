@@ -49,17 +49,17 @@
     },
     {
         "name": "google/recaptcha",
-        "version": "1.2.3",
-        "version_normalized": "1.2.3.0",
+        "version": "1.2.4",
+        "version_normalized": "1.2.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/google/recaptcha.git",
-            "reference": "98c4a6573b27e8b0990ea8789c74ea378795134c"
+            "reference": "614f25a9038be4f3f2da7cbfd778dc5b357d2419"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/google/recaptcha/zipball/98c4a6573b27e8b0990ea8789c74ea378795134c",
-            "reference": "98c4a6573b27e8b0990ea8789c74ea378795134c",
+            "url": "https://api.github.com/repos/google/recaptcha/zipball/614f25a9038be4f3f2da7cbfd778dc5b357d2419",
+            "reference": "614f25a9038be4f3f2da7cbfd778dc5b357d2419",
             "shasum": ""
         },
         "require": {
@@ -70,7 +70,7 @@
             "php-coveralls/php-coveralls": "^2.1",
             "phpunit/phpunit": "^4.8.36|^5.7.27|^6.59|^7.5.11"
         },
-        "time": "2019-08-16T15:48:25+00:00",
+        "time": "2020-03-31T17:50:54+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -163,17 +163,17 @@
     },
     {
         "name": "paragonie/random_compat",
-        "version": "v2.0.18",
-        "version_normalized": "2.0.18.0",
+        "version": "v2.0.19",
+        "version_normalized": "2.0.19.0",
         "source": {
             "type": "git",
             "url": "https://github.com/paragonie/random_compat.git",
-            "reference": "0a58ef6e3146256cc3dc7cc393927bcc7d1b72db"
+            "reference": "446fc9faa5c2a9ddf65eb7121c0af7e857295241"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/paragonie/random_compat/zipball/0a58ef6e3146256cc3dc7cc393927bcc7d1b72db",
-            "reference": "0a58ef6e3146256cc3dc7cc393927bcc7d1b72db",
+            "url": "https://api.github.com/repos/paragonie/random_compat/zipball/446fc9faa5c2a9ddf65eb7121c0af7e857295241",
+            "reference": "446fc9faa5c2a9ddf65eb7121c0af7e857295241",
             "shasum": ""
         },
         "require": {
@@ -185,7 +185,7 @@
         "suggest": {
             "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
         },
-        "time": "2019-01-03T20:59:08+00:00",
+        "time": "2020-10-15T10:06:57+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -322,17 +322,17 @@
     },
     {
         "name": "phpmyadmin/sql-parser",
-        "version": "4.6.1",
-        "version_normalized": "4.6.1.0",
+        "version": "4.7.1",
+        "version_normalized": "4.7.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpmyadmin/sql-parser.git",
-            "reference": "fd339b2b40b7910659c842891eb36d1d15079fcb"
+            "reference": "550ce6968794e890cfd5b4cbf202e716d78b6a92"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpmyadmin/sql-parser/zipball/fd339b2b40b7910659c842891eb36d1d15079fcb",
-            "reference": "fd339b2b40b7910659c842891eb36d1d15079fcb",
+            "url": "https://api.github.com/repos/phpmyadmin/sql-parser/zipball/550ce6968794e890cfd5b4cbf202e716d78b6a92",
+            "reference": "550ce6968794e890cfd5b4cbf202e716d78b6a92",
             "shasum": ""
         },
         "require": {
@@ -343,16 +343,14 @@
             "phpmyadmin/motranslator": "<3.0"
         },
         "require-dev": {
-            "phpunit/php-code-coverage": "*",
             "phpunit/phpunit": "~4.8 || ~5.7 || ~6.5 || ^7.0",
-            "sami/sami": "^4.0",
             "squizlabs/php_codesniffer": "~2.9 || ~3.4"
         },
         "suggest": {
             "ext-mbstring": "For best performance",
             "phpmyadmin/motranslator": "Translate messages to your favorite locale"
         },
-        "time": "2020-03-21T00:16:38+00:00",
+        "time": "2020-10-15T15:17:59+00:00",
         "bin": [
             "bin/highlight-query",
             "bin/lint-query",
@@ -387,17 +385,17 @@
     },
     {
         "name": "phpseclib/phpseclib",
-        "version": "2.0.25",
-        "version_normalized": "2.0.25.0",
+        "version": "2.0.29",
+        "version_normalized": "2.0.29.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpseclib/phpseclib.git",
-            "reference": "c18159618ed7cd7ff721ac1a8fec7860a475d2f0"
+            "reference": "497856a8d997f640b4a516062f84228a772a48a8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/c18159618ed7cd7ff721ac1a8fec7860a475d2f0",
-            "reference": "c18159618ed7cd7ff721ac1a8fec7860a475d2f0",
+            "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/497856a8d997f640b4a516062f84228a772a48a8",
+            "reference": "497856a8d997f640b4a516062f84228a772a48a8",
             "shasum": ""
         },
         "require": {
@@ -406,7 +404,6 @@
         "require-dev": {
             "phing/phing": "~2.7",
             "phpunit/phpunit": "^4.8.35|^5.7|^6.0",
-            "sami/sami": "~2.0",
             "squizlabs/php_codesniffer": "~2.0"
         },
         "suggest": {
@@ -415,7 +412,7 @@
             "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
             "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
         },
-        "time": "2020-02-25T04:16:50+00:00",
+        "time": "2020-09-08T04:24:43+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -477,6 +474,20 @@
             "twofish",
             "x.509",
             "x509"
+        ],
+        "funding": [
+            {
+                "url": "https://github.com/terrafrost",
+                "type": "github"
+            },
+            {
+                "url": "https://www.patreon.com/phpseclib",
+                "type": "patreon"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
+                "type": "tidelift"
+            }
         ]
     },
     {
@@ -686,17 +697,17 @@
     },
     {
         "name": "symfony/polyfill-ctype",
-        "version": "v1.14.0",
-        "version_normalized": "1.14.0.0",
+        "version": "v1.18.1",
+        "version_normalized": "1.18.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-ctype.git",
-            "reference": "fbdeaec0df06cf3d51c93de80c7eb76e271f5a38"
+            "reference": "1c302646f6efc070cd46856e600e5e0684d6b454"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/fbdeaec0df06cf3d51c93de80c7eb76e271f5a38",
-            "reference": "fbdeaec0df06cf3d51c93de80c7eb76e271f5a38",
+            "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/1c302646f6efc070cd46856e600e5e0684d6b454",
+            "reference": "1c302646f6efc070cd46856e600e5e0684d6b454",
             "shasum": ""
         },
         "require": {
@@ -705,11 +716,15 @@
         "suggest": {
             "ext-ctype": "For best performance"
         },
-        "time": "2020-01-13T11:15:53+00:00",
+        "time": "2020-07-14T12:35:20+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.14-dev"
+                "dev-master": "1.18-dev"
+            },
+            "thanks": {
+                "name": "symfony/polyfill",
+                "url": "https://github.com/symfony/polyfill"
             }
         },
         "installation-source": "dist",
@@ -742,21 +757,35 @@
             "ctype",
             "polyfill",
             "portable"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
         "name": "symfony/polyfill-mbstring",
-        "version": "v1.14.0",
-        "version_normalized": "1.14.0.0",
+        "version": "v1.18.1",
+        "version_normalized": "1.18.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-mbstring.git",
-            "reference": "34094cfa9abe1f0f14f48f490772db7a775559f2"
+            "reference": "a6977d63bf9a0ad4c65cd352709e230876f9904a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/34094cfa9abe1f0f14f48f490772db7a775559f2",
-            "reference": "34094cfa9abe1f0f14f48f490772db7a775559f2",
+            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/a6977d63bf9a0ad4c65cd352709e230876f9904a",
+            "reference": "a6977d63bf9a0ad4c65cd352709e230876f9904a",
             "shasum": ""
         },
         "require": {
@@ -765,11 +794,15 @@
         "suggest": {
             "ext-mbstring": "For best performance"
         },
-        "time": "2020-01-13T11:15:53+00:00",
+        "time": "2020-07-14T12:35:20+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.14-dev"
+                "dev-master": "1.18-dev"
+            },
+            "thanks": {
+                "name": "symfony/polyfill",
+                "url": "https://github.com/symfony/polyfill"
             }
         },
         "installation-source": "dist",
@@ -803,32 +836,50 @@
             "polyfill",
             "portable",
             "shim"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
         "name": "symfony/polyfill-php56",
-        "version": "v1.14.0",
-        "version_normalized": "1.14.0.0",
+        "version": "v1.18.1",
+        "version_normalized": "1.18.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php56.git",
-            "reference": "16ec91cb06998b609501b55b7177b7d7c02badb3"
+            "reference": "13df84e91cd168f247c2f2ec82cc0fa24901c011"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/16ec91cb06998b609501b55b7177b7d7c02badb3",
-            "reference": "16ec91cb06998b609501b55b7177b7d7c02badb3",
+            "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/13df84e91cd168f247c2f2ec82cc0fa24901c011",
+            "reference": "13df84e91cd168f247c2f2ec82cc0fa24901c011",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.3",
             "symfony/polyfill-util": "~1.0"
         },
-        "time": "2020-01-13T11:15:53+00:00",
+        "time": "2020-07-14T12:35:20+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.14-dev"
+                "dev-master": "1.18-dev"
+            },
+            "thanks": {
+                "name": "symfony/polyfill",
+                "url": "https://github.com/symfony/polyfill"
             }
         },
         "installation-source": "dist",
@@ -861,31 +912,49 @@
             "polyfill",
             "portable",
             "shim"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
         "name": "symfony/polyfill-util",
-        "version": "v1.14.0",
-        "version_normalized": "1.14.0.0",
+        "version": "v1.18.1",
+        "version_normalized": "1.18.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-util.git",
-            "reference": "ba3cfcea6d0192cae46c62041f61cbb704b526d3"
+            "reference": "46b910c71e9828f8ec2aa7a0314de1130d9b295a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-util/zipball/ba3cfcea6d0192cae46c62041f61cbb704b526d3",
-            "reference": "ba3cfcea6d0192cae46c62041f61cbb704b526d3",
+            "url": "https://api.github.com/repos/symfony/polyfill-util/zipball/46b910c71e9828f8ec2aa7a0314de1130d9b295a",
+            "reference": "46b910c71e9828f8ec2aa7a0314de1130d9b295a",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2020-01-13T11:15:53+00:00",
+        "time": "2020-07-14T12:35:20+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.14-dev"
+                "dev-master": "1.18-dev"
+            },
+            "thanks": {
+                "name": "symfony/polyfill",
+                "url": "https://github.com/symfony/polyfill"
             }
         },
         "installation-source": "dist",
@@ -915,6 +984,20 @@
             "compatibility",
             "polyfill",
             "shim"
+        ],
+        "funding": [
+            {
+                "url": "https://symfony.com/sponsor",
+                "type": "custom"
+            },
+            {
+                "url": "https://github.com/fabpot",
+                "type": "github"
+            },
+            {
+                "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                "type": "tidelift"
+            }
         ]
     },
     {
@@ -1036,7 +1119,8 @@
         "keywords": [
             "i18n",
             "text"
-        ]
+        ],
+        "abandoned": true
     },
     {
         "name": "twig/twig",
