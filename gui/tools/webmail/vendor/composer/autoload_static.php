@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3f9f5357bea1cdd9f2fcae8e728ce358
+class ComposerStaticInit1a4767152b35c7fc95f6730fa167d515
 {
     public static $prefixLengthsPsr4 = array (
         'E' => 
@@ -28,13 +28,6 @@ class ComposerStaticInit3f9f5357bea1cdd9f2fcae8e728ce358
                 0 => __DIR__ . '/..' . '/roundcube/plugin-installer/src',
             ),
         ),
-        'P' => 
-        array (
-            'PEAR' => 
-            array (
-                0 => __DIR__ . '/..' . '/pear/pear_exception',
-            ),
-        ),
         'N' => 
         array (
             'Net' => 
@@ -53,10 +46,6 @@ class ComposerStaticInit3f9f5357bea1cdd9f2fcae8e728ce358
         ),
         'C' => 
         array (
-            'Crypt' => 
-            array (
-                0 => __DIR__ . '/..' . '/pear/crypt_gpg',
-            ),
             'Console' => 
             array (
                 0 => __DIR__ . '/..' . '/pear/console_commandline',
@@ -77,6 +66,28 @@ class ComposerStaticInit3f9f5357bea1cdd9f2fcae8e728ce358
     );
 
     public static $classMap = array (
+        'Crypt_GPG' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG.php',
+        'Crypt_GPGAbstract' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPGAbstract.php',
+        'Crypt_GPG_BadPassphraseException' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_DeletePrivateKeyException' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_Engine' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Engine.php',
+        'Crypt_GPG_Exception' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_FileException' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_InvalidKeyParamsException' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_InvalidOperationException' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_Key' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Key.php',
+        'Crypt_GPG_KeyGenerator' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/KeyGenerator.php',
+        'Crypt_GPG_KeyNotCreatedException' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_KeyNotFoundException' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_NoDataException' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_OpenSubprocessException' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Exceptions.php',
+        'Crypt_GPG_PinEntry' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/PinEntry.php',
+        'Crypt_GPG_ProcessControl' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/ProcessControl.php',
+        'Crypt_GPG_ProcessHandler' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/ProcessHandler.php',
+        'Crypt_GPG_Signature' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/Signature.php',
+        'Crypt_GPG_SignatureCreationInfo' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/SignatureCreationInfo.php',
+        'Crypt_GPG_SubKey' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/SubKey.php',
+        'Crypt_GPG_UserId' => __DIR__ . '/..' . '/pear/crypt_gpg/Crypt/GPG/UserId.php',
         'Net_LDAP2' => __DIR__ . '/..' . '/pear/net_ldap2/Net/LDAP2.php',
         'Net_LDAP2_Entry' => __DIR__ . '/..' . '/pear/net_ldap2/Net/LDAP2/Entry.php',
         'Net_LDAP2_Error' => __DIR__ . '/..' . '/pear/net_ldap2/Net/LDAP2.php',
@@ -91,17 +102,18 @@ class ComposerStaticInit3f9f5357bea1cdd9f2fcae8e728ce358
         'Net_LDAP3' => __DIR__ . '/..' . '/kolab/net_ldap3/lib/Net/LDAP3.php',
         'Net_LDAP3_Result' => __DIR__ . '/..' . '/kolab/net_ldap3/lib/Net/LDAP3/Result.php',
         'Net_Sieve' => __DIR__ . '/..' . '/pear/net_sieve/Sieve.php',
+        'PEAR_Exception' => __DIR__ . '/..' . '/pear/pear_exception/PEAR/Exception.php',
         'SieveTest' => __DIR__ . '/..' . '/pear/net_sieve/tests/SieveTest.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3f9f5357bea1cdd9f2fcae8e728ce358::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3f9f5357bea1cdd9f2fcae8e728ce358::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit3f9f5357bea1cdd9f2fcae8e728ce358::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit3f9f5357bea1cdd9f2fcae8e728ce358::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit3f9f5357bea1cdd9f2fcae8e728ce358::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1a4767152b35c7fc95f6730fa167d515::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1a4767152b35c7fc95f6730fa167d515::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit1a4767152b35c7fc95f6730fa167d515::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit1a4767152b35c7fc95f6730fa167d515::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit1a4767152b35c7fc95f6730fa167d515::$classMap;
 
         }, null, ClassLoader::class);
     }

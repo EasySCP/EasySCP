@@ -734,20 +734,20 @@ class Net_LDAP3
             if (!empty($result)) {
                 $attributes = array(
                     'dn'                   => $entry_dn,
-                    'attributeLevelRights' => array(),
-                    'entryLevelRights'     => array(),
+                    'attributelevelrights' => array(),
+                    'entrylevelrights'     => array(),
                 );
 
-                foreach (array('aclRights', 'attributeLevelRights', 'entryLevelRights') as $attr_name) {
+                foreach (array('aclrights', 'attributelevelrights', 'entrylevelrights') as $attr_name) {
                     if ($attr_value = $result[$attr_name]) {
                         switch ($attr_name) {
-                        case 'aclRights':
+                        case 'aclrights':
                             $this->parse_aclrights($attributes, $attr_value);
                             break;
-                        case 'attributeLevelRights':
+                        case 'attributelevelrights':
                             $attributes[$attr_name] = $this->parse_attribute_level_rights($attr_value);
                             break;
-                        case 'entryLevelRights':
+                        case 'entrylevelrights':
                             $attributes[$attr_name] = $this->parse_entry_level_rights($attr_value);
                             break;
                         }
@@ -851,8 +851,8 @@ class Net_LDAP3
 
         $attributes = array(
             'dn'                   => $subject_dn,
-            'attributeLevelRights' => array(),
-            'entryLevelRights'     => array(),
+            'attributelevelrights' => array(),
+            'entrylevelrights'     => array(),
         );
 
         if ($this->vendor_name() == "Oracle Corporation") {
@@ -876,10 +876,10 @@ class Net_LDAP3
 
                 switch ($attribute_name) {
                 case "attributeLevelRights":
-                    $attributes[$attribute_name] = $this->parse_attribute_level_rights($attribute_value);
+                    $attributes['attributelevelrights'] = $this->parse_attribute_level_rights($attribute_value);
                     break;
                 case "entryLevelRights":
-                    $attributes[$attribute_name] = $this->parse_entry_level_rights($attribute_value);
+                    $attributes['entrylevelrights'] = $this->parse_entry_level_rights($attribute_value);
                     break;
                 }
             }
@@ -1608,6 +1608,12 @@ class Net_LDAP3
      */
     public function search($base_dn, $filter = '(objectclass=*)', $scope = 'sub', $attrs = array('dn'), $props = array(), $count_only = false)
     {
+        $controls = null;
+
+        if (!array_key_exists('sort', $props)) {
+            $props['sort'] = false;
+        }
+
         if (!$this->conn) {
             $this->_debug("No active connection for " . __CLASS__ . "::" . __FUNCTION__);
             return false;
@@ -1883,14 +1889,17 @@ class Net_LDAP3
     public static function normalize_entry($entry, $flat = false)
     {
         $rec = array();
+
         for ($i=0; $i < $entry['count']; $i++) {
             $attr = $entry[$i];
+            $_attr = strtolower($attr);
+
             for ($j=0; $j < $entry[$attr]['count']; $j++) {
-                $rec[$attr][$j] = $entry[$attr][$j];
+                $rec[$_attr][$j] = $entry[$attr][$j];
             }
 
-            if ($flat && count($rec[$attr]) == 1) {
-                $rec[$attr] = $rec[$attr][0];
+            if ($flat && count($rec[$_attr]) == 1) {
+                $rec[$_attr] = $rec[$_attr][0];
             }
         }
 
@@ -2462,26 +2471,26 @@ class Net_LDAP3
 
         switch ($_acl_components[1]) {
             case "entryLevel":
-                $attributes['entryLevelRights'] = Array();
+                $attributes['entrylevelrights'] = Array();
                 $_acl_value = explode(',', $_acl_value);
 
                 foreach ($_acl_value as $right) {
                     list($method, $bool) = explode(':', $right);
-                    if ($bool == "1" && !in_array($method, $attributes['entryLevelRights'])) {
-                        $attributes['entryLevelRights'][] = $method;
+                    if ($bool == "1" && !in_array($method, $attributes['entrylevelrights'])) {
+                        $attributes['entrylevelrights'][] = $method;
                     }
                 }
 
                 break;
 
             case "attributeLevel":
-                $attributes['attributeLevelRights'][$_acl_components[2]] = Array();
+                $attributes['attributelevelrights'][$_acl_components[2]] = Array();
                 $_acl_value = explode(',', $_acl_value);
 
                 foreach ($_acl_value as $right) {
                     list($method, $bool) = explode(':', $right);
-                    if ($bool == "1" && !in_array($method, $attributes['attributeLevelRights'][$_acl_components[2]])) {
-                        $attributes['attributeLevelRights'][$_acl_components[2]][] = $method;
+                    if ($bool == "1" && !in_array($method, $attributes['attributelevelrights'][$_acl_components[2]])) {
+                        $attributes['attributelevelrights'][$_acl_components[2]][] = $method;
                     }
                 }
 
@@ -3057,8 +3066,8 @@ class Net_LDAP3
         }
 
         $ckey = 'domain.root::' . $domain;
-        if ($result = $this->icache[$ckey]) {
-            return $result;
+        if (array_key_exists($ckey, $this->icache)) {
+            return $this->icache[$ckey];
         }
 
         $this->_debug("Net_LDAP3::domain_root_dn($domain)");
@@ -3111,7 +3120,7 @@ class Net_LDAP3
         $ckey  = 'domain::' . $domain;
         $ickey = $ckey . '::' . md5(implode(',', $attributes));
 
-        if (isset($this->icache[$ickey])) {
+        if (array_key_exists($ickey, $this->icache)) {
             return $this->icache[$ickey];
         }
 
@@ -3122,6 +3131,7 @@ class Net_LDAP3
 
         if ($domain_dn) {
             $result = $this->get_entry_attributes($domain_dn, $attributes);
+
             if (!empty($result)) {
                 $result['dn'] = $domain_dn;
             }

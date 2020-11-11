@@ -342,6 +342,20 @@ class Crypt_GPG_Engine
     private $_cipher_algo = null;
 
     /**
+     * Compress algorithm.
+     *
+     * @var string
+     */
+    private $_compress_algo = null;
+
+    /**
+     * Additional per-command arguments
+     *
+     * @var array
+     */
+    private $_options = array();
+
+    /**
      * Commands to be sent to GPG's command input stream
      *
      * @var string
@@ -433,85 +447,9 @@ class Crypt_GPG_Engine
     /**
      * Creates a new GPG engine
      *
-     * Available options are:
-     *
-     * - <kbd>string  homedir</kbd>        - the directory where the GPG
-     *                                       keyring files are stored. If not
-     *                                       specified, Crypt_GPG uses the
-     *                                       default of <kbd>~/.gnupg</kbd>.
-     * - <kbd>string  publicKeyring</kbd>  - the file path of the public
-     *                                       keyring. Use this if the public
-     *                                       keyring is not in the homedir, or
-     *                                       if the keyring is in a directory
-     *                                       not writable by the process
-     *                                       invoking GPG (like Apache). Then
-     *                                       you can specify the path to the
-     *                                       keyring with this option
-     *                                       (/foo/bar/pubring.gpg), and specify
-     *                                       a writable directory (like /tmp)
-     *                                       using the <i>homedir</i> option.
-     * - <kbd>string  privateKeyring</kbd> - the file path of the private
-     *                                       keyring. Use this if the private
-     *                                       keyring is not in the homedir, or
-     *                                       if the keyring is in a directory
-     *                                       not writable by the process
-     *                                       invoking GPG (like Apache). Then
-     *                                       you can specify the path to the
-     *                                       keyring with this option
-     *                                       (/foo/bar/secring.gpg), and specify
-     *                                       a writable directory (like /tmp)
-     *                                       using the <i>homedir</i> option.
-     * - <kbd>string  trustDb</kbd>        - the file path of the web-of-trust
-     *                                       database. Use this if the trust
-     *                                       database is not in the homedir, or
-     *                                       if the database is in a directory
-     *                                       not writable by the process
-     *                                       invoking GPG (like Apache). Then
-     *                                       you can specify the path to the
-     *                                       trust database with this option
-     *                                       (/foo/bar/trustdb.gpg), and specify
-     *                                       a writable directory (like /tmp)
-     *                                       using the <i>homedir</i> option.
-     * - <kbd>string  binary</kbd>         - the location of the GPG binary. If
-     *                                       not specified, the driver attempts
-     *                                       to auto-detect the GPG binary
-     *                                       location using a list of known
-     *                                       default locations for the current
-     *                                       operating system. The option
-     *                                       <kbd>gpgBinary</kbd> is a
-     *                                       deprecated alias for this option.
-     * - <kbd>string  agent</kbd>          - the location of the GnuPG agent
-     *                                       binary. The gpg-agent is only
-     *                                       used for GnuPG 2.x. If not
-     *                                       specified, the engine attempts
-     *                                       to auto-detect the gpg-agent
-     *                                       binary location using a list of
-     *                                       know default locations for the
-     *                                       current operating system.
-     * - <kbd>string|false gpgconf</kbd>   - the location of the GnuPG conf
-     *                                       binary. The gpgconf is only
-     *                                       used for GnuPG >= 2.1. If not
-     *                                       specified, the engine attempts
-     *                                       to auto-detect the location using
-     *                                       a list of know default locations.
-     *                                       When set to FALSE `gpgconf --kill`
-     *                                       will not be executed via destructor.
-     * - <kbd>string digest-algo</kbd>     - Sets the message digest algorithm.
-     * - <kbd>string cipher-algo</kbd>     - Sets the symmetric cipher.
-     * - <kbd>boolean strict</kbd>         - In strict mode clock problems on
-     *                                       subkeys and signatures are not ignored
-     *                                       (--ignore-time-conflict
-     *                                       and --ignore-valid-from options)
-     * - <kbd>mixed debug</kbd>            - whether or not to use debug mode.
-     *                                       When debug mode is on, all
-     *                                       communication to and from the GPG
-     *                                       subprocess is logged. This can be
-     *                                       useful to diagnose errors when
-     *                                       using Crypt_GPG.
-     *
-     * @param array $options optional. An array of options used to create the
-     *                       GPG object. All options are optional and are
-     *                       represented as key-value pairs.
+     * @param array $options An array of options used to create the engine object.
+     *                       All options are optional and are represented as key-value
+     *                       pairs. See Crypt_GPGAbstract::__construct() for more info.
      *
      * @throws Crypt_GPG_FileException if the <kbd>homedir</kbd> does not exist
      *         and cannot be created. This can happen if <kbd>homedir</kbd> is
@@ -530,7 +468,7 @@ class Crypt_GPG_Engine
      *
      * @throws PEAR_Exception if the provided <kbd>agent</kbd> is invalid, or
      *         if no <kbd>agent</kbd> is provided and no suitable gpg-agent
-     *         cound be found.
+     *         could be found.
      */
     public function __construct(array $options = array())
     {
@@ -707,6 +645,14 @@ class Crypt_GPG_Engine
 
         if (!empty($options['cipher-algo'])) {
             $this->_cipher_algo = $options['cipher-algo'];
+        }
+
+        if (!empty($options['compress-algo'])) {
+            $this->_compress_algo = $options['compress-algo'];
+        }
+
+        if (!empty($options['options'])) {
+            $this->_options = $options['options'];
         }
     }
 
@@ -941,6 +887,12 @@ class Crypt_GPG_Engine
         $this->_operation = $operation;
         $this->_arguments = $arguments;
 
+        foreach ($this->_options as $optname => $args) {
+            if (strpos($operation, '--' . $optname) !== false) {
+                $this->_arguments[] = $args;
+            }
+        }
+
         $this->_processHandler->setOperation($operation);
     }
 
@@ -970,6 +922,27 @@ class Crypt_GPG_Engine
         }
 
         $_ENV['PINENTRY_USER_DATA'] = json_encode($envKeys);
+    }
+
+    // }}}
+    // {{{ setOptions()
+
+    /**
+     * Sets per-command additional arguments
+     *
+     * @param array $options Additional per-command options for GPG command.
+     *                       Note: This will unset options set previously.
+     *                       Key of the array is a command (e.g.
+     *                       gen-key, import, sign, encrypt, list-keys).
+     *                       Value is a string containing command line arguments to be
+     *                       added to the related command. For example:
+     *                       array('sign' => '--emit-version').
+     *
+     * @return void
+     */
+    public function setOptions(array $options)
+    {
+        $this->_options = $options;
     }
 
     // }}}
@@ -1700,6 +1673,10 @@ class Crypt_GPG_Engine
             $defaultArguments[] = '--s2k-cipher-algo ' . escapeshellarg($this->_cipher_algo);
         }
 
+        if (!empty($this->_compress_algo)) {
+            $defaultArguments[] = '--compress-algo ' . escapeshellarg($this->_compress_algo);
+        }
+
         $arguments = array_merge($defaultArguments, $this->_arguments);
 
         if ($this->_homedir) {
@@ -2011,7 +1988,8 @@ class Crypt_GPG_Engine
         } else {
             $locations = array(
                 '/usr/bin/',
-                '/usr/local/bin/'
+                '/usr/local/bin/',
+                '/run/current-system/sw/bin/' // NixOS
             );
         }
 
