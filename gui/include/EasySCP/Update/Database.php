@@ -725,10 +725,8 @@ class EasySCP_Update_Database extends EasySCP_Update {
 
 	/**
 	 * Add database field for external ip´s/nat support
-	 * Add missing fields for php_version
-	 * Add new cronjob
 	 *
-	 * @author Tommy <tommy@sallingstadt.net>
+	 * @author Tom Winterhalder <tom.winterhalder@easyscp.net>
 	 * @return array
 	 */
 	protected function _databaseUpdate_65(){
@@ -751,6 +749,19 @@ class EasySCP_Update_Database extends EasySCP_Update {
 			AFTER
 				`ip_number_v6`;
 		";
+
+		return $sqlUpd;
+	}
+
+	/**
+	 * Add missing fields for php_version
+	 * Add new cronjob
+	 *
+	 * @author Tommy
+	 * @return array
+	 */
+	protected function _databaseUpdate_66(){
+		$sqlUpd = array();
 
 		$sqlUpd[] = "
 			INSERT INTO

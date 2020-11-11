@@ -87,7 +87,7 @@ INSERT INTO `config` (`name`, `value`) VALUES
 ('MTA_SSL_STATUS',0),
 ('PHP_VERSION',0),
 ('MIGRATION_ENABLED',0),
-('DATABASE_REVISION', '65');
+('DATABASE_REVISION', '66');
 
 -- --------------------------------------------------------
 
