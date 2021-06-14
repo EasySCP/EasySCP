@@ -4,7 +4,7 @@
  *
  * @copyright 	2001-2006 by moleSoftware GmbH
  * @copyright 	2006-2010 by ispCP | http://isp-control.net
- * @copyright 	2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * @copyright 	2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  * @version 	SVN: $Id$
  * @link 		http://www.easyscp.net
  * @author 		EasySCP Team
@@ -29,7 +29,7 @@
  * Portions created by the ispCP Team are Copyright (C) 2006-2010 by
  * isp Control Panel. All Rights Reserved.
  *
- * Portions created by the EasySCP Team are Copyright (C) 2010-2019 by
+ * Portions created by the EasySCP Team are Copyright (C) 2010-2020 by
  * Easy Server Control Panel. All Rights Reserved.
  */
 
@@ -534,8 +534,7 @@ function _validates_tld($tld) {
 	if ($cfg->TLD_STRICT_VALIDATION) {
 		$ianaTLDXML = simplexml_load_file(EasyConfig_PATH . '/Iana_TLD.xml');
 		
-		$idnTld = idn_to_ascii($tld);
-		// $idnTld = idn_to_ascii($tld,IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
+		$idnTld = idn_to_ascii($tld,IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
 		$search = "//domain[tld='".$idnTld."']";
 		if ($ianaTLDXML->xpath($search)) {
 			return true;

@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2017 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -370,6 +370,7 @@ function gen_editdomain_page($tpl) {
 			'VL_USER_NAME'				=> tohtml($username)
 		)
 	);
+	
 } // End of gen_editdomain_page()
 
 /**
@@ -395,13 +396,13 @@ function check_user_data($reseller_id, $user_id) {
 	$disk 			= clean_input($_POST['dom_disk']);
 
 	// $domain_ip = $_POST['domain_ip'];
-	$domain_php		= preg_replace("/\_/", "", $_POST['domain_php']);
-	$domain_php_edit= preg_replace("/\_/", "", $_POST['domain_php_edit']);
-	$domain_cgi		= preg_replace("/\_/", "", $_POST['domain_cgi']);
-	$domain_ssl		= preg_replace("/\_/", "", $_POST['domain_ssl']);
-	$domain_dns		= preg_replace("/\_/", "", $_POST['domain_dns']);
-	$allowbackup	= preg_replace("/\_/", "", $_POST['backup']);
-	$countbackup	= preg_replace("/\_/", "", $_POST['countbackup']);
+	$domain_php			= preg_replace("/\_/", "", $_POST['domain_php']);
+	$domain_php_edit	= preg_replace("/\_/", "", $_POST['domain_php_edit']);
+	$domain_cgi			= preg_replace("/\_/", "", $_POST['domain_cgi']);
+	$domain_ssl			= preg_replace("/\_/", "", $_POST['domain_ssl']);
+	$domain_dns			= preg_replace("/\_/", "", $_POST['domain_dns']);
+	$allowbackup		= preg_replace("/\_/", "", $_POST['backup']);
+	$countbackup		= preg_replace("/\_/", "", $_POST['countbackup']);
 
 	$ed_error = '';
 

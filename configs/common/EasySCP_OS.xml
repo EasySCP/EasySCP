@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 	EasySCP a Virtual Hosting Control Panel
-	Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+	Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
 
 	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -20,11 +20,6 @@
 
 	<Dist Name="Debian">
 		<OS>
-			<Name>Debian GNU/Linux 7 (Wheezy)</Name>
-			<DistName>Debian</DistName>
-			<DistVersion>7</DistVersion>
-		</OS>
-		<OS>
 			<Name>Debian GNU/Linux 8 (Jessie)</Name>
 			<DistName>Debian</DistName>
 			<DistVersion>8</DistVersion>
@@ -34,18 +29,23 @@
 			<DistName>Debian</DistName>
 			<DistVersion>9</DistVersion>
 		</OS>
+		<OS>
+			<Name>Debian GNU/Linux 10 (Buster)</Name>
+			<DistName>Debian</DistName>
+			<DistVersion>10</DistVersion>
+		</OS>
 	</Dist>
 
 	<Dist Name="Ubuntu">
 		<OS>
-			<Name>Ubuntu 14.04 (Trusty) LTS</Name>
-			<DistName>Ubuntu</DistName>
-			<DistVersion>14.04</DistVersion>
-		</OS>
-		<OS>
 			<Name>Ubuntu 16.04 (Xenial) LTS</Name>
 			<DistName>Ubuntu</DistName>
 			<DistVersion>16.04</DistVersion>
+		</OS>
+		<OS>
+			<Name>Ubuntu 18.04 (Bionic) LTS</Name>
+			<DistName>Ubuntu</DistName>
+			<DistVersion>18.04</DistVersion>
 		</OS>
 	</Dist>
 </EasySCP_OS>

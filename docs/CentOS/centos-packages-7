@@ -15,6 +15,7 @@ mariadb-server
 mc
 mod_fcgid
 mod_ssl
+openssl
 pdns
 pdns-backend-mysql
 php

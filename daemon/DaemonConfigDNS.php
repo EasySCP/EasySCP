@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -22,14 +22,13 @@ class DaemonConfigDNS {
 	public static function CreatePDNSPass(){
 		System_Daemon::debug('Starting "DaemonConfigDNS::createPDNSPass" subprocess.');
 
-		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_DNS.xml');
+		$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/tpl/EasySCP_Config_DNS.xml');
 
 		System_Daemon::debug('Building the new pdns config file');
 
 		$xml->{'PDNS_USER'} = 'powerdns';
 		$xml->{'PDNS_PASS'} = DB::encrypt_data(DaemonCommon::generatePassword(18));
-		$xml->{'HOSTNAME'} = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'});
-		// $xml->{'HOSTNAME'} = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
+		$xml->{'HOSTNAME'} = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
 
 		$handle = fopen(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml', "wb");
 		fwrite($handle, $xml->asXML());
@@ -56,8 +55,7 @@ class DaemonConfigDNS {
 
 		$sql_param = array(
 			':DATABASE_USER'=> DaemonConfig::$cfg->DATABASE_USER,
-			':DATABASE_HOST'=> idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'})
-			// ':DATABASE_HOST'=> idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46)
+			':DATABASE_HOST'=> idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46)
 		);
 
 		$sql_query = "
@@ -83,7 +81,7 @@ class DaemonConfigDNS {
 			DaemonCommon::systemCreateDirectory(DaemonConfig::$distro->{'PDNS_DB_DIR'}.'/', DaemonConfig::$cfg->{'ROOT_USER'}, DaemonConfig::$cfg->{'ROOT_GROUP'}, 0640);
 		}
 
-		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml');
+		$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_DNS.xml');
 
 		$tpl_param = array(
 			'PDNS_USER'	=> $xml->{'PDNS_USER'},

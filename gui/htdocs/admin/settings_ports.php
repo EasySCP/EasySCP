@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -325,9 +325,13 @@ function show_services($tpl) {
 		$values = EasySCP_Registry::get('Db_Config');
 
 		// Filter function to get only the services ports names
-		$filter = create_function(
-			'$value', 'if(substr($value, 0, 5) == \'PORT_\') return $value;'
-		);
+//		$filter = create_function(
+//			'$value', 'if(substr($value, 0, 5) == \'PORT_\') return $value;'
+//		);
+
+		$filter = function ($value) {
+					if(substr($value, 0, 5) == 'PORT_') return $value;
+				};
 
 		// Gets list of services port names
 		$services = array_filter(array_keys($values->toArray()), $filter);

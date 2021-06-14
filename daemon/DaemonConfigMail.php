@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -34,10 +34,8 @@ class DaemonConfigMail {
 		// Loading the template from /etc/easyscp/postfix/, Building the file
 
 		$tpl_param = array(
-			'MTA_HOSTNAME'			=> idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'}),
-			// 'MTA_HOSTNAME'			=> idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46),
-			'MTA_LOCAL_DOMAIN'		=> idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'}).'.local',
-			// 'MTA_LOCAL_DOMAIN'		=> idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46).'.local',
+			'MTA_HOSTNAME'			=> idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46),
+			'MTA_LOCAL_DOMAIN'		=> idn_to_ascii(DaemonConfig::$cfg->{'SERVER_HOSTNAME'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46).'.local',
 			'MTA_VERSION'			=> DaemonConfig::$cfg->{'Version'},
 			'MTA_TRANSPORT'			=> DaemonConfig::$distro->{'MTA_TRANSPORT'},
 			'MTA_LOCAL_MAIL_DIR'	=> DaemonConfig::$distro->{'MTA_LOCAL_MAIL_DIR'},
@@ -86,8 +84,7 @@ class DaemonConfigMail {
 
 		// Loading the template from /etc/easyscp/postfix/, Building the file
 
-		$MTA_DB_HOST = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'});
-		// $MTA_DB_HOST = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
+		$MTA_DB_HOST = idn_to_ascii(DaemonConfig::$cfg->{'DATABASE_HOST'},IDNA_NONTRANSITIONAL_TO_ASCII,INTL_IDNA_VARIANT_UTS46);
 		$MTA_DB_USER = 'mail_admin';
 		$MTA_DB_PASS = DaemonCommon::generatePassword(9);
 		$MTA_CONFIG_FILES = array('domains', 'email2email', 'forwardings', 'mailboxes', 'transports');

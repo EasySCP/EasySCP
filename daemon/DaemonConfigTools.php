@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -19,7 +19,7 @@ class DaemonConfigTools {
 	public static function SavePMAConfig(){
 		System_Daemon::debug('Starting "DaemonConfigTools::SavePMAConfig" subprocess.');
 
-		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_PMA.xml');
+		$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_PMA.xml');
 
 		// Backup current phpMyAdmin conf if exists
 		if (file_exists(DaemonConfig::$cfg->{'GUI_ROOT_DIR'} . '/tools/pma/config.inc.php')){
@@ -57,7 +57,7 @@ class DaemonConfigTools {
 	public static function SaveRCConfig(){
 		System_Daemon::debug('Starting "DaemonConfigTools::SaveRCConfig" subprocess.');
 
-		$xml = simplexml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_RC.xml');
+		$xml = DaemonCommon::xml_load_file(DaemonConfig::$cfg->{'CONF_DIR'} . '/EasySCP_Config_RC.xml');
 
 		// Backup current Roundcube conf if exists
 		if (file_exists(DaemonConfig::$cfg->{'GUI_ROOT_DIR'} . '/tools/webmail/config/config.inc.php')){

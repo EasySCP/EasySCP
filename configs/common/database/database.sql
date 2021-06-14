@@ -1,6 +1,6 @@
 --
 -- EasySCP a Virtual Hosting Control Panel
--- Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+-- Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
 --
 -- This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 -- To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -85,8 +85,9 @@ INSERT INTO `config` (`name`, `value`) VALUES
 ('MTA_SSL_CERT', ''),
 ('MTA_SSL_CACERT', ''),
 ('MTA_SSL_STATUS',0),
+('PHP_VERSION',0),
 ('MIGRATION_ENABLED',0),
-('DATABASE_REVISION', '65');
+('DATABASE_REVISION', '66');
 
 -- --------------------------------------------------------
 
@@ -117,6 +118,7 @@ INSERT INTO `cronjobs` (`user_id`, `schedule`, `command`, `active`, `description
 (1, '0,30 * * * *', 'umask 027; /var/www/easyscp/daemon/CronDomainTraffic.php > /var/log/easyscp/CronDomainTraffic.log', 'yes', 'Domain Traffic', 'Domain Traffic', 'root'),
 (1, '@daily', 'umask 027; /var/www/easyscp/daemon/CronDomainBackup.php > /var/log/easyscp/CronDomainBackup.log', 'yes', 'Backup for all the customers'' data depending of the domain properties', 'Domain backup', 'root'),
 (1, '@daily', 'umask 027; /var/www/easyscp/daemon/CronSystemBackup.php > /var/log/easyscp/CronSystemBackup.log', 'yes', 'Backup for EasySCP database and all EasySCP configuration files', 'System backup', 'root'),
+(1, '@daily', 'umask 027; /var/www/easyscp/daemon/CronDomainLetsEncrypt.php >> /var/log/easyscp/CronDomainLetsEncrypt.log', 'yes', 'Create and Update the LetsEncrypt Certificates', 'System LetsEncrypt', 'root'),
 (1, '0 */12 * * *', '/usr/bin/rkhunter --cronjob --createlogfile /var/log/rkhunter.log.root --display-logfile 1>/var/log/rkhunter.log 2>/dev/null', 'yes', 'Rootkit Hunter', 'Rootkit Hunter', 'root');
 
 -- --------------------------------------------------------
@@ -152,6 +154,7 @@ CREATE TABLE IF NOT EXISTS `domain` (
   `domain_php_config` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '32M;8M',
   `domain_php_edit` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
   `domain_cgi` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
+  `domain_php_version` int(1) unsigned NOT NULL DEFAULT '0',
   `allowbackup` varchar(8) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'full',
   `domain_dns` varchar(3) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
   `domain_ssl` varchar(15) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no',
@@ -639,6 +642,7 @@ CREATE TABLE IF NOT EXISTS `subdomain` (
   `subdomain_name` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `subdomain_mount` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `subdomain_url_forward` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `subdomain_php_version` int(1) unsigned NOT NULL DEFAULT '0',
   `status` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status_msg` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `ssl_key` varchar(5000) COLLATE utf8_unicode_ci DEFAULT NULL,

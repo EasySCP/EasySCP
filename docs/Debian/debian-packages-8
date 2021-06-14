@@ -29,6 +29,7 @@ make
 mc
 mysql-client
 mysql-server
+openssl
 pdns-server
 pdns-backend-mysql
 php-pear

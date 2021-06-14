@@ -26,10 +26,6 @@ select, input, textarea, button
   font-family: inherit;
 }
 
-html.mozilla select {
-  padding: 2px 1px;
-}
-
 th
 {
   font-weight: normal;
@@ -161,6 +157,15 @@ img
   display: none;
 }
 
+.noselect
+{
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+}
+
 /* fixes vertical alignment of checkboxes and labels */
 label input,
 label span
@@ -198,7 +203,7 @@ body > #logo
   right: 0px;
   height: 24px;
   left: 250px;
-  background: url(images/taskbar.png?v=3878.1902) top right no-repeat;
+  background: url(images/taskbar.png?v=11a3.1640) top right no-repeat;
   padding: 10px 6px 5px 0px;
   text-align: right;
   white-space: nowrap;
@@ -418,7 +423,7 @@ body.iframe .boxtitle
   padding: 0px;
   margin: 0;
   overflow: hidden;
-  background: url(images/icons/groupactions.png?v=ace6.1092) 0 0 no-repeat transparent;
+  background: url(images/icons/groupactions.png?v=6760.604) 0 0 no-repeat transparent;
   opacity: 0.99; /* this is needed to make buttons appear correctly in Chrome */
 }
 
@@ -453,7 +458,6 @@ body.iframe .boxtitle
   height: 11px;
   padding: 0;
   margin: 1px;
-  margin-top: 2px;
   overflow: hidden;
   background: url(images/pagenav.gif?v=8464.1147) 0 0 no-repeat transparent;
   opacity: 0.99; /* this is needed to make buttons appear correctly in Chrome */
@@ -505,6 +509,18 @@ body.iframe .boxtitle
   padding: 0;
   cursor: default;
   font-size: 10px;
+}
+
+.toolbarseparator {
+  display: block;
+  float: left;
+  width: 5px;
+  height: 32px;
+  padding: 0;
+  margin: 0 5px;
+  overflow: hidden;
+  background: url(images/abook_toolbar.png?v=8259.4881) -162px 0 no-repeat transparent;
+  opacity: 0.99; /* this is needed to make buttons appear correctly in Chrome */
 }
 
 .splitter
@@ -608,7 +624,7 @@ body.iframe .boxtitle
 
 .popupmenu.selectable li a.selected
 {
-  background: url(images/messageicons.png?v=16cb.2581) 2px -372px no-repeat;
+  background: url(images/messageicons.png?v=c493.2511) 2px -372px no-repeat;
 }
 
 .popupmenu.selectable li a
@@ -630,13 +646,13 @@ body.iframe .boxtitle
 
 .dropbutton:hover
 {
-/*  background: url(images/dbutton.png?v=7bba.240) 0 0 no-repeat transparent; */
+/*  background: url(images/dbutton.png?v=4d5a.230) 0 0 no-repeat transparent; */
 }
 
 .dropbutton span
 {
   width: 9px;
-  background: url(images/dbutton.png?v=7bba.240) -53px 0 no-repeat transparent;
+  background: url(images/dbutton.png?v=4d5a.230) -53px 0 no-repeat transparent;
 }
 
 .dropbutton span:hover
@@ -694,6 +710,11 @@ table.records-table tr.selected td
   background-color: #CC3333;
 }
 
+table.records-table tr.selected td a
+{
+  color: #FFFFFF;
+}
+
 table.records-table tr.focused td
 {
 }
@@ -736,7 +757,7 @@ ul.treelist li div.collapsed
 
 ul.treelist li div.expanded
 {
-  background: url(images/icons/expanded.png?v=f647.107) bottom right no-repeat;
+  background: url(images/icons/expanded.png?v=3a53.89) bottom right no-repeat;
 }
 
 ul.treelist,
@@ -850,7 +871,7 @@ ul.treelist li.droptarget
   padding-bottom: 2px;
   text-decoration: none;
   height: 15px;
-  background: url(images/icons/folders.png?v=d9d2.5356) 5px 1px no-repeat;
+  background: url(images/icons/folders.png?v=7c4f.5218) 5px 1px no-repeat;
 }
 
 .folderlist li.virtual > a
@@ -1006,7 +1027,7 @@ div.searchbox a.searchicon
   width: 16px;
   height: 16px;
   overflow: hidden;
-  background: url(images/icons/glass.png?v=6b06.406) top left no-repeat;
+  background: url(images/icons/glass.png?v=dcbc.302) top left no-repeat;
 }
 
 #quicksearchbar img
@@ -1108,7 +1129,7 @@ div.searchbox > input
   content: " ";
   width: 14px;
   height: 14px;
-  background: url(images/messageactions.png?v=d93e.3223) -2px -128px no-repeat;
+  background: url(images/messageactions.png?v=8c64.2615) -2px -128px no-repeat;
 }
 
 a.rcmContactAddress
@@ -1336,7 +1357,7 @@ ul.toolbarmenu li.separator_above
 
 #folder-selector li a span
 {
-  background: url(images/icons/folders.png?v=d9d2.5356) no-repeat 6px 0;
+  background: url(images/icons/folders.png?v=7c4f.5218) no-repeat 6px 0;
   display: block;
   height: 15px;
   min-height: 14px;
@@ -1469,9 +1490,9 @@ fieldset.tabbed
   cursor: default;
 }
 .quota_bg { background-color: white; }
-.quota_high { background: url(images/quota-colors.png?v=c1e9.287) repeat-x 0 -28px #f90509; }
-.quota_mid { background: url(images/quota-colors.png?v=c1e9.287) repeat-x 0 -14px #e3e909; }
-.quota_low { background: url(images/quota-colors.png?v=c1e9.287) repeat-x 0 0px #05f905; }
+.quota_high { background: url(images/quota-colors.png?v=e7fa.219) repeat-x 0 -28px #f90509; }
+.quota_mid { background: url(images/quota-colors.png?v=e7fa.219) repeat-x 0 -14px #e3e909; }
+.quota_low { background: url(images/quota-colors.png?v=e7fa.219) repeat-x 0 0px #05f905; }
 .quota_text_high { color: white; }
 .quota_text_mid { color: #666; }
 .quota_text_low { color: #666; }
@@ -1534,7 +1555,7 @@ table.quota-info td.root {
 }
 
 #image-selector-form.droptarget {
-  background: url(images/filedrop.png?v=deab.605) center bottom no-repeat;
+  background: url(images/filedrop.png?v=080e.581) center bottom no-repeat;
 }
 
 #image-selector-form.droptarget.hover
@@ -1543,4 +1564,58 @@ table.quota-info td.root {
   box-shadow: 0 0 5px 0 #999;
   -moz-box-shadow: 0 0 5px 0 #999;
   -o-box-shadow: 0 0 5px 0 #999;
+}
+
+/** PGP key import dialog **/
+.pgpkeyimport div.key {
+  position: relative;
+  margin-bottom: 2px;
+  padding: 1em 1em 5px;
+  background-color: #ebebeb;
+}
+
+.pgpkeyimport div.key.revoked,
+.pgpkeyimport div.key.disabled {
+  color: #a0a0a0;
+}
+
+.pgpkeyimport div.key label {
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+.pgpkeyimport div.key label:after {
+  content: ":";
+}
+
+.pgpkeyimport div.key label + a,
+.pgpkeyimport div.key label + span {
+  display: inline-block;
+  margin-right: 2em;
+  white-space: nowrap;
+}
+
+.pgpkeyimport div.key label + a {
+  font-weight: bold;
+}
+
+.pgpkeyimport ul.uids {
+  margin: 5px 1em 0 1em;
+  padding: 0;
+}
+
+.pgpkeyimport li.uid {
+  border: 0;
+  padding: 2px;
+}
+
+.pgpkeyimport div.key input.button.importkey {
+  position: absolute;
+  top: 0.8em;
+  right: 0.8em;
+  padding: 2px 6px;
+}
+
+.pgpkeyimport div.key input.button[disabled] {
+  display: none;
 }

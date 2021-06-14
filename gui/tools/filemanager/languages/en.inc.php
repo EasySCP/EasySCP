@@ -72,7 +72,7 @@ $net2ftp_messages["left"] = "left";
 $net2ftp_messages["right"] = "right";
 
 // Encoding
-$net2ftp_messages["iso-8859-1"] = "iso-8859-1";
+$net2ftp_messages["iso-8859-1"] = "UTF-8";
 
 
 // -------------------------------------------------------------------------
@@ -856,7 +856,7 @@ $net2ftp_messages["Execute"] = "Execute";
 $net2ftp_messages["Owner"] = "Owner";
 $net2ftp_messages["Group"] = "Group";
 $net2ftp_messages["Everyone"] = "Everyone";
-$net2ftp_messages["To set all permissions to the same values, enter those permissions and click on the button \"Set all permissions\""] = "To set all permissions to the same values, enter those permissions and click on the button \"Set all permissions\"";
+$net2ftp_messages["To set all permissions to the same values, enter those permissions and click on the button \"Set all permissions\""] = "To set all permissions to the same values, enter those permissions above and click on the button \"Set all permissions\"";
 $net2ftp_messages["Set the permissions of directory <b>%1\$s</b> to: "] = "Set the permissions of directory <b>%1\$s</b> to: ";
 $net2ftp_messages["Set the permissions of file <b>%1\$s</b> to: "] = "Set the permissions of file <b>%1\$s</b> to: ";
 $net2ftp_messages["Set the permissions of symlink <b>%1\$s</b> to: "] = "Set the permissions of symlink <b>%1\$s</b> to: ";

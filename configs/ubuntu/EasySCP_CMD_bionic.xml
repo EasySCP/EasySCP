@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EasySCP a Virtual Hosting Control Panel
+	Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
+
+	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+
+	@link 		http://www.easyscp.net
+	@author		EasySCP Team
+
+	Ubuntu 18.04 (Bionic) LTS
+-->
+<EasySCP_CMD>
+	<!--
+		System Commands
+	-->
+	<CMD_BZIP>/bin/bzip2</CMD_BZIP>
+
+	<CMD_CHMOD>/bin/chmod</CMD_CHMOD>
+
+	<CMD_CHOWN>/bin/chown</CMD_CHOWN>
+
+	<CMD_CP>/bin/cp</CMD_CP>
+
+	<CMD_DU>/usr/bin/du</CMD_DU>
+
+	<CMD_FIND>/usr/bin/find</CMD_FIND>
+
+	<CMD_GROUPADD>/usr/sbin/groupadd</CMD_GROUPADD>
+
+	<CMD_GROUPDEL>/usr/sbin/groupdel</CMD_GROUPDEL>
+
+	<CMD_HTTPD_A2ENSITE>/usr/sbin/a2ensite</CMD_HTTPD_A2ENSITE>
+
+	<CMD_HTTPD_A2DISSITE>/usr/sbin/a2dissite</CMD_HTTPD_A2DISSITE>
+
+	<CMD_HTTPD_CTL>/usr/sbin/apache2ctl</CMD_HTTPD_CTL>
+
+	<CMD_ID>/usr/bin/id</CMD_ID>
+
+	<CMD_IPTABLES>/sbin/iptables</CMD_IPTABLES>
+
+	<CMD_IPTABLESv6>/sbin/ip6tables</CMD_IPTABLESv6>
+
+	<CMD_LOGROTATE>/usr/sbin/logrotate</CMD_LOGROTATE>
+
+	<CMD_MV>/bin/mv</CMD_MV>
+
+	<CMD_MYSQLDUMP>/usr/bin/mysqldump</CMD_MYSQLDUMP>
+
+	<CMD_QUOTAON>/sbin/quotaon</CMD_QUOTAON>
+	
+	<CMD_QUOTAOFF>/sbin/quotaoff</CMD_QUOTAOFF>
+
+	<CMD_RKHUNTER>/usr/bin/rkhunter</CMD_RKHUNTER>
+
+	<CMD_RM>/bin/rm</CMD_RM>
+
+	<CMD_SETQUOTA>/usr/sbin/setquota</CMD_SETQUOTA>
+
+	<CMD_SYSTEMCTL>/bin/systemctl</CMD_SYSTEMCTL>
+
+	<CMD_TAR>/bin/tar</CMD_TAR>
+
+	<CMD_USERADD>/usr/sbin/useradd</CMD_USERADD>
+
+	<CMD_USERDEL>/usr/sbin/userdel</CMD_USERDEL>
+
+	<SHELL_INTERNAL_CMDS>alias,umask,unalias</SHELL_INTERNAL_CMDS>
+
+	<!--
+		System Services
+	-->
+
+	<SRV_PHP>php7.2-fpm</SRV_PHP>
+
+</EasySCP_CMD>

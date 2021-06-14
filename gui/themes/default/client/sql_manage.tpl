@@ -50,7 +50,7 @@
 	<tr>
 		<td><span class="icon i_users">&nbsp;</span> {$DB_USERLIST[i][user].DB_USER}</td>
 		<td>
-			<a href="/client/pma_auth.php?id={$DB_USERLIST[i][user].USER_ID}" id="phpMyAdmin" title="{$TR_PHP_MYADMIN}" class="icon i_pma"></a>
+			<a href="/client/pma_auth.php?id={$DB_USERLIST[i][user].USER_ID}" id="phpMyAdmin" title="{$TR_PHP_MYADMIN}" class="icon i_pma external"></a>
 			<a href="/client/sql_change_password.php?id={$DB_USERLIST[i][user].USER_ID}" title="{$TR_CHANGE_PASSWORD}" class="icon i_change_password"></a>
 			<a href="#" onclick="action_delete('sql_delete_user.php?id={$DB_USERLIST[i][user].USER_ID}', '{$DB_USERLIST[i][user].DB_USER}')" title="{$TR_DELETE}" class="icon i_delete"></a>
 		</td>

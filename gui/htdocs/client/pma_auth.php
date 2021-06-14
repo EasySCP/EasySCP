@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,44 +135,66 @@ function pmaAuth($dbUserId) {
 	}
 
 	// Prepares PhpMyadmin absolute Uri to use
-	if(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS'])) {
-		$port = ($_SERVER['SERVER_PORT'] != '443')
-			? ':' . $_SERVER['SERVER_PORT'] : '';
-
-		$pmaUri = "https://{$_SERVER['SERVER_NAME']}$port/pma/";
-	} else {
-		$port = ($_SERVER['SERVER_PORT'] != '80')
-			? ':' . $_SERVER['SERVER_PORT'] : '';
-
-		$pmaUri = "http://{$_SERVER['SERVER_NAME']}$port/pma/";
-	}
+	//if(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS'])) {
+	//	$port = ($_SERVER['SERVER_PORT'] != '443')
+	//		? ':' . $_SERVER['SERVER_PORT'] : '';
+	//
+	//	$pmaUri = "https://{$_SERVER['SERVER_NAME']}$port/pma/";
+	//} else {
+	//	$port = ($_SERVER['SERVER_PORT'] != '80')
+	//		? ':' . $_SERVER['SERVER_PORT'] : '';
+	//
+	//	$pmaUri = "http://{$_SERVER['SERVER_NAME']}$port/pma/";
+	//}
 
 	// Set stream context (http) options
-	stream_context_get_default(
-		array(
-			'http' => array(
-				'method' => 'POST',
-				'header' => "Host: {$_SERVER['SERVER_NAME']}$port\r\n" .
-					"Content-Type: application/x-www-form-urlencoded\r\n" .
-					'Content-Length: ' . strlen($data) . "\r\n" .
-					"Connection: close\r\n\r\n",
-				'content' => $data,
-				'user_agent' => 'Mozilla/5.0',
-				'max_redirects' => 1
-			)
-		)
-	);
+	//stream_context_get_default(
+	//	array(
+	//		'http' => array(
+	//			'method' => 'POST',
+	//			'header' => "Host: {$_SERVER['SERVER_NAME']}$port\r\n" .
+	//				"Content-Type: application/x-www-form-urlencoded\r\n" .
+	//				'Content-Length: ' . strlen($data) . "\r\n" .
+	//				"Connection: close\r\n\r\n",
+	//			'content' => $data,
+	//			'user_agent' => 'Mozilla/5.0',
+	//			'max_redirects' => 1
+	//		)
+	//	)
+	//);
 
 	// Gets the headers from PhpMyAdmin
-	$headers = get_headers($pmaUri, true);
+	//$headers = get_headers($pmaUri, true);
+	//
+	//if(!$headers || !isset($headers['Location'])) {
+	//	set_page_message(tr('An error occurred while authentication!'), 'error');
+	//	return false;
+	//} else {
+	//	_pmaCreateCookies($headers['Set-Cookie']);
+	//	header("Location: {$headers['Location']}");
+	//}
+	
+	/* Need to have cookie visible from parent directory */
+	session_set_cookie_params(0, '/', '', true, true);
 
-	if(!$headers || !isset($headers['Location'])) {
-		set_page_message(tr('An error occurred while authentication!'), 'error');
-		return false;
-	} else {
-		_pmaCreateCookies($headers['Set-Cookie']);
-		header("Location: {$headers['Location']}");
-	}
+	/* Create signon session */
+	$session_name = 'EasySCP';
+	session_name($session_name);
+
+	// Uncomment and change the following line to match your $cfg['SessionSavePath']
+	//session_save_path('/foobar');
+	@session_start();
+
+	/* Store there credentials */
+	$_SESSION['PMA_single_signon_user'] = $credentials[0];
+	$_SESSION['PMA_single_signon_password'] = stripcslashes($credentials[1]);
+	$id = session_id();
+
+	/* Close that session */
+	@session_write_close();
+
+	/* Redirect to phpMyAdmin (should use absolute URL here!) */
+	header('Location: /pma/index.php?server=2');
 
 	return true;
 }

@@ -1,6 +1,6 @@
 --
 -- EasySCP a Virtual Hosting Control Panel
--- Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+-- Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
 --
 -- This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 -- To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -22,7 +22,7 @@ USE phpmyadmin;
 -- Privileges
 --
 -- (activate this statement if necessary)
--- GRANT SELECT, INSERT, DELETE, UPDATE ON `phpmyadmin`.* TO
+-- GRANT SELECT, INSERT, DELETE, UPDATE, ALTER ON `phpmyadmin`.* TO
 --    'pma'@localhost;
 
 -- --------------------------------------------------------
@@ -32,7 +32,7 @@ USE phpmyadmin;
 --
 
 CREATE TABLE IF NOT EXISTS `pma__bookmark` (
-  `id` int(11) NOT NULL auto_increment,
+  `id` int(10) unsigned NOT NULL auto_increment,
   `dbase` varchar(255) NOT NULL default '',
   `user` varchar(255) NOT NULL default '',
   `label` varchar(255) COLLATE utf8_general_ci NOT NULL default '',
@@ -57,6 +57,8 @@ CREATE TABLE IF NOT EXISTS `pma__column_info` (
   `mimetype` varchar(255) COLLATE utf8_general_ci NOT NULL default '',
   `transformation` varchar(255) NOT NULL default '',
   `transformation_options` varchar(255) NOT NULL default '',
+  `input_transformation` varchar(255) NOT NULL default '',
+  `input_transformation_options` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `db_name` (`db_name`,`table_name`,`column_name`)
 )
@@ -74,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `pma__history` (
   `username` varchar(64) NOT NULL default '',
   `db` varchar(64) NOT NULL default '',
   `table` varchar(64) NOT NULL default '',
-  `timevalue` timestamp NOT NULL,
+  `timevalue` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `sqlquery` text NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `username` (`username`,`db`,`table`,`timevalue`)
@@ -110,6 +112,20 @@ CREATE TABLE IF NOT EXISTS `pma__recent` (
   PRIMARY KEY (`username`)
 )
   COMMENT='Recently accessed tables'
+  DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pma__favorite`
+--
+
+CREATE TABLE IF NOT EXISTS `pma__favorite` (
+  `username` varchar(64) NOT NULL,
+  `tables` text NOT NULL,
+  PRIMARY KEY (`username`)
+)
+  COMMENT='Favorite tables'
   DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- --------------------------------------------------------
@@ -183,24 +199,6 @@ CREATE TABLE IF NOT EXISTS `pma__table_info` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pma__designer_coords`
---
-
-CREATE TABLE IF NOT EXISTS `pma__designer_coords` (
-  `db_name` varchar(64) NOT NULL default '',
-  `table_name` varchar(64) NOT NULL default '',
-  `x` INT,
-  `y` INT,
-  `v` TINYINT,
-  `h` TINYINT,
-  PRIMARY KEY (`db_name`,`table_name`)
-)
-  COMMENT='Table coordinates for Designer'
-  DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `pma__tracking`
 --
 
@@ -228,9 +226,125 @@ CREATE TABLE IF NOT EXISTS `pma__tracking` (
 
 CREATE TABLE IF NOT EXISTS `pma__userconfig` (
   `username` varchar(64) NOT NULL,
-  `timevalue` timestamp NOT NULL,
+  `timevalue` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `config_data` text NOT NULL,
   PRIMARY KEY  (`username`)
 )
   COMMENT='User preferences storage for phpMyAdmin'
+  DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pma__users`
+--
+
+CREATE TABLE IF NOT EXISTS `pma__users` (
+  `username` varchar(64) NOT NULL,
+  `usergroup` varchar(64) NOT NULL,
+  PRIMARY KEY (`username`,`usergroup`)
+)
+  COMMENT='Users and their assignments to user groups'
+  DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pma__usergroups`
+--
+
+CREATE TABLE IF NOT EXISTS `pma__usergroups` (
+  `usergroup` varchar(64) NOT NULL,
+  `tab` varchar(64) NOT NULL,
+  `allowed` enum('Y','N') NOT NULL DEFAULT 'N',
+  PRIMARY KEY (`usergroup`,`tab`,`allowed`)
+)
+  COMMENT='User groups with configured menu items'
+  DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pma__navigationhiding`
+--
+
+CREATE TABLE IF NOT EXISTS `pma__navigationhiding` (
+  `username` varchar(64) NOT NULL,
+  `item_name` varchar(64) NOT NULL,
+  `item_type` varchar(64) NOT NULL,
+  `db_name` varchar(64) NOT NULL,
+  `table_name` varchar(64) NOT NULL,
+  PRIMARY KEY (`username`,`item_name`,`item_type`,`db_name`,`table_name`)
+)
+  COMMENT='Hidden items of navigation tree'
+  DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pma__savedsearches`
+--
+
+CREATE TABLE IF NOT EXISTS `pma__savedsearches` (
+  `id` int(5) unsigned NOT NULL auto_increment,
+  `username` varchar(64) NOT NULL default '',
+  `db_name` varchar(64) NOT NULL default '',
+  `search_name` varchar(64) NOT NULL default '',
+  `search_data` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `u_savedsearches_username_dbname` (`username`,`db_name`,`search_name`)
+)
+  COMMENT='Saved searches'
+  DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pma__central_columns`
+--
+
+CREATE TABLE IF NOT EXISTS `pma__central_columns` (
+  `db_name` varchar(64) NOT NULL,
+  `col_name` varchar(64) NOT NULL,
+  `col_type` varchar(64) NOT NULL,
+  `col_length` text,
+  `col_collation` varchar(64) NOT NULL,
+  `col_isNull` boolean NOT NULL,
+  `col_extra` varchar(255) default '',
+  `col_default` text,
+  PRIMARY KEY (`db_name`,`col_name`)
+)
+  COMMENT='Central list of columns'
+  DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pma__designer_settings`
+--
+
+CREATE TABLE IF NOT EXISTS `pma__designer_settings` (
+  `username` varchar(64) NOT NULL,
+  `settings_data` text NOT NULL,
+  PRIMARY KEY (`username`)
+)
+  COMMENT='Settings related to Designer'
+  DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pma__export_templates`
+--
+
+CREATE TABLE IF NOT EXISTS `pma__export_templates` (
+  `id` int(5) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(64) NOT NULL,
+  `export_type` varchar(10) NOT NULL,
+  `template_name` varchar(64) NOT NULL,
+  `template_data` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_user_type_template` (`username`,`export_type`,`template_name`)
+)
+  COMMENT='Saved export templates'
   DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;

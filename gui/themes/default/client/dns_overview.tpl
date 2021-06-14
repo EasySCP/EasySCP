@@ -51,7 +51,7 @@
 			<th>{$TR_DOMAIN_NAME}</th>
 			<th>{$TR_DNS_NAME}</th>
 			<th>{$TR_DNS_TYPE}</th>
-			<th>{$TR_DNS_DATA}</th>
+			<th style="max-width:500px;word-break:break-all">{$TR_DNS_DATA}</th>
 			<th style="width:200px">{$TR_DNS_ACTION}</th>
 		</tr>
 	</thead>
@@ -61,10 +61,12 @@
 			<td><span class="icon i_domain_icon">{$r.DNS_DOMAIN}</span></td>
 			<td>{$r.DNS_NAME}</td>
 			<td>{$r.DNS_TYPE}</td>
-			<td>{$r.DNS_DATA}</td>
+			<td style="max-width:500px;word-break:break-all">{$r.DNS_DATA}</td>
 			<td>
+				{if $r.DNS_RW==true}
 				<a href="{$r.DNS_ACTION_SCRIPT_EDIT}" title="{$r.DNS_ACTION_EDIT}" class="icon i_edit"></a>
 				<a href="#" onclick="action_delete('{$r.DNS_ACTION_SCRIPT_DELETE}', '{$r.DNS_TYPE_RECORD}')" title="{$r.DNS_ACTION_DELETE}" class="icon i_delete"></a>
+				{/if}
 			</td>
 		</tr>
 		{/foreach}

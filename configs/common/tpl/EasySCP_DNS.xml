@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EasySCP a Virtual Hosting Control Panel
+	Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
+
+	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+
+	@link 		http://www.easyscp.net
+	@author		EasySCP Team
+	
+	useable variables:
+
+	{$DMN_DNS_ID}				=> domain ID
+	{$DMN_NAME}					=> domain name
+	{$DMN_IP}					=> domain IPv4
+	{$DMN_IPV6}					=> domain IPv6 
+	{$DEFAULT_ADMIN_ADDRESS}	=> default admin email address
+	{$BASE_SERVER_IP}			=> servers base IP
+	{$TIME}						=> actual timestamp
+
+	only available at subdomain
+	{$SUBDMN_NAME}				=> subdomain name
+	
+	available groups:
+
+	*) DefaultDNSEntries_Domain
+	*) DefaultDNSEntries_Domain_IPv6
+	
+	*) DefaultDNSEntries_SubDomain
+	*) DefaultDNSEntries_SubDomain_IPv6
+	
+-->
+<EasySCP_DNS>
+
+	<DefaultDNSEntries_Domain>
+	
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>{$DMN_NAME}</domain_name>
+			<domain_type>SOA</domain_type>
+			<domain_content>ns1.{$DMN_NAME}. {$DEFAULT_ADMIN_ADDRESS} {$TIME} 12000 1800 604800 86400</domain_content>
+			<domain_ttl>3600</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>{$DMN_NAME}</domain_name>
+			<domain_type>TXT</domain_type>
+			<domain_content>v=spf1 a mx ip4:{$DMN_IP} ip4:{$BASE_SERVER_IP} ~all</domain_content>
+			<domain_ttl>3600</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>ns1.{$DMN_NAME}</domain_name>
+			<domain_type>A</domain_type>
+			<domain_content>{$DMN_IP}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>{$DMN_NAME}</domain_name>
+			<domain_type>NS</domain_type>
+			<domain_content>ns1.{$DMN_NAME}</domain_content>
+			<domain_ttl>28800</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>ns.{$DMN_NAME}</domain_name>
+			<domain_type>CNAME</domain_type>
+			<domain_content>ns1.{$DMN_NAME}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>mail.{$DMN_NAME}</domain_name>
+			<domain_type>A</domain_type>
+			<domain_content>{$DMN_IP}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>{$DMN_NAME}</domain_name>
+			<domain_type>MX</domain_type>
+			<domain_content>mail.{$DMN_NAME}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>10</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>{$DMN_NAME}</domain_name>
+			<domain_type>A</domain_type>
+			<domain_content>{$DMN_IP}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>www.{$DMN_NAME}</domain_name>
+			<domain_type>A</domain_type>
+			<domain_content>{$DMN_IP}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>ftp.{$DMN_NAME}</domain_name>
+			<domain_type>CNAME</domain_type>
+			<domain_content>www.{$DMN_NAME}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>webmail.{$DMN_NAME}</domain_name>
+			<domain_type>CNAME</domain_type>
+			<domain_content>www.{$DMN_NAME}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+		
+	</DefaultDNSEntries_Domain>
+
+	<DefaultDNSEntries_Domain_IPv6>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>ns1.{$DMN_NAME}</domain_name>
+			<domain_type>AAAA</domain_type>
+			<domain_content>{$DMN_IPV6}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>mail.{$DMN_NAME}</domain_name>
+			<domain_type>AAAA</domain_type>
+			<domain_content>{$DMN_IPV6}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>{$DMN_NAME}</domain_name>
+			<domain_type>AAAA</domain_type>
+			<domain_content>{$DMN_IPV6}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>www.{$DMN_NAME}</domain_name>
+			<domain_type>AAAA</domain_type>
+			<domain_content>{$DMN_IPV6}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+	</DefaultDNSEntries_Domain_IPv6>
+
+	<DefaultDNSEntries_SubDomain>
+	
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>{$SUBDMN_NAME}.{$DMN_NAME}</domain_name>
+			<domain_type>A</domain_type>
+			<domain_content>{$DMN_IP}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>www.{$SUBDMN_NAME}.{$DMN_NAME}</domain_name>
+			<domain_type>A</domain_type>
+			<domain_content>{$DMN_IP}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+	</DefaultDNSEntries_SubDomain>
+
+	<DefaultDNSEntries_SubDomain_IPv6>
+	
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>{$SUBDMN_NAME}.{$DMN_NAME}</domain_name>
+			<domain_type>AAAA</domain_type>
+			<domain_content>{$DMN_IPV6}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+		<DNS_Entry>
+			<domain_id>{$DMN_DNS_ID}</domain_id>
+			<domain_name>www.{$SUBDMN_NAME}.{$DMN_NAME}</domain_name>
+			<domain_type>AAAA</domain_type>
+			<domain_content>{$DMN_IPV6}</domain_content>
+			<domain_ttl>7200</domain_ttl>
+			<domain_prio>NULL</domain_prio>
+		</DNS_Entry>
+
+	</DefaultDNSEntries_SubDomain_IPv6>
+	
+</EasySCP_DNS>

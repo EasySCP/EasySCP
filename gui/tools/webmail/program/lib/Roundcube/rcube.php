@@ -39,7 +39,7 @@ class rcube
     const DEBUG_LINE_LENGTH = 4096;
 
     /**
-     * Singleton instace of rcube
+     * Singleton instance of rcube
      *
      * @var rcube
      */
@@ -53,21 +53,21 @@ class rcube
     public $config;
 
     /**
-     * Instace of database class.
+     * Instance of database class.
      *
      * @var rcube_db
      */
     public $db;
 
     /**
-     * Instace of Memcache class.
+     * Instance of Memcache class.
      *
      * @var Memcache
      */
     public $memcache;
 
    /**
-     * Instace of rcube_session class.
+     * Instance of rcube_session class.
      *
      * @var rcube_session
      */
@@ -390,6 +390,7 @@ class rcube
         );
 
         if (!empty($_SESSION['storage_host'])) {
+            $options['language'] = $_SESSION['language'];
             $options['host']     = $_SESSION['storage_host'];
             $options['user']     = $_SESSION['username'];
             $options['port']     = $_SESSION['storage_port'];
@@ -514,6 +515,8 @@ class rcube
             ini_set('session.gc_maxlifetime', $lifetime * 2);
         }
 
+        // set session cookie lifetime so it never expires (#5961)
+        ini_set('session.cookie_lifetime', 0);
         ini_set('session.cookie_secure', $is_secure);
         ini_set('session.name', $sess_name ?: 'roundcube_sessid');
         ini_set('session.use_cookies', 1);
@@ -594,12 +597,12 @@ class rcube
     /**
      * Get localized text in the desired language
      *
-     * @param mixed   $attrib  Named parameters array or label name
-     * @param string  $domain  Label domain (plugin) name
+     * @param mixed  $attrib Named parameters array or label name
+     * @param string $domain Label domain (plugin) name
      *
      * @return string Localized text
      */
-    public function gettext($attrib, $domain=null)
+    public function gettext($attrib, $domain = null)
     {
         // load localization files if not done yet
         if (empty($this->texts)) {
@@ -633,26 +636,33 @@ class rcube
             }
         }
 
-        // format output
-        if (($attrib['uppercase'] && strtolower($attrib['uppercase'] == 'first')) || $attrib['ucfirst']) {
-            return ucfirst($text);
+        // replace \n with real line break
+        $text = strtr($text, array('\n' => "\n"));
+
+        // case folding
+        if (($attrib['uppercase'] && strtolower($attrib['uppercase']) == 'first') || $attrib['ucfirst']) {
+            $case_mode = MB_CASE_TITLE;
         }
         else if ($attrib['uppercase']) {
-            return mb_strtoupper($text);
+            $case_mode = MB_CASE_UPPER;
         }
         else if ($attrib['lowercase']) {
-            return mb_strtolower($text);
+            $case_mode = MB_CASE_LOWER;
         }
 
-        return strtr($text, array('\n' => "\n"));
+        if (isset($case_mode)) {
+            $text = mb_convert_case($text, $case_mode);
+        }
+
+        return $text;
     }
 
     /**
      * Check if the given text label exists
      *
-     * @param string  $name       Label name
-     * @param string  $domain     Label domain (plugin) name or '*' for all domains
-     * @param string  $ref_domain Sets domain name if label is found
+     * @param string $name       Label name
+     * @param string $domain     Label domain (plugin) name or '*' for all domains
+     * @param string $ref_domain Sets domain name if label is found
      *
      * @return boolean True if text exists (either in the current language or in en_US)
      */
@@ -799,7 +809,7 @@ class rcube
     {
         static $sa_languages = array();
 
-        if (!sizeof($sa_languages)) {
+        if (!count($sa_languages)) {
             @include(RCUBE_LOCALIZATION_DIR . 'index.inc');
 
             if ($dh = @opendir(RCUBE_LOCALIZATION_DIR)) {
@@ -946,7 +956,7 @@ class rcube
         $sess_tok = $this->get_request_token();
 
         // ajax requests
-        if (rcube_utils::request_header('X-Roundcube-Request') == $sess_tok) {
+        if (rcube_utils::request_header('X-Roundcube-Request') === $sess_tok) {
             return true;
         }
 
@@ -961,7 +971,7 @@ class rcube
         $token   = rcube_utils::get_input_value('_token', $mode);
         $sess_id = $_COOKIE[ini_get('session.name')];
 
-        if (empty($sess_id) || $token != $sess_tok) {
+        if (empty($sess_id) || $token !== $sess_tok) {
             $this->request_status = self::REQUEST_ERROR_TOKEN;
             return false;
         }
@@ -1024,7 +1034,7 @@ class rcube
      * The functions will be executed before destroying any
      * objects like smtp, imap, session, etc.
      *
-     * @param callback Function callback
+     * @param callback $function Function callback
      */
     public function add_shutdown_function($function)
     {
@@ -1172,6 +1182,8 @@ class rcube
      *
      * @param string $name Name of the log file
      * @param mixed  $line Line to append
+     *
+     * @return bool True on success, False on failure
      */
     public static function write_log($name, $line)
     {
@@ -1209,14 +1221,19 @@ class rcube
 
         if ($log_driver == 'syslog') {
             $prio = $name == 'errors' ? LOG_ERR : LOG_INFO;
-            syslog($prio, $line);
-            return true;
+            return syslog($prio, $line);
+        }
+
+        // write message with file name when configured to log to STDOUT
+        if ($log_driver == 'stdout') {
+            $stdout = "php://stdout";
+            $line = "$name: $line";
+            return file_put_contents($stdout, $line, FILE_APPEND) !== false;
         }
 
         // log_driver == 'file' is assumed here
 
         $line = sprintf("[%s]: %s\n", $date, $line);
-        $log_dir = null;
 
         // per-user logging is activated
         if (self::$instance && self::$instance->config->get('per_user_logging') && self::$instance->get_user_id()) {
@@ -1247,7 +1264,7 @@ class rcube
      *
      * @param array $arg Named parameters
      *      - code:    Error code (required)
-     *      - type:    Error type [php|db|imap|javascript] (required)
+     *      - type:    Error type [php|db|imap|javascript]
      *      - message: Error message
      *      - file:    File where error occurred
      *      - line:    Line where error occurred
@@ -1273,14 +1290,14 @@ class rcube
             $arg['code'] = 500;
         }
 
+        $cli = php_sapi_name() == 'cli';
+
         // installer
-        if (class_exists('rcmail_install', false)) {
+        if (!$cli && class_exists('rcmail_install', false)) {
             $rci = rcmail_install::get_instance();
             $rci->raise_error($arg);
             return;
         }
-
-        $cli = php_sapi_name() == 'cli';
 
         if (($log || $terminate) && !$cli && $arg['message']) {
             $arg['fatal'] = $terminate;
@@ -1506,8 +1523,8 @@ class rcube
      */
     protected function get_user_log_dir()
     {
-        $log_dir = $this->config->get('log_dir', RCUBE_INSTALL_PATH . 'logs');
-        $user_name = $this->get_user_name();
+        $log_dir      = $this->config->get('log_dir', RCUBE_INSTALL_PATH . 'logs');
+        $user_name    = $this->get_user_name();
         $user_log_dir = $log_dir . '/' . $user_name;
 
         return !empty($user_name) && is_writable($user_log_dir) ? $user_log_dir : false;
@@ -1571,10 +1588,12 @@ class rcube
      * @param string $body_file Location of file with saved message body (reference),
      *                          used when delay_file_io is enabled
      * @param array  $options   SMTP options (e.g. DSN request)
+     * @param bool   $disconnect Close SMTP connection ASAP
      *
      * @return boolean Send status.
      */
-    public function deliver_message(&$message, $from, $mailto, &$error, &$body_file = null, $options = null)
+    public function deliver_message(&$message, $from, $mailto, &$error,
+        &$body_file = null, $options = null, $disconnect = false)
     {
         $plugin = $this->plugins->exec_hook('message_before_send', array(
             'message' => $message,
@@ -1600,117 +1619,66 @@ class rcube
         $message = $plugin['message'];
         $headers = $message->headers();
 
-        // send thru SMTP server using custom SMTP library
-        if ($this->config->get('smtp_server')) {
-            // generate list of recipients
-            $a_recipients = (array) $mailto;
+        // generate list of recipients
+        $a_recipients = (array) $mailto;
 
-            if (strlen($headers['Cc']))
-                $a_recipients[] = $headers['Cc'];
-            if (strlen($headers['Bcc']))
-                $a_recipients[] = $headers['Bcc'];
-
-            // remove Bcc header and get the whole head of the message as string
-            $smtp_headers = $this->message_head($message, array('Bcc'));
-
-            if ($message->getParam('delay_file_io')) {
-                // use common temp dir
-                $temp_dir    = $this->config->get('temp_dir');
-                $body_file   = tempnam($temp_dir, 'rcmMsg');
-                $mime_result = $message->saveMessageBody($body_file);
-
-                if (is_a($mime_result, 'PEAR_Error')) {
-                    self::raise_error(array('code' => 650, 'type' => 'php',
-                        'file' => __FILE__, 'line' => __LINE__,
-                        'message' => "Could not create message: ".$mime_result->getMessage()),
-                        true, false);
-                    return false;
-                }
-
-                $msg_body = fopen($body_file, 'r');
-            }
-            else {
-                $msg_body = $message->get();
-            }
-
-            // send message
-            if (!is_object($this->smtp)) {
-                $this->smtp_init(true);
-            }
-
-            $sent     = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $options);
-            $response = $this->smtp->get_response();
-            $error    = $this->smtp->get_error();
-
-            // log error
-            if (!$sent) {
-                self::raise_error(array('code' => 800, 'type' => 'smtp',
-                    'line' => __LINE__, 'file' => __FILE__,
-                    'message' => join("\n", $response)), true, false);
-            }
+        if (strlen($headers['Cc'])) {
+            $a_recipients[] = $headers['Cc'];
         }
-        // send mail using PHP's mail() function
-        else {
-            // unset To,Subject headers because they will be added by the mail() function
-            $header_str = $this->message_head($message, array('To', 'Subject'));
+        if (strlen($headers['Bcc'])) {
+            $a_recipients[] = $headers['Bcc'];
+        }
 
-            if (is_array($mailto)) {
-                $mailto = implode(', ', $mailto);
-            }
+        // remove Bcc header and get the whole head of the message as string
+        $smtp_headers = $message->txtHeaders(array('Bcc' => null), true);
 
-            // #1485779
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                if (preg_match_all('/<([^@]+@[^>]+)>/', $mailto, $m)) {
-                    $mailto = implode(', ', $m[1]);
-                }
-            }
+        if ($message->getParam('delay_file_io')) {
+            // use common temp dir
+            $temp_dir    = $this->config->get('temp_dir');
+            $body_file   = tempnam($temp_dir, 'rcmMsg');
+            $mime_result = $message->saveMessageBody($body_file);
 
-            $msg_body = $message->get();
-
-            if (is_a($msg_body, 'PEAR_Error')) {
+            if (is_a($mime_result, 'PEAR_Error')) {
                 self::raise_error(array('code' => 650, 'type' => 'php',
                     'file' => __FILE__, 'line' => __LINE__,
-                    'message' => "Could not create message: ".$msg_body->getMessage()),
+                    'message' => "Could not create message: ".$mime_result->getMessage()),
                     true, false);
+                return false;
             }
-            else {
-                $delim      = $this->config->header_delimiter();
-                $to         = $message->encodeHeader('To', $mailto, RCUBE_CHARSET, 'quoted-printable');
-                $subject    = $headers['Subject'];
-                $header_str = rtrim($header_str);
 
-                if ($delim != "\r\n") {
-                    $header_str = str_replace("\r\n", $delim, $header_str);
-                    $msg_body   = str_replace("\r\n", $delim, $msg_body);
-                    $to         = str_replace("\r\n", $delim, $to);
-                    $subject    = str_replace("\r\n", $delim, $subject);
-                }
-
-                if (filter_var(ini_get('safe_mode'), FILTER_VALIDATE_BOOLEAN))
-                    $sent = mail($to, $subject, $msg_body, $header_str);
-                else
-                    $sent = mail($to, $subject, $msg_body, $header_str, '-f ' . escapeshellarg($from));
-            }
+            $msg_body = fopen($body_file, 'r');
+        }
+        else {
+            $msg_body = $message->get();
         }
 
-        if ($sent) {
-            $this->plugins->exec_hook('message_sent', array('headers' => $headers, 'body' => $msg_body));
+        // initialize SMTP connection
+        if (!is_object($this->smtp)) {
+            $this->smtp_init(true);
+        }
+
+        // send message
+        $sent     = $this->smtp->send_mail($from, $a_recipients, $smtp_headers, $msg_body, $options);
+        $response = $this->smtp->get_response();
+        $error    = $this->smtp->get_error();
+
+        if (!$sent) {
+            self::raise_error(array('code' => 800, 'type' => 'smtp',
+                'line' => __LINE__, 'file' => __FILE__,
+                'message' => join("\n", $response)), true, false);
+
+            // allow plugins to catch sending errors with the same parameters as in 'message_before_send'
+            $this->plugins->exec_hook('message_send_error', $plugin + array('error' => $error));
+        }
+        else {
+            $this->plugins->exec_hook('message_sent', array('headers' => $headers, 'body' => $msg_body, 'message' => $message));
 
             // remove MDN headers after sending
             unset($headers['Return-Receipt-To'], $headers['Disposition-Notification-To']);
 
             if ($this->config->get('smtp_log')) {
                 // get all recipient addresses
-                if (is_array($mailto)) {
-                    $mailto = implode(',', $mailto);
-                }
-                if ($headers['Cc']) {
-                    $mailto .= ',' . $headers['Cc'];
-                }
-                if ($headers['Bcc']) {
-                    $mailto .= ',' . $headers['Bcc'];
-                }
-
+                $mailto = implode(',', $a_recipients);
                 $mailto = rcube_mime::decode_address_list($mailto, null, false, null, true);
 
                 self::write_log('sendmail', sprintf("User %s [%s]; Message for %s; %s",
@@ -1720,32 +1688,18 @@ class rcube
                     !empty($response) ? join('; ', $response) : ''));
             }
         }
-        else {
-            // allow plugins to catch sending errors with the same parameters as in 'message_before_send'
-            $this->plugins->exec_hook('message_send_error', $plugin + array('error' => $error));
-        }
 
         if (is_resource($msg_body)) {
             fclose($msg_body);
         }
 
+        if ($disconnect) {
+            $this->smtp->disconnect();
+        }
+
         $message->headers($headers, true);
 
         return $sent;
-    }
-
-    /**
-     * Return message headers as a string
-     */
-    protected function message_head($message, $unset = array())
-    {
-        // requires Mail_mime >= 1.9.0
-        $headers = array();
-        foreach ((array) $unset as $header) {
-            $headers[$header] = null;
-        }
-
-        return $message->txtHeaders($headers, true);
     }
 }
 

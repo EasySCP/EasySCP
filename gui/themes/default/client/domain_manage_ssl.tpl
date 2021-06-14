@@ -29,24 +29,34 @@
 		<tr>
 			<td>{$TR_SSL_ENABLED}</td>
 			<td>
-				<select name="ssl_status" id="sslstatus">
-					<option value="0" {$SSL_SELECTED_DISABLED}>{$TR_SSL_STATUS_DISABLED}</option>
-					<option value="1" {$SSL_SELECTED_SSLONLY}>{$TR_SSL_STATUS_SSLONLY}</option>
-					<option value="2" {$SSL_SELECTED_BOTH}>{$TR_SSL_STATUS_BOTH}</option>
+				<select name="ssl_status" id="sslstatus" onchange='showHideSSL(this)'>
+					<option value="10" {$SSL_SELECTED_DISABLED}>{$TR_SSL_STATUS_DISABLED}</option>
+					<option value="11" {$SSL_SELECTED_SSLONLY}>{$TR_SSL_STATUS_SSLONLY}</option>
+					<option value="12" {$SSL_SELECTED_BOTH}>{$TR_SSL_STATUS_BOTH}</option>
+					<option value="13" {$SSL_SELECTED_SSLONLY_LETSENCRYPT}>{$TR_SSL_STATUS_SSLONLY_LETSENCRYPT}</option>
+					<option value="14" {$SSL_SELECTED_BOTH_LETSENCRYPT}>{$TR_SSL_STATUS_BOTH_LETSENCRYPT}</option>
 				</select>
-			</td>
+				</td>
+		</tr>
+			<tr>
+				<td>{$TR_SSL_STATE}</td>
+				<td>{$SSL_STATE}</td>
+			</tr>
+		<tr>
+			<td>{$TR_SSL_VALID}</td>
+			<td>{$SSL_VALID}</td>
 		</tr>
 		<tr>
 			<td>{$TR_SSL_CERTIFICATE}</td>
-			<td><textarea name="ssl_cert" id="sslcertificate" cols="80" rows="15" >{$SSL_CERTIFICATE}</textarea></td>
+			<td><textarea name="ssl_cert" id="sslcertificate" cols="80" rows="15" {$SSL_TEXT_FIELD}>{$SSL_CERTIFICATE}</textarea></td>
 		</tr>
 		<tr>
 			<td>{$TR_SSL_KEY}</td>
-			<td><textarea name="ssl_key" id="sslkey" cols="80" rows="15" >{$SSL_KEY}</textarea></td>
+			<td><textarea name="ssl_key" id="sslkey" cols="80" rows="15" {$SSL_TEXT_FIELD}>{$SSL_KEY}</textarea></td>
 		</tr>
 		<tr>
 			<td>{$TR_SSL_CACERT}</td>
-			<td><textarea name="ssl_cacert" id="ssl_cacert" cols="80" rows="15" >{$SSL_CACERT}</textarea></td>
+			<td><textarea name="ssl_cacert" id="ssl_cacert" cols="80" rows="15" {$SSL_TEXT_FIELD}>{$SSL_CACERT}</textarea></td>
 		</tr>
 	</table>
 		<div class="buttons">

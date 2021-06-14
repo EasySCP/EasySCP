@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -467,6 +467,24 @@ function subdomain_schedule($user_id, $domain_id, $sub_name, $sub_mnt_pt, $forwa
 	$cfg = EasySCP_Registry::get('Config');
 	$sql = EasySCP_Registry::get('Db');
 
+	$sql_param = array(
+		'domain_id'	=> $domain_id
+	);
+
+	$sql_query = "
+			SELECT
+				`domain_php_version`
+			FROM
+				`domain`
+			WHERE
+				`domain_id` = :domain_id;
+		";
+
+	DB::prepare($sql_query);
+	$stmt = DB::execute($sql_param);
+	$data = $stmt->fetch();
+	$php_version = $data['domain_php_version'];
+	
 	$status_add = $cfg->ITEM_ADD_STATUS;
 
 	if ($_POST['dmn_type'] == 'als') {
@@ -490,11 +508,12 @@ function subdomain_schedule($user_id, $domain_id, $sub_name, $sub_mnt_pt, $forwa
 					`subdomain_name`,
 					`subdomain_mount`,
 					`subdomain_url_forward`,
+					`subdomain_php_version`,
 					`status`)
 			VALUES
-				(?, ?, ?, ?, ?)
+				(?, ?, ?, ?, ?, ?)
 		;";
-		exec_query($sql, $query, array($domain_id, $sub_name, $sub_mnt_pt, $forward, $status_add));
+		exec_query($sql, $query, array($domain_id, $sub_name, $sub_mnt_pt, $forward, $php_version, $status_add));
 	}
 
 	update_reseller_c_props(get_reseller_id($domain_id));

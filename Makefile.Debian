@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 # EasySCP a Virtual Hosting Control Panel
-# Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+# Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
 #
 # This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -14,6 +14,8 @@ ifndef INST_PREF
 endif
 
 HOST_OS=debian
+
+OS := $(shell lsb_release -sc)
 
 ROOT_CONF=$(INST_PREF)/etc
 
@@ -30,6 +32,10 @@ SYSTEM_SYSTEMD=$(INST_PREF)/lib/systemd/system
 SYSTEM_ROOT=$(INST_PREF)/var/www/easyscp
 SYSTEM_VIRTUAL=$(INST_PREF)/var/www/virtual
 SYSTEM_WWW=$(INST_PREF)/var/www
+
+ifeq ($(OS),buster)
+	SYSTEM_SYSTEMD=$(INST_PREF)/usr/lib/systemd/system
+endif
 
 export
 

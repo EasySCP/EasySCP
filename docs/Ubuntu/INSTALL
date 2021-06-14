@@ -1,5 +1,5 @@
 # EasySCP a Virtual Hosting Control Panel
-# Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+# Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
 #
 # This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -23,7 +23,7 @@ Table of Content
 ================================================================================
 1) Version Info
 ---------------
-EasySCP Version: 	2.1.0
+EasySCP Version: 	2.2.0
 INSTALL Script:		1.00
 Maintainer:			Markus Szywon
 Homepage:			http://www.easyscp.net
@@ -39,8 +39,8 @@ Pentium III or K6-4 with 500 MHz
 100 MB disk space (only for install of EasySCP)
 Debian (or even any other *NIX-Distribution)
 
-All required packages for "Ubuntu 14.04 LTS" are listed in "./docs/ubuntu-packages-1404"
 All required packages for "Ubuntu 16.04 LTS" are listed in "./docs/ubuntu-packages-1604"
+All required packages for "Ubuntu 18.04 LTS" are listed in "./docs/ubuntu-packages-1804"
 
 ================================================================================
 3) Introduction
@@ -61,12 +61,12 @@ provides graphic user interfaces for the administrators, resellers and users.
 
 1. Untar or unzip the distribution files to a secure directory:
 	# cd /usr/src
-	# sudo tar xfvz easyscp-2.1.0.tar.gz
+	# sudo tar xfvz easyscp-2.2.0.tar.gz
 	or when you load Bzip2 Archive
-	# sudo tar xjvf easyscp-2.1.0.tar.bz2
+	# sudo tar xjvf easyscp-2.2.0.tar.bz2
 
 2. Change to the newly created directory:
-	# cd ./easyscp-2.1.0
+	# cd ./easyscp-2.2.0
 
 3. Install the required packages
 
@@ -75,9 +75,11 @@ provides graphic user interfaces for the administrators, resellers and users.
 
 	Install all required packages:
 
-	# sudo apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-1404)
-	or
-   	# sudo apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-1604)
+	If you running "Ubuntu 16.04 LTS (Xenial)"
+	# apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-1604)
+
+	or when you running "Ubuntu 18.04 LTS (xxx)"
+	# apt-get install $(cat ./docs/Ubuntu/ubuntu-packages-1804)
 
 	If you get to the "ProFTPD configuration" screen, select 'standalone'.
 	If you get to the "Postfix configuration" screen select 'internet site'.
@@ -85,11 +87,7 @@ provides graphic user interfaces for the administrators, resellers and users.
 		If you've set debian up correctly on install your domain should be already shown.
 	If you get to the 'Configuring pdns-backend-mysql' screen about database configuration, select 'no'.
 
-4.	Enable php modul mcrypt
-
-	# php5enmod mcrypt
-
-5. Start the basic setup:
+4. Start the basic setup:
 	# sh easyscp-setup.sh
 
 	Setup will now Build the Software and copy all the directories into your system.

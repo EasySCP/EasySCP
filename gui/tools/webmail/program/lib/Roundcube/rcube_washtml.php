@@ -76,7 +76,7 @@
  * - base URL support
  * - invalid HTML comments removal before parsing
  * - "fixing" unitless CSS values for XHTML output
- * - base url resolving
+ * - SVG and MathML support
  */
 
 /**
@@ -111,6 +111,15 @@ class rcube_washtml
         'feflood', 'fefunca', 'fefuncb', 'fefuncg', 'fefuncr', 'fegaussianblur',
         'feimage', 'femerge', 'femergenode', 'femorphology', 'feoffset',
         'fespecularlighting', 'fetile', 'feturbulence',
+        // MathML
+        'math', 'menclose', 'merror', 'mfenced', 'mfrac', 'mglyph', 'mi', 'mlabeledtr',
+        'mmuliscripts', 'mn', 'mo', 'mover', 'mpadded', 'mphantom', 'mroot', 'mrow',
+        'ms', 'mspace', 'msqrt', 'mstyle', 'msub', 'msup', 'msubsup', 'mtable', 'mtd',
+        'mtext', 'mtr', 'munder', 'munderover', 'maligngroup', 'malignmark',
+        'mprescripts', 'semantics', 'annotation', 'annotation-xml', 'none',
+        'infinity', 'matrix', 'matrixrow', 'ci', 'cn', 'sep', 'apply',
+        'plus', 'minus', 'eq', 'power', 'times', 'divide', 'csymbol', 'root',
+        'bvar', 'lowlimit', 'uplimit',
     );
 
     /* Ignore these HTML tags and their content */
@@ -153,11 +162,24 @@ class rcube_washtml
         'visibility', 'vert-adv-y', 'version', 'vert-origin-x', 'vert-origin-y', 'word-spacing',
         'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2',
         'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan',
+        // MathML
+        'accent', 'accentunder', 'bevelled', 'close', 'columnalign', 'columnlines',
+        'columnspan', 'denomalign', 'depth', 'display', 'displaystyle', 'encoding', 'fence',
+        'frame', 'largeop', 'length', 'linethickness', 'lspace', 'lquote',
+        'mathbackground', 'mathcolor', 'mathsize', 'mathvariant', 'maxsize',
+        'minsize', 'movablelimits', 'notation', 'numalign', 'open', 'rowalign',
+        'rowlines', 'rowspacing', 'rowspan', 'rspace', 'rquote', 'scriptlevel',
+        'scriptminsize', 'scriptsizemultiplier', 'selection', 'separator',
+        'separators', 'stretchy', 'subscriptshift', 'supscriptshift', 'symmetric', 'voffset',
+        'fontsize', 'fontweight', 'fontstyle', 'fontfamily', 'groupalign', 'edge', 'side',
     );
 
     /* Elements which could be empty and be returned in short form (<tag />) */
     static $void_elements = array('area', 'base', 'br', 'col', 'command', 'embed', 'hr',
         'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr',
+        // MathML
+        'sep', 'infinity', 'in', 'plus', 'eq', 'power', 'times', 'divide', 'root',
+        'maligngroup', 'none', 'mprescripts',
     );
 
     /* State for linked objects in HTML */
@@ -220,8 +242,11 @@ class rcube_washtml
         // Remove unwanted white-space characters so regular expressions below work better
         $style = preg_replace('/[\n\r\s\t]+/', ' ', $style);
 
+        // Decode insecure character sequences
+        $style = rcube_utils::xss_entity_decode($style);
+
         foreach (explode(';', $style) as $declaration) {
-            if (preg_match('/^\s*([a-z\-]+)\s*:\s*(.*)\s*$/i', $declaration, $match)) {
+            if (preg_match('/^\s*([a-z\\\-]+)\s*:\s*(.*)\s*$/i', $declaration, $match)) {
                 $cssid = $match[1];
                 $str   = $match[2];
                 $value = '';
@@ -293,7 +318,7 @@ class rcube_washtml
                     $out = $this->wash_uri($value, true);
                 }
                 else if ($this->is_link_attribute($node->nodeName, $key)) {
-                    if (!preg_match('!^(javascript|vbscript|data:text)!i', $value)
+                    if (!preg_match('!^(javascript|vbscript|data:)!i', $value)
                         && preg_match('!^([a-z][a-z0-9.+-]+:|//|#).+!i', $value)
                     ) {
                         $out = $value;
@@ -365,7 +390,30 @@ class rcube_washtml
                 return $this->config['blocked_src'];
             }
         }
-        else if (preg_match('/^data:image.+/i', $uri)) { // RFC2397
+        else if (preg_match('/^data:image\/([^,]+),(.+)$/i', $uri, $matches)) { // RFC2397
+            // svg images can be insecure, we'll sanitize them
+            if (stripos($matches[1], 'svg') !== false) {
+                $svg = $matches[2];
+
+                if (stripos($matches[1], ';base64') !== false) {
+                    $svg  = base64_decode($svg);
+                    $type = $matches[1];
+                }
+                else {
+                    $type = $matches[1] . ';base64';
+                }
+
+                $washer = new self($this->config);
+                $svg    = $washer->wash($svg);
+
+                // Invalid svg content
+                if (empty($svg)) {
+                    return null;
+                }
+
+                return 'data:image/' . $type . ',' . base64_encode($svg);
+            }
+
             return $uri;
         }
     }
@@ -375,7 +423,7 @@ class rcube_washtml
      */
     private function is_link_attribute($tag, $attr)
     {
-        return ($tag == 'a' || $tag == 'area') && $attr == 'href';
+        return $attr === 'href';
     }
 
     /**
@@ -387,6 +435,7 @@ class rcube_washtml
             || $attr == 'color-profile' // SVG
             || ($attr == 'poster' && $tag == 'video')
             || ($attr == 'src' && preg_match('/^(img|image|source|input|video|audio)$/i', $tag))
+            || ($tag == 'use' && $attr == 'href') // SVG
             || ($tag == 'image' && $attr == 'href'); // SVG
     }
 
@@ -397,6 +446,31 @@ class rcube_washtml
     {
         return in_array($attr, array('fill', 'filter', 'stroke', 'marker-start',
             'marker-end', 'marker-mid', 'clip-path', 'mask', 'cursor'));
+    }
+
+    /**
+     * Check if a specified element has an attribute with specified value.
+     * Do it in case-insensitive manner.
+     *
+     * @param DOMElement $node       The element
+     * @param string     $attr_name  The attribute name
+     * @param string     $attr_value The attribute value to find
+     *
+     * @return bool True if the specified attribute exists and has the expected value
+     */
+    private static function attribute_value($node, $attr_name, $attr_value)
+    {
+        $attr_name = strtolower($attr_name);
+
+        foreach ($node->attributes as $name => $attr) {
+            if (strtolower($name) === $attr_name) {
+                if (strtolower($attr_value) === strtolower($attr->nodeValue)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -433,6 +507,15 @@ class rcube_washtml
             switch ($node->nodeType) {
             case XML_ELEMENT_NODE: //Check element
                 $tagName = strtolower($node->nodeName);
+
+                if (in_array($tagName, array('animate', 'animatecolor', 'set', 'animatetransform'))
+                    && self::attribute_value($node, 'attributename', 'href')
+                ) {
+                    // Insecure svg tags
+                    $dump .= "<!-- $tagName blocked -->";
+                    break;
+                }
+
                 if ($callback = $this->handlers[$tagName]) {
                     $dump .= call_user_func($callback, $tagName,
                         $this->wash_attribs($node), $this->dumpHtml($node, $level), $this);
@@ -445,7 +528,10 @@ class rcube_washtml
                         $xpath = new DOMXPath($node->ownerDocument);
                         foreach ($xpath->query('namespace::*') as $ns) {
                             if ($ns->nodeName != 'xmlns:xml') {
-                                $dump .= ' ' . $ns->nodeName . '="' . $ns->nodeValue . '"';
+                                $dump .= sprintf(' %s="%s"',
+                                    $ns->nodeName,
+                                    htmlspecialchars($ns->nodeValue, ENT_QUOTES, $this->config['charset'])
+                                );
                             }
                         }
                     }
@@ -472,9 +558,6 @@ class rcube_washtml
                 break;
 
             case XML_CDATA_SECTION_NODE:
-                $dump .= $node->nodeValue;
-                break;
-
             case XML_TEXT_NODE:
                 $dump .= htmlspecialchars($node->nodeValue);
                 break;
@@ -513,7 +596,7 @@ class rcube_washtml
         $this->max_nesting_level = (int) @ini_get('xdebug.max_nesting_level');
 
         // SVG need to be parsed as XML
-        $this->is_xml = stripos($html, '<html') === false && stripos($html, '<svg') !== false;
+        $this->is_xml = !preg_match('/<(html|head|body)/i', $html) && stripos($html, '<svg') !== false;
         $method       = $this->is_xml ? 'loadXML' : 'loadHTML';
         $options      = 0;
 
@@ -607,13 +690,16 @@ class rcube_washtml
             return '';
         }
 
+        // FIXME: HTML comments handling could be better. The code below can break comments (#6464),
+        //        we should probably do not modify content inside comments at all.
+
         // fix (unknown/malformed) HTML tags before "wash"
         $html = preg_replace_callback('/(<(?!\!)[\/]*)([^\s>]+)([^>]*)/', array($this, 'html_tag_callback'), $html);
 
         // Remove invalid HTML comments (#1487759)
-        // Don't remove valid conditional comments
-        // Don't remove MSOutlook (<!-->) conditional comments (#1489004)
-        $html = preg_replace('/<!--[^-<>\[\n]+>/', '', $html);
+        // Note: We don't want to remove valid comments, conditional comments
+        // and MSOutlook comments (<!-->)
+        $html = preg_replace('/<!--[a-zA-Z0-9]+>/', '', $html);
 
         // fix broken nested lists
         self::fix_broken_lists($html);
@@ -629,9 +715,15 @@ class rcube_washtml
      */
     public static function html_tag_callback($matches)
     {
+        // It might be an ending of a comment, ignore (#6464)
+        if (substr($matches[3], -2) == '--') {
+            $matches[0] = '';
+            return implode('', $matches);
+        }
+
         $tagname = $matches[2];
         $tagname = preg_replace(array(
-            '/:.*$/',               // Microsoft's Smart Tags <st1:xxxx>
+            '/:.*$/',                // Microsoft's Smart Tags <st1:xxxx>
             '/[^a-z0-9_\[\]\!?-]/i', // forbidden characters
         ), '', $tagname);
 

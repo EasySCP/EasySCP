@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -445,5 +445,94 @@ class DaemonCommon {
 			return false;
 		}
 	}
+
+	/**
+	 *
+	 * @param string $data
+	 * @return SimpleXMLElement || NULL
+	 */
+	public static function xml_load_string($data) {
+
+		$xml_data = simplexml_load_string($data);
+		$xml = explode("\n", $data);
+
+		if ($xml_data === false) {
+			System_Daemon::info('Error load XML String: ' .$data);
+
+			$errors = libxml_get_errors();
+			foreach ($errors as $error) {
+				System_Daemon::debug(display_xml_error($error, $xml));
+			}
+		
+			libxml_clear_errors();
+			return null;
+		} else {
+			return $xml_data;
+		}
+	}
+
+	/**
+	 *
+	 * @param string $filename
+	 * @return SimpleXMLElement || NULL
+	 */
+	public static function xml_load_file($filename) {
+
+		if (file_exists($filename)) {
+			$xml_data = simplexml_load_file($filename);
+			$xml = explode("\n", file_get_contents($filename));
+
+			if ($xml_data === false) {
+				System_Daemon::info('Error load XML file: ' .$filename);
+
+				$errors = libxml_get_errors();
+				foreach ($errors as $error) {
+					System_Daemon::debug(display_xml_error($error, $xml));
+				}
+			
+				libxml_clear_errors();
+				return null;
+			} else {
+				return $xml_data;
+			}
+		} else {
+			System_Daemon::info('Error XML file does not exist: ' .$filename);
+			return null;
+		}
+	}
+	
+	/**
+	 *
+	 * @param LibXMLError $error
+	 * @param string $xml
+	 * @return string
+	 */
+	public static function display_xml_error($error, $xml) {
+		$return  = $xml[$error->line - 1] . "\n";
+		$return .= str_repeat('-', $error->column) . "^\n";
+
+		switch ($error->level) {
+			case LIBXML_ERR_WARNING:
+				$return .= "Warning $error->code: ";
+				break;
+			 case LIBXML_ERR_ERROR:
+				$return .= "Error $error->code: ";
+				break;
+			case LIBXML_ERR_FATAL:
+				$return .= "Fatal Error $error->code: ";
+				break;
+		}
+
+		$return .= trim($error->message) .
+				   "\n  Line: $error->line" .
+				   "\n  Column: $error->column";
+
+		if ($error->file) {
+			$return .= "\n  File: $error->file";
+		}
+
+		return "$return\n\n--------------------------------------------\n\n";
+	}
+
 }
 ?>

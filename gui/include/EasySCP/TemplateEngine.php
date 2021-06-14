@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -25,7 +25,7 @@ class EasySCP_TemplateEngine {
 	 * Constructor
 	 */
 	protected function __construct() {
-		require_once(EasyConfig::$cfg->GUI_ROOT_DIR.'/include/Smarty/Smarty.class.php');
+		require_once(EasyConfig::$cfg->GUI_ROOT_DIR.'/include/Smarty/bootstrap.php');
 		$this->template_engine = new Smarty();
 		$this->template_engine->caching = false;
 

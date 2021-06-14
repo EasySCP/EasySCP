@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,6 @@ EasySCP_Exception::setHandler();
 /**
  * Include EasySCP common functions
  */
-require_once 'Net/IDNA2.php';
 require_once INCLUDEPATH . '/easyscp-functions.php';
 
 /**

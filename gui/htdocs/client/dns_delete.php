@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,75 +47,71 @@ if (isset($_GET['edit_id']) && !empty($_GET['edit_id'])) {
 		FROM
 			`powerdns`.`records`
 		WHERE
-			`id` = :record_id
+			`id` = :record_id;
 	";
 	
 	DB::prepare($sql_query);
 	$row = DB::execute($sql_param, true);
-	if ($row['protected'] == 1) {
+	if ($row['protected']==1) {
 		set_page_message(
 			tr('You are not allowed to remove this DNS record!'),
 			'error'
 		);
 		user_goto('dns_overview.php');
-	} else {
-		$sql_param = array(
-				'domain_id' => $dmn_id,
-		);
-
-		$sql_query = "
-			SELECT
-				id, name
-			FROM
-				powerdns.domains
-			WHERE
-				easyscp_domain_id = :domain_id;
-		";
-
-		DB::prepare($sql_query);
-		$data = DB::execute($sql_param, true);
-
-		$sql_param = array(
-			'domain_content'	=> 'ns1.' . $data['name'] . '. ' . EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
-			'domain_id'			=> $data['id'],
-			'domain_name'		=> $data['name'],
-			'domain_type'		=> 'SOA'
-		);
-
-		$sql_query = "
-			UPDATE
-				powerdns.records
-			SET
-				content = :domain_content
-			WHERE
-				domain_id = :domain_id
-			AND
-				name = :domain_name
-			AND
-				type = :domain_type;
-		";
-
-		DB::prepare($sql_query);
-		DB::execute($sql_param);
-
-		$sql_param = array(
-			'record_id' => $_GET['edit_id'],
-		);
-
-		$sql_query = "
-			DELETE FROM
-				`powerdns`.`records`
-			WHERE
-				`id` = :record_id;
-		";
-
-		DB::prepare($sql_query);
-		if (DB::execute($sql_param)) {
-			set_page_message(tr('Custom DNS record scheduled for deletion!'), 'success');
-			user_goto('dns_overview.php');
-		}
 	}
+	
+	$sql_query = "
+			SELECT
+				d.id,
+				d.easyscp_domain_id,
+				d.easyscp_domain_alias_id,
+				d.name
+			FROM
+				powerdns.domains d,
+				powerdns.records r
+			WHERE
+				r.id = :record_id
+			AND
+				r.domain_id = d.id;
+	";
+	
+	DB::prepare($sql_query);
+	$stmt = DB::execute($sql_param);
+	if ($stmt->rowCount() <= 0) {
+		set_page_message(
+			tr('Fatal Error to remove this DNS record!'),
+			'error'
+		);
+		user_goto('dns_overview.php');
+	}
+	$data = $stmt->fetch();
+	$alias_id = $data['easyscp_domain_alias_id'];
+
+	$sql_query = "
+		DELETE FROM
+			`powerdns`.`records`
+		WHERE
+			`id` = :record_id
+	";
+	
+	DB::prepare($sql_query);
+	if (DB::execute($sql_param)) {
+
+		if ($alias_id > 0) {
+		
+			send_request('120 DNS alias '. $alias_id);
+			
+		} else {
+			
+			send_request('120 DNS domain '. $dmn_id);
+			
+		}
+			
+		set_page_message(tr('Custom DNS record scheduled for deletion!'), 'success');
+		user_goto('dns_overview.php');
+		}
 }
 
 //  Back to the main page
 user_goto('dns_overview.php');
+

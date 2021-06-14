@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,8 +57,8 @@ $tpl->assign(
 	)
 );
 
-if (isset($_GET['select_domain']) && ($_GET['select_domain'])) {
-	$dmn_data = explode('-', $_GET['domain_id']);
+if (isset($_POST['select_domain']) && ($_POST['select_domain'])) {
+	$dmn_data = explode('-', $_POST['domain_id']);
 	$dmn_alias = $dmn_data[0];
 	$dmn_id = $dmn_data[1];
 }
@@ -67,7 +67,7 @@ $dmn_zone_data = get_dns_zone($dmn_alias, $dmn_id);
 $tpl->assign(
 	array(
 		'D_USER_DOMAIN_SELECTED'	=> 	$dmn_alias.'-'.$dmn_id,
-		'D_DNS_ZONE'	=>	$dmn_zone_data,
+		'D_DNS_ZONE'				=>	$dmn_zone_data,
 	)
 );
 

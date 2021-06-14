@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	EasySCP a Virtual Hosting Control Panel
+	Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
+
+	This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+	To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+
+	@link 		http://www.easyscp.net
+	@author		EasySCP Team
+-->
+<EasySCP_PHP>
+	<PHP_Entry>
+		<PHP_NAME />
+		<ID />
+		<ENABLE />
+		<SRV_PHP />
+		<PEAR_DIR />
+		<PHP_FASTCGI_BIN />
+		<PHP_STARTER_DIR />
+		<PHP_FPM_POOL_DIR />
+	</PHP_Entry>
+</EasySCP_PHP>

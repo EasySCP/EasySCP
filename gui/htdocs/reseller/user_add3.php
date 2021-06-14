@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2017 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -252,6 +252,7 @@ function add_user_data($reseller_id) {
 	}
 
 	$php = $props['allow_php'];
+	$php_version = $props['php_version'];
 	$phpe = $props['allow_php_editor'];
 	$cgi = $props['allow_cgi'];
 	$sub = $props['subdomain_cnt'];
@@ -268,6 +269,7 @@ function add_user_data($reseller_id) {
 	$ssl = $props['allow_ssl'];
 
 	$php			= preg_replace("/\_/", "", $php);
+	$php_version	= preg_replace("/\_/", "", $php_version);
 	$phpe			= preg_replace("/\_/", "", $phpe);
 	$cgi			= preg_replace("/\_/", "", $cgi);
 	$ssl			= preg_replace("/\_/", "", $ssl);
@@ -336,7 +338,7 @@ function add_user_data($reseller_id) {
 			`domain_sqlu_limit`, `status`,
 			`domain_subd_limit`, `domain_alias_limit`,
 			`domain_ip_id`, `domain_disk_limit`,
-			`domain_disk_usage`, `domain_php`, `domain_php_edit`, `domain_cgi`,
+			`domain_disk_usage`, `domain_php`, `domain_php_version`, `domain_php_edit`, `domain_cgi`,
 			`allowbackup`, `domain_dns`, `domain_ssl`, `domain_disk_countbackup`
 		)
 		VALUES (
@@ -347,7 +349,7 @@ function add_user_data($reseller_id) {
 			:domain_sqlu_limit, :status,
 			:domain_subd_limit, :domain_alias_limit,
 			:domain_ip_id, :domain_disk_limit,
-			'0', :domain_php, :domain_php_edit, :domain_cgi,
+			'0', :domain_php, :domain_php_version, :domain_php_edit, :domain_cgi,
 			:allowbackup, :domain_dns, :domain_ssl, :domain_disk_countbackup
 		)
 	";
@@ -367,6 +369,7 @@ function add_user_data($reseller_id) {
 		':domain_ip_id' => $domain_ip,
 		':domain_disk_limit' => $disk,
 		':domain_php' => $php,
+		':domain_php_version' => $php_version,
 		':domain_php_edit' => $phpe,
 		':domain_cgi' => $cgi,
 		':allowbackup' => $backup,

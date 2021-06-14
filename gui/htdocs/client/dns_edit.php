@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,7 +159,6 @@ function decode_zone_data($data) {
 				$cname = $data['content'];
 				break;
 			case 'MX':
-				$name = '';
 				$srv_prio = $data['prio'];
 				$srv_host = $data['content'];
 				break;
@@ -168,20 +167,19 @@ function decode_zone_data($data) {
 				break;
 			case 'SRV':
 				$name = '';
-				if (preg_match('~_([^\.]+)\._([^\s]+)[\s]+([\d]+)~', $data['content'], $srv)) {
+				if (preg_match('~_([^\.]+)\._([^\.]+)~', $data['name'], $srv)) {
 					$srv_name = $srv[1];
 					$srv_proto = $srv[2];
-					$srv_TTL = $data['ttl'];
 				}
-				if (preg_match('~([\d]+)[\s]+([\d]+)[\s]+([\d]+)[\s]+([^\s]+)+~', $data['content'], $srv)) {
-					$srv_prio = $srv[1];
-					$srv_weight = $srv[2];
-					$srv_port = $srv[3];
-					$srv_host = $srv[4];
+				if (preg_match('~([\d]+)[\s]+([\d]+)[\s]+([^\s]+)+~', $data['content'], $srv)) {
+					$srv_weight = $srv[1];
+					$srv_port = $srv[2];
+					$srv_host = $srv[3];
 				}
+				$srv_prio = $data['prio'];
+				$srv_TTL = $data['ttl'];
 				break;
 			case 'TXT':
-				$name = '';
 				$plain = $data['content'];
 				break;
 			default:
@@ -277,7 +275,7 @@ function gen_editdns_page($tpl, $edit_id, $add_mode) {
 	}
 	
 	list(
-		$name, $address, $addressv6, $srv_name, $srv_proto, $srv_ttl, $srv_prio,
+		$name, $address, $addressv6, $srv_name, $srv_proto, $srv_TTL, $srv_prio,
 		$srv_weight, $srv_host, $srv_port, $cname, $txt, $ns, $plain
 	) = decode_zone_data($data);
 
@@ -295,12 +293,12 @@ function gen_editdns_page($tpl, $edit_id, $add_mode) {
 	$tpl->assign(
 		array(
 			'SELECT_DNS_TYPE'			=> $dns_type,
-			'DNS_NAME'					=> tohtml($name),
+			'DNS_NAME'					=> tohtml(tryPost('dns_name', $name)),
 			'DNS_ADDRESS'				=> tohtml(tryPost('dns_A_address', $address)),
 			'DNS_ADDRESS_V6'			=> tohtml(tryPost('dns_AAAA_address', $addressv6)),
-			'SELECT_DNS_SRV_PROTOCOL'	=> create_options(array('tcp', 'udp'), tryPost('srv_proto', $srv_proto)),
+			'SELECT_DNS_SRV_PROTOCOL'	=> create_options(array('tcp', 'udp', 'tls'), tryPost('srv_proto', $srv_proto)),
 			'DNS_SRV_NAME'				=> tohtml(tryPost('dns_srv_name', $srv_name)),
-			'DNS_SRV_TTL'				=> tohtml(tryPost('dns_srv_ttl', $srv_ttl)),
+			'DNS_SRV_TTL'				=> tohtml(tryPost('dns_srv_ttl', $srv_TTL)),
 			'DNS_SRV_PRIO'				=> tohtml(tryPost('dns_srv_prio', $srv_prio)),
 			'DNS_SRV_WEIGHT'			=> tohtml(tryPost('dns_srv_weight', $srv_weight)),
 			'DNS_SRV_HOST'				=> tohtml(tryPost('dns_srv_host', $srv_host)),
@@ -323,12 +321,15 @@ function tryPost($id, $data = '') {
 	return $data;
 }
 
-function validate_NS($record, &$err = null) {
+function validate_NS($record, &$err = null, $record_domain) {
 	if (empty($record['dns_ns'])) {
+		$err .= tr('Nameserver must be filled.');
+		return false;
+	}
+	if (empty($record['dns_name'])) {
 		$err .= tr('Name must be filled.');
 		return false;
 	}
-
 	if (preg_match('~([^a-z,^A-Z,^0-9,^\.-])~u', $record['dns_ns'], $e)) {
 		$err .= sprintf(tr('Use of disallowed char("%s") in NS'), $record['dns_ns']);
 		return false;
@@ -378,7 +379,7 @@ function validate_AAAA($record, &$err = null) {
 	return true;
 }
 
-function validate_SRV($record, &$err, &$dns, &$text) {
+function validate_SRV($record, &$err, &$dns, &$text, $record_domain) {
 
 	if (!preg_match('~^([\d]+)$~', $record['dns_srv_port'])) {
 		$err .= tr('Port must be a number!');
@@ -410,21 +411,24 @@ function validate_SRV($record, &$err, &$dns, &$text) {
 		return false;
 	}
 
-	$dns = sprintf("_%s._%s %d", $record['dns_srv_name'], $record['srv_proto'], $record['dns_srv_ttl']);
-	$text = sprintf("%d %d %d %s", $record['dns_srv_prio'], $record['dns_srv_weight'], $record['dns_srv_port'], $record['dns_srv_host']);
+	$dns = sprintf("_%s._%s.%s", $record['dns_srv_name'], $record['srv_proto'], $record_domain);
+	$text = sprintf("%d %d %s", $record['dns_srv_weight'], $record['dns_srv_port'], $record['dns_srv_host']);
 
 	return true;
 }
 
-function validate_MX($record, &$err, &$dns_srv_prio, &$dns_srv_host) {
+function validate_MX($record, &$err, &$dns_srv_prio, &$dns_srv_host, $record_domain) {
 
 	if (!preg_match('~^([\d]+)$~', $record['dns_srv_prio'])) {
 		$err .= tr('Priority must be a number!');
 		return false;
 	}
-
 	if (empty($record['dns_srv_host'])) {
 		$err .= tr('Host must be filled.');
+		return false;
+	}
+	if (empty($record['dns_name'])) {
+		$err .= tr('Name must be filled.');
 		return false;
 	}
 
@@ -466,15 +470,13 @@ function check_CNAME_conflict($domain, &$err) {
 }
 
 function validate_NAME($domain, &$err) {
-	if (preg_match('~([^-a-z,A-Z,0-9.])~u', $domain['name'], $e)) {
+	if (preg_match('~([^-a-z,A-Z,0-9._])~u', $domain['name'], $e)) {
 		$err .= sprintf(tr('Use of disallowed char("%s") in NAME'), $e[1]);
 		return false;
 	}
-	if (preg_match('/\.$/', $domain['name'])) {
-		if (!preg_match('/'.str_replace('.', '\.', $domain['domain']).'\.$/', $domain['name'])) {
-			$err .= sprintf(tr('Record "%s" is not part of domain "%s".', $domain['name'], $domain['domain']));
-			return false;
-		}
+	if (strpos($domain['name'],$domain['domain'])===false) {
+		$err .= sprintf(tr('Record "%s" is not part of domain "%s".', $domain['name'], $domain['domain']));
+		return false;
 	}
 	return true;
 }
@@ -484,7 +486,10 @@ function validate_TXT($record, &$err = null) {
 		$err .= tr('Text must be filled.');
 		return false;
 	}
-
+	if (empty($record['dns_name'])) {
+		$err .= tr('Name must be filled.');
+		return false;
+	}
 	return true;
 }
 
@@ -495,6 +500,7 @@ function validate_TXT($record, &$err = null) {
  */
 function check_fwd_data($edit_id) {
 
+	$cfg = EasySCP_Registry::get('Config');
 	$sql = EasySCP_Registry::get('Db');
 
 	$add_mode = $edit_id === true;
@@ -573,8 +579,10 @@ function check_fwd_data($edit_id) {
 		$domain_id = $data['id'];
 	}
 
-	if (!validate_NAME(array('name' => $_POST['dns_name'], 'domain' => $record_domain), $err)) {
-		$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
+	if ($_POST['type'] != 'SRV') {
+		if (!validate_NAME(array('name' => $_POST['dns_name'], 'domain' => $record_domain), $err)) {
+			$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
+		}
 	}
 
 	$_ttl = null;
@@ -610,17 +618,16 @@ function check_fwd_data($edit_id) {
 			$_dns = $_POST['dns_name'];
 			break;
 		case 'MX':
-			if (!validate_MX($_POST, $err, $_dns_srv_prio, $_text)) {
+			if (!validate_MX($_POST, $err, $_dns_srv_prio, $_text, $record_domain)) {
 				$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
-			} else {
-				// $_dns = $record_domain . '.';
-				$_dns = $record_domain;
-			}
+			} 
+			$_dns = $_POST['dns_name'];
 			break;
 		case 'NS':
-			if (!validate_NS($_POST, $err)) {
+			if (!validate_NS($_POST, $err, $record_domain)) {
 				$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
 			}
+			$_dns = $_POST['dns_name'];
 			$_text = $_POST['dns_ns'];
 			$_ttl = '28800';
 			break;
@@ -628,9 +635,19 @@ function check_fwd_data($edit_id) {
 			$_ttl = '3600';
 			break;
 		case 'SRV':
-			if (!validate_SRV($_POST, $err, $_dns, $_text)) {
+			if (!validate_SRV($_POST, $err, $_dns, $_text, $record_domain)) {
 				$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
 			}
+			$_ttl = $_POST['dns_srv_ttl'];
+			$_dns_srv_prio = $_POST['dns_srv_prio'];
+			break;
+		case 'TXT':
+			if (!validate_TXT($_POST, $err)) {
+					$ed_error = sprintf(tr('Cannot validate %s record. Reason \'%s\'.'), $_POST['type'], $err);
+			}
+			$_dns = $_POST['dns_name'];
+			$_text = $_POST['dns_plain_data'];
+			$_ttl = '3600';
 			break;
 		default :
 			$ed_error = sprintf(tr('Unknown zone type %s!'), $_POST['type']);
@@ -695,29 +712,6 @@ function check_fwd_data($edit_id) {
 			DB::prepare($sql_query);
 			DB::execute($sql_param);
 			
-			$sql_param = array(
-				'domain_content'	=> 'ns1.' . $data['domain_name'] . '. ' . EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'} . ' ' . time() . ' 12000 1800 604800 86400',
-				'domain_id'			=> $data['id'],
-				'domain_name'		=> $data['name'],
-				'domain_type'		=> 'SOA'
-			);
-			
-			$sql_query = "
-				UPDATE
-					powerdns.records
-				SET
-					content = :domain_content
-				WHERE
-					domain_id = :domain_id
-				AND
-					name = :domain_name
-				AND
-					type = :domain_type;
-				";
-					
-			DB::prepare($sql_query);
-			DB::execute($sql_param);
-
 		} else {
 			
 			$sql_param = array(
@@ -763,26 +757,18 @@ function check_fwd_data($edit_id) {
 			DB::prepare($sql_query);
 			DB::execute($sql_param);
 			
-			$sql_param = array(
-				'domain_content' => 'ns1.'.$data['domain_name'].'. '.EasyConfig::$cfg->{'DEFAULT_ADMIN_ADDRESS'}.' '.time().' 12000 1800 604800 86400',
-				'domain_id'	=> $data['id'],
-				'domain_name' => $data['name'],
-				'domain_type' => 'SOA'
-			);
-			
-			$sql_query = "
-				UPDATE
-					powerdns.records
-				SET
-					content = :domain_content
-				WHERE
-					domain_id = :domain_id AND name = :domain_name AND type = :domain_type;
-				";
-
-			DB::prepare($sql_query);
-			DB::execute($sql_param);
 		}
 
+		if ($alias_id > 0) {
+			
+			send_request('120 DNS alias '. $alias_id);
+			
+		} else {
+			
+			send_request('120 DNS domain '. $dmn_props['domain_id']);
+			
+		}
+		
 		$admin_login = $_SESSION['user_logged'];
 		write_log("$admin_login: " . (($add_mode) ? 'add new' : ' modify') . " dns zone record.");
 
@@ -792,5 +778,7 @@ function check_fwd_data($edit_id) {
 		set_page_message($ed_error, 'error');
 		return false;
 	}
-} // End of check_user_data()
+}
+// End of check_user_data()
+
 ?>

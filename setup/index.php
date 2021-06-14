@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -26,6 +26,8 @@ if (isset($_POST['uaction']) && $_POST['uaction'] != '') {
 			if (checkData($xml)){
 				switch($xml->{'DistName'}->__toString() . '_' . $xml->{'DistVersion'}->__toString()){
 					case 'Debian_9':
+					case 'Debian_10':
+					case 'Ubuntu_18.04':
 						$template = 'finisch.tpl';
 						break;
 					default:
@@ -361,29 +363,26 @@ function getOS($xml){
 					// Unbekannt
 					$select = '';
 				}
-			} else {
-				// CentOS 6
-				$select = base64_encode('{"DistName":"CentOS","DistVersion":"6"}');
 			}
 		} elseif(file_exists('/etc/os-release')){
 			$fp = @fopen('/etc/os-release', "r");
 			$temp = fread($fp, filesize('/etc/os-release'));
 			fclose($fp);
-			if(strpos($temp, 'VERSION_ID="7"') !== false){
-				// Debian 7
-				$select = base64_encode('{"DistName":"Debian","DistVersion":"7"}');
-			} elseif(strpos($temp, 'VERSION_ID="8"') !== false){
+			if(strpos($temp, 'VERSION_ID="8"') !== false){
 				// Debian 8
 				$select = base64_encode('{"DistName":"Debian","DistVersion":"8"}');
 			} elseif(strpos($temp, 'VERSION_ID="9"') !== false){
 				// Debian 9
 				$select = base64_encode('{"DistName":"Debian","DistVersion":"9"}');
-			} elseif(strpos($temp, 'VERSION_ID="14.04"')  !== false){
-				// Ubuntu 14.04
-				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"14.04"}');
+			} elseif(strpos($temp, 'VERSION_ID="10"') !== false){
+				// Debian 10
+				$select = base64_encode('{"DistName":"Debian","DistVersion":"10"}');
 			} elseif(strpos($temp, 'VERSION_ID="16.04"')  !== false){
 				// Ubuntu 16.04
 				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"16.04"}');
+			} elseif(strpos($temp, 'VERSION_ID="18.04"')  !== false){
+				// Ubuntu 18.04
+				$select = base64_encode('{"DistName":"Ubuntu","DistVersion":"18.04"}');
 			} else {
 				// Unbekannt
 				$select = '';

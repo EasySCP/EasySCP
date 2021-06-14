@@ -1,5 +1,7 @@
-EasySCP a Virtual Hosting Control Panel
+This is a Fork of the EasySCP a Virtual Hosting Control Panel
 ================================================================
+
+This version is beta, so be careful if you want to use for production.
 
 http://www.easyscp.net
 
@@ -36,7 +38,7 @@ LICENSING
 ---------
 
 Unless otherwise stated all code is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License
-and has a Copyright 2010-2019 by EasySCP.
+and has a Copyright 2010-2020 by EasySCP.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
 
 

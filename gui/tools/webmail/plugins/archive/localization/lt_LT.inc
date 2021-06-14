@@ -25,7 +25,9 @@ $labels['settingstitle'] = 'Archyvuoti';
 $labels['archivetype'] = 'Padalinti archyvą pagal';
 $labels['archivetypeyear'] = 'Metai (pvz. Archyvas/2012)';
 $labels['archivetypemonth'] = 'Mėnesis (pvz. Archyvas/2012/06)';
+$labels['archivetypetbmonth'] = 'Mėnesis - Suderinama su Thunderbird (pvz., Archyvas/2012/2012-06)';
 $labels['archivetypefolder'] = 'Tikrasis aplankas';
 $labels['archivetypesender'] = 'Siuntėjo el. pašto adresas';
 $labels['unkownsender'] = 'nežinomas';
+$labels['readonarchive'] = 'Archyvuojant, žymėti laišką kaip skaitytą';
 ?>

@@ -4,7 +4,7 @@
  *
  * @copyright 	2001-2006 by moleSoftware GmbH
  * @copyright 	2006-2010 by ispCP | http://isp-control.net
- * @copyright 	2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * @copyright 	2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  * @version 	SVN: $Id$
  * @link 		http://www.easyscp.net
  * @author 		EasySCP Team
@@ -29,7 +29,7 @@
  * Portions created by the ispCP Team are Copyright (C) 2006-2010 by
  * isp Control Panel. All Rights Reserved.
  *
- * Portions created by the EasySCP Team are Copyright (C) 2010-2019 by
+ * Portions created by the EasySCP Team are Copyright (C) 2010-2020 by
  * Easy Server Control Panel. All Rights Reserved.
  */
 
@@ -464,6 +464,7 @@ function gen_client_menu($tpl, $menu_file) {
 			'TR_MENU_ADD_ALIAS'				=> tr('Add alias'),
 			'TR_MENU_MANAGE_DNS'			=> tr('Manage DNS'),
 			'TR_MENU_MANAGE_SSL'			=> tr('Manage SSL certificate'),
+			'TR_MENU_PHP_VERSION'			=> tr('PHP version'),
 			'TR_MENU_PHP_EDITOR'			=> tr('PHP editor'),
 
 			'TR_MENU_ADD_MAIL_USER'			=> tr('Add mail user'),
@@ -558,6 +559,10 @@ function gen_client_menu($tpl, $menu_file) {
 
 	if ($dmn_props['domain_ssl'] == 'yes'){
 		$tpl->assign('ISACTIVE_SSL_MENU', true);
+	}
+
+	if ($dmn_props['domain_php'] == 'yes'){
+		$tpl->assign('ISACTIVE_PHP_VERSION', true);
 	}
 
 	if ($dmn_props['domain_php_edit'] == 'yes'){
@@ -1120,9 +1125,13 @@ function get_dns_zone($alias=0, $domain_id) {
 		$sbd_name = $row['domain_dns'];
 		if ($row['domain_type']=="MX") {
 			$sbd_data = $row['prio']." ".$row['domain_text'];
-		}
-		else {
+			$data_rw = true;
+		} elseif ($row['domain_type']=="SOA") {
 			$sbd_data = $row['domain_text'];	
+			$data_rw = false;
+		} else {
+			$sbd_data = $row['domain_text'];	
+			$data_rw = true;
 		}
 		
 		$dns_records[] =
@@ -1131,6 +1140,7 @@ function get_dns_zone($alias=0, $domain_id) {
 				'DNS_NAME'					=> tohtml($sbd_name),
 				'DNS_TYPE'					=> tohtml($row['domain_type']),
 				'DNS_DATA'					=> tohtml($sbd_data),
+				'DNS_RW'					=> $data_rw,
 				'DNS_ACTION_SCRIPT_DELETE'	=> tohtml($dns_action_script_delete),
 				'DNS_ACTION_DELETE'			=> tohtml($dns_action_delete),
 				'DNS_ACTION_SCRIPT_EDIT'	=> tohtml($dns_action_script_edit),

@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -191,7 +191,8 @@ class EasySSL
 	 * @throws Exception
 	 */
 	public static function storeSSLData($sslDomain, $status, $key, $cert, $cacert){
-		if (self::checkSSLKey($key, $cert)===true){
+		if (self::checkSSLKey($key, $cert)===true
+				|| $status == 10 || $status == 13 || $status == 14){
 			$domain = explode(';',$sslDomain);
 			$tableData = self::getTableData($domain);
 			$table = $tableData['table'];
@@ -220,9 +221,7 @@ class EasySSL
 			DB::prepare($sql_query);
 			$rs = DB::execute($sql_param);
 
-			if ($rs->rowCount() > 0) {
-				send_request('110 DOMAIN ' .$tableData['type'] . ' ' . $domain[2]);
-			}
+			send_request('110 DOMAIN ' .$tableData['type'] . ' ' . $domain[2]);
 			return $rs;
 		} else {
 			return false;

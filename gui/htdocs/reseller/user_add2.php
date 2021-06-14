@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2017 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,7 @@ $tpl->assign(
 			'TR_MAX_TRAFFIC'				=> tr('Traffic limit [MB]<br /><em>(0 unlimited)</em>'),
 			'TR_MAX_DISK_USAGE'				=> tr('Disk limit [MB]<br /><em>(0 unlimited)</em>'),
 			'TR_PHP'						=> tr('PHP'),
+			'TR_USER_PHP_VERSION'			=> tr('PHP version'), 
 			'TR_PHP_EDIT'					=> tr('PHP editor'),
 			'TR_CGI'						=> tr('CGI / Perl'),
 			'TR_SSL'						=> tr('SSL support'),
@@ -90,6 +91,7 @@ if (isset($_POST['uaction'])
 		$_SESSION["step_two_data"] = "$dmn_name;0;";
 		$newProps = array(
 			'allow_php'	=> $hp_php,
+			'php_version' => $hp_php_version,
 			'allow_php_editor'=> $hp_phpe,
 			'allow_cgi'	=> $hp_cgi,
 			'subdomain_cnt'	=> $hp_sub,
@@ -171,7 +173,7 @@ function get_pageone_param() {
  * @param EasySCP_TemplateEngine $tpl
  */
 function get_init_au2_page($tpl) {
-	global $hp_name, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
+	global $hp_name, $hp_php, $hp_php_version, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk, $hp_countbackup, $hp_backup, $hp_dns;
@@ -209,13 +211,29 @@ function get_init_au2_page($tpl) {
 			)
 	);
 
+	$entry = 0;
+	foreach (EasyConfig::$php->PHP_Entry as $PHP_Entry) {
+		if (isset($PHP_Entry->SRV_PHP) && isset($PHP_Entry->PHP_NAME)
+				&& isset($PHP_Entry->ENABLE) && $PHP_Entry->ENABLE == '1') {
+			$php_selected = ($hp_php_version == $entry) ? $cfg->HTML_SELECTED : '';
+			$tpl->append(
+				array(
+					'PHP_VERSION_VALUE'		=> $entry,
+					'PHP_VERSION_SELECTED'	=> $php_selected,
+					'PHP_VERSION_NAME'		=> $PHP_Entry->PHP_NAME)
+				);
+		}
+		$entry = $entry + 1;
+	}
+
+	
 } // End of get_init_au2_page()
 
 /**
  * Get data for hosting plan
  */
 function get_hp_data($hpid, $admin_id) {
-	global $hp_name, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
+	global $hp_name, $hp_php, $hp_php_version, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk, $hp_countbackup, $hp_backup, $hp_dns;
@@ -231,6 +249,7 @@ function get_hp_data($hpid, $admin_id) {
 
 		$props = unserialize($data['props']);
 		$hp_php = $props['allow_php'];
+		$hp_php_version = $props['php_version'];
 		$hp_phpe = $props['allow_php_editor'];
 		$hp_cgi = $props['allow_cgi'];
 		$hp_sub = $props['subdomain_cnt'];
@@ -250,6 +269,7 @@ function get_hp_data($hpid, $admin_id) {
 	} else {
 			$hp_name = 'Custom';
 			$hp_php = '_no_';
+			$hp_php_version = 0;
 			$hp_phpe = '_no_';
 			$hp_cgi = '_no_';
 			$hp_ssl = '_no_';
@@ -271,7 +291,7 @@ function get_hp_data($hpid, $admin_id) {
  * Check validity of input data
  */
 function check_user_data() {
-	global $hp_name, $hp_php, $hp_phpe, $hp_cgi, $hp_ssl;
+	global $hp_name, $hp_php, $hp_php_version, $hp_phpe, $hp_cgi, $hp_ssl;
 	global $hp_sub, $hp_als, $hp_mail;
 	global $hp_ftp, $hp_sql_db, $hp_sql_user;
 	global $hp_traff, $hp_disk, $hp_countbackup, $hp_dmn, $hp_backup, $hp_dns;
@@ -323,6 +343,10 @@ function check_user_data() {
 
 	if (isset($_POST['php'])) {
 		$hp_php = $_POST['php'];
+	}
+
+	if (isset($_POST['php_version'])) {
+		$hp_php_version = $_POST['php_version'];
 	}
 
 	if (isset($_POST['php_edit'])) {

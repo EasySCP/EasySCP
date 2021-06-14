@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,7 @@ if (isset($_POST['uaction']) && $_POST['uaction'] == 'apply') {
 	$hard_mail_suspension = $_POST['hard_mail_suspension'];
 	$user_initial_lang = $_POST['def_language'];
 	$user_initial_theme = $_POST['def_theme'];
+	$user_php_version = $_POST['php_version'];
 	$support_system = $_POST['support_system'];
 	// $hosting_plan_level = $_POST['hosting_plan_level'];
 	$domain_rows_per_page = clean_input($_POST['domain_rows_per_page']);
@@ -94,6 +95,7 @@ if (isset($_POST['uaction']) && $_POST['uaction'] == 'apply') {
 		$db_cfg->HARD_MAIL_SUSPENSION = $hard_mail_suspension;
 		$db_cfg->USER_INITIAL_LANG = $user_initial_lang;
 		$db_cfg->USER_INITIAL_THEME = $user_initial_theme;
+		$db_cfg->PHP_VERSION = $user_php_version;
 		$db_cfg->EasySCP_SUPPORT_SYSTEM = $support_system;
 		// $db_cfg->HOSTING_PLANS_LEVEL = $hosting_plan_level;
 		$db_cfg->DOMAIN_ROWS_PER_PAGE = $domain_rows_per_page;
@@ -134,6 +136,7 @@ if (isset($_POST['uaction']) && $_POST['uaction'] == 'apply') {
 				'success'
 			);
 		}
+		send_request('110 DOMAIN master');
 	}
 
 	user_goto('settings.php');
@@ -282,7 +285,20 @@ if ($cfg->MIGRATION_ENABLED) {
 	$tpl->assign('MIGRATION_ENABLED_SELECTED_OFF', $html_selected);
 }
 */
-
+$entry = 0;
+foreach (EasyConfig::$php->PHP_Entry as $PHP_Entry) {
+	if (isset($PHP_Entry->SRV_PHP) && isset($PHP_Entry->PHP_NAME)) {
+		$php_selected = ($cfg->PHP_VERSION == $entry) ? $html_selected : '';
+		$tpl->append(
+			array(
+				'PHP_VERSION_VALUE'		=> $entry,
+				'PHP_VERSION_SELECTED'	=> $php_selected,
+				'PHP_VERSION_NAME'		=> $PHP_Entry->PHP_NAME)
+			);
+	}
+	$entry = $entry + 1;
+}
+		
 // static page messages
 $tpl->assign(
 	array(
@@ -307,6 +323,7 @@ $tpl->assign(
 		'TR_HARD_MAIL_SUSPENSION'			=> tr('E-Mail accounts are hard suspended'),
 		'TR_USER_INITIAL_LANG'				=> tr('Panel default language'),
 		'TR_USER_INITIAL_THEME'				=> tr('Panel default theme'),
+		'TR_USER_PHP_VERSION'				=> tr('PHP version'),
 		'TR_SUPPORT_SYSTEM'					=> tr('Support system'),
 		'TR_ENABLED'						=> tr('Enabled'),
 		'TR_DISABLED'						=> tr('Disabled'),

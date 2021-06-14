@@ -3,7 +3,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
  * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -36,10 +36,6 @@ if ($runmode['help'] == true) {
  
 error_reporting(E_ALL);
 require_once(dirname(__FILE__).'/extlibs/Daemon.php');
-require_once(dirname(__FILE__).'/DaemonCommon.php');
-require_once(dirname(__FILE__).'/DaemonConfig.php');
-require_once(dirname(__FILE__).'/DaemonMaps.php');
-require_once(dirname(__FILE__).'/SocketHandler.php');
 
 // Setup
 $options = array(
@@ -54,13 +50,23 @@ $options = array(
 	'usePEAR' => false,
 	'appRunAsGID' => 0, // Maybe this should be changed later
 	'appRunAsUID' => 0, // Maybe this should be changed later
-	'logLocation' => '/var/log/easyscp/easyscp_daemon.log'
+	'logLocation' => '/var/log/easyscp/easyscp_daemon.log',
+	'logVerbosity' => 7
 );
+
+System_Daemon::setOptions($options);
+require_once(dirname(__FILE__).'/DaemonCommon.php');
+require_once(dirname(__FILE__).'/DaemonConfig.php');
+require_once(dirname(__FILE__).'/DaemonMaps.php');
+require_once(dirname(__FILE__).'/SocketHandler.php');
 
 if (DaemonConfig::$cfg->{'DEBUG'} == '1'){
 	// Default: 6
 	$options['logVerbosity'] = 7;
-}
+} else {
+	// Default: 6
+	$options['logVerbosity'] = 6;
+}	
  
 System_Daemon::setOptions($options);
 System_Daemon::start();

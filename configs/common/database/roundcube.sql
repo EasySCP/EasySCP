@@ -1,6 +1,6 @@
 --
 -- EasySCP a Virtual Hosting Control Panel
--- Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+-- Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
 --
 -- This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 -- To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -17,13 +17,14 @@ CREATE DATABASE IF NOT EXISTS `roundcubemail`
 use `roundcubemail`;
 -- --------------------------------------------------------
 
+-- Roundcube Webmail initial database structure
+
 /*!40014  SET FOREIGN_KEY_CHECKS=0 */;
 
 -- Table structure for table `session`
 
-CREATE TABLE IF NOT EXISTS `session` (
+CREATE TABLE `session` (
  `sess_id` varchar(128) NOT NULL,
- `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `changed` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `ip` varchar(40) NOT NULL,
  `vars` mediumtext NOT NULL,
@@ -34,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `session` (
 
 -- Table structure for table `users`
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
  `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
  `username` varchar(128) BINARY NOT NULL,
  `mail_host` varchar(128) NOT NULL,
@@ -51,34 +52,32 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Table structure for table `cache`
 
-CREATE TABLE IF NOT EXISTS `cache` (
+CREATE TABLE `cache` (
  `user_id` int(10) UNSIGNED NOT NULL,
  `cache_key` varchar(128) /*!40101 CHARACTER SET ascii COLLATE ascii_general_ci */ NOT NULL,
- `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `expires` datetime DEFAULT NULL,
  `data` longtext NOT NULL,
+ PRIMARY KEY (`user_id`, `cache_key`),
  CONSTRAINT `user_id_fk_cache` FOREIGN KEY (`user_id`)
    REFERENCES `users`(`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
- INDEX `expires_index` (`expires`),
- INDEX `user_cache_index` (`user_id`,`cache_key`)
+ INDEX `expires_index` (`expires`)
 ) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
 
 
 -- Table structure for table `cache_shared`
 
-CREATE TABLE IF NOT EXISTS `cache_shared` (
+CREATE TABLE `cache_shared` (
  `cache_key` varchar(255) /*!40101 CHARACTER SET ascii COLLATE ascii_general_ci */ NOT NULL,
- `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `expires` datetime DEFAULT NULL,
  `data` longtext NOT NULL,
- INDEX `expires_index` (`expires`),
- INDEX `cache_key_index` (`cache_key`)
+ PRIMARY KEY (`cache_key`),
+ INDEX `expires_index` (`expires`)
 ) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
 
 
 -- Table structure for table `cache_index`
 
-CREATE TABLE IF NOT EXISTS `cache_index` (
+CREATE TABLE `cache_index` (
  `user_id` int(10) UNSIGNED NOT NULL,
  `mailbox` varchar(255) BINARY NOT NULL,
  `expires` datetime DEFAULT NULL,
@@ -93,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `cache_index` (
 
 -- Table structure for table `cache_thread`
 
-CREATE TABLE IF NOT EXISTS `cache_thread` (
+CREATE TABLE `cache_thread` (
  `user_id` int(10) UNSIGNED NOT NULL,
  `mailbox` varchar(255) BINARY NOT NULL,
  `expires` datetime DEFAULT NULL,
@@ -107,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `cache_thread` (
 
 -- Table structure for table `cache_messages`
 
-CREATE TABLE IF NOT EXISTS `cache_messages` (
+CREATE TABLE `cache_messages` (
  `user_id` int(10) UNSIGNED NOT NULL,
  `mailbox` varchar(255) BINARY NOT NULL,
  `uid` int(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -123,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `cache_messages` (
 
 -- Table structure for table `contacts`
 
-CREATE TABLE IF NOT EXISTS `contacts` (
+CREATE TABLE `contacts` (
  `contact_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
  `changed` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
  `del` tinyint(1) NOT NULL DEFAULT '0',
@@ -142,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `contacts` (
 
 -- Table structure for table `contactgroups`
 
-CREATE TABLE IF NOT EXISTS `contactgroups` (
+CREATE TABLE `contactgroups` (
   `contactgroup_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` int(10) UNSIGNED NOT NULL,
   `changed` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
@@ -154,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `contactgroups` (
   INDEX `contactgroups_user_index` (`user_id`,`del`)
 ) /*!40000 ENGINE=INNODB */ /*!40101 CHARACTER SET utf8 COLLATE utf8_general_ci */;
 
-CREATE TABLE IF NOT EXISTS `contactgroupmembers` (
+CREATE TABLE `contactgroupmembers` (
   `contactgroup_id` int(10) UNSIGNED NOT NULL,
   `contact_id` int(10) UNSIGNED NOT NULL,
   `created` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
@@ -169,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `contactgroupmembers` (
 
 -- Table structure for table `identities`
 
-CREATE TABLE IF NOT EXISTS `identities` (
+CREATE TABLE `identities` (
  `identity_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
  `user_id` int(10) UNSIGNED NOT NULL,
  `changed` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
@@ -192,8 +191,9 @@ CREATE TABLE IF NOT EXISTS `identities` (
 
 -- Table structure for table `dictionary`
 
-CREATE TABLE IF NOT EXISTS `dictionary` (
-  `user_id` int(10) UNSIGNED DEFAULT NULL,
+CREATE TABLE `dictionary` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, -- redundant, for compat. with Galera Cluster
+  `user_id` int(10) UNSIGNED DEFAULT NULL, -- NULL here is for "shared dictionaries"
   `language` varchar(5) NOT NULL,
   `data` longtext NOT NULL,
   CONSTRAINT `user_id_fk_dictionary` FOREIGN KEY (`user_id`)
@@ -204,7 +204,7 @@ CREATE TABLE IF NOT EXISTS `dictionary` (
 
 -- Table structure for table `searches`
 
-CREATE TABLE IF NOT EXISTS `searches` (
+CREATE TABLE `searches` (
  `search_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
  `user_id` int(10) UNSIGNED NOT NULL,
  `type` int(3) NOT NULL DEFAULT '0',
@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `searches` (
 
 -- Table structure for table `system`
 
-CREATE TABLE IF NOT EXISTS `system` (
+CREATE TABLE `system` (
  `name` varchar(64) NOT NULL,
  `value` mediumtext,
  PRIMARY KEY(`name`)
@@ -227,4 +227,5 @@ CREATE TABLE IF NOT EXISTS `system` (
 
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 
-INSERT INTO system (name, value) VALUES ('roundcube-version', '2015111100');
+
+INSERT INTO `system` (`name`, `value`) VALUES ('roundcube-version', '2016112200');

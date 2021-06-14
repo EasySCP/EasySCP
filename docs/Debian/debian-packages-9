@@ -28,6 +28,7 @@ make
 mariadb-client-10.1
 mariadb-server-10.1
 mc
+openssl
 pdns-server
 pdns-backend-mysql
 php-apcu

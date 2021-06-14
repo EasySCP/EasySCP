@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 # EasySCP a Virtual Hosting Control Panel
-# Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+# Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
 #
 # This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
@@ -15,6 +15,7 @@ install:
 	cp -pR ./database $(SYSTEM_CONF)
 	cp -pR ./dovecot $(SYSTEM_CONF)
 	cp -pR ./iptables $(SYSTEM_CONF)
+	cp -pR ./letsencrypt $(SYSTEM_CONF)
 	cd ./logrotate && $(MAKE) install
 	cp -pR ./pdns $(SYSTEM_CONF)
 	cp -pR ./php $(SYSTEM_CONF)
@@ -34,6 +35,7 @@ uninstall:
 	rm -rf $(SYSTEM_CONF)/database
 	rm -rf $(SYSTEM_CONF)/dovecot
 	rm -rf $(SYSTEM_CONF)/iptables
+	rm -rf $(SYSTEM_CONF)/letsencrypt
 	cd ./logrotate && $(MAKE) uninstall
 	rm -rf $(SYSTEM_CONF)/pdns
 	rm -rf $(SYSTEM_CONF)/php

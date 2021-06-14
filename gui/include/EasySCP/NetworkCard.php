@@ -1,7 +1,7 @@
 <?php
 /**
  * EasySCP a Virtual Hosting Control Panel
- * Copyright (C) 2010-2019 by Easy Server Control Panel - http://www.easyscp.net
+ * Copyright (C) 2010-2020 by Easy Server Control Panel - http://www.easyscp.net
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -206,6 +206,8 @@ class EasySCP_NetworkCard {
 
 		switch(EasyConfig::$cfg->{'DistName'} . '_' . EasyConfig::$cfg->{'DistVersion'}){
 			case 'Debian_9':
+			case 'Debian_10':
+			case 'Ubuntu_18.04':
 				$this->_availableInterfaces = array_diff(
 						$this->_interfaces,
 						array('lo')

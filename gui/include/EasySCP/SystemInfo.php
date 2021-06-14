@@ -672,7 +672,8 @@ class EasySCP_SystemInfo {
 	 */
 	protected function strstrb($haystack, $needle) {
 
-		return array_shift((explode($needle, $haystack, 2)));
+		$arr = explode($needle, $haystack, 2);
+		return array_shift(($arr));
 	}
 
 	/**

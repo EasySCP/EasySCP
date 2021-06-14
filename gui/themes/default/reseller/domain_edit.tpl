@@ -76,7 +76,7 @@
 					</select>
 				</td>
 			</tr>
-			<tr>
+			<tr style="display:none;">
 				<td>{$TR_PHP_EDIT}</td>
 				<td>
 					<select name="domain_php_edit" id="domain_php_edit">
